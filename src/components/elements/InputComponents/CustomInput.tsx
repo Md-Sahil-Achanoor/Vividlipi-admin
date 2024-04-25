@@ -20,6 +20,8 @@ const CustomInput: FC<CustomInputCom> = ({
   leftIcon,
   rightIcon,
   className,
+  horizontal,
+  tooltip,
   ...props
 }) => {
   const Input = () => {
@@ -81,13 +83,13 @@ const CustomInput: FC<CustomInputCom> = ({
       <div
         className={cn(
           "w-full mb-4",
-          props.horizontal && "flex justify-center items-center gap-4 mb-3"
+          horizontal && "flex justify-center items-center gap-4 mb-3"
         )}
       >
         <div
           className={cn(
             "w-initial",
-            props.horizontal &&
+            horizontal &&
               "w-full lg:w-4/12 p-0 INPUT_DIV flex items-center justify-end "
           )}
         >
@@ -96,28 +98,28 @@ const CustomInput: FC<CustomInputCom> = ({
               className={cn(
                 "text-black text-[14px]",
                 isRequired &&
-                  props?.horizontal &&
+                  horizontal &&
                   "flex items-center gap-1 font-medium"
               )}
               htmlFor={id}
             >
-              {isRequired && props?.horizontal ? (
+              {isRequired && horizontal ? (
                 <span className="text-red-600 ml-[1px]">{"*"}</span>
               ) : null}
               {label}
-              {isRequired && !props?.horizontal ? (
+              {isRequired && !horizontal ? (
                 <span className="text-red-600 ml-[1px]">{"*"}</span>
               ) : null}
             </label>
           ) : null}
-          {props.horizontal && props.tooltip && (
+          {horizontal && tooltip && (
             <FaRegQuestionCircle className="text-2xl ml-2" />
           )}
         </div>
-        <div className={cn(props?.horizontal ? "w-full lg:w-8/12" : "w-full")}>
+        <div className={cn(horizontal ? "w-full lg:w-8/12" : "w-full")}>
           <div
             className={cn(
-              `border border-gray-300 flex flex-1 items-center px-3 py-1 my-2 rounded-md shadow-sm`,
+              `border border-black flex flex-1 items-center px-3 py-1 my-2 rounded-md shadow-sm`,
               isValid ? "border-red-600" : ""
             )}
           >

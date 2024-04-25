@@ -62,6 +62,8 @@ export interface InfiniteSelect<T extends object> extends IFormik {
   loadMore?: () => void;
   isInsideSearch?: boolean;
   searchProps?: InputType;
+  horizontal?: boolean;
+  tooltip?: string;
 }
 
 /**
@@ -83,6 +85,8 @@ export interface InputSelect<T extends OptionValue> extends IFormik {
   isArray?: boolean;
   onChangeCallback: (e: React.FormEvent) => void;
   onBlurCallback: (e: React.FormEvent) => void;
+  horizontal?: boolean;
+  tooltip?: string;
   [key: string]: never;
 }
 
@@ -118,7 +122,7 @@ export interface PhoneInputType extends IFormik {
  */
 export interface CheckboxItem {
   key: string;
-  value: string | number;
+  value: string | number | boolean;
 }
 
 /**
@@ -136,6 +140,8 @@ export interface CheckboxGroupProps<T = CheckboxItem> extends InputType {
   labelClass?: string;
   itemsclass?: string;
   isAuth?: boolean;
+  horizontal?: boolean;
+  tooltip?: string;
 }
 
 /**

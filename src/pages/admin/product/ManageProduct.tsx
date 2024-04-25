@@ -3,22 +3,20 @@ import { useState } from "react";
 import { BsArrowRightShort } from "react-icons/bs";
 import { useParams } from "react-router-dom";
 import Loader from "../../../components/atoms/Loader";
+import MultiSelectItem from "../../../components/atoms/MultiSelectItem";
 import { Card } from "../../../components/base/Card";
+import CheckboxGroup from "../../../components/elements/InputComponents/CheckboxGroup";
 import CustomInput from "../../../components/elements/InputComponents/CustomInput";
-// import {
-//   useGetSalesmanByIdQuery,
-//   useManageProductMutation,
-// } from "../../../feature/salesman/salesmanQuery";
+import InfiniteSelect from "../../../components/elements/InputComponents/InfiniteSelect";
+import InputSelect from "../../../components/elements/InputComponents/InputSelect";
+import InputTagComponent from "../../../components/elements/InputComponents/InputTagComponent";
 import QuillComponent from "../../../components/elements/InputComponents/QuillComponent";
 import PageLayout from "../../../layout/PageLayout";
 import { manageProductSchema } from "../../../models/product";
-import { BreadCrumbItem } from "../../../types";
-import { IProduct } from "../../../types/product";
-// import { manageSalesmanSchema } from "../../../models/salesman";
-// import { BreadCrumbItem, FormikSubmitOption, any } from "../../../types";
+import { BreadCrumbItem, CategoryResponse, Product } from "../../../types";
 
-const initialValues: IProduct = {
-  bootTitle: "",
+const initialValues: Product = {
+  bookTitle: "",
   thumbnail: "",
   description: "",
   authorName: "",
@@ -37,7 +35,7 @@ const initialValues: IProduct = {
   tax: "",
   shipping: "",
   genre: "",
-  tags: [""],
+  tags: [],
   bookFormat: 1,
   translated: "", //Yes/No
   translatorName: "",
@@ -45,6 +43,24 @@ const initialValues: IProduct = {
   category: [],
   allowComments: false, // Yes/No
 };
+
+const categoryData: CategoryResponse[] = [
+  {
+    id: "1",
+    name: "Category 1",
+    description: "hello",
+  },
+  {
+    id: "2",
+    name: "Category 2",
+    description: "hello",
+  },
+  {
+    id: "3",
+    name: "Category 3",
+    description: "hello",
+  },
+];
 
 const ManageProduct = () => {
   const { id } = useParams();
@@ -71,26 +87,27 @@ const ManageProduct = () => {
   //   const [manageSalesman, { isLoading }] = useManageProductMutation();
   const isLoading = false;
 
-  const onSubmit = () =>
-    // values: any
+  const onSubmit = (
+    values: Product
     // { setSubmitting, resetForm }: FormikSubmitOption
-    {
-      // let { passwordConfirm, Password, ...data } = values;
-      // let query = {};
-      // let body: any = { ...data };
-      // if (!id) {
-      //   body.Password = Password;
-      // }
-      // if (id) {
-      //   query = { id };
-      // }
-      // manageSalesman({
-      //   data: body,
-      //   options: { router, setSubmitting, resetForm },
-      //   query,
-      //   id,
-      // });
-    };
+  ) => {
+    console.log(values);
+    // let { passwordConfirm, Password, ...data } = values;
+    // let query = {};
+    // let body: any = { ...data };
+    // if (!id) {
+    //   body.Password = Password;
+    // }
+    // if (id) {
+    //   query = { id };
+    // }
+    // manageSalesman({
+    //   data: body,
+    //   options: { router, setSubmitting, resetForm },
+    //   query,
+    //   id,
+    // });
+  };
 
   return (
     <PageLayout
@@ -112,8 +129,9 @@ const ManageProduct = () => {
                 onSubmit={onSubmit}
                 enableReinitialize
               >
-                {({ isSubmitting }) => (
+                {({ isSubmitting, values, setFieldValue }) => (
                   <Form>
+                    {/* {console.log(values)} */}
                     <div className="mt-5">
                       <Field
                         name="bookTitle"
@@ -125,7 +143,6 @@ const ManageProduct = () => {
                         placeholder="Type your products name"
                         isRequired
                       />
-
                       <Field
                         name="thumbnail"
                         label={"Thumbnail"}
@@ -136,7 +153,6 @@ const ManageProduct = () => {
                         placeholder="Upload thumbnail"
                         isRequired
                       />
-
                       <Field
                         name="description"
                         label={"Description"}
@@ -146,10 +162,9 @@ const ManageProduct = () => {
                         tooltip="Description"
                         placeholder="Type your product description"
                         customClass={""}
-                        classes="border rounded-xl shadow-sm border-gray-200 min-h-[150px]"
+                        classes="border rounded-xl border-black min-h-[150px]"
                         isRequired
                       />
-
                       <Field
                         name="authorName"
                         label={"Author Name"}
@@ -160,7 +175,6 @@ const ManageProduct = () => {
                         placeholder="Type your products author name"
                         isRequired
                       />
-
                       <Field
                         name="publisher"
                         label={"Publisher"}
@@ -171,7 +185,6 @@ const ManageProduct = () => {
                         placeholder="Type your products publisher"
                         isRequired
                       />
-
                       <Field
                         name="releaseDate"
                         label={"Release Date"}
@@ -182,7 +195,6 @@ const ManageProduct = () => {
                         placeholder="Type your products release date"
                         isRequired
                       />
-
                       <Field
                         name="digitalProductURL"
                         label={"Digital Product URL"}
@@ -193,7 +205,6 @@ const ManageProduct = () => {
                         placeholder="Type your products digital product URL"
                         isRequired
                       />
-
                       <Field
                         name="salePrice"
                         label={"Sale Price"}
@@ -204,7 +215,6 @@ const ManageProduct = () => {
                         placeholder="Type your products sale price"
                         isRequired
                       />
-
                       <Field
                         name="saleQuantity"
                         label={"Sale Quantity"}
@@ -215,7 +225,6 @@ const ManageProduct = () => {
                         placeholder="Type your products sale quantity"
                         isRequired
                       />
-
                       <Field
                         name="price"
                         label={"Price"}
@@ -226,7 +235,6 @@ const ManageProduct = () => {
                         placeholder="Type your products price"
                         isRequired
                       />
-
                       <Field
                         name="inventory"
                         label={"Inventory"}
@@ -237,7 +245,6 @@ const ManageProduct = () => {
                         placeholder="Type your products inventory"
                         isRequired
                       />
-
                       <Field
                         name="commission"
                         label={"Commission"}
@@ -248,7 +255,6 @@ const ManageProduct = () => {
                         placeholder="Type your products commission"
                         isRequired
                       />
-
                       <Field
                         name="firstYearCommission"
                         label={"First Year Commission"}
@@ -259,7 +265,6 @@ const ManageProduct = () => {
                         placeholder="Type your products first year commission"
                         isRequired
                       />
-
                       <Field
                         name="secondYearCommission"
                         label={"Second Year Commission"}
@@ -270,7 +275,6 @@ const ManageProduct = () => {
                         placeholder="Type your products second year commission"
                         isRequired
                       />
-
                       <Field
                         name="thereAfterCommission"
                         label={"There After Commission"}
@@ -281,18 +285,18 @@ const ManageProduct = () => {
                         placeholder="Type your products there after commission"
                         isRequired
                       />
-
                       <Field
                         name="commissionGoesTo"
                         label={"Commission Goes To"}
                         horizontal
-                        type="text"
-                        component={CustomInput}
+                        component={InputSelect}
+                        items={[
+                          { value: 1, name: "Author" },
+                          { value: 2, name: "Publisher" },
+                        ]}
                         tooltip="Commission Goes To"
-                        placeholder="Type your products commission goes to"
                         isRequired
                       />
-
                       <Field
                         name="tax"
                         label={"Tax"}
@@ -303,7 +307,6 @@ const ManageProduct = () => {
                         placeholder="Type your products tax"
                         isRequired
                       />
-
                       <Field
                         name="shipping"
                         label={"Shipping"}
@@ -314,7 +317,6 @@ const ManageProduct = () => {
                         placeholder="Type your products shipping"
                         isRequired
                       />
-
                       <Field
                         name="genre"
                         label={"Genre"}
@@ -325,29 +327,28 @@ const ManageProduct = () => {
                         placeholder="Type your products genre"
                         isRequired
                       />
-
                       <Field
                         name="tags"
                         label={"Tags"}
                         horizontal
                         type="text"
-                        component={CustomInput}
+                        component={InputTagComponent}
                         tooltip="Tags"
                         placeholder="Type your products tags"
                         isRequired
                       />
-
                       <Field
                         name="bookFormat"
                         label={"Book Format"}
                         horizontal
-                        type="number"
-                        component={CustomInput}
+                        component={InputSelect}
+                        items={[
+                          { value: 1, name: "Physical" },
+                          { value: 2, name: "E-book" },
+                        ]}
                         tooltip="Book Format"
-                        placeholder="Type your products book format"
                         isRequired
                       />
-
                       <Field
                         name="translated"
                         label={"Translated"}
@@ -358,7 +359,6 @@ const ManageProduct = () => {
                         placeholder="Type your products translated"
                         isRequired
                       />
-
                       <Field
                         name="translatorName"
                         label={"Translator Name"}
@@ -369,7 +369,6 @@ const ManageProduct = () => {
                         placeholder="Type your products translator name"
                         isRequired
                       />
-
                       <Field
                         name="language"
                         label={"Language"}
@@ -381,7 +380,7 @@ const ManageProduct = () => {
                         isRequired
                       />
 
-                      <Field
+                      {/* <Field
                         name="category"
                         label={"Category"}
                         horizontal
@@ -390,17 +389,81 @@ const ManageProduct = () => {
                         tooltip="Category"
                         placeholder="Type your products category"
                         isRequired
-                      />
+                      /> */}
 
-                      <Field
+                      <div>
+                        <Field
+                          label={"Category"}
+                          name="category"
+                          isRequired
+                          renderData={categoryData}
+                          isLoading={false}
+                          isError={false}
+                          errorMessage={""}
+                          // reload={()}
+                          // listRef={batchListRef}
+                          horizontal
+                          tooltip="Category"
+                          renderItem={(item: CategoryResponse) => (
+                            <>{item?.name}</>
+                          )}
+                          isActive={(item: CategoryResponse) =>
+                            values?.category?.find(
+                              (category) => category?.id === item?.id
+                            )
+                          }
+                          renderName={() => (
+                            <MultiSelectItem<CategoryResponse>
+                              data={values?.category}
+                              defaultName="Select Category"
+                              displayName="name"
+                              onClick={(item) => {
+                                setFieldValue(
+                                  "category",
+                                  values?.category?.filter(
+                                    (category) => category?.id !== item?.id
+                                  )
+                                );
+                              }}
+                            />
+                          )}
+                          onChangeCallback={(item: CategoryResponse) => {
+                            // check unique item in array
+                            let isUnique = values?.category?.find(
+                              (category) => category?.id === item?.id
+                            );
+                            if (!isUnique) {
+                              setFieldValue("category", [
+                                ...values?.category,
+                                item,
+                              ]);
+                            } else {
+                              return;
+                            }
+                          }}
+                          clearData={(item: CategoryResponse) => {
+                            // find data and clear
+                            let data = values?.category?.filter(
+                              (category) => category?.id !== item?.id
+                            );
+                            setFieldValue("category", data);
+                          }}
+                          isSelected={false}
+                          component={InfiniteSelect}
+                          isAuth
+                        />
+                      </div>
+
+                      <CheckboxGroup
                         name="allowComments"
-                        label={"Allow Comments"}
+                        label="Allow Comments"
+                        isMulti={false}
                         horizontal
-                        type="text"
-                        component={CustomInput}
                         tooltip="Allow Comments"
-                        placeholder="Type your products allow comments"
-                        isRequired
+                        options={[
+                          { key: "Yes", value: true },
+                          { key: "No", value: false },
+                        ]}
                       />
                     </div>
                     <div className="flex justify-end">

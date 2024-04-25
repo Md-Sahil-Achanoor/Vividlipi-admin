@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: #000;
+  --black: #000;
+  --primary: #059ed4;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 }
@@ -182,4 +183,14 @@ input[type="number"] {
   p {
     word-break: break-all;
   }
+}
+
+.rti--container {
+  border-color: var(--black);
+  box-shadow: none;
+}
+
+.rti--container:focus-within {
+  border-color: var(--black);
+  box-shadow: none;
 }

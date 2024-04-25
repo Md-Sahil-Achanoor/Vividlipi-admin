@@ -1,6 +1,8 @@
 import { ErrorMessage } from "formik";
 import React from "react";
+import { FaRegQuestionCircle } from "react-icons/fa";
 import { InputSelect as InputSelectType, OptionValue } from "../../../types";
+import { cn } from "../../../utils/twmerge";
 import TextError from "./TextError";
 
 const InputSelect = <T extends OptionValue>({
@@ -12,6 +14,8 @@ const InputSelect = <T extends OptionValue>({
   isRequired,
   items,
   className,
+  horizontal,
+  tooltip,
   ...props
 }: InputSelectType<T>) => {
   // const isCustom = isPassword || isTel;
@@ -19,41 +23,72 @@ const InputSelect = <T extends OptionValue>({
     touched[rest.name] && errors[rest.name] && !props.disabled ? true : false;
   return (
     <React.Fragment>
-      <div className={"w-full mb-4"}>
-        {label ? (
-          <label className="text-gray-600 text-[14px]" htmlFor={id}>
-            {label}
-            {isRequired ? (
-              <span className="text-red-600 ml-[1px]">{" *"}</span>
-            ) : null}
-          </label>
-        ) : null}
+      <div
+        className={cn(
+          "w-full mb-4",
+          horizontal && "flex justify-center items-center gap-4 mb-3"
+        )}
+      >
         <div
-          className={`border border-gray-300 flex flex-1 items-center px-3 py-1 my-2 rounded-lg focus-within:bg-white focus-within:border-gray-300 border-b-2
-          ${isValid ? "border-error_color" : "border-form_border"}`}
+          className={cn(
+            "w-initial",
+            horizontal &&
+              "w-full lg:w-4/12 p-0 INPUT_DIV flex items-center justify-end "
+          )}
         >
-          <select
-            id={id}
-            className={`w-full h-full py-2.5 outline-none text-gray-600 text-sm placeholder:text-gray-500`}
-            onChange={(e) => {
-              const data = e;
-              onChangeCallback && onChangeCallback(data);
-              onChange && onChange(e);
-            }}
-            {...rest}
-            {...props}
-          >
-            <option value="">Select...</option>
-            {items?.map((el, idx) => (
-              <option value={el?.value} key={idx}>
-                {el?.name}
-              </option>
-            ))}
-          </select>
+          {label ? (
+            <label
+              className={cn(
+                "text-black text-[14px]",
+                isRequired &&
+                  horizontal &&
+                  "flex items-center gap-1 font-medium"
+              )}
+              htmlFor={id}
+            >
+              {isRequired && horizontal ? (
+                <span className="text-red-600 ml-[1px]">{"*"}</span>
+              ) : null}
+              {label}
+              {isRequired && !horizontal ? (
+                <span className="text-red-600 ml-[1px]">{"*"}</span>
+              ) : null}
+            </label>
+          ) : null}
+          {horizontal && tooltip && (
+            <FaRegQuestionCircle className="text-2xl ml-2" />
+          )}
         </div>
-        <ErrorMessage name={rest.name}>
-          {(msg) => <TextError text={msg} />}
-        </ErrorMessage>
+        <div className={cn(horizontal ? "w-full lg:w-8/12" : "w-full")}>
+          <div
+            className={cn(
+              `border border-black flex flex-1 items-center px-3 py-1 my-2 rounded-lg focus-within:border-black `,
+              isValid ? "border-red-600" : ""
+            )}
+          >
+            <select
+              id={id}
+              className={`w-full h-full py-2 outline-none text-sm`}
+              onChange={(e) => {
+                const data = e;
+                onChangeCallback && onChangeCallback(data);
+                onChange && onChange(e);
+              }}
+              {...rest}
+              {...props}
+            >
+              <option value="">Select...</option>
+              {items?.map((el, idx) => (
+                <option value={el?.value} key={idx}>
+                  {el?.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <ErrorMessage name={rest.name}>
+            {(msg) => <TextError text={msg} />}
+          </ErrorMessage>
+        </div>
       </div>
     </React.Fragment>
   );

@@ -1,5 +1,7 @@
-export interface IProduct {
-  bootTitle: string;
+import { CategoryResponse } from "../category";
+
+export interface IProduct<T> {
+  bookTitle: string;
   thumbnail: string;
   description: string;
   authorName: string;
@@ -23,13 +25,15 @@ export interface IProduct {
   translated: string; // Yes /No
   translatorName: string; // if yes then required
   language: string;
-  category: string[];
+  category: T[];
   allowComments: boolean; // Yes / No
 }
 
-export interface ProductPayload extends IProduct {}
+export type Product = IProduct<CategoryResponse>;
 
-export interface ProductResponse extends IProduct {
+export interface ProductPayload extends IProduct<string> {}
+
+export interface ProductResponse extends IProduct<CategoryResponse> {
   id: string;
   createdAt: string;
 }
