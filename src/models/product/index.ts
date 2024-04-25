@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import { CategoryResponse } from "../../types";
 
 export const manageProductSchema = Yup.object({
   bookTitle: Yup.string().required("Book title is required"),
@@ -48,13 +49,20 @@ export const manageProductSchema = Yup.object({
     name: "translatorName",
     message: "Translator name is required",
     test: function (value) {
+      // console.log(this.parent, "===========+>");
       if (this.parent.translated === "Yes") {
-        return value !== "";
+        return value ? true : false;
       }
       return true;
     },
   }),
   language: Yup.string().required("Language is required"),
-  category: Yup.array().of(Yup.string()).required("Category is required"),
+  category: Yup.array<CategoryResponse[]>().test({
+    name: "category",
+    message: "category is Required.",
+    test: (value) => {
+      return value?.filter((i) => i?.id).length !== 0 ? true : false;
+    },
+  }),
   allowComments: Yup.boolean().required("Allow comment is required"), // Yes/No
 });
