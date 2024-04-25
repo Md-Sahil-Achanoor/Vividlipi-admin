@@ -1,4 +1,4 @@
-## Smart-Bus-Ticket Frontend
+## Vividlipi Admin
 
 ## How to setup in local desktop
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { useAppSelector } from "../../app/store";
+import { projectName } from "../../constants/service";
 import { cn } from "../../utils/twmerge";
 
 const Footer = () => {
@@ -16,7 +17,7 @@ const Footer = () => {
         <div className="grid grid-cols-12 items-center">
           <div className="col-span-6">
             <span className="text-xs sm:text-sm">
-              {new Date().getFullYear()} © Copyright LEKPAY.
+              {new Date().getFullYear()} © Copyright {projectName}.
             </span>
           </div>
           <div className="col-span-6">
