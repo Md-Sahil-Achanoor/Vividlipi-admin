@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: #000;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@layer utilities {
+  .menu-item {
+    @apply w-full hover:bg-pink-500 px-5 py-3 select-none text-content-primary hover:text-black text-sm cursor-pointer transition-colors;
+  }
+
+  .active-menu {
+    @apply bg-pink-500 text-white hover:text-white relative after:absolute after:w-2 after:h-full font-medium;
+  }
+
+  .inActive-menu:hover svg path {
+    @apply bg-pink-500 text-black;
+  }
+
+  .inActive-menu {
+    @apply text-content-primary hover:text-black relative;
+  }
+
+  .inactive-submenu {
+    @apply text-content-primary hover:text-white relative;
+  }
+
+  .hover-multi-menu:hover .hover-menu-open {
+    @apply absolute block;
+  }
+
+  .svg_active svg,
+  .svg_active path {
+    @apply stroke-pink-500;
+  }
+
+  .svg_active_white svg,
+  .svg_active_white path {
+    @apply stroke-white;
+  }
+}
+
+@layer components {
+  .primary-scrollbar {
+    @apply overflow-y-scroll scrollbar scrollbar-thumb-gray-400 scrollbar-track-gray-100 scrollbar-w-1;
+  }
+  .primary-scrollbar-horizontal {
+    @apply overflow-x-scroll scrollbar scrollbar-thumb-borderClr-gray scrollbar-track-gray-100 scrollbar-h-1;
+  }
+
+  .button_primary {
+    @apply rounded-md md:px-4 px-3 md:py-3 py-2 bg-pink-500 hover:bg-pink-600 duration-100 text-white flex items-center gap-1 justify-center;
+  }
+
+  .button_sm_primary {
+    @apply rounded-md md:px-2 px-1 md:py-[6px] bg-pink-500 hover:bg-pink-600 duration-100 text-white flex items-center gap-1 justify-center;
+  }
+
+  .button_primary_outline {
+    @apply rounded-md md:px-4 px-3 md:py-3 py-2 border border-pink-500 hover:bg-pink-500 hover:text-white text-pink-500 flex items-center gap-1 justify-center;
+  }
+
+  .button_sm_primary_outline_base {
+    @apply rounded-md md:px-2 px-1 md:py-[6px] border-pink-500 hover:bg-pink-600 hover:text-white text-pink-500 flex items-center gap-1 justify-center duration-300;
+  }
+  .button_sm_primary_outline {
+    @apply border-[2px] font-semibold button_sm_primary_outline_base;
+  }
+
+  .button_danger {
+    @apply rounded-md md:px-4 px-3 md:py-3 py-2 bg-red-500 hover:bg-red-600 text-white flex items-center gap-1 justify-center;
+  }
+
+  .button_success {
+    @apply rounded-md md:px-4 px-3 md:py-3 py-2 bg-green-500 hover:bg-green-600 text-white flex items-center gap-1 justify-center;
+  }
+
+  .table_th {
+    @apply px-6 py-3 whitespace-nowrap;
+  }
+
+  .table_tr {
+    @apply h-max bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 even:bg-gray-100;
+  }
+
+  .table_td {
+    @apply px-6 py-4 whitespace-nowrap;
+  }
+
+  .check_box {
+    @apply w-4 h-4 text-pink-500 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-pink-500 focus:ring-1;
+  }
+
+  .dropdown_filter {
+    @apply flex justify-center items-center border bg-white px-3 py-2 rounded-lg cursor-pointer;
+  }
+  .dropdown_filter_extraClass {
+    @apply min-w-[250px];
+  }
+
+  .dropdown_filter_listItemClass {
+    @apply bg-white hover:bg-primary-light px-0 rounded-none hover:rounded-none mb-0;
+  }
+
+  .input_filed {
+    @apply w-full h-full py-2.5 outline-none text-gray-600 text-sm placeholder:text-gray-500;
+  }
+
+  .capsule {
+    @apply rounded-full px-2 py-1;
+  }
+
+  .table_edit {
+    @apply font-medium text-blue-600 dark:text-blue-500 hover:underline;
+  }
+  .table_remove {
+    @apply font-medium text-red-600 dark:text-red-500 hover:underline;
+  }
+
+  .page_content {
+    @apply pt-[60px] md:pt-[90px] pb-[80px] px-[24px] container mx-auto;
+  }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
