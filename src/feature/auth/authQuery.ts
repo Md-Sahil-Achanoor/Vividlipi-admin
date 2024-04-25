@@ -8,7 +8,6 @@ import type {
   SignUpPayload,
   UserPasswordPayload,
 } from "../../types/auth";
-import { OperatorPayload } from "../../types/operator";
 import { authAction } from "./authSlice";
 
 const authQuery = API.injectEndpoints({
@@ -70,7 +69,7 @@ const authQuery = API.injectEndpoints({
     // operator
     operatorSignUp: builder.mutation<
       ApiResponse<string>,
-      ManagePayload<OperatorPayload, any>
+      ManagePayload<any, any>
     >({
       query: ({ data, options }) => {
         let url =

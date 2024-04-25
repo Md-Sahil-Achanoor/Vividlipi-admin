@@ -1,4 +1,5 @@
 import { LuLayoutDashboard } from "react-icons/lu";
+import { MdLibraryBooks } from "react-icons/md";
 import { MenuType } from "../../types";
 
 const NavbarAllLink: MenuType[] = [
@@ -10,9 +11,9 @@ const NavbarAllLink: MenuType[] = [
   },
   {
     title: "Product",
-    link: "/admin/product",
+    link: "/admin/products",
     role: ["Admin"],
-    icon: LuLayoutDashboard,
+    icon: MdLibraryBooks,
   },
   // {
   //   title: "Operator",

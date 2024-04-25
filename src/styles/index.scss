@@ -10,15 +10,15 @@
 
 @layer utilities {
   .menu-item {
-    @apply w-full hover:bg-pink-500 px-5 py-3 select-none text-content-primary hover:text-black text-sm cursor-pointer transition-colors;
+    @apply w-full hover:bg-custom-primary-main px-5 py-3 select-none text-content-primary hover:text-black text-sm cursor-pointer transition-colors;
   }
 
   .active-menu {
-    @apply bg-pink-500 text-white hover:text-white relative after:absolute after:w-2 after:h-full font-medium;
+    @apply bg-custom-primary-main text-white hover:text-white relative after:absolute after:w-2 after:h-full font-medium;
   }
 
   .inActive-menu:hover svg path {
-    @apply bg-pink-500 text-black;
+    @apply bg-custom-primary-main text-black;
   }
 
   .inActive-menu {
@@ -35,7 +35,7 @@
 
   .svg_active svg,
   .svg_active path {
-    @apply stroke-pink-500;
+    @apply stroke-custom-primary-main;
   }
 
   .svg_active_white svg,
@@ -53,19 +53,19 @@
   }
 
   .button_primary {
-    @apply rounded-md md:px-4 px-3 md:py-3 py-2 bg-pink-500 hover:bg-pink-600 duration-100 text-white flex items-center gap-1 justify-center;
+    @apply rounded-md md:px-4 px-3 md:py-3 py-2 bg-custom-primary-main hover:bg-custom-primary-main duration-100 text-white flex items-center gap-1 justify-center;
   }
 
   .button_sm_primary {
-    @apply rounded-md md:px-2 px-1 md:py-[6px] bg-pink-500 hover:bg-pink-600 duration-100 text-white flex items-center gap-1 justify-center;
+    @apply rounded-md md:px-2 px-1 md:py-[6px] bg-custom-primary-main hover:bg-custom-primary-main duration-100 text-white flex items-center gap-1 justify-center;
   }
 
   .button_primary_outline {
-    @apply rounded-md md:px-4 px-3 md:py-3 py-2 border border-pink-500 hover:bg-pink-500 hover:text-white text-pink-500 flex items-center gap-1 justify-center;
+    @apply rounded-md md:px-4 px-3 md:py-3 py-2 border border-custom-primary-main hover:bg-custom-primary-main hover:text-white text-custom-primary-main flex items-center gap-1 justify-center;
   }
 
   .button_sm_primary_outline_base {
-    @apply rounded-md md:px-2 px-1 md:py-[6px] border-pink-500 hover:bg-pink-600 hover:text-white text-pink-500 flex items-center gap-1 justify-center duration-300;
+    @apply rounded-md md:px-2 px-1 md:py-[6px] border-custom-primary-main hover:bg-custom-primary-main hover:text-white text-custom-primary-main flex items-center gap-1 justify-center duration-300;
   }
   .button_sm_primary_outline {
     @apply border-[2px] font-semibold button_sm_primary_outline_base;
@@ -92,7 +92,7 @@
   }
 
   .check_box {
-    @apply w-4 h-4 text-pink-500 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-pink-500 focus:ring-1;
+    @apply w-4 h-4 text-custom-primary-main bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-custom-primary-main focus:ring-1;
   }
 
   .dropdown_filter {
@@ -107,7 +107,7 @@
   }
 
   .input_filed {
-    @apply w-full h-full py-2.5 outline-none text-gray-600 text-sm placeholder:text-gray-500;
+    @apply w-full h-full py-2 outline-none text-gray-600 text-sm placeholder:text-gray-500;
   }
 
   .capsule {
@@ -136,4 +136,50 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
+  /* color: #0e9dd181; */
+}
+
+.quill {
+  border: none !important;
+}
+
+.quill p {
+  word-break: break-all;
+}
+
+.ql-toolbar {
+  margin-top: auto;
+  border: none !important;
+}
+
+.ql-container.ql-snow {
+  border: none !important;
+}
+
+.ql-editor.ql-blank::before {
+  font-style: normal !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  color: #7d7d7d !important;
+}
+
+.quillText {
+  ul,
+  ol {
+    margin-left: 20px;
+  }
+  ul {
+    li {
+      list-style: disc !important;
+    }
+  }
+  ol {
+    margin-left: 30px;
+    li {
+      list-style: decimal !important;
+    }
+  }
+  p {
+    word-break: break-all;
+  }
 }

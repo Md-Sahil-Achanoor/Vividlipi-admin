@@ -11,9 +11,7 @@ interface PrivateOutletProps extends PropsWithChildren {
 }
 
 const PrivateOutlet = ({ children, roles }: PrivateOutletProps) => {
-  const { isLoggedIn, token, role, user } = useAppSelector(
-    (state) => state.auth
-  );
+  const { isLoggedIn, token, role } = useAppSelector((state) => state.auth);
 
   const loggedIn = isLoggedIn;
 

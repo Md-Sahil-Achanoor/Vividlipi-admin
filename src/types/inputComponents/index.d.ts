@@ -28,6 +28,8 @@ export interface CustomInputCom extends IFormik {
   desc?: string;
   leftIcon?: () => React.ReactNode;
   rightIcon?: () => React.ReactNode;
+  horizontal?: boolean;
+  tooltip?: string;
 }
 
 /**

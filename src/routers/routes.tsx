@@ -3,10 +3,12 @@ import { lazy } from "react";
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import ErrorPage from "../pages/NotFound";
 import AdminDashboard from "../pages/admin/dashboard";
+import ProductList from "../pages/admin/product";
+import ManageProduct from "../pages/admin/product/ManageProduct";
 const NonAuth = lazy(() => import("../layout/NonAuth"));
 const Home = lazy(() => import("../pages/Home"));
 const Login = lazy(() => import("../pages/auth/Login"));
-const Register = lazy(() => import("../pages/auth/Register"));
+// const Register = lazy(() => import("../pages/auth/Register"));
 const AppWrapper = lazy(() => import("./middleware/AppWrapper"));
 const PrivateOutlet = lazy(() => import("./middleware/PrivateOutlet"));
 
@@ -50,6 +52,15 @@ const router = createBrowserRouter([
         path: "dashboard",
         element: <AdminDashboard />,
       },
+      {
+        path: "products",
+        element: <AppWrapper />,
+        children: [
+          { path: "", element: <ProductList /> },
+          { path: "add-product", element: <ManageProduct /> },
+          // { path: "edit/:id", element: <EditProduct /> },
+        ],
+      },
     ],
   },
 
@@ -69,7 +80,7 @@ const router = createBrowserRouter([
     children: [
       { path: "", element: <Navigate to="/account/login" /> },
       { path: "login", element: <Login /> },
-      { path: "register", element: <Register /> },
+      // { path: "register", element: <Register /> },
     ],
   },
   {

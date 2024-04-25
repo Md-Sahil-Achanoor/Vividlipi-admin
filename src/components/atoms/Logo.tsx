@@ -28,7 +28,7 @@ const Logo = () => {
       ) : (
         <span className="w-full ">
           <div className="flex items-center justify-center gap-2 my-2">
-            <img className="w-20" src={logo} alt="LOGO" />
+            <img className="w-28" src={logo} alt="LOGO" />
             {/* <h1 className="text-2xl ml-2">Vividlipi</h1> */}
           </div>
         </span>

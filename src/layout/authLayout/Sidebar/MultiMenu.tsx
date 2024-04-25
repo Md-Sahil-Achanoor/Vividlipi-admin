@@ -45,7 +45,7 @@ const MultiMenu: React.FC<MultiMenuProps> = ({
         className={cn(
           `transition-colors block w-full px-5 py-3 text-content-primary text-sm cursor-pointer relative`,
           isActive || expandedMenu === menuName
-            ? "text-pink-500 font-medium"
+            ? "text-custom-primary-main font-medium"
             : "hover:bg-custom-primary-light inActive-menu",
           collapsed ? "flex justify-center" : "flex items-center"
         )}
@@ -56,7 +56,7 @@ const MultiMenu: React.FC<MultiMenuProps> = ({
             className={cn(
               "text-xl",
               isActive || expandedMenu === menuName
-                ? "text-pink-500 svg_active"
+                ? "text-custom-primary-main svg_active"
                 : ""
             )}
           />

@@ -8,7 +8,7 @@ export default {
       colors: {
         custom: {
           primary: {
-            light: "#aa1a7d3c",
+            light: "#0e9dd181",
             main: "#059ed4",
           },
         },
