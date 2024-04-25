@@ -353,10 +353,12 @@ const ManageProduct = () => {
                         name="translated"
                         label={"Translated"}
                         horizontal
-                        type="text"
-                        component={CustomInput}
+                        component={InputSelect}
+                        items={[
+                          { value: "Yes", name: "Yes" },
+                          { value: "No", name: "No" },
+                        ]}
                         tooltip="Translated"
-                        placeholder="Type your products translated"
                         isRequired
                       />
                       <Field
