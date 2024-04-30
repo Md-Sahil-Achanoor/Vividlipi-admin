@@ -93,7 +93,7 @@ const Header = () => {
           <div className="flex h-full items-center">
             <div
               className={cn(
-                "w-[70px] md:w-[250px] h-full bg-[#f6f6f6] text-black flex items-center justify-center",
+                "w-[70px] md:w-[250px] h-full bg-[#fdfbfb] text-black flex items-center justify-center",
                 leftSideBarType === "condensed" && !isMobile
                   ? "w-[70px] md:w-[70px]"
                   : ""

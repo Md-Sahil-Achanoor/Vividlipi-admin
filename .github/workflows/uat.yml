@@ -1,9 +1,9 @@
-name: Netlify Deploy
+name: Netlify Deploy (UAT)
 
 on:
   push:
     branches:
-      - main # Change this to your main branch
+      - uat # Change this to your uat branch
 
 jobs:
   build:
