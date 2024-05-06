@@ -5,7 +5,6 @@ import { ApiResponse, ManagePayload } from "../../types";
 import type {
   AuthResponse,
   LoginData,
-  SignUpPayload,
   UserPasswordPayload,
 } from "../../types/auth";
 import { authAction } from "./authSlice";
@@ -13,7 +12,7 @@ import { authAction } from "./authSlice";
 const authQuery = API.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
-    signup: builder.mutation<any, SignUpPayload>({
+    signup: builder.mutation<any, any>({
       query: (user) => ({
         url: endpoints.login,
         method: "POST",
@@ -32,23 +31,16 @@ const authQuery = API.injectEndpoints({
         try {
           const result = await queryFulfilled;
           const res = result.data;
+          console.log(res);
           if (res?.status === 1) {
             dispatch(authAction.loginSuccess(res));
             localStorage.setItem("user", JSON.stringify(res));
             const role = res?.user?.role;
+            // console.log(role, "role", role === "admin");
             if (options?.router) {
-              if (role === "Admin") {
+              if (role === "admin") {
                 toast.success("Signed in successfully");
                 options?.router("/admin/dashboard");
-              } else if (role === "Operator") {
-                toast.success("Signed in successfully");
-                options?.router("/operator/dashboard");
-              } else if (role === "EventManager") {
-                toast.success("Signed in successfully");
-                options?.router("/event-manager/dashboard");
-              } else if (role === "Saleman") {
-                toast.success("Signed in successfully");
-                options?.router("/ad-partner/dashboard");
               } else {
                 toast.error("Invalid Role");
               }
@@ -66,52 +58,13 @@ const authQuery = API.injectEndpoints({
       },
     }),
 
-    // operator
-    operatorSignUp: builder.mutation<
-      ApiResponse<string>,
-      ManagePayload<any, any>
-    >({
-      query: ({ data, options }) => {
-        let url =
-          options?.conditions?.as === "operator"
-            ? endpoints.operator_register
-            : endpoints.eventmanager_register;
-        return {
-          url,
-          method: "POST",
-          body: data,
-        };
-      },
-      async onQueryStarted(_arg, { queryFulfilled }) {
-        try {
-          const result = await queryFulfilled;
-          // console.log(`\n\n result:`, result);
-          if (result?.data?.status === 1) {
-            toast.success(
-              "Signed up successfully. You can login after admin approval"
-            );
-            _arg?.options?.resetForm();
-            _arg?.options?.setSubmitting(false);
-            if (_arg?.options?.router) _arg?.options?.router("/account/login");
-          } else {
-            toast.error(result?.data?.data);
-            _arg?.options?.setSubmitting(false);
-          }
-        } catch (err: unknown) {
-          const error = err as any;
-          const message = error?.response?.data?.message;
-          toast.error(message || "Invalid Credentials");
-        }
-      },
-    }),
-
     // update password
     updatePassword: builder.mutation<
       ApiResponse<{ message: string }>,
       ManagePayload<UserPasswordPayload>
     >({
       query: ({ data }) => ({
-        url: endpoints.updatePassword,
+        url: endpoints.login,
         method: "POST",
         body: data,
       }),
@@ -148,7 +101,6 @@ const authQuery = API.injectEndpoints({
 export const {
   useSignupMutation,
   useSignInMutation,
-  useOperatorSignUpMutation,
   useUpdatePasswordMutation,
 } = authQuery;
 

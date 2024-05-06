@@ -1,9 +1,8 @@
-import { Field, Form, Formik } from "formik";
-import { useState } from "react";
+import { Field, Form, Formik, FormikHelpers } from "formik";
+import { useEffect, useState } from "react";
 import { BsArrowRightShort } from "react-icons/bs";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../../components/atoms/Loader";
-import MultiSelectItem from "../../../components/atoms/MultiSelectItem";
 import { Card } from "../../../components/base/Card";
 import CheckboxGroup from "../../../components/elements/InputComponents/CheckboxGroup";
 import CustomInput from "../../../components/elements/InputComponents/CustomInput";
@@ -11,64 +10,59 @@ import InfiniteSelect from "../../../components/elements/InputComponents/Infinit
 import InputSelect from "../../../components/elements/InputComponents/InputSelect";
 import InputTagComponent from "../../../components/elements/InputComponents/InputTagComponent";
 import QuillComponent from "../../../components/elements/InputComponents/QuillComponent";
+import { useGetCategoriesQuery } from "../../../feature/category/categoryQuery";
+import { useManageProductMutation } from "../../../feature/product/productQuery";
 import PageLayout from "../../../layout/PageLayout";
 import { manageProductSchema } from "../../../models/product";
-import { BreadCrumbItem, CategoryResponse, Product } from "../../../types";
+import {
+  BreadCrumbItem,
+  CategoryQuery,
+  CategoryResponse,
+  Product,
+  ProductPayload,
+} from "../../../types";
+import { cn } from "../../../utils/twmerge";
 
 const initialValues: Product = {
-  bookTitle: "",
-  thumbnail: "",
+  book_title: "",
+  cat1: null,
+  cat2: null,
+  thumbnail: "https://example.com/book_cover.jpg",
   description: "",
-  authorName: "",
+  author_name: "",
   publisher: "",
-  releaseDate: "",
-  digitalProductURL: "",
-  salePrice: "",
-  saleQuantity: "",
+  release_date: "",
+  digital_product_url: "",
+  sale_price: "",
+  sale_quantity: "",
   price: "",
   inventory: "",
   commission: "",
-  firstYearCommission: "",
-  secondYearCommission: "",
-  thereAfterCommission: "",
-  commissionGoesTo: "",
+  first_year_commission: "",
+  second_year_commission: "",
+  there_after_commission: "",
+  commission_goes_to: "",
   tax: "",
   shipping: "",
   genre: "",
   tags: [],
-  bookFormat: 1,
-  translated: "", //Yes/No
-  translatorName: "",
+  book_format: 1,
+  translated: "No", //Yes/No
+  translator_name: "",
   language: "",
   category: [],
-  allowComments: false, // Yes/No
+  allow_comments: "No", // Yes/No
 };
-
-const categoryData: CategoryResponse[] = [
-  {
-    id: "1",
-    name: "Category 1",
-    description: "hello",
-  },
-  {
-    id: "2",
-    name: "Category 2",
-    description: "hello",
-  },
-  {
-    id: "3",
-    name: "Category 3",
-    description: "hello",
-  },
-];
 
 const ManageProduct = () => {
   const { id } = useParams();
-  const [values] = useState<any | null>(null);
+  const router = useNavigate();
+  const [values] = useState<Product | null>(null);
+  const [category2, setCategory2] = useState<CategoryResponse | null>(null);
   const breadcrumbItem: BreadCrumbItem[] = [
     {
       name: "Product List",
-      link: "/admin/products",
+      link: "/admin/products/product-list",
     },
     {
       name: id ? "Edit Product" : "Create Product",
@@ -76,7 +70,6 @@ const ManageProduct = () => {
     },
   ];
 
-  // const router = useNavigate();
   const loading = false;
   //   const {
   //     isLoading: loading,
@@ -84,30 +77,82 @@ const ManageProduct = () => {
   //     refetch,
   //   } = useGetSalesmanByIdQuery({ query: { id } }, { skip: !id });
 
-  //   const [manageSalesman, { isLoading }] = useManageProductMutation();
-  const isLoading = false;
+  const [manageProduct, { isLoading }] = useManageProductMutation();
 
   const onSubmit = (
-    values: Product
-    // { setSubmitting, resetForm }: FormikSubmitOption
+    values: Product,
+    { setSubmitting, resetForm }: FormikHelpers<Product>
   ) => {
-    console.log(values);
-    // let { passwordConfirm, Password, ...data } = values;
-    // let query = {};
-    // let body: any = { ...data };
-    // if (!id) {
-    //   body.Password = Password;
-    // }
-    // if (id) {
-    //   query = { id };
-    // }
-    // manageSalesman({
-    //   data: body,
-    //   options: { router, setSubmitting, resetForm },
-    //   query,
-    //   id,
-    // });
+    // console.log(values);
+    // setSubmitting(false);
+    let body: ProductPayload = {
+      ...values,
+      cat1: values.cat1?.id as number,
+      cat2: values.cat2?.id as number,
+      translator_name:
+        values?.translated === "Yes" ? values?.translator_name : null,
+      category: [],
+    };
+    let query: Partial<CategoryQuery> = {};
+    if (!id) {
+      query = {
+        id,
+      };
+    }
+    manageProduct({
+      data: body,
+      options: { router, setSubmitting, resetForm },
+      query,
+      id,
+    });
   };
+
+  const {
+    isLoading: categoryLoading,
+    refetch: categoryRefetch,
+    data: categoryList,
+    isError: categoryIsError,
+    error: categoryErrorMessage,
+  } = useGetCategoriesQuery({
+    conditions: {
+      type: "category1",
+    },
+  });
+
+  const getQuery = () => {
+    let query: Partial<CategoryQuery> = {};
+    if (category2) {
+      query = {
+        cat1: category2?.id,
+      };
+    }
+    return query;
+  };
+
+  const {
+    isLoading: category2Loading,
+    refetch: category2Refetch,
+    data: category2List,
+    isError: category2IsError,
+    error: category2ErrorMessage,
+  } = useGetCategoriesQuery(
+    {
+      query: getQuery(),
+      conditions: {
+        type: "category2",
+      },
+    },
+    {
+      skip: category2 === null,
+    }
+  );
+
+  useEffect(() => {
+    if (category2) {
+      category2Refetch();
+    }
+    categoryRefetch();
+  }, [category2]);
 
   return (
     <PageLayout
@@ -134,7 +179,7 @@ const ManageProduct = () => {
                     {/* {console.log(values)} */}
                     <div className="mt-5">
                       <Field
-                        name="bookTitle"
+                        name="book_title"
                         label={"Book title"}
                         horizontal
                         type="text"
@@ -143,7 +188,97 @@ const ManageProduct = () => {
                         placeholder="Type your products name"
                         isRequired
                       />
-                      <Field
+                      <div>
+                        <Field
+                          label={"Category"}
+                          name="cat1"
+                          isRequired
+                          renderData={categoryList?.data}
+                          isLoading={categoryLoading}
+                          isError={categoryIsError}
+                          errorMessage={categoryErrorMessage}
+                          // reload={()}
+                          // listRef={batchListRef}
+                          horizontal
+                          tooltip="Category"
+                          renderItem={(item: CategoryResponse) => (
+                            <span className="uppercase">{item?.title}</span>
+                          )}
+                          isActive={(item: CategoryResponse) =>
+                            values?.cat1?.id === item?.id
+                          }
+                          renderName={() => {
+                            return (
+                              <span
+                                className={cn(
+                                  "text-sm text-gray-700 truncate",
+                                  values?.cat1?.title && "uppercase"
+                                )}
+                              >
+                                {values?.cat1?.title || "Select Category"}
+                              </span>
+                            );
+                          }}
+                          onChangeCallback={(item: CategoryResponse) => {
+                            setFieldValue(`cat1`, item);
+                            setCategory2(item);
+                          }}
+                          clearData={() => {
+                            setFieldValue(`cat1`, null);
+                            setFieldValue(`cat2`, null);
+                            setCategory2(null);
+                          }}
+                          isSelected={values?.cat1 !== null}
+                          component={InfiniteSelect}
+                          isAuth
+                        />
+                      </div>
+
+                      {values?.cat1 && (
+                        <div>
+                          <Field
+                            label={"Sub Category"}
+                            name="cat2"
+                            isRequired
+                            renderData={category2List?.data}
+                            isLoading={category2Loading}
+                            isError={category2IsError}
+                            errorMessage={category2ErrorMessage}
+                            // reload={()}
+                            // listRef={batchListRef}
+                            horizontal
+                            tooltip="Category"
+                            renderItem={(item: CategoryResponse) => (
+                              <span className="uppercase">{item?.title}</span>
+                            )}
+                            isActive={(item: CategoryResponse) =>
+                              values?.cat2?.id === item?.id
+                            }
+                            renderName={() => {
+                              return (
+                                <span
+                                  className={cn(
+                                    "text-sm text-gray-700 truncate",
+                                    values?.cat2?.title && "uppercase"
+                                  )}
+                                >
+                                  {values?.cat2?.title || "Select Category"}
+                                </span>
+                              );
+                            }}
+                            onChangeCallback={(item: CategoryResponse) => {
+                              setFieldValue(`cat2`, item);
+                            }}
+                            clearData={() => {
+                              setFieldValue(`cat2`, null);
+                            }}
+                            isSelected={values?.cat2 !== null}
+                            component={InfiniteSelect}
+                            isAuth
+                          />
+                        </div>
+                      )}
+                      {/* <Field
                         name="thumbnail"
                         label={"Thumbnail"}
                         horizontal
@@ -152,7 +287,7 @@ const ManageProduct = () => {
                         tooltip="Thumbnail"
                         placeholder="Upload thumbnail"
                         isRequired
-                      />
+                      /> */}
                       <Field
                         name="description"
                         label={"Description"}
@@ -166,7 +301,7 @@ const ManageProduct = () => {
                         isRequired
                       />
                       <Field
-                        name="authorName"
+                        name="author_name"
                         label={"Author Name"}
                         horizontal
                         type="text"
@@ -186,7 +321,7 @@ const ManageProduct = () => {
                         isRequired
                       />
                       <Field
-                        name="releaseDate"
+                        name="release_date"
                         label={"Release Date"}
                         horizontal
                         type="date"
@@ -196,7 +331,7 @@ const ManageProduct = () => {
                         isRequired
                       />
                       <Field
-                        name="digitalProductURL"
+                        name="digital_product_url"
                         label={"Digital Product URL"}
                         horizontal
                         type="text"
@@ -206,7 +341,7 @@ const ManageProduct = () => {
                         isRequired
                       />
                       <Field
-                        name="salePrice"
+                        name="sale_price"
                         label={"Sale Price"}
                         horizontal
                         type="number"
@@ -216,7 +351,7 @@ const ManageProduct = () => {
                         isRequired
                       />
                       <Field
-                        name="saleQuantity"
+                        name="sale_quantity"
                         label={"Sale Quantity"}
                         horizontal
                         type="number"
@@ -256,7 +391,7 @@ const ManageProduct = () => {
                         isRequired
                       />
                       <Field
-                        name="firstYearCommission"
+                        name="first_year_commission"
                         label={"First Year Commission"}
                         horizontal
                         type="number"
@@ -266,7 +401,7 @@ const ManageProduct = () => {
                         isRequired
                       />
                       <Field
-                        name="secondYearCommission"
+                        name="second_year_commission"
                         label={"Second Year Commission"}
                         horizontal
                         type="number"
@@ -276,7 +411,7 @@ const ManageProduct = () => {
                         isRequired
                       />
                       <Field
-                        name="thereAfterCommission"
+                        name="there_after_commission"
                         label={"There After Commission"}
                         horizontal
                         type="number"
@@ -286,7 +421,7 @@ const ManageProduct = () => {
                         isRequired
                       />
                       <Field
-                        name="commissionGoesTo"
+                        name="commission_goes_to"
                         label={"Commission Goes To"}
                         horizontal
                         component={InputSelect}
@@ -338,7 +473,7 @@ const ManageProduct = () => {
                         isRequired
                       />
                       <Field
-                        name="bookFormat"
+                        name="book_format"
                         label={"Book Format"}
                         horizontal
                         component={InputSelect}
@@ -361,16 +496,18 @@ const ManageProduct = () => {
                         tooltip="Translated"
                         isRequired
                       />
-                      <Field
-                        name="translatorName"
-                        label={"Translator Name"}
-                        horizontal
-                        type="text"
-                        component={CustomInput}
-                        tooltip="Translator Name"
-                        placeholder="Type your products translator name"
-                        isRequired
-                      />
+                      {values?.translated === "Yes" && (
+                        <Field
+                          name="translator_name"
+                          label={"Translator Name"}
+                          horizontal
+                          type="text"
+                          component={CustomInput}
+                          tooltip="Translator Name"
+                          placeholder="Type your products translator name"
+                          isRequired
+                        />
+                      )}
                       <Field
                         name="language"
                         label={"Language"}
@@ -393,7 +530,7 @@ const ManageProduct = () => {
                         isRequired
                       /> */}
 
-                      <div>
+                      {/* <div>
                         <Field
                           label={"Category"}
                           name="category"
@@ -454,17 +591,17 @@ const ManageProduct = () => {
                           component={InfiniteSelect}
                           isAuth
                         />
-                      </div>
+                      </div> */}
 
                       <CheckboxGroup
-                        name="allowComments"
+                        name="allow_comments"
                         label="Allow Comments"
                         isMulti={false}
                         horizontal
                         tooltip="Allow Comments"
                         options={[
-                          { key: "Yes", value: true },
-                          { key: "No", value: false },
+                          { key: "Yes", value: "Yes" },
+                          { key: "No", value: "No" },
                         ]}
                       />
                     </div>

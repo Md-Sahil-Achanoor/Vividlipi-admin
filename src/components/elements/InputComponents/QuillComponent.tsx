@@ -13,7 +13,7 @@ const QuillComponent = ({
   isRequired,
   ...props
 }: any) => {
-  console.log(`\n\n ~ file: QuillComponent.tsx:14 ~ rest:`, name, rest, form);
+  // console.log(`\n\n ~ file: QuillComponent.tsx:14 ~ rest:`, name, rest, form);
   const isValid =
     form.touched[rest.name] && form.errors[rest.name] && !props.disabled
       ? true

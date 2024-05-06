@@ -1,79 +1,43 @@
 export const endpoints = {
-  // Global
+  /**
+   * @module Global
+   * */
   imageUpload: "/UploadProfilePic",
-  profile: "/Profile",
-  update_profile: "/ProfileUpdate",
-  updatePassword: "/ChangePassword",
-  globalSearch: "/GlobalSearch",
 
-  // auth
-  login: "/Auth",
+  /**
+   * @module Auth
+   * */
+  login: "/api/login",
 
-  // admin
-  operator_register: "/Operator_register",
-  operator_list: `/ListOperator`,
-  approved_operator: `/Approve-UnApprove-Operator`,
-  delete_operator: `/DeleteOperator`,
-  dashboard: "/OperatorDashboard",
-  salesman: "/Salesman",
-  approveVendor: "/Approve-UnApprove-Vendor",
-  approveAds: "/Approve-UnApprove-ads",
-  admin_dashboard: "/AdminDashboard",
-  brand: "/Brand",
-  pos: "/POS",
-  posBulk: "/ImportPOS",
+  /**
+   * @module Role { Admin }
+   * @protected
+   * */
 
-  // employee
-  employee_create: "/CreateEmployee",
-  employee_update: "/UpdateEmployee",
-  employee_list: `/ListEmployee`,
-  delete_employee: `/DeleteEmployee`,
-  employeeBulk: `/ImportEmployees`,
+  /**
+   *  @module Category
+   * */
+  category: "/api/category",
 
-  // operator
-  // stage
-  stage: "/Stage",
-  stageBulk: "/ImportStage",
-  // asset
-  asset: "/Asset",
-  assetBulk: "/ImportAssets",
-  // connect asset
-  connect_asset: "/ConnectAsset",
-  // route
-  route: "/Routes",
-  // route map
-  routeMap: "/RouteMap",
-  // multi ticket
-  multiTicket: "/MutiTicketConfiguration",
-  // child fare
-  childFare: "/ChildFare",
-  // ticket master
-  PassengerRoles: "/PassengerRoles",
+  // old api
+  category_list1: "/api/list-cat1",
+  add_category1: "/api/add-cat1",
+  edit_category1: "/api/edit-cat1",
+  delete_category1: "/api/delete-cat1",
+  // single_category1: "/api/single-cat1",
+  category_list2: "/api/list-cat2",
+  add_category2: "/api/add-cat2",
+  edit_category2: "/api/edit-cat2",
+  delete_category2: "/api/delete-cat2",
 
-  // event manager
-  eventmanager_register: "/EManager_register",
-  eventmanager_list: `/ListEmanager`,
-  approved_eventmanager: `/Approve-UnApprove-Emanager`,
-  delete_eventmanager: `/DeleteEmanager`,
+  /**
+   * @module Product
+   * */
+  product: "/api/product",
 
-  // employee
-  event_employee_create: "/CreateEventEmployee",
-  event_employee_update: "/UpdateEventEmployee",
-  event_employee_list: `/ListEventEmployee`,
-  delete_event_employee: `/DeleteEventEmployee`,
-
-  // event
-  event: "/Event",
-
-  // ticket
-  ticket: "/Tickets",
-
-  // ticket config
-  ticket_config: "/TicketsConfiguration",
-
-  // advertisement
-  advertisement: "/Advertisement",
-
-  // vendor
-  vendor: "/Vendor",
+  // old api
+  add_product: "/api/add-product",
+  product_list: "/api/list-product",
+  edit_product: "/api/edit-product",
+  delete_product: "/api/delete-product",
 };

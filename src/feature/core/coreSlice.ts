@@ -17,6 +17,7 @@ const initialState: InitialStateType = {
   selectedDate: formatDate(new Date()),
   isCreateAble: true,
   sortType: "asc",
+  page: 1,
 };
 
 export type State = (typeof initialState)[keyof typeof initialState];
@@ -60,6 +61,9 @@ const coreSlice = createSlice({
     },
     setSortType(state, { payload }: PayloadAction<string>) {
       state.sortType = payload;
+    },
+    setPage: (state, { payload }: PayloadAction<number>) => {
+      state.page = payload;
     },
   },
 });

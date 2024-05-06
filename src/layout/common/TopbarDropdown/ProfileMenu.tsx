@@ -12,7 +12,7 @@ import {
   ResponseUser,
 } from "../../../types";
 
-const includeType = ["admin", "operator", "ad-partner", "event-manager"];
+const includeType = ["operator", "ad-partner", "event-manager"];
 
 const ProfileMenu = () => {
   const dispatch = useAppDispatch();
@@ -40,7 +40,7 @@ const ProfileMenu = () => {
     switch (type) {
       case "admin":
         const values = data?.profile as ResponseUser;
-        return values?.name || "N/A";
+        return values?.role || "N/A";
       case "operator":
         const values1 = data?.profile as any;
         return values1?.ShortName || "N/A";
@@ -81,7 +81,7 @@ const ProfileMenu = () => {
                   ? isLoading
                     ? "Loading..."
                     : displayName()
-                  : user?.name || "N/A"}
+                  : user?.role?.toLocaleUpperCase()}
                 {/* {user?.role} */}
               </span>
               <BiChevronDown className="text-xl" />
