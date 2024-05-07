@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../app/store";
+import { useAppSelector } from "../../../app/store";
 import NoTableData from "../../../components/atoms/NoTableData";
 import CustomTable from "../../../components/elements/common/custom-table/CustomTable";
 import SkeletonTable from "../../../components/elements/skeleton/SkeletonTable";
@@ -44,7 +44,7 @@ const ProductList = () => {
   // const [updateProductStatus, { isLoading: isUpdateStatus }] =
   //   useUpdateProductStatusMutation();
 
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const { data, isLoading, refetch } = useGetProductsQuery({
     query: {
       page: 1,
