@@ -51,6 +51,7 @@ export interface ApiResponse<T> {
   count: number;
   status: number;
   message: string;
+  current_page: number;
 }
 
 /**
@@ -290,7 +291,7 @@ export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
  * @type { Manage Update or create module Base Payload }
  */
 export interface ManagePayload<T, Q = {}> {
-  id?: string;
+  id?: string | number;
   data: T;
   query?: Q;
   options?: FormikSubmitOption;

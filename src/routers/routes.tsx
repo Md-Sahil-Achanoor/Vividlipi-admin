@@ -1,10 +1,15 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy } from "react";
 import { Navigate, createBrowserRouter } from "react-router-dom";
-import ErrorPage from "../pages/NotFound";
-import AdminDashboard from "../pages/admin/dashboard";
-import ProductList from "../pages/admin/product";
-import ManageProduct from "../pages/admin/product/ManageProduct";
+
+const ErrorPage = lazy(() => import("../pages/NotFound"));
+const AdminDashboard = lazy(() => import("../pages/admin/dashboard"));
+const MainCategoryList = lazy(() => import("../pages/admin/main-category"));
+const ProductList = lazy(() => import("../pages/admin/product"));
+const ManageProduct = lazy(
+  () => import("../pages/admin/product/ManageProduct")
+);
+const SubCategoryList = lazy(() => import("../pages/admin/sub-category"));
 const NonAuth = lazy(() => import("../layout/NonAuth"));
 const Home = lazy(() => import("../pages/Home"));
 const Login = lazy(() => import("../pages/auth/Login"));
@@ -42,7 +47,7 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: (
-      <PrivateOutlet roles={["Admin"]}>
+      <PrivateOutlet roles={["admin"]}>
         <AppWrapper />
       </PrivateOutlet>
     ),
@@ -56,8 +61,17 @@ const router = createBrowserRouter([
         path: "products",
         element: <AppWrapper />,
         children: [
-          { path: "", element: <ProductList /> },
-          { path: "add-product", element: <ManageProduct /> },
+          { path: "product-list", element: <ProductList /> },
+          { path: "product-list/add-product", element: <ManageProduct /> },
+          // { path: "edit/:id", element: <EditProduct /> },
+        ],
+      },
+      {
+        path: "categories",
+        element: <AppWrapper />,
+        children: [
+          { path: "main-category", element: <MainCategoryList /> },
+          { path: "sub-category", element: <SubCategoryList /> },
           // { path: "edit/:id", element: <EditProduct /> },
         ],
       },

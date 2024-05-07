@@ -1,39 +1,51 @@
 import { CategoryResponse } from "../category";
+import { IStore, ReqQuery } from "../common";
 
 export interface IProduct<T> {
-  bookTitle: string;
+  book_title: string;
   thumbnail: string;
+  cat1: T | null;
+  cat2: T | null;
   description: string;
-  authorName: string;
+  author_name: string;
   publisher: string;
-  releaseDate: string;
-  digitalProductURL: string;
-  salePrice: string | number;
-  saleQuantity: number | string;
+  release_date: string;
+  digital_product_url: string;
+  sale_price: string | number;
+  sale_quantity: number | string;
   price: string | number;
   inventory: string | number;
   commission: string;
-  firstYearCommission: string | number;
-  secondYearCommission: string | number;
-  thereAfterCommission: string | number;
-  commissionGoesTo: string;
+  first_year_commission: string | number;
+  second_year_commission: string | number;
+  there_after_commission: string | number;
+  commission_goes_to: string;
   tax: string | number;
   shipping: string | number;
   genre: string;
   tags: string[];
-  bookFormat: number;
+  book_format: number;
   translated: string; // Yes /No
-  translatorName: string; // if yes then required
+  translator_name: string | null; // if yes then required
   language: string;
   category: T[];
-  allowComments: boolean; // Yes / No
+  allow_comments: string; // Yes / No
 }
 
 export type Product = IProduct<CategoryResponse>;
 
-export interface ProductPayload extends IProduct<string> {}
+export interface ProductPayload extends IProduct<number> {}
 
 export interface ProductResponse extends IProduct<CategoryResponse> {
   id: string;
   createdAt: string;
+}
+
+export interface ProductQuery extends ReqQuery {
+  productid: string;
+  searchKeyword: string;
+}
+
+export interface ProductState extends IStore {
+  selectedProduct: ProductResponse | null;
 }

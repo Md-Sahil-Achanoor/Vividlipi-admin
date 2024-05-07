@@ -1,11 +1,4 @@
-export type Role =
-  | "Admin"
-  | "User"
-  | "SuperAdmin"
-  | "Operator"
-  | "EventManager"
-  | "Saleman"
-  | "";
+export type Role = "admin" | "";
 
 export type CountryInfoCode = {
   countryCode?: string;
@@ -22,49 +15,21 @@ export interface Tokens<T> {
   refresh: T;
 }
 
-export interface ISignUp {
-  email: string;
-  password: string;
-  passwordConfirm: string;
-  agree: boolean;
-}
-
-export interface UpdateAdmin {
-  Name: string;
-  profilepic: string;
-  name?: string;
-}
-
-export type SignUpPayload = Omit<ISignUp, "agree" | "passwordConfirm">;
-
 export interface ResponseUser {
-  ID: string;
-  // images: string;
-  // phone: string;
-  role: Role;
-  name: string;
-  // profilepic: string;
   email: string;
+  id: number;
+  picture: string;
+  first_name: string;
+  last_name: string;
+  role: Role;
 }
-
-// export interface ResponseUser {
-//   firstName: string;
-//   lastName: string;
-//   userName: string;
-//   email: string;
-//   phoneNumber: string;
-//   isphoneNumberVerified: boolean;
-//   isEmailVerified: boolean;
-//   id: string;
-//   images?: string;
-// }
 
 export interface AuthResponse {
-  // tokens: Tokens<TokenObject>;
-  jwt: string;
+  token: string;
   status: number;
   message: string;
   user: ResponseUser;
+  admin: ResponseUser;
 }
 
 export interface OtpPayload {
@@ -89,10 +54,8 @@ export interface ResetPasswordType {
 }
 
 export interface LoginData {
-  email_phone: string;
+  email: string;
   password: string;
-  RemeberMe?: number | string;
-  Type: string;
 }
 
 export interface AuthState {

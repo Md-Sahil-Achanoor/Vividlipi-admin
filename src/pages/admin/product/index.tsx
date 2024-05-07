@@ -1,11 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
-import Loader from "../../../components/atoms/Loader";
+
+import { useEffect } from "react";
+import { useAppSelector } from "../../../app/store";
 import NoTableData from "../../../components/atoms/NoTableData";
 import CustomTable from "../../../components/elements/common/custom-table/CustomTable";
-
+import SkeletonTable from "../../../components/elements/skeleton/SkeletonTable";
+import { useGetProductsQuery } from "../../../feature/product/productQuery";
 import PageLayout from "../../../layout/PageLayout";
 import { BreadCrumbItem } from "../../../types";
-import { cn } from "../../../utils/twmerge";
 
 const breadcrumbItem: BreadCrumbItem[] = [
   {
@@ -13,55 +15,64 @@ const breadcrumbItem: BreadCrumbItem[] = [
     link: "#",
   },
 ];
+
+const LIMIT = 10;
+// release_date: "",
+// digital_product_url: "",
+// sale_price: "",
+// sale_quantity: "",
 const tableHead = [
   "SL",
-  // "ID",
   "Name",
-  "Category",
-  // "Phone Number",
-  // "Address",
+  "Author",
+  "Price",
+  "Publisher",
+  "Release Date",
+  "Sale Price",
+  "Sale Quantity",
   "Action",
 ];
 
 const ProductList = () => {
   const navigate = useNavigate();
-  // const { selectedOperator, reRender } = useAppSelector(
+  const { page } = useAppSelector((state) => state.core);
+  // const { selectedProduct, reRender } = useAppSelector(
   //   (state) => state.operator
   // );
   // const { type, selectedStatus } = useAppSelector((state) => state.core);
 
-  // const [updateOperatorStatus, { isLoading: isUpdateStatus }] =
-  //   useUpdateOperatorStatusMutation();
+  // const [updateProductStatus, { isLoading: isUpdateStatus }] =
+  //   useUpdateProductStatusMutation();
 
   // const dispatch = useAppDispatch();
-  // const { data, isLoading, refetch } = useGetOperatorsQuery({
-  //   query: { status: "1", isActive: selectedStatus },
-  // });
+  const { data, isLoading, refetch } = useGetProductsQuery({
+    query: {
+      page: 1,
+    },
+  });
 
-  // useEffect(() => {
-  //   refetch();
-  // }, [reRender]);
+  useEffect(() => {
+    refetch();
+  }, []);
 
   // const handleModal = (type: string) => {
   //   // console.log(`\n\n handleModal ~ type:`, type);
   //   if (type === "cancelled") {
   //     dispatch(coreAction.toggleModal({ type: "", open: false }));
-  //     dispatch(operatorAction.setSelectedOperator(null));
+  //     dispatch(operatorAction.setSelectedProduct(null));
   //   }
   // };
 
   // const handleUpdateStatus = async () => {
-  //   await updateOperatorStatus({
-  //     id: selectedOperator?.ID,
+  //   await updateProductStatus({
+  //     id: selectedProduct?.ID,
   //     query: {
-  //       isActive: selectedOperator?.isActive === 1 ? "0" : "1",
+  //       isActive: selectedProduct?.isActive === 1 ? "0" : "1",
   //     },
   //   });
   // };
 
-  // const status = selectedOperator?.isActive === 1 ? "Deactivate" : "Activate";
-
-  const data: any = [];
+  // const status = selectedProduct?.isActive === 1 ? "Deactivate" : "Activate";
 
   return (
     <>
@@ -81,15 +92,15 @@ const ProductList = () => {
         wrapperClass="h-full"
         isModalHeader
         outSideClick
-        // headText={`Delete the Operator?`}
-        // heading={selectedOperator?.ShortName || ""}
+        // headText={`Delete the Product?`}
+        // heading={selectedProduct?.ShortName || ""}
         // details={`Are you certain you want to delete?`}
         // type={"delete"}
         // buttonText={isUpdateStatus ? "Deleting..." : "Delete"}
-        headText={`${status} the Operator?`}
-        heading={selectedOperator?.ShortName || ""}
+        headText={`${status} the Product?`}
+        heading={selectedProduct?.ShortName || ""}
         details={`Are you certain you want to ${status}?`}
-        type={selectedOperator?.isActive === 1 ? "delete" : ""}
+        type={selectedProduct?.isActive === 1 ? "delete" : ""}
         buttonText={isUpdateStatus ? "Updating..." : status}
         buttonProps={{
           onClick: handleUpdateStatus,
@@ -101,33 +112,40 @@ const ProductList = () => {
         breadcrumbItem={breadcrumbItem}
         buttonText="Add Product"
         buttonProps={{
-          onClick: () => navigate("/admin/products/add-product"),
+          onClick: () => navigate("/admin/products/product-list/add-product"),
         }}
       >
         {/* <Card className="p-3 border-0 shadow-md"> */}
         {/* <TableWrapper isActiveInactive isSort={false}> */}
         <CustomTable headList={tableHead}>
-          {false ? (
-            <NoTableData colSpan={7}>
-              <Loader className="h-40" />
-            </NoTableData>
-          ) : data?.data &&
-            typeof data?.data === "object" &&
-            data?.data?.length > 0 ? (
-            data?.data?.map((item: any, index: any) => (
-              <tr className="table_tr" key={item?.ID}>
-                <td className="table_td">{index + 1}</td>
-                {/* <td className="table_td">{item?.DisplayID}</td> */}
-                <td className="table_td uppercase">{item?.CompanyName}</td>
-                <td className="table_td">{item?.CompanyEmail}</td>
-                {/* <td className="table_td">{item?.PhoneNo}</td>
-                  <td className="table_td">{item?.Address1}</td> */}
+          {isLoading ? (
+            <SkeletonTable total={6} tableCount={6} />
+          ) : data?.data && data?.data?.length > 0 ? (
+            data?.data?.map((item, index) => (
+              <tr
+                key={item?.id}
+                className={`table_tr border-0 ${
+                  data?.data?.length - 1 !== index
+                    ? "border-table-background-gray border-b"
+                    : ""
+                }`}
+              >
+                <th scope="row" className="table_td">
+                  {index + 1 + (page - 1) * LIMIT}
+                </th>
+                <td className="table_td">{item?.book_title}</td>
+                <td className="table_td">{item?.author_name}</td>
+                <td className="table_td">{item?.price}</td>
+                <td className="table_td">{item?.publisher}</td>
+                <td className="table_td">{item?.release_date}</td>
+                <td className="table_td">{item?.sale_price}</td>
+                <td className="table_td">{item?.sale_quantity}</td>
                 <td className="table_td">
                   <div className="flex items-center gap-3">
-                    <Link to={`/admin/operator/approved-list/${item?.ID}`}>
+                    <Link to={`/admin/products/product-list/${item?.id}`}>
                       View
                     </Link>
-                    <button
+                    <div
                       onClick={() => {
                         // dispatch(
                         //   coreAction.toggleModal({
@@ -135,17 +153,11 @@ const ProductList = () => {
                         //     open: true,
                         //   })
                         // );
-                        // dispatch(operatorAction.setSelectedOperator(item));
                       }}
-                      className={cn(
-                        "font-medium hover:underline",
-                        item?.isActive === 1
-                          ? "text-red-600 dark:text-red-500"
-                          : "text-green-600 dark:text-green-500"
-                      )}
+                      className="cursor-pointer"
                     >
-                      {item?.isActive === 1 ? "Deactivate" : "Activate"}
-                    </button>
+                      Delete
+                    </div>
                   </div>
                 </td>
               </tr>

@@ -9,6 +9,7 @@ export interface InitialStateType {
   currentTab: number;
   selectedDate: string;
   sortType: string;
+  page: number;
 }
 
 export interface SortObject {

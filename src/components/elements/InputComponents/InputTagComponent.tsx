@@ -14,7 +14,7 @@ const QuillComponent = ({
   isRequired,
   ...props
 }: any) => {
-  console.log(`\n\n ~ file: QuillComponent.tsx:14 ~ rest:`, name, rest);
+  // console.log(`\n\n ~ file: QuillComponent.tsx:14 ~ rest:`, name, rest);
   return (
     <React.Fragment>
       <div

@@ -24,10 +24,10 @@ const CustomModal = ({
           onClick={() => outSideClick && handleModal("cancelled")}
         ></div>
         <div
-          className={`${classes.body} bg-white dark:bg-dark_primary p-5 rounded-lg shadow duration-500 z-20 border-2 border-pink-500`}
+          className={`${classes.body} bg-white dark:bg-dark_primary p-5 rounded-lg shadow duration-500 z-20 border-2 border-custom-primary-main`}
         >
           {isModalHeader && (
-            <div className="flex justify-between items-center mb-5">
+            <div className="flex justify-between items-center">
               <span className="text-xl font-semibold">{headText}</span>
               <div
                 className="p-3 rounded-full bg-bg-gray flex items-center justify-center cursor-pointer"

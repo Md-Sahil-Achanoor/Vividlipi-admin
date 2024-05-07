@@ -2,24 +2,18 @@ import React from "react";
 import { AiOutlineUser } from "react-icons/ai";
 import { BiChevronDown, BiLogOut } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import API from "../../../app/services/api";
 import { useAppDispatch, useAppSelector } from "../../../app/store";
 import logo from "../../../assets/Images/male.png";
 import Dropdown from "../../../components/elements/common/Dropdown";
 import { authAction } from "../../../feature/auth/authSlice";
-// import { useGetProfileQuery } from "../../../feature/common/commonQuery";
-import {
-  // OperatorResponse,
-  ResponseUser,
-} from "../../../types";
+import { ResponseUser } from "../../../types";
 
-const includeType = ["admin", "operator", "ad-partner", "event-manager"];
+const includeType = ["operator", "ad-partner", "event-manager"];
 
 const ProfileMenu = () => {
   const dispatch = useAppDispatch();
-  // const { selectedOperator } = useAppSelector((state) => state.operator);
-  // const { reRenderBulk } = useAppSelector((state) => state.common);
   const { user, type } = useAppSelector((state) => state.auth);
-  // console.log(`\n\n type:`, type);
   const navigate = useNavigate();
 
   const data = JSON.parse(localStorage.getItem("user") || "{}");
@@ -28,6 +22,7 @@ const ProfileMenu = () => {
   const handleLogout = () => {
     localStorage.clear();
     dispatch(authAction.logoutSuccess());
+    dispatch(API.util.resetApiState());
     navigate("/account/login");
   };
 
@@ -40,7 +35,7 @@ const ProfileMenu = () => {
     switch (type) {
       case "admin":
         const values = data?.profile as ResponseUser;
-        return values?.name || "N/A";
+        return values?.role || "N/A";
       case "operator":
         const values1 = data?.profile as any;
         return values1?.ShortName || "N/A";
@@ -81,7 +76,7 @@ const ProfileMenu = () => {
                   ? isLoading
                     ? "Loading..."
                     : displayName()
-                  : user?.name || "N/A"}
+                  : user?.role?.toLocaleUpperCase()}
                 {/* {user?.role} */}
               </span>
               <BiChevronDown className="text-xl" />

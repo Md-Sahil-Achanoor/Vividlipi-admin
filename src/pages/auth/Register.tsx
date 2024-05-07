@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 import CheckboxGroup from "../../components/elements/InputComponents/CheckboxGroup";
 import CustomInput from "../../components/elements/InputComponents/CustomInput";
 import { projectName } from "../../constants/service";
-import { useOperatorSignUpMutation } from "../../feature/auth/authQuery";
 import { operatorSignUpSchema } from "../../models/auth/signup-validation";
 import { FormikSubmitOption } from "../../types";
 
@@ -33,7 +32,8 @@ const Register = () => {
   const [type, setType] = useState("password");
   const [showPassword, setShowPassword] = useState("password");
 
-  const [signIn, { isLoading }] = useOperatorSignUpMutation();
+  const isLoading = false;
+  // const [signIn, { isLoading }] = useOperatorSignUpMutation();
 
   const onSubmit = async (
     values: any,
@@ -45,10 +45,14 @@ const Register = () => {
     if (CIN) {
       body.CIN = CIN;
     }
-    signIn({
-      data: body,
-      options: { router, setSubmitting, resetForm, conditions: { as } },
-    });
+    setSubmitting(true);
+    console.log(body);
+    resetForm();
+    router("/account/login");
+    // signIn({
+    //   data: body,
+    //   options: { router, setSubmitting, resetForm, conditions: { as } },
+    // });
   };
 
   useEffect(() => {

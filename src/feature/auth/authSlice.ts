@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AuthResponse, AuthState, UpdateAdmin } from "../../types";
+import { AuthResponse, AuthState } from "../../types";
 
 const initialState: AuthState = {
   isLoggedIn: false,
@@ -18,18 +18,13 @@ const authSlice = createSlice({
   reducers: {
     loginSuccess: (
       state,
-      { payload: { user, jwt } }: PayloadAction<AuthResponse>
+      { payload: { user, token } }: PayloadAction<AuthResponse>
     ) => {
       state.isLoggedIn = true;
       state.user = user;
-      state.token = jwt;
+      state.token = token;
       state.role = user.role;
-      state.type =
-        user?.role === "Saleman"
-          ? "ad-partner"
-          : user?.role === "EventManager"
-          ? "event-manager"
-          : user?.role?.toLocaleLowerCase();
+      state.type = user?.role;
     },
     logoutSuccess: (state) => {
       state.isLoggedIn = false;
@@ -37,9 +32,9 @@ const authSlice = createSlice({
       state.role = "";
       state.user = null;
     },
-    setSelectedUser: (state, action: PayloadAction<UpdateAdmin | null>) => {
-      state.selectedUser = action.payload;
-    },
+    // setSelectedUser: (state, action: PayloadAction<UpdateAdmin | null>) => {
+    //   state.selectedUser = action.payload;
+    // },
   },
 });
 

@@ -108,7 +108,7 @@ const commonQuery = API.injectEndpoints({
       ManagePayload<GlobalSearchPayload>
     >({
       query: ({ data }) => ({
-        url: endpoints.globalSearch,
+        url: endpoints.login,
         method: "POST",
         body: data,
       }),
