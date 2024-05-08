@@ -2,6 +2,7 @@ import { Field, Form, Formik, FormikHelpers } from "formik";
 import { BsArrowRightShort } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "../../../app/store";
 import { useManageCategoryMutation } from "../../../feature/category/categoryQuery";
+import { categoryAction } from "../../../feature/category/categorySlice";
 import { coreAction } from "../../../feature/core/coreSlice";
 import { categorySchema } from "../../../models/category";
 import { ICategory } from "../../../types";
@@ -14,21 +15,29 @@ const initialValues: ICategory = {
 
 const ManageCategory = () => {
   const { type, open } = useAppSelector((state) => state.core);
-  const { selectedCategory } = useAppSelector((state) => state.category);
+  const { singleCategory, selectedCategory } = useAppSelector(
+    (state) => state.category
+  );
   const [manageCategory, { isLoading }] = useManageCategoryMutation();
   const dispatch = useAppDispatch();
   const handleModal = (type: string) => {
     if (type === "cancelled") {
       // do nothing
       dispatch(coreAction.toggleModal({ open: false, type: "" }));
+      dispatch(categoryAction.setSelectedCategory(null));
     }
   };
+  console.log(
+    `\n\n ~ ManageCategory ~ singleCategory:`,
+    singleCategory,
+    selectedCategory
+  );
 
   const onSubmit = async (
     values: ICategory,
     { setSubmitting, resetForm }: FormikHelpers<ICategory>
   ) => {
-    console.log("values", values);
+    // console.log("values", values);
     await manageCategory({
       id: selectedCategory?.id as number,
       data: values,
@@ -59,7 +68,7 @@ const ManageCategory = () => {
     >
       <div className="w-full h-full">
         <Formik
-          initialValues={initialValues}
+          initialValues={singleCategory || initialValues}
           validationSchema={categorySchema}
           onSubmit={onSubmit}
           enableReinitialize

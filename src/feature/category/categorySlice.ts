@@ -1,22 +1,32 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CategoryResponse, CategoryState } from "../../types";
+import {
+  CategoryResponse,
+  CategoryState,
+  SubCategoryResponse,
+} from "../../types";
 
 const initialState: CategoryState = {
   loading: false,
   adding: false,
   error: "",
   selectedCategory: null,
+  selectedSubCategory: null,
+  singleCategory: null,
+  singleSubCategory: null,
   reRender: false,
 };
-
-// export type AdselectedCategorys = (typeof initialState)[keyof typeof initialState];
 
 const categorySlice = createSlice({
   name: "category",
   initialState,
   reducers: {
-    rerenderVendor: (state) => {
-      state.reRender = !state.reRender;
+    resetCategory: (state) => {
+      state.selectedCategory = null;
+      state.singleCategory = null;
+    },
+    resetSubCategory: (state) => {
+      state.selectedSubCategory = null;
+      state.singleSubCategory = null;
     },
     resetWithReload: (state) => {
       state.reRender = !state.reRender;
@@ -32,6 +42,34 @@ const categorySlice = createSlice({
       action: PayloadAction<CategoryResponse | null>
     ) => {
       state.selectedCategory = action.payload;
+      if (action?.payload) {
+        state.singleCategory = {
+          title: action.payload.title,
+        };
+      } else {
+        state.singleCategory = null;
+      }
+    },
+    setSelectedSubCategory: (
+      state,
+      action: PayloadAction<SubCategoryResponse | CategoryResponse | null>
+    ) => {
+      state.selectedSubCategory = action.payload;
+      if (action?.payload) {
+        const data = action.payload as SubCategoryResponse;
+        state.singleSubCategory = {
+          title: data.title,
+          category: data.category,
+        };
+      } else {
+        state.singleSubCategory = null;
+      }
+    },
+    setSingleCategory: (
+      state,
+      action: PayloadAction<Pick<CategoryResponse, "title"> | null>
+    ) => {
+      state.singleCategory = action.payload;
     },
   },
 });

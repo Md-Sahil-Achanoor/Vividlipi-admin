@@ -1,14 +1,19 @@
-import Loader from "../../../components/atoms/Loader";
 import NoTableData from "../../../components/atoms/NoTableData";
 import CustomTable from "../../../components/elements/common/custom-table/CustomTable";
 
 import { useEffect } from "react";
-import { useAppDispatch } from "../../../app/store";
+import { useAppDispatch, useAppSelector } from "../../../app/store";
+import ManageModule from "../../../components/elements/modal/ManageModule";
+import SkeletonTable from "../../../components/elements/skeleton/SkeletonTable";
 import ManageCategory from "../../../components/module/category/ManageCategory";
-import { useGetCategoriesQuery } from "../../../feature/category/categoryQuery";
+import {
+  useDeleteCategoryMutation,
+  useGetCategoriesQuery,
+} from "../../../feature/category/categoryQuery";
+import { categoryAction } from "../../../feature/category/categorySlice";
 import { coreAction } from "../../../feature/core/coreSlice";
 import PageLayout from "../../../layout/PageLayout";
-import { BreadCrumbItem } from "../../../types";
+import { BreadCrumbItem, CategoryResponse } from "../../../types";
 import { cn } from "../../../utils/twmerge";
 
 const breadcrumbItem: BreadCrumbItem[] = [
@@ -21,6 +26,8 @@ const tableHead = ["SL", "Name", "Action"];
 
 const MainCategoryList = () => {
   // const navigate = useNavigate();
+  const { type } = useAppSelector((state) => state.core);
+  const { selectedCategory } = useAppSelector((state) => state.category);
   const dispatch = useAppDispatch();
   const { data, isLoading, refetch } = useGetCategoriesQuery({
     query: {},
@@ -29,8 +36,15 @@ const MainCategoryList = () => {
     },
   });
 
+  const [deleteCategory, { isLoading: isDeleteCategory }] =
+    useDeleteCategoryMutation();
+
   useEffect(() => {
     refetch();
+    return () => {
+      dispatch(categoryAction.setSelectedSubCategory(null));
+      dispatch(categoryAction.setSelectedCategory(null));
+    };
   }, []);
 
   // const handleModal = (type: string) => {
@@ -41,21 +55,37 @@ const MainCategoryList = () => {
   //   }
   // };
 
-  // const handleUpdateStatus = async () => {
-  //   await updateOperatorStatus({
-  //     id: selectedOperator?.ID,
-  //     query: {
-  //       isActive: selectedOperator?.isActive === 1 ? "0" : "1",
-  //     },
-  //   });
-  // };
+  const handleUpdateStatus = async () => {
+    await deleteCategory({
+      id: selectedCategory?.id,
+      query: {},
+    });
+  };
 
-  // const status = selectedOperator?.isActive === 1 ? "Deactivate" : "Activate";
+  // const status = selectedCategory?.isActive === 1 ? "Deactivate" : "Activate";
 
-  const handleModal = (type?: string) => {
+  const handleModal = (type?: string, data?: CategoryResponse) => {
     if (type === "cancelled") {
       // do nothing
       dispatch(coreAction.toggleModal({ open: false, type: "" }));
+      dispatch(categoryAction.setSelectedCategory(null));
+    } else if (type === "edit") {
+      dispatch(
+        coreAction.toggleModal({
+          type: "manage-category",
+          open: true,
+        })
+      );
+      dispatch(categoryAction.setSelectedCategory(data as CategoryResponse));
+      // setSingleCategory;
+    } else if (type === "delete") {
+      dispatch(
+        coreAction.toggleModal({
+          type: "delete-category",
+          open: true,
+        })
+      );
+      dispatch(categoryAction.setSelectedCategory(data as CategoryResponse));
     } else {
       dispatch(coreAction.toggleModal({ open: true, type: "manage-category" }));
     }
@@ -63,6 +93,32 @@ const MainCategoryList = () => {
 
   return (
     <>
+      <ManageModule
+        classes={
+          type === "delete-category"
+            ? {
+                top: "visible",
+                body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
+              }
+            : {
+                top: "invisible",
+                body: "-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]",
+              }
+        }
+        handleModal={handleModal}
+        wrapperClass="h-full"
+        isModalHeader
+        outSideClick
+        headText={`Delete the Category?`}
+        heading={selectedCategory?.title || ""}
+        details={`Are you certain you want to delete?`}
+        type={"delete"}
+        buttonText={isDeleteCategory ? "Deleting..." : "Delete"}
+        buttonProps={{
+          onClick: handleUpdateStatus,
+          disabled: isDeleteCategory,
+        }}
+      />
       <ManageCategory />
       <PageLayout
         title="Category List"
@@ -76,9 +132,7 @@ const MainCategoryList = () => {
         {/* <TableWrapper isActiveInactive isSort={false}> */}
         <CustomTable headList={tableHead}>
           {isLoading ? (
-            <NoTableData colSpan={7}>
-              <Loader className="h-40" />
-            </NoTableData>
+            <SkeletonTable total={6} tableCount={3} />
           ) : data?.data &&
             typeof data?.data === "object" &&
             data?.data?.length > 0 ? (
@@ -89,37 +143,19 @@ const MainCategoryList = () => {
                 <td className="table_td">
                   <div className="flex items-center gap-3">
                     <button
-                      onClick={() => {
-                        // dispatch(
-                        //   coreAction.toggleModal({
-                        //     type: "status-operator",
-                        //     open: true,
-                        //   })
-                        // );
-                        // dispatch(operatorAction.setSelectedOperator(item));
-                      }}
+                      onClick={() => handleModal("edit", item)}
                       className={cn(
                         "font-medium hover:underline",
                         "text-blue-600 dark:text-blue-500"
-                        // : "text-green-600 dark:text-green-500"
                       )}
                     >
                       Edit
                     </button>
                     <button
-                      onClick={() => {
-                        // dispatch(
-                        //   coreAction.toggleModal({
-                        //     type: "status-operator",
-                        //     open: true,
-                        //   })
-                        // );
-                        // dispatch(operatorAction.setSelectedOperator(item));
-                      }}
+                      onClick={() => handleModal("delete", item)}
                       className={cn(
                         "font-medium hover:underline",
                         "text-red-600 dark:text-red-500"
-                        // : "text-green-600 dark:text-green-500"
                       )}
                     >
                       Delete

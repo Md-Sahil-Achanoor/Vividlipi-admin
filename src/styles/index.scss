@@ -7,6 +7,12 @@
   --primary: #059ed4;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+
+  --background-start-rgb: 172, 57, 253;
+  --background-end-rgb: 138, 58, 254;
+  --background-search-gray: 237, 238, 241;
+  --text-placeholder-gray: 61, 66, 79;
+  --table-background-gray: 237, 238, 241;
 }
 
 @layer utilities {
@@ -42,6 +48,19 @@
   .svg_active_white svg,
   .svg_active_white path {
     @apply stroke-white;
+  }
+
+  .skeleton {
+    @apply bg-gray-300 rounded-xl animate-pulse duration-100;
+  }
+
+  // Skeleton loading
+  .skeleton_table {
+    @apply bg-gray-300 h-3 rounded-xl animate-pulse duration-100;
+  }
+
+  .skeleton_table_tr {
+    @apply border-0 border-table-background-gray border-b;
   }
 }
 

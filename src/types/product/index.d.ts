@@ -39,11 +39,13 @@ export interface ProductPayload extends IProduct<number> {}
 export interface ProductResponse extends IProduct<CategoryResponse> {
   id: string;
   createdAt: string;
+  isDeleted: Number;
 }
 
 export interface ProductQuery extends ReqQuery {
   productid: string;
   searchKeyword: string;
+  page: number;
 }
 
 export interface ProductState extends IStore {

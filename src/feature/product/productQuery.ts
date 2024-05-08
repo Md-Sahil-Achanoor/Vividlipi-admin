@@ -3,6 +3,7 @@ import API from "../../app/services/api";
 import { endpoints } from "../../constants/api/endpoints";
 import {
   ApiResponse,
+  ListResponse,
   ManagePayload,
   ManagePayloadQuery,
   ManageQuery,
@@ -17,7 +18,7 @@ const productQuery = API.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
     getProducts: builder.query<
-      ApiResponse<ProductResponse[]>,
+      ApiResponse<ListResponse<ProductResponse>>,
       ManageQuery<Partial<ProductQuery>>
     >({
       query: ({ query }) => ({
@@ -45,17 +46,25 @@ const productQuery = API.injectEndpoints({
       ManageQuery<Partial<ProductQuery>, null>
     >({
       query: ({ query }) => ({
-        url: endpoints.product,
-        method: "GET",
+        url: endpoints.product_list,
+        method: "POST",
         params: query,
-        headers: {
-          id: query?.id,
-        },
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled;
-          dispatch(productAction.setSelectedProduct(result?.data?.data));
+          const { isDeleted, id, ...rest }: ProductResponse =
+            result?.data?.data;
+          const data: Partial<ProductResponse> = {
+            ...rest,
+            tags:
+              rest?.tags?.length > 0
+                ? rest?.tags?.filter((el) => el !== "")
+                : [],
+            translator_name: rest?.translator_name || "",
+            category: [],
+          };
+          dispatch(productAction.setSelectedProduct(data as ProductResponse));
         } catch (err: unknown) {
           // do nothing
           const error = err as any;
@@ -77,13 +86,15 @@ const productQuery = API.injectEndpoints({
         method: "POST",
         body: data,
         params: query,
+        headers: {
+          productid: String(id),
+        },
       }),
       async onQueryStarted({ options }, { queryFulfilled }) {
         try {
           const result = await queryFulfilled;
           if (result?.data?.status === 1) {
             options?.resetForm();
-            options?.setSubmitting(false);
             toast.success(result?.data?.message || "Success");
             if (options?.router) {
               options?.router("/admin/products/product-list");
@@ -91,6 +102,7 @@ const productQuery = API.injectEndpoints({
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
           }
+          options?.setSubmitting(false);
         } catch (err: unknown) {
           // do nothing
           options?.setSubmitting(false);
@@ -107,17 +119,31 @@ const productQuery = API.injectEndpoints({
       any,
       ManagePayloadQuery<Partial<ProductQuery>>
     >({
-      query: ({ query }) => ({
-        url: endpoints.product,
-        method: "DELETE",
-        params: query,
+      query: ({ id }) => ({
+        url: endpoints.delete_product,
+        method: "POST",
+        headers: {
+          productid: String(id),
+        },
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled;
           if (result?.data?.status === 1) {
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            dispatch(productAction.resetWithReload());
+            dispatch(
+              productQuery.util.updateQueryData(
+                "getProducts",
+                {
+                  query: _arg.query,
+                },
+                (draft) => {
+                  draft.data.data = draft.data.data?.filter(
+                    (item) => item.id !== _arg.id
+                  );
+                }
+              )
+            );
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
           }
