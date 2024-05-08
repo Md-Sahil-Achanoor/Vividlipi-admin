@@ -302,7 +302,7 @@ export interface ManagePayload<T, Q = {}> {
  * @type { Manage Delete module Base Payload }
  */
 export interface ManagePayloadQuery<Q> {
-  id?: string;
+  id?: string | number;
   query?: Q;
   options?: FormikSubmitOption;
   secondId?: string;

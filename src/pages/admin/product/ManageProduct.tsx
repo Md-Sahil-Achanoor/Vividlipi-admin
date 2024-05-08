@@ -2,6 +2,7 @@ import { Field, Form, Formik, FormikHelpers } from "formik";
 import { useEffect, useState } from "react";
 import { BsArrowRightShort } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAppSelector } from "../../../app/store";
 import Loader from "../../../components/atoms/Loader";
 import { Card } from "../../../components/base/Card";
 import CheckboxGroup from "../../../components/elements/InputComponents/CheckboxGroup";
@@ -11,7 +12,10 @@ import InputSelect from "../../../components/elements/InputComponents/InputSelec
 import InputTagComponent from "../../../components/elements/InputComponents/InputTagComponent";
 import QuillComponent from "../../../components/elements/InputComponents/QuillComponent";
 import { useGetCategoriesQuery } from "../../../feature/category/categoryQuery";
-import { useManageProductMutation } from "../../../feature/product/productQuery";
+import {
+  useGetProductByIdQuery,
+  useManageProductMutation,
+} from "../../../feature/product/productQuery";
 import PageLayout from "../../../layout/PageLayout";
 import { manageProductSchema } from "../../../models/product";
 import {
@@ -57,7 +61,8 @@ const initialValues: Product = {
 const ManageProduct = () => {
   const { id } = useParams();
   const router = useNavigate();
-  const [values] = useState<Product | null>(null);
+  // const [values] = useState<Product | null>(null);
+  const { selectedProduct } = useAppSelector((state) => state.product);
   const [category2, setCategory2] = useState<CategoryResponse | null>(null);
   const breadcrumbItem: BreadCrumbItem[] = [
     {
@@ -70,12 +75,10 @@ const ManageProduct = () => {
     },
   ];
 
-  const loading = false;
-  //   const {
-  //     isLoading: loading,
-  //     data,
-  //     refetch,
-  //   } = useGetSalesmanByIdQuery({ query: { id } }, { skip: !id });
+  const { isLoading: loading, refetch } = useGetProductByIdQuery(
+    { query: { id } },
+    { skip: !id }
+  );
 
   const [manageProduct, { isLoading }] = useManageProductMutation();
 
@@ -154,6 +157,12 @@ const ManageProduct = () => {
     categoryRefetch();
   }, [category2]);
 
+  useEffect(() => {
+    if (id) {
+      refetch();
+    }
+  }, [id]);
+
   return (
     <PageLayout
       title={id ? "Edit Product" : "Create Product"}
@@ -169,7 +178,7 @@ const ManageProduct = () => {
           ) : (
             <div>
               <Formik
-                initialValues={values || initialValues}
+                initialValues={selectedProduct || initialValues}
                 validationSchema={manageProductSchema}
                 onSubmit={onSubmit}
                 enableReinitialize

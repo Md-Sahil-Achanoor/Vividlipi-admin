@@ -6,6 +6,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        "table-background-gray": "rgba(var(--table-background-gray), 1)",
         custom: {
           primary: {
             light: "#0e9dd181",

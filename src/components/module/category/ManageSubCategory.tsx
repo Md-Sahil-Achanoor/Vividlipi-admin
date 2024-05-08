@@ -6,7 +6,9 @@ import {
   useGetCategoriesQuery,
   useManageSubCategoryMutation,
 } from "../../../feature/category/categoryQuery";
+import { categoryAction } from "../../../feature/category/categorySlice";
 import { coreAction } from "../../../feature/core/coreSlice";
+import { subCategorySchema } from "../../../models/category";
 import { CategoryResponse, SubCategory } from "../../../types";
 import { cn } from "../../../utils/twmerge";
 import CustomInput from "../../elements/InputComponents/CustomInput";
@@ -20,13 +22,15 @@ const initialValues: SubCategory = {
 
 const ManageSubCategory = () => {
   const { type, open } = useAppSelector((state) => state.core);
-  const { selectedCategory } = useAppSelector((state) => state.category);
+  const { selectedSubCategory, singleSubCategory } = useAppSelector(
+    (state) => state.category
+  );
   const [manageSubCategory, { isLoading }] = useManageSubCategoryMutation();
   const dispatch = useAppDispatch();
   const handleModal = (type: string) => {
     if (type === "cancelled") {
-      // do nothing
       dispatch(coreAction.toggleModal({ open: false, type: "" }));
+      dispatch(categoryAction.setSelectedSubCategory(null));
     }
   };
 
@@ -34,9 +38,9 @@ const ManageSubCategory = () => {
     values: SubCategory,
     { setSubmitting, resetForm }: FormikHelpers<SubCategory>
   ) => {
-    console.log("values", values);
+    // console.log("values", values, selectedSubCategory);
     await manageSubCategory({
-      id: selectedCategory?.id as number,
+      id: selectedSubCategory?.id as number,
       data: {
         ...values,
         category: values?.category?.id as number,
@@ -76,7 +80,7 @@ const ManageSubCategory = () => {
         type === "manage-sub-category" && open
           ? {
               top: "visible",
-              body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
+              body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px]`,
             }
           : {
               top: "invisible",
@@ -86,15 +90,15 @@ const ManageSubCategory = () => {
       handleModal={handleModal}
       wrapperClass="h-full"
       headText={
-        selectedCategory?.id ? "Update Sub Category" : "Create Sub Category"
+        selectedSubCategory?.id ? "Update Sub Category" : "Create Sub Category"
       }
       isModalHeader
       outSideClick
     >
       <div className="w-full h-full">
         <Formik
-          initialValues={initialValues}
-          // validationSchema={manageStageSchema}
+          initialValues={singleSubCategory || initialValues}
+          validationSchema={subCategorySchema}
           onSubmit={onSubmit}
           enableReinitialize
         >
@@ -163,7 +167,7 @@ const ManageSubCategory = () => {
                 ) : (
                   <>
                     <span className="font-medium">
-                      {selectedCategory?.id ? "Update" : "Create"}
+                      {selectedSubCategory?.id ? "Update" : "Create"}
                     </span>
                     <span className="text-2xl ml-1">
                       <BsArrowRightShort />
