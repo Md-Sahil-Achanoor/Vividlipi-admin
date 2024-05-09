@@ -171,10 +171,10 @@ export interface ReqQuery {
 }
 
 export interface IStore {
-  loading: boolean;
-  adding: boolean;
-  error: string;
-  reRender: boolean;
+  // loading: boolean;
+  // adding: boolean;
+  // error: string;
+  // reRender: boolean;
   singleRerender?: boolean;
 }
 

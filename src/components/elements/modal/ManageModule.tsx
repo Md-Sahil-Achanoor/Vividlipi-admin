@@ -1,4 +1,4 @@
-import { ButtonType, ModalProps } from "../../../types";
+import { ButtonType, ModalProps } from "@/types";
 import CustomModal from "../common/CustomModal";
 
 interface Props extends ModalProps {

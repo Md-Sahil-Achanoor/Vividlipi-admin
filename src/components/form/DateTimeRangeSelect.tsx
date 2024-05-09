@@ -1,7 +1,7 @@
+import { CustomInputCom } from "@/types";
+import { getTime } from "@/utils/time";
 import { ErrorMessage } from "formik";
 import React, { FC, useEffect } from "react";
-import { CustomInputCom } from "../../../types";
-import { getTime } from "../../../utils/time";
 import TextError from "./TextError";
 
 const DateTimeRangeSelect: FC<CustomInputCom> = ({

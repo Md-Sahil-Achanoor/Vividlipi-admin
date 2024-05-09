@@ -1,8 +1,8 @@
+import { SingleMenuProps } from "@/types";
+import { stringToArray } from "@/utils/capitalize";
+import { cn } from "@/utils/twmerge";
 import { useLayoutEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { SingleMenuProps } from "../../../types";
-import { stringToArray } from "../../../utils/capitalize";
-import { cn } from "../../../utils/twmerge";
 
 const SingleMenu: React.FC<SingleMenuProps> = ({
   menu: { icon: MenuIcon, link, title: menuName },

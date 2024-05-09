@@ -1,15 +1,14 @@
+import { useAppDispatch, useAppSelector } from "@/app/store";
+import CustomModal from "@/components/elements/common/CustomModal";
+import CustomInput from "@/components/form/CustomInput";
+import { useManageCategoryMutation } from "@/feature/category/categoryQuery";
+import { categoryAction } from "@/feature/category/categorySlice";
+import { coreAction } from "@/feature/core/coreSlice";
+import { IManageCategory, categorySchema } from "@/models/category";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { BsArrowRightShort } from "react-icons/bs";
-import { useAppDispatch, useAppSelector } from "../../../app/store";
-import { useManageCategoryMutation } from "../../../feature/category/categoryQuery";
-import { categoryAction } from "../../../feature/category/categorySlice";
-import { coreAction } from "../../../feature/core/coreSlice";
-import { categorySchema } from "../../../models/category";
-import { ICategory } from "../../../types";
-import CustomInput from "../../elements/InputComponents/CustomInput";
-import CustomModal from "../../elements/common/CustomModal";
 
-const initialValues: ICategory = {
+const initialValues: IManageCategory = {
   title: "",
 };
 
@@ -34,8 +33,8 @@ const ManageCategory = () => {
   );
 
   const onSubmit = async (
-    values: ICategory,
-    { setSubmitting, resetForm }: FormikHelpers<ICategory>
+    values: IManageCategory,
+    { setSubmitting, resetForm }: FormikHelpers<IManageCategory>
   ) => {
     // console.log("values", values);
     await manageCategory({

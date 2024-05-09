@@ -1,9 +1,9 @@
+import { CustomInputCom } from "@/types";
+import { cn } from "@/utils/twmerge";
 import { ErrorMessage } from "formik";
 import React, { FC } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { FaRegQuestionCircle } from "react-icons/fa";
-import { CustomInputCom } from "../../../types";
-import { cn } from "../../../utils/twmerge";
 import TextError from "./TextError";
 
 const CustomInput: FC<CustomInputCom> = ({

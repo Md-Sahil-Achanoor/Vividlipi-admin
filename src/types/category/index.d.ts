@@ -1,12 +1,9 @@
+import { IManageCategory } from "@/models/category";
 import { IStore, ReqQuery } from "../common";
 
-export interface ICategory {
-  title: string;
-}
+export interface CategoryPayload extends IManageCategory {}
 
-export interface CategoryPayload extends ICategory {}
-
-export interface CategoryResponse extends ICategory {
+export interface CategoryResponse extends IManageCategory {
   id: number;
 }
 
@@ -14,7 +11,7 @@ export interface CategoryQuery extends ReqQuery {
   cat1: number;
 }
 
-export interface ISubCategory<T> extends ICategory {
+export interface ISubCategory<T> extends IManageCategory {
   category: T | null;
 }
 

@@ -1,14 +1,14 @@
-import React, { useCallback, useMemo } from "react";
-import { DropzoneOptions, FileRejection, useDropzone } from "react-dropzone";
-import toast from "react-hot-toast";
-import { FileUploadProps } from "../../../types";
+import { FileUploadProps } from "@/types";
 import {
   acceptStyle,
   activeStyle,
   baseStyle,
   formatBytes,
   rejectStyle,
-} from "../../../utils/dropzone";
+} from "@/utils/dropzone";
+import React, { useCallback, useMemo } from "react";
+import { DropzoneOptions, FileRejection, useDropzone } from "react-dropzone";
+import toast from "react-hot-toast";
 
 const singleFile = 1048576;
 const UploadFile = ({

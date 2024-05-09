@@ -1,8 +1,7 @@
-import NoTableData from "@/components/atoms/NoTableData";
-import CustomTable from "@/components/elements/common/custom-table/CustomTable";
-
 import { useAppDispatch, useAppSelector } from "@/app/store";
+import NoTableData from "@/components/atoms/NoTableData";
 import TableWrapper from "@/components/elements/common/TableWrapper";
+import CustomTable from "@/components/elements/common/custom-table/CustomTable";
 import InfiniteFilter from "@/components/elements/filters/InfiniteFilter";
 import ManageModule from "@/components/elements/modal/ManageModule";
 import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
@@ -25,19 +24,14 @@ import { useEffect } from "react";
 
 const breadcrumbItem: BreadCrumbItem[] = [
   {
-    name: "Sub Category List",
+    name: "Role List",
     link: "#",
   },
 ];
-const tableHead = [
-  "SL",
-  // "ID",
-  "Name",
-  "Category",
-  "Action",
-];
 
-const SubCategoryList = () => {
+const tableHead = ["SL", "Name", "Permissions", "Action"];
+
+const RoleList = () => {
   const { type } = useAppSelector((state) => state.core);
   const { selectedCategory, selectedSubCategory } = useAppSelector(
     (state) => state.category
@@ -46,6 +40,7 @@ const SubCategoryList = () => {
 
   const [deleteCategory, { isLoading: isDeleteCategory }] =
     useDeleteSubCategoryMutation();
+
   const query = () => {
     let q: Partial<CategoryQuery> = {};
     if (selectedCategory) {
@@ -61,9 +56,6 @@ const SubCategoryList = () => {
 
   useEffect(() => {
     refetch();
-    return () => {
-      dispatch(categoryAction.resetData());
-    };
   }, []);
 
   // console.log(`\n\n selectedSubCategory:`, selectedSubCategory);
@@ -144,7 +136,7 @@ const SubCategoryList = () => {
         wrapperClass="h-full"
         isModalHeader
         outSideClick
-        headText={`Delete the Sub Category?`}
+        headText={`Delete the Role?`}
         heading={selectedSubCategory?.title || ""}
         details={`Are you certain you want to delete?`}
         type={"delete"}
@@ -156,9 +148,9 @@ const SubCategoryList = () => {
       />
       <ManageSubCategory />
       <PageLayout
-        title="Sub Category List"
+        title="Role List"
         breadcrumbItem={breadcrumbItem}
-        buttonText="Add Sub Category"
+        buttonText="Add Role"
         buttonProps={{
           onClick: () => handleModal(),
         }}
@@ -252,4 +244,4 @@ const SubCategoryList = () => {
   );
 };
 
-export default SubCategoryList;
+export default RoleList;

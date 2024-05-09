@@ -46,13 +46,10 @@ const router = createBrowserRouter([
    */
   {
     path: "/admin",
-    element: (
-      <PrivateOutlet roles={["admin"]}>
-        <AppWrapper />
-      </PrivateOutlet>
-    ),
+    element: <PrivateOutlet roles={["admin"]} />,
     errorElement: <ErrorPage />,
     children: [
+      { path: "", element: <Navigate to="/admin/dashboard" /> },
       {
         path: "dashboard",
         element: <AdminDashboard />,
@@ -72,6 +69,27 @@ const router = createBrowserRouter([
         children: [
           { path: "main-category", element: <MainCategoryList /> },
           { path: "sub-category", element: <SubCategoryList /> },
+          // { path: "edit/:id", element: <EditProduct /> },
+        ],
+      },
+      {
+        path: "user-management",
+        element: <AppWrapper />,
+        children: [
+          {
+            path: "",
+            element: <Navigate to="/admin/user-management/role-list" />,
+          },
+          {
+            path: "role-list",
+            element: <AppWrapper />,
+            children: [
+              { path: "", element: <MainCategoryList /> },
+              { path: "sub-category", element: <SubCategoryList /> },
+              // { path: "edit/:id", element: <EditProduct /> },
+            ],
+          },
+          { path: "user-list", element: <SubCategoryList /> },
           // { path: "edit/:id", element: <EditProduct /> },
         ],
       },

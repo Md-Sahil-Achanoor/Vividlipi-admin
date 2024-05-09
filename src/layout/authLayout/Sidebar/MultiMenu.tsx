@@ -1,9 +1,9 @@
+import { MultiMenuProps } from "@/types";
+import { stringToArray } from "@/utils/capitalize";
+import { cn } from "@/utils/twmerge";
 import { useLayoutEffect } from "react";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { Link, useLocation } from "react-router-dom";
-import { MultiMenuProps } from "../../../types";
-import { stringToArray } from "../../../utils/capitalize";
-import { cn } from "../../../utils/twmerge";
 
 const MultiMenu: React.FC<MultiMenuProps> = ({
   menu: { icon: MenuIcon, list = [], title: menuName },

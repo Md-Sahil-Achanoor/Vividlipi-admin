@@ -1,21 +1,21 @@
-import { Field, Form, Formik, FormikHelpers } from "formik";
-import { useEffect } from "react";
-import { BsArrowRightShort } from "react-icons/bs";
-import { useAppDispatch, useAppSelector } from "../../../app/store";
+import { useAppDispatch, useAppSelector } from "@/app/store";
+import CustomModal from "@/components/elements/common/CustomModal";
+import CustomInput from "@/components/form/CustomInput";
+import InfiniteSelect from "@/components/form/InfiniteSelect";
 import {
   useGetCategoriesQuery,
   useManageSubCategoryMutation,
-} from "../../../feature/category/categoryQuery";
-import { categoryAction } from "../../../feature/category/categorySlice";
-import { coreAction } from "../../../feature/core/coreSlice";
-import { subCategorySchema } from "../../../models/category";
-import { CategoryResponse, SubCategory } from "../../../types";
-import { cn } from "../../../utils/twmerge";
-import CustomInput from "../../elements/InputComponents/CustomInput";
-import InfiniteSelect from "../../elements/InputComponents/InfiniteSelect";
-import CustomModal from "../../elements/common/CustomModal";
+} from "@/feature/category/categoryQuery";
+import { categoryAction } from "@/feature/category/categorySlice";
+import { coreAction } from "@/feature/core/coreSlice";
+import { IManageSubCategory, subCategorySchema } from "@/models/category";
+import { CategoryResponse } from "@/types";
+import { cn } from "@/utils/twmerge";
+import { Field, Form, Formik, FormikHelpers } from "formik";
+import { useEffect } from "react";
+import { BsArrowRightShort } from "react-icons/bs";
 
-const initialValues: SubCategory = {
+const initialValues: IManageSubCategory = {
   title: "",
   category: null,
 };
@@ -35,8 +35,8 @@ const ManageSubCategory = () => {
   };
 
   const onSubmit = async (
-    values: SubCategory,
-    { setSubmitting, resetForm }: FormikHelpers<SubCategory>
+    values: IManageSubCategory,
+    { setSubmitting, resetForm }: FormikHelpers<IManageSubCategory>
   ) => {
     // console.log("values", values, selectedSubCategory);
     await manageSubCategory({
@@ -104,11 +104,12 @@ const ManageSubCategory = () => {
         >
           {({ isSubmitting, values, setFieldValue }) => (
             <Form noValidate>
+              {/* {console.log(JSON.stringify(errors))} */}
               <div className="mt-2">
                 <div>
                   <Field
                     label={"Category"}
-                    name="cat1"
+                    name="category"
                     isRequired
                     renderData={categoryList?.data}
                     isLoading={categoryLoading}

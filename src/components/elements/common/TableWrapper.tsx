@@ -1,9 +1,9 @@
+import { useAppDispatch, useAppSelector } from "@/app/store";
+import { coreAction } from "@/feature/core/coreSlice";
 import React, { PropsWithChildren } from "react";
 import { BiSort } from "react-icons/bi";
 import { GoDotFill } from "react-icons/go";
-import { useAppDispatch, useAppSelector } from "../../../app/store";
-import { coreAction } from "../../../feature/core/coreSlice";
-import { Card } from "../../base/Card";
+import { Card } from "../../ui/Card";
 import InfiniteFilter from "../filters/InfiniteFilter";
 
 export interface Filter {

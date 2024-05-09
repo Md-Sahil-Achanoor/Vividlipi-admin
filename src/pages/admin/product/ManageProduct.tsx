@@ -1,31 +1,31 @@
-import { Field, Form, Formik, FormikHelpers } from "formik";
-import { useEffect, useState } from "react";
-import { BsArrowRightShort } from "react-icons/bs";
-import { useNavigate, useParams } from "react-router-dom";
-import { useAppSelector } from "../../../app/store";
-import Loader from "../../../components/atoms/Loader";
-import { Card } from "../../../components/base/Card";
-import CheckboxGroup from "../../../components/elements/InputComponents/CheckboxGroup";
-import CustomInput from "../../../components/elements/InputComponents/CustomInput";
-import InfiniteSelect from "../../../components/elements/InputComponents/InfiniteSelect";
-import InputSelect from "../../../components/elements/InputComponents/InputSelect";
-import InputTagComponent from "../../../components/elements/InputComponents/InputTagComponent";
-import QuillComponent from "../../../components/elements/InputComponents/QuillComponent";
-import { useGetCategoriesQuery } from "../../../feature/category/categoryQuery";
+import { useAppSelector } from "@/app/store";
+import Loader from "@/components/atoms/Loader";
+import CheckboxGroup from "@/components/form/CheckboxGroup";
+import CustomInput from "@/components/form/CustomInput";
+import InfiniteSelect from "@/components/form/InfiniteSelect";
+import InputSelect from "@/components/form/InputSelect";
+import InputTagComponent from "@/components/form/InputTagComponent";
+import QuillComponent from "@/components/form/QuillComponent";
+import { Card } from "@/components/ui/Card";
+import { useGetCategoriesQuery } from "@/feature/category/categoryQuery";
 import {
   useGetProductByIdQuery,
   useManageProductMutation,
-} from "../../../feature/product/productQuery";
-import PageLayout from "../../../layout/PageLayout";
-import { manageProductSchema } from "../../../models/product";
+} from "@/feature/product/productQuery";
+import PageLayout from "@/layout/PageLayout";
+import { manageProductSchema } from "@/models/product";
 import {
   BreadCrumbItem,
   CategoryQuery,
   CategoryResponse,
   Product,
   ProductPayload,
-} from "../../../types";
-import { cn } from "../../../utils/twmerge";
+} from "@/types";
+import { cn } from "@/utils/twmerge";
+import { Field, Form, Formik, FormikHelpers } from "formik";
+import { useEffect, useState } from "react";
+import { BsArrowRightShort } from "react-icons/bs";
+import { useNavigate, useParams } from "react-router-dom";
 
 const initialValues: Product = {
   book_title: "",

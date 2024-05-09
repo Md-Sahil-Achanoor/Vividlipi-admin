@@ -1,13 +1,13 @@
+import API from "@/app/services/api";
+import { useAppDispatch, useAppSelector } from "@/app/store";
+import logo from "@/assets/Images/male.png";
+import Dropdown from "@/components/elements/common/Dropdown";
+import { authAction } from "@/feature/auth/authSlice";
+import { ResponseUser } from "@/types";
 import React from "react";
 import { AiOutlineUser } from "react-icons/ai";
 import { BiChevronDown, BiLogOut } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
-import API from "../../../app/services/api";
-import { useAppDispatch, useAppSelector } from "../../../app/store";
-import logo from "../../../assets/Images/male.png";
-import Dropdown from "../../../components/elements/common/Dropdown";
-import { authAction } from "../../../feature/auth/authSlice";
-import { ResponseUser } from "../../../types";
 
 const includeType = ["operator", "ad-partner", "event-manager"];
 

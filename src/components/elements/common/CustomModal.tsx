@@ -1,5 +1,5 @@
+import { ModalProps } from "@/types";
 import { BiX } from "react-icons/bi";
-import { ModalProps } from "../../../types";
 
 const CustomModal = ({
   classes,

@@ -1,6 +1,6 @@
+import useOnClickOutside from "@/hooks/useOnClickOutside";
+import { cn } from "@/utils/twmerge";
 import { useRef, useState } from "react";
-import useOnClickOutside from "../../../hooks/useOnClickOutside";
-import { cn } from "../../../utils/twmerge";
 
 // type ObjectKey = keyof typeof ;
 

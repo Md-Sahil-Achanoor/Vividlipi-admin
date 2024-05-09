@@ -1,23 +1,20 @@
+import { cn } from "@/utils/twmerge";
 import { ErrorMessage } from "formik";
 import React from "react";
 import { FaRegQuestionCircle } from "react-icons/fa";
-import { cn } from "../../../utils/twmerge";
-import Quill from "../editor/Quill";
+import { TagsInput } from "react-tag-input-component";
+import { twMerge } from "tailwind-merge";
 import TextError from "./TextError";
 
 const QuillComponent = ({
   label,
   id,
   field: { name, onChange, onBlur, ...rest },
-  form: { setFieldTouched, ...form },
+  form: { setFieldTouched },
   isRequired,
   ...props
 }: any) => {
-  // console.log(`\n\n ~ file: QuillComponent.tsx:14 ~ rest:`, name, rest, form);
-  const isValid =
-    form.touched[rest.name] && form.errors[rest.name] && !props.disabled
-      ? true
-      : false;
+  // console.log(`\n\n ~ file: QuillComponent.tsx:14 ~ rest:`, name, rest);
   return (
     <React.Fragment>
       <div
@@ -57,19 +54,16 @@ const QuillComponent = ({
           )}
         </div>
         <div className={cn(props?.horizontal ? "w-full lg:w-8/12" : "w-full")}>
-          <div
-            className={cn(
-              "w-full",
-              isValid ? "!border-red-600" : "",
-              props?.classes
-            )}
-          >
-            <Quill
-              id={id}
+          <div className={twMerge("w-full", props?.classes)}>
+            <TagsInput
+              value={rest?.value}
               onChange={(e) => onChange({ target: { value: e, name } })}
               onBlur={() => setFieldTouched(name, true)}
-              {...props}
               {...rest}
+              classNames={{
+                tag: "tag",
+                input: "border-none",
+              }}
             />
           </div>
           <ErrorMessage name={name}>

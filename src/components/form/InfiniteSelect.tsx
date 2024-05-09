@@ -1,9 +1,9 @@
+import InfiniteFilter from "@/components/elements/filters/InfiniteFilter";
+import { InfiniteSelect as InfiniteSelectType } from "@/types";
+import { cn } from "@/utils/twmerge";
 import { ErrorMessage } from "formik";
 import React from "react";
 import { FaRegQuestionCircle } from "react-icons/fa";
-import { InfiniteSelect as InfiniteSelectType } from "../../../types";
-import { cn } from "../../../utils/twmerge";
-import InfiniteFilter from "../filters/InfiniteFilter";
 import TextError from "./TextError";
 
 const InfiniteSelect = <T extends object>({
