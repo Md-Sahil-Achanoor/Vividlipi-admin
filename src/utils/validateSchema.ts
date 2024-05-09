@@ -1,4 +1,5 @@
 import { Schema } from "yup";
+import { toCapitalize } from "./capitalize";
 
 const validateSchema = <T>(
   schema: Schema,
@@ -27,6 +28,15 @@ export function filterPermissionObject(permissions: Record<string, number>) {
       [current]: permissions[current],
     };
   }, {});
+}
+
+export function filterPermission(permission: Record<string, number>) {
+  return Object.keys(permission || {})
+    .filter((key) => permission[key] === 1)
+    .map((key) => ({
+      label: toCapitalize(key.replace(/_/g, " ")),
+      value: key,
+    }));
 }
 
 export default validateSchema;

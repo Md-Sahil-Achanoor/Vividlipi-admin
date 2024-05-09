@@ -165,7 +165,7 @@ export interface ReqQuery {
   page: number;
   limit: number;
   status: string;
-  id: string;
+  id: string | number;
   isActive: string;
   order: string;
 }

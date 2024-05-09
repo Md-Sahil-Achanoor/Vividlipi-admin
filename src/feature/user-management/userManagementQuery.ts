@@ -9,8 +9,11 @@ import {
   RolePermissionPayLoad,
   RolePermissionQuery,
   RolePermissionResponse,
+  UserManagementPayLoad,
+  UserManagementResponse,
 } from "@/types";
 import toast from "react-hot-toast";
+import { userManagementAction } from "./userManagementSlice";
 
 const userManagementQuery = API.injectEndpoints({
   overrideExisting: false,
@@ -45,14 +48,16 @@ const userManagementQuery = API.injectEndpoints({
       ManageQuery<Partial<RolePermissionQuery>, null>
     >({
       query: ({ query }) => ({
-        url: endpoints.category,
+        url: endpoints.role_list,
         method: "GET",
         params: query,
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled;
-          // dispatch(categoryAction.setSelectedRole(result?.data?.data));
+          dispatch(
+            userManagementAction.setSelectedRolePermission(result?.data?.data)
+          );
         } catch (err: unknown) {
           // do nothing
           const error = err as any;
@@ -72,7 +77,7 @@ const userManagementQuery = API.injectEndpoints({
         url: endpoints.role_list,
         method: id ? "PUT" : "POST",
         body: data,
-        query: {
+        params: {
           id,
         },
       }),
@@ -105,11 +110,10 @@ const userManagementQuery = API.injectEndpoints({
       ManagePayloadQuery<Partial<RolePermissionQuery>>
     >({
       query: ({ id }) => ({
-        url: endpoints.delete_category1,
-        method: "POST",
-        // params: query,
-        headers: {
-          cat1: String(id),
+        url: endpoints.role_list,
+        method: "DELETE",
+        params: {
+          id,
         },
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
@@ -117,13 +121,11 @@ const userManagementQuery = API.injectEndpoints({
           const result = await queryFulfilled;
           if (result?.data?.status === 1) {
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            // dispatch(categoryAction.resetWithReload());
-            // dispatch(categoryAction.resetRole());
             dispatch(
               userManagementQuery.util.updateQueryData(
                 "getRolePermissions",
                 {
-                  query: _arg.query,
+                  query: {},
                 },
                 (draft) => {
                   draft.data = draft?.data?.filter(
@@ -132,6 +134,7 @@ const userManagementQuery = API.injectEndpoints({
                 }
               )
             );
+            toast.success(result?.data?.message || "Delete Successful!");
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
           }
@@ -145,152 +148,137 @@ const userManagementQuery = API.injectEndpoints({
       },
     }),
 
-    // getAdminUsers: builder.query<
-    //   ApiResponse<RolePermissionResponse[]>,
-    //   ManageQuery<Partial<RolePermissionQuery>>
-    // >({
-    //   query: ({ query }) => {
-    //     return {
-    //       url: endpoints.subAdmin_list,
-    //       method: "GET",
-    //       params: query,
-    //     };
-    //   },
-    //   providesTags: ["AdminUsers"],
-    //   async onQueryStarted(_arg, { queryFulfilled }) {
-    //     try {
-    //       await queryFulfilled;
-    //     } catch (err: unknown) {
-    //       // do nothing
-    //       const error = err as any;
-    //       const message =
-    //         error?.response?.data?.message || "Something went wrong!";
-    //       toast.error(message);
-    //     }
-    //   },
-    // }),
+    getAdminUsers: builder.query<
+      ApiResponse<UserManagementResponse[]>,
+      ManageQuery<Partial<RolePermissionQuery>>
+    >({
+      query: ({ query }) => {
+        return {
+          url: endpoints.subAdmin_list,
+          method: "GET",
+          params: query,
+        };
+      },
+      providesTags: ["AdminUsers"],
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any;
+          const message =
+            error?.response?.data?.message || "Something went wrong!";
+          toast.error(message);
+        }
+      },
+    }),
 
-    // getSubRoleById: builder.query<
-    //   ApiResponse<RolePermissionResponse>,
-    //   ManageQuery<Partial<RolePermissionQuery>, null>
-    // >({
-    //   query: ({ query }) => ({
-    //     url: endpoints.category,
-    //     method: "GET",
-    //     params: query,
-    //     headers: {
-    //       id: query?.id,
-    //     },
-    //   }),
-    //   async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
-    //     try {
-    //       const result = await queryFulfilled;
-    //       dispatch(categoryAction.setSelectedRole(result?.data?.data));
-    //     } catch (err: unknown) {
-    //       // do nothing
-    //       const error = err as any;
-    //       const message =
-    //         error?.response?.data?.message || "Something went wrong!";
-    //       toast.error(message);
-    //     }
-    //   },
-    // }),
+    getAdminUserById: builder.query<
+      ApiResponse<UserManagementResponse>,
+      ManageQuery<Partial<RolePermissionQuery>, null>
+    >({
+      query: ({ query }) => ({
+        url: endpoints.category,
+        method: "GET",
+        params: query,
+      }),
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          const result = await queryFulfilled;
+          dispatch(userManagementAction.setSelectedUser(result?.data?.data));
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any;
+          const message =
+            error?.response?.data?.message || "Something went wrong!";
+          toast.error(message);
+        }
+      },
+    }),
 
-    // // POST
-    // manageSubRole: builder.mutation<
-    //   any,
-    //   ManagePayload<SubRolePermissionPayLoad, Partial<RolePermissionQuery>>
-    // >({
-    //   query: ({ data, query, id }) => {
-    //     const { category, ...rest } = data;
-    //     const body: any = {
-    //       ...rest,
-    //     };
-    //     if (id) {
-    //       body.cat1id = category;
-    //     }
-    //     return {
-    //       url: id ? endpoints.edit_category2 : endpoints.add_category2,
-    //       // url: endpoints.category,
-    //       // method: id ? "PUT" : "POST",
-    //       method: "POST",
-    //       body,
-    //       params: query,
-    //       headers: {
-    //         cat1: String(category),
-    //         cat2: id ? String(id) : "",
-    //       },
-    //     };
-    //   },
-    //   invalidatesTags: ["RoleList"],
-    //   async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
-    //     try {
-    //       const result = await queryFulfilled;
-    //       if (result?.data?.status === 1) {
-    //         options?.resetForm();
-    //         options?.setSubmitting(false);
-    //         toast.success(result?.data?.message || "Success");
-    //         dispatch(coreAction.toggleModal({ open: false, type: "" }));
-    //       } else {
-    //         toast.error(result?.data?.message || "Something went wrong!");
-    //       }
-    //     } catch (err: unknown) {
-    //       // do nothing
-    //       options?.setSubmitting(false);
-    //       const error = err as any;
-    //       // console.log(`\n\n error:`, error);
-    //       const message =
-    //         error?.response?.data?.message || "Something went wrong!";
-    //       toast.error(message);
-    //     }
-    //   },
-    // }),
+    // POST
+    manageAdminUser: builder.mutation<
+      any,
+      ManagePayload<UserManagementPayLoad, Partial<RolePermissionQuery>>
+    >({
+      query: ({ data, id }) => {
+        return {
+          url: endpoints.subAdmin_list,
+          method: id ? "PUT" : "POST",
+          body: data,
+          params: {
+            id,
+          },
+        };
+      },
+      invalidatesTags: ["AdminUsers"],
+      async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          if (result?.data?.status === 1) {
+            options?.resetForm();
+            options?.setSubmitting(false);
+            toast.success(result?.data?.message || "Success");
+            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+          } else {
+            toast.error(result?.data?.message || "Something went wrong!");
+          }
+        } catch (err: unknown) {
+          // do nothing
+          options?.setSubmitting(false);
+          const error = err as any;
+          // console.log(`\n\n error:`, error);
+          const message =
+            error?.response?.data?.message || "Something went wrong!";
+          toast.error(message);
+        }
+      },
+    }),
 
-    // deleteSubRole: builder.mutation<
-    //   any,
-    //   ManagePayloadQuery<Partial<RolePermissionQuery>>
-    // >({
-    //   query: ({ id }) => ({
-    //     url: endpoints.delete_category2,
-    //     method: "POST",
-    //     // params: query,
-    //     headers: {
-    //       cat2: String(id),
-    //     },
-    //   }),
-    //   async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
-    //     try {
-    //       const result = await queryFulfilled;
-    //       if (result?.data?.status === 1) {
-    //         console.log(`\n\n _arg:`, _arg.query);
-    //         dispatch(
-    //           userManagementQuery.util.updateQueryData(
-    //             "getCategories",
-    //             {
-    //               query: _arg.query,
-    //             },
-    //             (draft) => {
-    //               draft.data = draft?.data?.filter(
-    //                 (item) => item?.id !== Number(_arg.id)
-    //               );
-    //             }
-    //           )
-    //         );
-    //         dispatch(coreAction.toggleModal({ open: false, type: "" }));
-    //         dispatch(categoryAction.resetSubRole());
-    //         toast.success(result?.data?.message || "Delete Successful!");
-    //       } else {
-    //         toast.error(result?.data?.message || "Something went wrong!");
-    //       }
-    //     } catch (err: unknown) {
-    //       // do nothing
-    //       const error = err as any;
-    //       const message =
-    //         error?.response?.data?.message || "Something went wrong!";
-    //       toast.error(message);
-    //     }
-    //   },
-    // }),
+    deleteAdminUser: builder.mutation<
+      any,
+      ManagePayloadQuery<Partial<RolePermissionQuery>>
+    >({
+      query: ({ id }) => ({
+        url: endpoints.subAdmin_list,
+        method: "DELETE",
+        params: {
+          id,
+        },
+      }),
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          const result = await queryFulfilled;
+          if (result?.data?.status === 1) {
+            // console.log(`\n\n _arg:`, _arg.query);
+            dispatch(
+              userManagementQuery.util.updateQueryData(
+                "getAdminUsers",
+                {
+                  query: {},
+                },
+                (draft) => {
+                  draft.data = draft?.data?.filter(
+                    (item) => item?.id !== Number(_arg.id)
+                  );
+                }
+              )
+            );
+            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            // dispatch(categoryAction.resetSubRole());
+            toast.success(result?.data?.message || "Delete Successful!");
+          } else {
+            toast.error(result?.data?.message || "Something went wrong!");
+          }
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any;
+          const message =
+            error?.response?.data?.message || "Something went wrong!";
+          toast.error(message);
+        }
+      },
+    }),
   }),
 });
 
@@ -299,10 +287,11 @@ export const {
   useGetRolePermissionByIdQuery,
   useManageRolePermissionMutation,
   useDeleteRolePermissionMutation,
-  // useGetAdminUsersQuery,
-  // useGetSubRoleByIdQuery,
-  // useManageSubRoleMutation,
-  // useDeleteSubRoleMutation,
+
+  useGetAdminUsersQuery,
+  useGetAdminUserByIdQuery,
+  useManageAdminUserMutation,
+  useDeleteAdminUserMutation,
 } = userManagementQuery;
 
 export default userManagementQuery;

@@ -51,8 +51,12 @@ export const userManagementFormSchema = Yup.object({
     }),
   email: Yup.string().required("Email is required").email("Invalid email"),
   password: Yup.string().required("Password is required").min(6, "Too short"),
+  // confirmPassword: Yup.string()
+  //   .required("Confirm password is required")
+  //   .oneOf([Yup.ref("password")], "Passwords must match"),
   role: Yup.object({
-    role_name: Yup.string(),
+    Title: Yup.string().required(),
+    id: Yup.string().required(),
   })
     .nullable()
     .test({

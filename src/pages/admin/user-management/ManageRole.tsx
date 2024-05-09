@@ -1,3 +1,4 @@
+import { useAppDispatch, useAppSelector } from "@/app/store";
 import Loader from "@/components/atoms/Loader";
 import MultiSelectItem from "@/components/atoms/MultiSelectItem";
 import CustomInput from "@/components/form/CustomInput";
@@ -8,13 +9,14 @@ import {
   useGetRolePermissionByIdQuery,
   useManageRolePermissionMutation,
 } from "@/feature/user-management/userManagementQuery";
+import { userManagementAction } from "@/feature/user-management/userManagementSlice";
 import PageLayout from "@/layout/PageLayout";
 import {
   IOptions,
   IRolePermissionForm,
   rolePermissionFormSchema,
 } from "@/models/user-management";
-import { BreadCrumbItem } from "@/types";
+import { BreadCrumbItem, RoleBase } from "@/types";
 import { convertPermissionIntoObject } from "@/utils/validateSchema";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { useEffect } from "react";
@@ -45,9 +47,13 @@ const initialValues: IRolePermissionForm = {
 
 const ManageRole = () => {
   const { id } = useParams();
+  console.log(`\n\n ~ ManageRole ~ id:`, id);
   const router = useNavigate();
+  const dispatch = useAppDispatch();
   // const [values] = useState<Role | null>(null);
-  // const { selectedRole } = useAppSelector((state) => state.se);
+  const { singleRolePermission } = useAppSelector(
+    (state) => state.userManagement
+  );
   const breadcrumbItem: BreadCrumbItem[] = [
     {
       name: "Role List",
@@ -72,71 +78,71 @@ const ManageRole = () => {
     { setSubmitting, resetForm }: FormikHelpers<IRolePermissionForm>
   ) => {
     // console.log(values);
-    // const { Title, ...rest } = values;
+    const { Title, ...rest } = values;
 
-    // let obj : Record<string, RoleBase> = {}
-    // Object.keys(rest).forEach((key: any) => {
-    //   if ((rest as any)[key]?.length > 0){
-    //     (obj as any)[key] = convertPermissionIntoObject(
-    //       (rest as any)[key] as IOptions[]
-    //     );
-    //   }
-    // });
+    let obj: Record<string, RoleBase> = {};
+    Object.keys(rest).forEach((key: any) => {
+      if ((rest as any)[key]?.length > 0) {
+        (obj as any)[key] = convertPermissionIntoObject(
+          (rest as any)[key] as IOptions[]
+        );
+      }
+    });
 
-    const permissions = {
-      Dashboard: convertPermissionIntoObject(values.Dashboard as IOptions[]),
-      Product_Category_Management: convertPermissionIntoObject(
-        values.Product_Category_Management as IOptions[]
-      ),
-      Analytics_and_Reporting: convertPermissionIntoObject(
-        values.Analytics_and_Reporting as IOptions[]
-      ),
-      Customer_Support: convertPermissionIntoObject(
-        values.Customer_Support as IOptions[]
-      ),
-      Shipping_Management: convertPermissionIntoObject(
-        values.Shipping_Management as IOptions[]
-      ),
-      Content_Management: convertPermissionIntoObject(
-        values.Content_Management as IOptions[]
-      ),
-      Dashboard_Customization: convertPermissionIntoObject(
-        values.Dashboard_Customization as IOptions[]
-      ),
-      Multi_language_Support: convertPermissionIntoObject(
-        values.Multi_language_Support as IOptions[]
-      ),
-      Backup_and_Recovery: convertPermissionIntoObject(
-        values.Backup_and_Recovery as IOptions[]
-      ),
-      Notification_Management: convertPermissionIntoObject(
-        values.Notification_Management as IOptions[]
-      ),
-      Product_Management: convertPermissionIntoObject(
-        values.Product_Management as IOptions[]
-      ),
-      User_Management: convertPermissionIntoObject(
-        values.User_Management as IOptions[]
-      ),
-      Promotions_and_Discounts: convertPermissionIntoObject(
-        values.Promotions_and_Discounts as IOptions[]
-      ),
-      Return_and_Refund_Management: convertPermissionIntoObject(
-        values.Return_and_Refund_Management as IOptions[]
-      ),
-      Permissions_and_Roles: convertPermissionIntoObject(
-        values.Permissions_and_Roles as IOptions[]
-      ),
-      Product_Sub_Category_Management: convertPermissionIntoObject(
-        values.Product_Sub_Category_Management as IOptions[]
-      ),
-    };
+    // const permissions = {
+    //   Dashboard: convertPermissionIntoObject(values.Dashboard as IOptions[]),
+    //   Product_Category_Management: convertPermissionIntoObject(
+    //     values.Product_Category_Management as IOptions[]
+    //   ),
+    //   Analytics_and_Reporting: convertPermissionIntoObject(
+    //     values.Analytics_and_Reporting as IOptions[]
+    //   ),
+    //   Customer_Support: convertPermissionIntoObject(
+    //     values.Customer_Support as IOptions[]
+    //   ),
+    //   Shipping_Management: convertPermissionIntoObject(
+    //     values.Shipping_Management as IOptions[]
+    //   ),
+    //   Content_Management: convertPermissionIntoObject(
+    //     values.Content_Management as IOptions[]
+    //   ),
+    //   Dashboard_Customization: convertPermissionIntoObject(
+    //     values.Dashboard_Customization as IOptions[]
+    //   ),
+    //   Multi_language_Support: convertPermissionIntoObject(
+    //     values.Multi_language_Support as IOptions[]
+    //   ),
+    //   Backup_and_Recovery: convertPermissionIntoObject(
+    //     values.Backup_and_Recovery as IOptions[]
+    //   ),
+    //   Notification_Management: convertPermissionIntoObject(
+    //     values.Notification_Management as IOptions[]
+    //   ),
+    //   Product_Management: convertPermissionIntoObject(
+    //     values.Product_Management as IOptions[]
+    //   ),
+    //   User_Management: convertPermissionIntoObject(
+    //     values.User_Management as IOptions[]
+    //   ),
+    //   Promotions_and_Discounts: convertPermissionIntoObject(
+    //     values.Promotions_and_Discounts as IOptions[]
+    //   ),
+    //   Return_and_Refund_Management: convertPermissionIntoObject(
+    //     values.Return_and_Refund_Management as IOptions[]
+    //   ),
+    //   Permissions_and_Roles: convertPermissionIntoObject(
+    //     values.Permissions_and_Roles as IOptions[]
+    //   ),
+    //   Product_Sub_Category_Management: convertPermissionIntoObject(
+    //     values.Product_Sub_Category_Management as IOptions[]
+    //   ),
+    // };
 
     await manageRolePermission({
       id,
       data: {
-        Title: values.Title,
-        Permissions: permissions,
+        Title: Title,
+        Permissions: obj,
       },
       options: {
         setSubmitting,
@@ -152,6 +158,12 @@ const ManageRole = () => {
     }
   }, [id]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(userManagementAction.resetAdminUser());
+    };
+  }, []);
+
   return (
     <PageLayout
       title={id ? "Edit Role" : "Create Role"}
@@ -162,7 +174,7 @@ const ManageRole = () => {
           <Loader />
         ) : (
           <Formik
-            initialValues={initialValues}
+            initialValues={singleRolePermission || initialValues}
             validationSchema={rolePermissionFormSchema}
             onSubmit={onSubmit}
             enableReinitialize

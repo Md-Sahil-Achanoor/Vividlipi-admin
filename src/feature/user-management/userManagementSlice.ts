@@ -1,3 +1,6 @@
+import { roleOptions } from "@/constants/role-constant";
+import { IOptions } from "@/models/user-management";
+import { filterPermission } from "@/utils/validateSchema";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   RolePermissionResponse,
@@ -8,6 +11,8 @@ import {
 const initialState: UserManagementState = {
   selectedRolePermission: null,
   selectedUser: null,
+  singleUser: null,
+  singleRolePermission: null,
 };
 
 const userManagementSlice = createSlice({
@@ -19,12 +24,56 @@ const userManagementSlice = createSlice({
       action: PayloadAction<RolePermissionResponse | null>
     ) => {
       state.selectedRolePermission = action.payload;
+      if (action.payload) {
+        const { Permissions } = action.payload;
+        let permissions: Record<string, IOptions[]> = {};
+        roleOptions?.forEach((role) => {
+          let check = Object.keys(Permissions)?.includes(role);
+          if (check) {
+            permissions[role] = filterPermission(Permissions[role]);
+          } else {
+            permissions[role] = [];
+          }
+        });
+        state.singleRolePermission = {
+          Title: action.payload.Title,
+          ...permissions,
+        };
+      } else {
+        state.singleRolePermission = null;
+      }
     },
     setSelectedUser: (
       state,
       action: PayloadAction<UserManagementResponse | null>
     ) => {
       state.selectedUser = action.payload;
+      if (action.payload) {
+        state.singleUser = {
+          name: action.payload.name,
+          email: action.payload.email,
+          password: "",
+          role: action.payload.role,
+        };
+      } else {
+        state.singleUser = null;
+      }
+    },
+
+    resetAdminUser: (state) => {
+      state.selectedUser = null;
+      state.singleUser = null;
+    },
+    resetRolePermission: (state) => {
+      state.selectedRolePermission = null;
+      state.singleRolePermission = null;
+    },
+
+    resetAll: (state) => {
+      state.selectedUser = null;
+      state.singleUser = null;
+      state.selectedRolePermission = null;
+      state.singleRolePermission = null;
     },
   },
 });

@@ -1,4 +1,4 @@
-import { IUserManagement } from "@/models/user-management";
+import { IRolePermissionForm, IUserManagement } from "@/models/user-management";
 import { ReqQuery } from "../common";
 
 export type RoleBase = {
@@ -16,7 +16,7 @@ export interface IRolePermission {
 export interface RolePermissionPayLoad extends IRolePermission {}
 
 export interface RolePermissionResponse extends IRolePermission {
-  id: number;
+  id: number | string;
   isDeleted: number;
 }
 
@@ -36,4 +36,6 @@ export interface UserManagementResponse
 export interface UserManagementState {
   selectedRolePermission: RolePermissionResponse | null;
   selectedUser: UserManagementResponse | null;
+  singleUser: IUserManagementForm | null;
+  singleRolePermission: IRolePermissionForm | null;
 }

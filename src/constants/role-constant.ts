@@ -124,7 +124,7 @@ export const permissionOptions = {
 export const getActualRole = {
   Dashboard: "Dashboard",
   Product_Category_Management: "Product Category Management",
-  Product_management: "Product Management",
+  Product_Management: "Product Management",
   Product_Sub_Category_Management: "Product Sub Category Management",
   User_Management: "User Management",
   Promotions_and_Discounts: "Promotions and Discounts",
@@ -140,3 +140,23 @@ export const getActualRole = {
   Multi_language_Support: "Multi language Support",
   Dashboard_Customization: "Dashboard Customization",
 };
+
+export const roleOptions = [
+  "Dashboard",
+  "Product_Category_Management",
+  "Product_Management",
+  "Product_Sub_Category_Management",
+  "User_Management",
+  "Promotions_and_Discounts",
+  "Return_and_Refund_Management",
+  "Permissions_and_Roles",
+  "Analytics_and_Reporting",
+  "Customer_Support",
+  "Shipping_Management",
+  "Order_Management",
+  "Tax_Management",
+  "Notification_Management",
+  "Backup_and_Recovery",
+  "Multi_language_Support",
+  "Dashboard_Customization",
+];
