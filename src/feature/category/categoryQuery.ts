@@ -55,7 +55,7 @@ const categoryQuery = API.injectEndpoints({
         method: "GET",
         params: query,
         headers: {
-          id: query?.id,
+          id: String(query?.id),
         },
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
@@ -167,7 +167,7 @@ const categoryQuery = API.injectEndpoints({
         method: "GET",
         params: query,
         headers: {
-          id: query?.id,
+          id: String(query?.id),
         },
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
