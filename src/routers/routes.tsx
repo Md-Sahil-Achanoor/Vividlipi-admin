@@ -1,4 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
+import ManageRole from "@/pages/admin/user-management/ManageRole";
+import RoleList from "@/pages/admin/user-management/RoleList";
+import UserList from "@/pages/admin/user-management/UserList";
 import { lazy } from "react";
 import { Navigate, createBrowserRouter } from "react-router-dom";
 
@@ -84,13 +87,12 @@ const router = createBrowserRouter([
             path: "role-list",
             element: <AppWrapper />,
             children: [
-              { path: "", element: <MainCategoryList /> },
-              { path: "sub-category", element: <SubCategoryList /> },
-              // { path: "edit/:id", element: <EditProduct /> },
+              { path: "", element: <RoleList /> },
+              { path: "add-role", element: <ManageRole /> },
+              { path: "edit-role/:id", element: <ManageRole /> },
             ],
           },
-          { path: "user-list", element: <SubCategoryList /> },
-          // { path: "edit/:id", element: <EditProduct /> },
+          { path: "user-list", element: <UserList /> },
         ],
       },
     ],

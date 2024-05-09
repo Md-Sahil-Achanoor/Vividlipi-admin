@@ -1,58 +1,70 @@
 import * as Yup from "yup";
 
 export const optionsSchema = Yup.object({
-  label: Yup.string(),
-  value: Yup.string(),
+  label: Yup.string().required(),
+  value: Yup.string().required(),
 });
 
 export type IOptions = Yup.InferType<typeof optionsSchema>;
 
 export const rolePermissionFormSchema = Yup.object({
-  role_name: Yup.string()
+  Title: Yup.string()
     .required("Role name can't be empty")
-    .trim("Role name can't be empty")
-    .matches(/^\s*$/, "Role name can't be empty"),
+    .test({
+      test: (value) => {
+        return !/^\s*$/g.test(value);
+      },
+      message: "Role name can't be empty",
+    }),
   Dashboard: Yup.array(optionsSchema),
-  featured_category_management: Yup.array(optionsSchema),
-  domain_management: Yup.array(optionsSchema),
-  referral_and_gifts: Yup.array(optionsSchema),
-  admin_user_management: Yup.array(optionsSchema),
-  roles_management: Yup.array(optionsSchema),
-  course_management: Yup.array(optionsSchema),
-  application_user_management: Yup.array(optionsSchema),
-  insight_management: Yup.array(optionsSchema),
-  banners_management: Yup.array(optionsSchema),
-  subscription_management: Yup.array(optionsSchema),
-  payment_management: Yup.array(optionsSchema),
-  static_content_management: Yup.array(optionsSchema),
-}).test({
-  test: function (value) {
-    // Array of keys to check
-    const keysToCheck = [
-      "Dashboard",
-      "featured_category_management",
-      "domain_management",
-      "referral_and_gifts",
-      "admin_user_management",
-      "roles_management",
-      "course_management",
-      "application_user_management",
-      "insight_management",
-      "banners_management",
-      "subscription_management",
-      "payment_management",
-      "static_content_management",
-    ];
-
-    // Check if at least one key has a length greater than zero
-    return keysToCheck.some(
-      (key: string) =>
-        Array.isArray((value as any)[key]) && (value as any)[key].length > 0
-    );
-  },
-  message: "At least one key must have a length greater than zero",
+  Product_Management: Yup.array(optionsSchema),
+  User_Management: Yup.array(optionsSchema),
+  Promotions_and_Discounts: Yup.array(optionsSchema),
+  Return_and_Refund_Management: Yup.array(optionsSchema),
+  Product_Category_Management: Yup.array(optionsSchema),
+  Product_Sub_Category_Management: Yup.array(optionsSchema),
+  Permissions_and_Roles: Yup.array(optionsSchema),
+  Analytics_and_Reporting: Yup.array(optionsSchema),
+  Customer_Support: Yup.array(optionsSchema),
+  Shipping_Management: Yup.array(optionsSchema),
+  Content_Management: Yup.array(optionsSchema),
+  Dashboard_Customization: Yup.array(optionsSchema),
+  Multi_language_Support: Yup.array(optionsSchema),
+  Backup_and_Recovery: Yup.array(optionsSchema),
+  Notification_Management: Yup.array(optionsSchema),
+  Tax_Management: Yup.array(optionsSchema),
+  Order_Management: Yup.array(optionsSchema),
 });
 
 export type IRolePermissionForm = Yup.InferType<
   typeof rolePermissionFormSchema
 >;
+
+export const userManagementFormSchema = Yup.object({
+  name: Yup.string()
+    .required("Name is required")
+    .test({
+      test: (value) => {
+        return !/^\s*$/g.test(value);
+      },
+      message: "Name is required",
+    }),
+  email: Yup.string().required("Email is required").email("Invalid email"),
+  password: Yup.string().required("Password is required").min(6, "Too short"),
+  role: Yup.object({
+    role_name: Yup.string(),
+  })
+    .nullable()
+    .test({
+      test: (value) => {
+        return value !== null;
+      },
+      message: "Role is required",
+    }),
+});
+
+export type IUserManagementForm = Yup.InferType<
+  typeof userManagementFormSchema
+>;
+
+export type IUserManagement = Omit<IUserManagementForm, "role">;

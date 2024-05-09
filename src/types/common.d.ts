@@ -331,6 +331,8 @@ export type AccessObject = {
   id: string;
   Title: string;
   image: string;
+  label: string;
+  value: string;
 };
 
 export type AccessObjectKey = keyof AccessObject;

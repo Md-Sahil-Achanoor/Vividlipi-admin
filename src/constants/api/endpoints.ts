@@ -40,4 +40,14 @@ export const endpoints = {
   product_list: "/api/list-product",
   edit_product: "/api/edit-product",
   delete_product: "/api/delete-product",
+
+  /**
+   * @module Role Management
+   * */
+  role_list: "/api/AdminRoles",
+
+  /**
+   * @module User Management
+   * */
+  subAdmin_list: "/api/subadmins",
 };
