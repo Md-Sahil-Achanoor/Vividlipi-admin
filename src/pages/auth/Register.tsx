@@ -1,12 +1,12 @@
+import CheckboxGroup from "@/components/form/CheckboxGroup";
+import CustomInput from "@/components/form/CustomInput";
+import { projectName } from "@/constants/service";
+import { operatorSignUpSchema } from "@/models/auth/signup-validation";
+import { FormikSubmitOption } from "@/types";
 import { Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { BsArrowRightShort } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
-import CheckboxGroup from "../../components/elements/InputComponents/CheckboxGroup";
-import CustomInput from "../../components/elements/InputComponents/CustomInput";
-import { projectName } from "../../constants/service";
-import { operatorSignUpSchema } from "../../models/auth/signup-validation";
-import { FormikSubmitOption } from "../../types";
 
 const initialValues: any = {
   CompanyName: "",

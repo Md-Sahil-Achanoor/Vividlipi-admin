@@ -1,20 +1,19 @@
-import NoTableData from "../../../components/atoms/NoTableData";
-import CustomTable from "../../../components/elements/common/custom-table/CustomTable";
-
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../app/store";
-import ManageModule from "../../../components/elements/modal/ManageModule";
-import SkeletonTable from "../../../components/elements/skeleton/SkeletonTable";
-import ManageCategory from "../../../components/module/category/ManageCategory";
+import { useAppDispatch, useAppSelector } from "@/app/store";
+import NoTableData from "@/components/atoms/NoTableData";
+import CustomTable from "@/components/elements/common/custom-table/CustomTable";
+import ManageModule from "@/components/elements/modal/ManageModule";
+import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
+import ManageCategory from "@/components/module/category/ManageCategory";
 import {
   useDeleteCategoryMutation,
   useGetCategoriesQuery,
-} from "../../../feature/category/categoryQuery";
-import { categoryAction } from "../../../feature/category/categorySlice";
-import { coreAction } from "../../../feature/core/coreSlice";
-import PageLayout from "../../../layout/PageLayout";
-import { BreadCrumbItem, CategoryResponse } from "../../../types";
-import { cn } from "../../../utils/twmerge";
+} from "@/feature/category/categoryQuery";
+import { categoryAction } from "@/feature/category/categorySlice";
+import { coreAction } from "@/feature/core/coreSlice";
+import PageLayout from "@/layout/PageLayout";
+import { BreadCrumbItem, CategoryResponse } from "@/types";
+import { cn } from "@/utils/twmerge";
+import { useEffect } from "react";
 
 const breadcrumbItem: BreadCrumbItem[] = [
   {
@@ -42,8 +41,7 @@ const MainCategoryList = () => {
   useEffect(() => {
     refetch();
     return () => {
-      dispatch(categoryAction.setSelectedSubCategory(null));
-      dispatch(categoryAction.setSelectedCategory(null));
+      dispatch(categoryAction.resetData());
     };
   }, []);
 

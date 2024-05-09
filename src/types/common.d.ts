@@ -165,16 +165,16 @@ export interface ReqQuery {
   page: number;
   limit: number;
   status: string;
-  id: string;
+  id: string | number;
   isActive: string;
   order: string;
 }
 
 export interface IStore {
-  loading: boolean;
-  adding: boolean;
-  error: string;
-  reRender: boolean;
+  // loading: boolean;
+  // adding: boolean;
+  // error: string;
+  // reRender: boolean;
   singleRerender?: boolean;
 }
 
@@ -331,6 +331,8 @@ export type AccessObject = {
   id: string;
   Title: string;
   image: string;
+  label: string;
+  value: string;
 };
 
 export type AccessObjectKey = keyof AccessObject;

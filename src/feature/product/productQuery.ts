@@ -173,7 +173,7 @@ const productQuery = API.injectEndpoints({
           const result = await queryFulfilled;
           if (result?.data?.status === 1) {
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            dispatch(productAction.resetWithReload());
+            // dispatch(productAction.resetWithReload());
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
           }

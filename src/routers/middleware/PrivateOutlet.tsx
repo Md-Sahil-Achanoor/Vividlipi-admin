@@ -1,25 +1,21 @@
 // import moment from "moment";
 import moment from "moment";
 import { PropsWithChildren } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAppSelector } from "../../app/store";
 import AuthLayout from "../../layout/authLayout";
 import { Role } from "../../types";
 import { checkTimeGapBetweenTwo } from "../../utils/time";
-// import { checkTimeGapBetweenTwo } from "../../utils/time";
 
 interface PrivateOutletProps extends PropsWithChildren {
   roles?: Role[];
 }
 
-const PrivateOutlet = ({ children, roles }: PrivateOutletProps) => {
-  const { isLoggedIn, token, role } = useAppSelector((state) => state.auth);
-  console.log(
-    `\n\n ~ PrivateOut ~ isLoggedIn, token, role:`,
-    isLoggedIn,
-    token,
-    role
+const PrivateOutlet = ({ roles }: PrivateOutletProps) => {
+  const { isLoggedIn, token, role, user } = useAppSelector(
+    (state) => state.auth
   );
+  const location = useLocation();
 
   const loggedIn = isLoggedIn;
 
@@ -31,21 +27,22 @@ const PrivateOutlet = ({ children, roles }: PrivateOutletProps) => {
     "seconds"
   );
   // console.log(`\n\n checkTokenTime:`, checkTokenTime);
-
   if (
     !loggedIn ||
     !token ||
     !roles?.includes(role) ||
-    checkTokenTime < 0
-    // decodedToken?.role !== role ||
-    // decodedToken?.id !== user?.ID ||
-    // decodedToken?.email !== user?.email ||
+    checkTokenTime < 0 ||
+    decodedToken?.role !== role ||
+    decodedToken?.sub != user?.Id
   ) {
-    return <Navigate to="/account/login" />;
+    return <Navigate to="/account/login" state={{ from: location }} replace />;
   }
 
-  return <AuthLayout>{children}</AuthLayout>;
-  // return children;
+  return (
+    <AuthLayout>
+      <Outlet />
+    </AuthLayout>
+  );
 };
 
 export default PrivateOutlet;

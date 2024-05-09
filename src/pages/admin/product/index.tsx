@@ -1,19 +1,18 @@
-import { Link, useNavigate } from "react-router-dom";
-
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../app/store";
-import NoTableData from "../../../components/atoms/NoTableData";
-import CustomTable from "../../../components/elements/common/custom-table/CustomTable";
-import ManageModule from "../../../components/elements/modal/ManageModule";
-import SkeletonTable from "../../../components/elements/skeleton/SkeletonTable";
-import { coreAction } from "../../../feature/core/coreSlice";
+import { useAppDispatch, useAppSelector } from "@/app/store";
+import NoTableData from "@/components/atoms/NoTableData";
+import CustomTable from "@/components/elements/common/custom-table/CustomTable";
+import ManageModule from "@/components/elements/modal/ManageModule";
+import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
+import { coreAction } from "@/feature/core/coreSlice";
 import {
   useDeleteProductMutation,
   useGetProductsQuery,
-} from "../../../feature/product/productQuery";
-import { productAction } from "../../../feature/product/productSlice";
-import PageLayout from "../../../layout/PageLayout";
-import { BreadCrumbItem } from "../../../types";
+} from "@/feature/product/productQuery";
+import { productAction } from "@/feature/product/productSlice";
+import PageLayout from "@/layout/PageLayout";
+import { BreadCrumbItem } from "@/types";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const breadcrumbItem: BreadCrumbItem[] = [
   {

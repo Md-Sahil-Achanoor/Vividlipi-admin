@@ -1,7 +1,7 @@
+import { CheckboxGroupProps } from "@/types";
+import { cn } from "@/utils/twmerge";
 import { ErrorMessage, Field, FieldProps } from "formik";
 import { FaRegQuestionCircle } from "react-icons/fa";
-import { CheckboxGroupProps } from "../../../types";
-import { cn } from "../../../utils/twmerge";
 import TextError from "./TextError";
 
 function CheckboxGroup(props: CheckboxGroupProps) {

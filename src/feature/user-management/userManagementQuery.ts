@@ -1,38 +1,35 @@
-import toast from "react-hot-toast";
-import API from "../../app/services/api";
-import { endpoints } from "../../constants/api/endpoints";
+import API from "@/app/services/api";
+import { endpoints } from "@/constants/api/endpoints";
+import { coreAction } from "@/feature/core/coreSlice";
 import {
   ApiResponse,
-  CategoryPayload,
-  CategoryQuery,
-  CategoryResponse,
   ManagePayload,
   ManagePayloadQuery,
   ManageQuery,
-  SubCategoryPayload,
-} from "../../types";
-import { coreAction } from "../core/coreSlice";
-import { categoryAction } from "./categorySlice";
+  RolePermissionPayLoad,
+  RolePermissionQuery,
+  RolePermissionResponse,
+  UserManagementPayLoad,
+  UserManagementResponse,
+} from "@/types";
+import toast from "react-hot-toast";
+import { userManagementAction } from "./userManagementSlice";
 
-const categoryQuery = API.injectEndpoints({
+const userManagementQuery = API.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
-    getCategories: builder.query<
-      ApiResponse<CategoryResponse[]>,
-      ManageQuery<Partial<CategoryQuery>>
+    getRolePermissions: builder.query<
+      ApiResponse<RolePermissionResponse[]>,
+      ManageQuery<Partial<RolePermissionQuery>>
     >({
-      query: ({ query, conditions }) => {
-        let url =
-          conditions?.type === "category1"
-            ? endpoints.category_list1
-            : endpoints.category_list2;
+      query: ({ query }) => {
         return {
-          url,
-          method: "POST",
+          url: endpoints.role_list,
+          method: "GET",
           params: query,
         };
       },
-      providesTags: ["Category"],
+      providesTags: ["RoleList"],
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           await queryFulfilled;
@@ -46,22 +43,21 @@ const categoryQuery = API.injectEndpoints({
       },
     }),
 
-    getCategoryById: builder.query<
-      ApiResponse<CategoryResponse>,
-      ManageQuery<Partial<CategoryQuery>, null>
+    getRolePermissionById: builder.query<
+      ApiResponse<RolePermissionResponse>,
+      ManageQuery<Partial<RolePermissionQuery>, null>
     >({
       query: ({ query }) => ({
-        url: endpoints.category,
+        url: endpoints.role_list,
         method: "GET",
         params: query,
-        headers: {
-          id: String(query?.id),
-        },
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled;
-          dispatch(categoryAction.setSelectedCategory(result?.data?.data));
+          dispatch(
+            userManagementAction.setSelectedRolePermission(result?.data?.data)
+          );
         } catch (err: unknown) {
           // do nothing
           const error = err as any;
@@ -73,31 +69,30 @@ const categoryQuery = API.injectEndpoints({
     }),
 
     // POST
-    manageCategory: builder.mutation<
+    manageRolePermission: builder.mutation<
       any,
-      ManagePayload<CategoryPayload, Partial<CategoryQuery>>
+      ManagePayload<RolePermissionPayLoad, Partial<RolePermissionQuery>>
     >({
       query: ({ data, id }) => ({
-        url: id ? endpoints.edit_category1 : endpoints.add_category1,
-        // method: id ? "PUT" : "POST",
-        method: "POST",
+        url: endpoints.role_list,
+        method: id ? "PUT" : "POST",
         body: data,
-        headers: {
-          cat1: String(id),
+        params: {
+          id,
         },
       }),
-      invalidatesTags: ["Category"],
-      async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
+      invalidatesTags: ["RoleList"],
+      async onQueryStarted({ options }, { queryFulfilled }) {
         try {
           const result = await queryFulfilled;
           if (result?.data?.status === 1) {
             options?.resetForm();
-            options?.setSubmitting(false);
             toast.success(result?.data?.message || "Success");
-            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            options?.router?.("/admin/user-management/role-list");
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
           }
+          options?.setSubmitting(false);
         } catch (err: unknown) {
           // do nothing
           options?.setSubmitting(false);
@@ -110,16 +105,15 @@ const categoryQuery = API.injectEndpoints({
       },
     }),
 
-    deleteCategory: builder.mutation<
+    deleteRolePermission: builder.mutation<
       any,
-      ManagePayloadQuery<Partial<CategoryQuery>>
+      ManagePayloadQuery<Partial<RolePermissionQuery>>
     >({
       query: ({ id }) => ({
-        url: endpoints.delete_category1,
-        method: "POST",
-        // params: query,
-        headers: {
-          cat1: String(id),
+        url: endpoints.role_list,
+        method: "DELETE",
+        params: {
+          id,
         },
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
@@ -127,16 +121,11 @@ const categoryQuery = API.injectEndpoints({
           const result = await queryFulfilled;
           if (result?.data?.status === 1) {
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            // dispatch(categoryAction.resetWithReload());
-            dispatch(categoryAction.resetCategory());
             dispatch(
-              categoryQuery.util.updateQueryData(
-                "getCategories",
+              userManagementQuery.util.updateQueryData(
+                "getRolePermissions",
                 {
-                  query: _arg.query,
-                  conditions: {
-                    type: "category1",
-                  },
+                  query: {},
                 },
                 (draft) => {
                   draft.data = draft?.data?.filter(
@@ -145,6 +134,7 @@ const categoryQuery = API.injectEndpoints({
                 }
               )
             );
+            toast.success(result?.data?.message || "Delete Successful!");
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
           }
@@ -158,22 +148,44 @@ const categoryQuery = API.injectEndpoints({
       },
     }),
 
-    getSubCategoryById: builder.query<
-      ApiResponse<CategoryResponse>,
-      ManageQuery<Partial<CategoryQuery>, null>
+    getAdminUsers: builder.query<
+      ApiResponse<UserManagementResponse[]>,
+      ManageQuery<Partial<RolePermissionQuery>>
+    >({
+      query: ({ query }) => {
+        return {
+          url: endpoints.subAdmin_list,
+          method: "GET",
+          params: query,
+        };
+      },
+      providesTags: ["AdminUsers"],
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any;
+          const message =
+            error?.response?.data?.message || "Something went wrong!";
+          toast.error(message);
+        }
+      },
+    }),
+
+    getAdminUserById: builder.query<
+      ApiResponse<UserManagementResponse>,
+      ManageQuery<Partial<RolePermissionQuery>, null>
     >({
       query: ({ query }) => ({
         url: endpoints.category,
         method: "GET",
         params: query,
-        headers: {
-          id: String(query?.id),
-        },
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled;
-          dispatch(categoryAction.setSelectedCategory(result?.data?.data));
+          dispatch(userManagementAction.setSelectedUser(result?.data?.data));
         } catch (err: unknown) {
           // do nothing
           const error = err as any;
@@ -185,32 +197,21 @@ const categoryQuery = API.injectEndpoints({
     }),
 
     // POST
-    manageSubCategory: builder.mutation<
+    manageAdminUser: builder.mutation<
       any,
-      ManagePayload<SubCategoryPayload, Partial<CategoryQuery>>
+      ManagePayload<UserManagementPayLoad, Partial<RolePermissionQuery>>
     >({
-      query: ({ data, query, id }) => {
-        const { category, ...rest } = data;
-        const body: any = {
-          ...rest,
-        };
-        if (id) {
-          body.cat1id = category;
-        }
+      query: ({ data, id }) => {
         return {
-          url: id ? endpoints.edit_category2 : endpoints.add_category2,
-          // url: endpoints.category,
-          // method: id ? "PUT" : "POST",
-          method: "POST",
-          body,
-          params: query,
-          headers: {
-            cat1: String(category),
-            cat2: id ? String(id) : "",
+          url: endpoints.subAdmin_list,
+          method: id ? "PUT" : "POST",
+          body: data,
+          params: {
+            id,
           },
         };
       },
-      invalidatesTags: ["Category"],
+      invalidatesTags: ["AdminUsers"],
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
@@ -234,28 +235,27 @@ const categoryQuery = API.injectEndpoints({
       },
     }),
 
-    deleteSubCategory: builder.mutation<
+    deleteAdminUser: builder.mutation<
       any,
-      ManagePayloadQuery<Partial<CategoryQuery>>
+      ManagePayloadQuery<Partial<RolePermissionQuery>>
     >({
       query: ({ id }) => ({
-        url: endpoints.delete_category2,
-        method: "POST",
-        // params: query,
-        headers: {
-          cat2: String(id),
+        url: endpoints.subAdmin_list,
+        method: "DELETE",
+        params: {
+          id,
         },
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled;
           if (result?.data?.status === 1) {
-            console.log(`\n\n _arg:`, _arg.query);
+            // console.log(`\n\n _arg:`, _arg.query);
             dispatch(
-              categoryQuery.util.updateQueryData(
-                "getCategories",
+              userManagementQuery.util.updateQueryData(
+                "getAdminUsers",
                 {
-                  query: _arg.query,
+                  query: {},
                 },
                 (draft) => {
                   draft.data = draft?.data?.filter(
@@ -265,7 +265,7 @@ const categoryQuery = API.injectEndpoints({
               )
             );
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            dispatch(categoryAction.resetSubCategory());
+            // dispatch(categoryAction.resetSubRole());
             toast.success(result?.data?.message || "Delete Successful!");
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
@@ -283,14 +283,15 @@ const categoryQuery = API.injectEndpoints({
 });
 
 export const {
-  useGetCategoriesQuery,
-  useGetCategoryByIdQuery,
-  useManageCategoryMutation,
-  useDeleteCategoryMutation,
+  useGetRolePermissionsQuery,
+  useGetRolePermissionByIdQuery,
+  useManageRolePermissionMutation,
+  useDeleteRolePermissionMutation,
 
-  useGetSubCategoryByIdQuery,
-  useManageSubCategoryMutation,
-  useDeleteSubCategoryMutation,
-} = categoryQuery;
+  useGetAdminUsersQuery,
+  useGetAdminUserByIdQuery,
+  useManageAdminUserMutation,
+  useDeleteAdminUserMutation,
+} = userManagementQuery;
 
-export default categoryQuery;
+export default userManagementQuery;

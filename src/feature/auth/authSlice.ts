@@ -4,7 +4,6 @@ import { AuthResponse, AuthState } from "../../types";
 const initialState: AuthState = {
   isLoggedIn: false,
   user: null,
-  tokens: null,
   token: "",
   role: "",
   reRender: false,

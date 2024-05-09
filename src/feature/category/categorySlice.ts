@@ -6,14 +6,10 @@ import {
 } from "../../types";
 
 const initialState: CategoryState = {
-  loading: false,
-  adding: false,
-  error: "",
   selectedCategory: null,
   selectedSubCategory: null,
   singleCategory: null,
   singleSubCategory: null,
-  reRender: false,
 };
 
 const categorySlice = createSlice({
@@ -28,8 +24,14 @@ const categorySlice = createSlice({
       state.selectedSubCategory = null;
       state.singleSubCategory = null;
     },
-    resetWithReload: (state) => {
-      state.reRender = !state.reRender;
+    // resetWithReload: (state) => {
+    //   state.reRender = !state.reRender;
+    // },
+    resetData: (state) => {
+      state.selectedCategory = null;
+      state.selectedSubCategory = null;
+      state.singleCategory = null;
+      state.singleSubCategory = null;
     },
     // setSelectedVendor: (
     //   state,

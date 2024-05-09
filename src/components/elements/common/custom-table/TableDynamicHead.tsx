@@ -1,5 +1,5 @@
+import Pagination from "@/components/atoms/Pagination";
 import { Dispatch, FC, SetStateAction } from "react";
-import Pagination from "../../../atoms/Pagination";
 
 interface Table {
   children: React.ReactNode;

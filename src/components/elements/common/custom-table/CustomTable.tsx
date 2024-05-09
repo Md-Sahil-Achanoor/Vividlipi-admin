@@ -1,7 +1,7 @@
+import Pagination from "@/components/atoms/Pagination";
+import { InputType } from "@/types";
+import { cn } from "@/utils/twmerge";
 import { Dispatch, FC, SetStateAction } from "react";
-import { InputType } from "../../../../types";
-import { cn } from "../../../../utils/twmerge";
-import Pagination from "../../../atoms/Pagination";
 
 interface Table {
   children: React.ReactNode;

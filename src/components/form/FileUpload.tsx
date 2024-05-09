@@ -1,15 +1,15 @@
 /* eslint-disable no-unsafe-optional-chaining */
+import logo from "@/assets/Images/male.png";
+import Loader from "@/components/atoms/Loader";
+import UploadFile from "@/components/elements/common/Upload";
+import useFileUploader from "@/hooks/useFileUploader";
+import { ChangeEventType, FormikFileUploadProps } from "@/types";
+import { displayFileName } from "@/utils/file";
 import { ErrorMessage } from "formik";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { BiLoaderCircle, BiTrash } from "react-icons/bi";
 import { LuImagePlus } from "react-icons/lu";
-import logo from "../../../assets/Images/male.png";
-import useFileUploader from "../../../hooks/useFileUploader";
-import { ChangeEventType, FormikFileUploadProps } from "../../../types";
-import { displayFileName } from "../../../utils/file";
-import Loader from "../../atoms/Loader";
-import UploadFile from "../common/Upload";
 import TextError from "./TextError";
 
 const FileUpload = ({

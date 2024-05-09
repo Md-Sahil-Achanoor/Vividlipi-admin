@@ -107,6 +107,8 @@ export const signInSchema = Yup.object().shape({
   password: Yup.string().required("Password is required."),
 });
 
+export type ISignIn = Yup.InferType<typeof signInSchema>;
+
 export const forgotPasswordSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email format"),
   password: Yup.string().matches(

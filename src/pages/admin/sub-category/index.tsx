@@ -1,27 +1,27 @@
-import NoTableData from "../../../components/atoms/NoTableData";
-import CustomTable from "../../../components/elements/common/custom-table/CustomTable";
+import NoTableData from "@/components/atoms/NoTableData";
+import CustomTable from "@/components/elements/common/custom-table/CustomTable";
 
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../app/store";
-import TableWrapper from "../../../components/elements/common/TableWrapper";
-import InfiniteFilter from "../../../components/elements/filters/InfiniteFilter";
-import ManageModule from "../../../components/elements/modal/ManageModule";
-import SkeletonTable from "../../../components/elements/skeleton/SkeletonTable";
-import ManageSubCategory from "../../../components/module/category/ManageSubCategory";
+import { useAppDispatch, useAppSelector } from "@/app/store";
+import TableWrapper from "@/components/elements/common/TableWrapper";
+import InfiniteFilter from "@/components/elements/filters/InfiniteFilter";
+import ManageModule from "@/components/elements/modal/ManageModule";
+import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
+import ManageSubCategory from "@/components/module/category/ManageSubCategory";
 import {
   useDeleteSubCategoryMutation,
   useGetCategoriesQuery,
-} from "../../../feature/category/categoryQuery";
-import { categoryAction } from "../../../feature/category/categorySlice";
-import { coreAction } from "../../../feature/core/coreSlice";
-import PageLayout from "../../../layout/PageLayout";
+} from "@/feature/category/categoryQuery";
+import { categoryAction } from "@/feature/category/categorySlice";
+import { coreAction } from "@/feature/core/coreSlice";
+import PageLayout from "@/layout/PageLayout";
 import {
   BreadCrumbItem,
   CategoryQuery,
   CategoryResponse,
   SubCategoryResponse,
-} from "../../../types";
-import { cn } from "../../../utils/twmerge";
+} from "@/types";
+import { cn } from "@/utils/twmerge";
+import { useEffect } from "react";
 
 const breadcrumbItem: BreadCrumbItem[] = [
   {
@@ -62,8 +62,7 @@ const SubCategoryList = () => {
   useEffect(() => {
     refetch();
     return () => {
-      dispatch(categoryAction.setSelectedSubCategory(null));
-      dispatch(categoryAction.setSelectedCategory(null));
+      dispatch(categoryAction.resetData());
     };
   }, []);
 

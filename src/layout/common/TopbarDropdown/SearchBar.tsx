@@ -1,12 +1,12 @@
+import { useAppSelector } from "@/app/store";
+import Loader from "@/components/atoms/Loader";
+import Dropdown from "@/components/elements/common/Dropdown";
+import { useGlobalSearchQuery } from "@/feature/common/commonQuery";
+import useDebounce from "@/hooks/useDebounce";
+import { Role } from "@/types";
 import React from "react";
 import { FaSpinner } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../../app/store";
-import Loader from "../../../components/atoms/Loader";
-import Dropdown from "../../../components/elements/common/Dropdown";
-import { useGlobalSearchQuery } from "../../../feature/common/commonQuery";
-import useDebounce from "../../../hooks/useDebounce";
-import { Role } from "../../../types";
 
 // const includeType = ["admin", "operator", "ad-partner", "event-manager"];
 

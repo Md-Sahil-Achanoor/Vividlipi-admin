@@ -1,17 +1,17 @@
+import logo from "@/assets/Images/logo.png";
+import CustomInput from "@/components/form/CustomInput";
+import { projectName } from "@/constants/service";
+import { useSignInMutation } from "@/feature/auth/authQuery";
+import { ISignIn, signInSchema } from "@/models/auth/signup-validation";
+import { FormikSubmitOption } from "@/types";
 import { Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { BiLock } from "react-icons/bi";
 import { BsArrowRightShort } from "react-icons/bs";
 import { HiOutlineEnvelope } from "react-icons/hi2";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/Images/logo.png";
-import CustomInput from "../../components/elements/InputComponents/CustomInput";
-import { projectName } from "../../constants/service";
-import { useSignInMutation } from "../../feature/auth/authQuery";
-import { signInSchema } from "../../models/auth/signup-validation";
-import { FormikSubmitOption, LoginData } from "../../types";
 
-const initialValues: LoginData = {
+const initialValues: ISignIn = {
   email: "",
   password: "",
 };
@@ -23,7 +23,7 @@ const Login = () => {
   const [signIn, { isLoading }] = useSignInMutation();
 
   const onSubmit = async (
-    values: LoginData,
+    values: ISignIn,
     { setSubmitting, resetForm }: FormikSubmitOption
   ) => {
     const castData = signInSchema.cast(values);

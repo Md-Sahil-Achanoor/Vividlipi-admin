@@ -22,19 +22,19 @@ const MultiSelectItem = <T extends Partial<AccessObject>>({
       <div className="flex items-center gap-1 flex-wrap">
         {data?.map((item) => (
           <div
-            className="flex justify-between items-center gap-1 bg-gray-200 rounded-md p-1"
+            className="flex justify-between items-center gap-1 bg-gray-200 rounded-md px-1"
             key={item?.id}
           >
             <span>{item[displayName]}</span>
             {!isRemoveAble && (
               <span
-                className="cursor-pointer bg-white rounded-md p-1"
+                className="cursor-pointer rounded-md"
                 onClick={(e) => {
                   e.stopPropagation();
                   onClick(item);
                 }}
               >
-                <BsX className="text-red-600 text-lg" />
+                <BsX className="text-red-600" />
               </span>
             )}
           </div>
