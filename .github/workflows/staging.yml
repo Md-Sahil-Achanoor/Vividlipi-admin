@@ -19,13 +19,6 @@ jobs:
         with:
           node-version: 16.x
 
-      - name: "Create env file"
-        run: |
-          touch .env
-          echo VITE_API_URL="https://powaha-api.edalytics.com/api" >> .env
-          echo GENERATE_SOURCEMAP=false >> .env
-          cat .env
-
       - name: Install dependencies
         run: yarn install --save-exact
 
