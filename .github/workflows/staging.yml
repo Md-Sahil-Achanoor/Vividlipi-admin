@@ -36,7 +36,7 @@ jobs:
         uses: nwtgck/actions-netlify@v1.2.3
         with:
           publish-dir: "./dist"
-          production-branch: main
+          production-branch: staging
           deploy-message: "${{ github.event.head_commit.message }}"
         env:
           NETLIFY_SITE_ID: "${{ secrets.NETLIFY_STAGING_SITE_ID }}"

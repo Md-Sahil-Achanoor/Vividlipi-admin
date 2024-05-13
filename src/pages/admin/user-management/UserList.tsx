@@ -136,7 +136,7 @@ const UserList = () => {
               data?.data?.map((item, index) => (
                 <tr className="table_tr" key={item?.id}>
                   <td className="table_td">{index + 1}</td>
-                  <td className="table_td uppercase">{item?.name}</td>
+                  <td className="table_td">{item?.name}</td>
                   <td className="table_td">{item?.email}</td>
                   <td className="table_td">{item?.role?.Title || "N/A"}</td>
                   <td className="table_td">
