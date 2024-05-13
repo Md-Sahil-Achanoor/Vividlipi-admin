@@ -3,6 +3,7 @@ import NoTableData from "@/components/atoms/NoTableData";
 import CustomTable from "@/components/elements/common/custom-table/CustomTable";
 import ManageModule from "@/components/elements/modal/ManageModule";
 import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
+import BulkUpload from "@/components/module/bulk/BulkUpload";
 import { coreAction } from "@/feature/core/coreSlice";
 import {
   useDeleteProductMutation,
@@ -12,6 +13,7 @@ import { productAction } from "@/feature/product/productSlice";
 import PageLayout from "@/layout/PageLayout";
 import { BreadCrumbItem } from "@/types";
 import { useEffect } from "react";
+import { BiUpload } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 
 const breadcrumbItem: BreadCrumbItem[] = [
@@ -37,6 +39,7 @@ const tableHead = [
 const ProductList = () => {
   const navigate = useNavigate();
   const { page } = useAppSelector((state) => state.core);
+  const { reRenderBulk } = useAppSelector((state) => state.common);
   const { selectedProduct } = useAppSelector((state) => state.product);
   const { type } = useAppSelector((state) => state.core);
 
@@ -53,7 +56,7 @@ const ProductList = () => {
   console.log(`\n\n ~ ProductList ~ data:`, data?.data?.data);
   useEffect(() => {
     refetch();
-  }, []);
+  }, [reRenderBulk]);
 
   const handleModal = (type: string) => {
     // console.log(`\n\n handleModal ~ type:`, type);
@@ -72,10 +75,19 @@ const ProductList = () => {
     });
   };
 
+  const handleOpenModal = () => {
+    dispatch(
+      coreAction.toggleModal({
+        type: "bulk-upload",
+        open: true,
+      })
+    );
+  };
   const productList = data?.data?.data || [];
 
   return (
     <>
+      <BulkUpload uploadType="product" />
       <ManageModule
         classes={
           type === "delete-product"
@@ -111,6 +123,14 @@ const ProductList = () => {
         title="Product List"
         breadcrumbItem={breadcrumbItem}
         buttonText="Add Product"
+        renderElements={() => (
+          <>
+            <button className="button_sm_primary" onClick={handleOpenModal}>
+              <BiUpload className="mr-1" />
+              <span className="mr-1">Bulk Upload</span>
+            </button>
+          </>
+        )}
         buttonProps={{
           onClick: () => navigate("/admin/products/product-list/add-product"),
         }}

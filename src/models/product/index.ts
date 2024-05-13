@@ -1,25 +1,7 @@
 import * as Yup from "yup";
 
-export const manageProductSchema = Yup.object({
+export const productBaseSchema = Yup.object({
   book_title: Yup.string().required("Book title is required"),
-  cat1: Yup.mixed()
-    .nullable()
-    .test({
-      name: "cat1",
-      message: "Category 1 is Required.",
-      test: function (value) {
-        return value !== null;
-      },
-    }),
-  cat2: Yup.mixed()
-    .nullable()
-    .test({
-      name: "cat2",
-      message: "Category 2 is Required.",
-      test: function (value) {
-        return value !== null;
-      },
-    }),
   thumbnail: Yup.string().required("Thumbnail is required"),
   description: Yup.string().required("Description is required"),
   author_name: Yup.string().required("Author name is required"),
@@ -62,7 +44,6 @@ export const manageProductSchema = Yup.object({
     .min(0, "Negative value is not allowed")
     .required("Shipping is required"),
   genre: Yup.string().required("Genre is required"),
-  tags: Yup.array().of(Yup.string()).required("Tags is required"),
   book_format: Yup.number().required("Book format is required"),
   translated: Yup.string().required("Translate is required"), //Yes/No
   translator_name: Yup.string().test({
@@ -76,14 +57,49 @@ export const manageProductSchema = Yup.object({
     },
   }),
   language: Yup.string().required("Language is required"),
-  // category: Yup.array<CategoryResponse[]>().test({
-  //   name: "category",
-  //   message: "category is Required.",
-  //   test: (value) => {
-  //     return value?.filter((i) => i?.id).length !== 0 ? true : false;
-  //   },
-  // }),
   allow_comments: Yup.string().required("Allow comment is required"), // Yes/No
 });
 
+export const manageProductSchema = productBaseSchema.concat(
+  Yup.object({
+    tags: Yup.array().of(Yup.string()).required("Tags is required"),
+    cat1: Yup.mixed()
+      .nullable()
+      .test({
+        name: "cat1",
+        message: "Category 1 is Required.",
+        test: function (value) {
+          return value !== null;
+        },
+      }),
+    cat2: Yup.mixed()
+      .nullable()
+      .test({
+        name: "cat2",
+        message: "Category 2 is Required.",
+        test: function (value) {
+          return value !== null;
+        },
+      }),
+  })
+);
+
+export const productBulkUploadSchema = productBaseSchema.concat(
+  Yup.object({
+    category1: Yup.string().required("Category 1 is required"),
+    category2: Yup.string().required("Category 2 is required"),
+    tags: Yup.string().required("Tags is required"),
+  })
+);
+
+export type IBulkProduct = Yup.InferType<typeof productBulkUploadSchema>;
+
 export type IManageProduct = Yup.InferType<typeof manageProductSchema>;
+
+export type ManageProduct<C1, C2 = C1> = Omit<
+  IManageProduct,
+  "cat1" | "cat2"
+> & {
+  cat1: C1 | null;
+  cat2: C2 | null;
+};

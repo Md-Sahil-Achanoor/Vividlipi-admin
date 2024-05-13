@@ -135,7 +135,7 @@ const RoleList = () => {
               data?.data?.map((item, index) => (
                 <tr className="table_tr" key={item?.id}>
                   <td className="table_td">{index + 1}</td>
-                  <td className="table_td uppercase">{item?.Title}</td>
+                  <td className="table_td">{item?.Title}</td>
                   <td className="table_td">
                     <div className="flex gap-2 items-center flex-wrap">
                       {manageRoles(item?.Permissions)?.map((el, key) => (

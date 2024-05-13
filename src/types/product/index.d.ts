@@ -1,3 +1,4 @@
+import { IBulkProduct } from "@/models/product";
 import { CategoryResponse } from "../category";
 import { IStore, ReqQuery } from "../common";
 
@@ -34,7 +35,14 @@ export interface IProduct<T> {
 
 export type Product = IProduct<CategoryResponse>;
 
-export interface ProductPayload extends IProduct<number> {}
+export interface ProductPayload extends IProduct<number | string> {}
+
+export type BulkProduct = Omit<IBulkProduct, "translator_name"> & {
+  translator_name?: string;
+  category?: [];
+  cat1?: string;
+  cat2?: string;
+};
 
 export interface ProductResponse extends IProduct<CategoryResponse> {
   id: string;

@@ -137,7 +137,7 @@ const MainCategoryList = () => {
             data?.data?.map((item, index) => (
               <tr className="table_tr" key={item?.id}>
                 <td className="table_td">{index + 1}</td>
-                <td className="table_td uppercase">{item?.title}</td>
+                <td className="table_td">{item?.title}</td>
                 <td className="table_td">
                   <div className="flex items-center gap-3">
                     <button

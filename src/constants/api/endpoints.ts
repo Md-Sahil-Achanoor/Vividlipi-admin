@@ -34,6 +34,7 @@ export const endpoints = {
    * @module Product
    * */
   product: "/api/product",
+  import_product: "/api/import-product",
 
   // old api
   add_product: "/api/add-product",

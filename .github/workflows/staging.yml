@@ -19,13 +19,6 @@ jobs:
         with:
           node-version: 16.x
 
-      - name: "Create env file"
-        run: |
-          touch .env
-          echo VITE_API_URL="https://vivid-dapi.edalytics.com" >> .env
-          echo GENERATE_SOURCEMAP=false >> .env
-          cat .env
-
       - name: Install dependencies
         run: yarn install --save-exact
 
@@ -36,7 +29,7 @@ jobs:
         uses: nwtgck/actions-netlify@v1.2.3
         with:
           publish-dir: "./dist"
-          production-branch: main
+          production-branch: staging
           deploy-message: "${{ github.event.head_commit.message }}"
         env:
           NETLIFY_SITE_ID: "${{ secrets.NETLIFY_STAGING_SITE_ID }}"

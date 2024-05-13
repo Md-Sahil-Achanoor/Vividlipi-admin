@@ -70,9 +70,6 @@ const commonQuery = API.injectEndpoints({
         url: query?.endpoint as string,
         method: "POST",
         body: data,
-        // headers: {
-        //   "Content-Type": "multipart/form-data",
-        // },
       }),
       async onQueryStarted({ options }, { dispatch, queryFulfilled }) {
         try {
