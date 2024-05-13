@@ -1,6 +1,7 @@
 import { productBulkUploadSchema } from "@/models/product";
 import moment from "moment";
 import { BulkProduct, BulkUploadReturn } from "../../types";
+import { ExcelDateToJSDate, formatDate } from "../time";
 import validateSchema from "../validateSchema";
 
 export const sampleProduct: BulkProduct[] = [
@@ -60,10 +61,19 @@ const checkProduct = async <T extends BulkProduct>(
     ) {
       message = `invalid release date in ${
         i + 2
-      }. format should be (YYYY/MM/DD)`;
+      }. format should be YYYY/MM/DD or YYYY-MM-DD`;
       isDate = false;
       break;
     }
+
+    obj.release_date = isMomentValidate
+      ? formatDate(String(product?.release_date)?.trim(), "YYYY-MM-DD")
+      : isDate
+      ? formatDate(
+          ExcelDateToJSDate(Number(product?.release_date)),
+          "YYYY-MM-DD"
+        )
+      : "";
 
     const validate = await validateSchema(productBulkUploadSchema, product);
 
