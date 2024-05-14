@@ -34,3 +34,7 @@ jobs:
         env:
           NETLIFY_SITE_ID: "${{ secrets.NETLIFY_STAGING_SITE_ID }}"
           NETLIFY_AUTH_TOKEN: "${{ secrets.NETLIFY_AUTH_TOKEN }}"
+
+      - name: Pull environment variables from Netlify
+        run: |
+          curl -X GET -H "Authorization: Bearer $NETLIFY_AUTH_TOKEN" https://api.netlify.com/api/v1/sites/$NETLIFY_STAGING_SITE_ID

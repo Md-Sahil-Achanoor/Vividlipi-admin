@@ -489,6 +489,7 @@ const ManageProduct = () => {
                         items={[
                           { value: 1, name: "Physical" },
                           { value: 2, name: "E-book" },
+                          { value: 3, name: "Audio Book" },
                         ]}
                         tooltip="Book Format"
                         isRequired
