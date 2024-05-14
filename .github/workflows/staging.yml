@@ -19,6 +19,15 @@ jobs:
         with:
           node-version: 16.x
 
+      - name: "Create env file"
+        run: |
+          touch .env
+          echo VITE_API_URL="https://vivid-dapi.edalytics.com" >> .env
+          echo GENERATE_SOURCEMAP=false >> .env
+          echo VITE_APP_IMAGE_URL="https://vivid-dapi.edalytics.com" >> .env
+          echo VITE_APP_NAME="Vividlipi"
+          cat .env
+
       - name: Install dependencies
         run: yarn install --save-exact
 
@@ -34,7 +43,3 @@ jobs:
         env:
           NETLIFY_SITE_ID: "${{ secrets.NETLIFY_STAGING_SITE_ID }}"
           NETLIFY_AUTH_TOKEN: "${{ secrets.NETLIFY_AUTH_TOKEN }}"
-
-      - name: Pull environment variables from Netlify
-        run: |
-          curl -X GET -H "Authorization: Bearer $NETLIFY_AUTH_TOKEN" https://api.netlify.com/api/v1/sites/$NETLIFY_SITE_ID
