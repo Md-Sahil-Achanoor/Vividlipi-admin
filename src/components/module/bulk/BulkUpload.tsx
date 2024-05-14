@@ -1,3 +1,6 @@
+import FileUpload from "@/components/form/FileUpload";
+import { BulkProduct, BulkUploadReturn, FormikSubmitOption } from "@/types";
+import { checkProduct, sampleProduct } from "@/utils/modules";
 import { Field, Form, Formik, FormikProps } from "formik";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -7,10 +10,6 @@ import { useBulkUploadMutation } from "../../../feature/common/commonQuery";
 import { coreAction } from "../../../feature/core/coreSlice";
 import useExcelReader from "../../../hooks/useExcelReader";
 import { bulkUploadSchema } from "../../../models/Common";
-
-import FileUpload from "@/components/form/FileUpload";
-import { BulkProduct, BulkUploadReturn, FormikSubmitOption } from "@/types";
-import { checkProduct, sampleProduct } from "@/utils/modules";
 import { bulkUploadPayload } from "../../../types/common/common";
 import { downloadXlsx } from "../../../utils/excel";
 import CustomModal from "../../elements/common/CustomModal";
