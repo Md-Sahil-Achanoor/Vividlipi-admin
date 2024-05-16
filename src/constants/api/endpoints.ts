@@ -51,4 +51,9 @@ export const endpoints = {
    * @module User Management
    * */
   subAdmin_list: "/api/subadmins",
+
+  /**
+   * @module Publisher
+   * */
+  publisher: "/api/Publisher",
 };

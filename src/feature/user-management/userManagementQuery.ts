@@ -20,7 +20,7 @@ const userManagementQuery = API.injectEndpoints({
   endpoints: (builder) => ({
     getRolePermissions: builder.query<
       ApiResponse<RolePermissionResponse[]>,
-      ManageQuery<Partial<RolePermissionQuery>>
+      ManageQuery<RolePermissionQuery>
     >({
       query: ({ query }) => {
         return {
@@ -45,7 +45,7 @@ const userManagementQuery = API.injectEndpoints({
 
     getRolePermissionById: builder.query<
       ApiResponse<RolePermissionResponse>,
-      ManageQuery<Partial<RolePermissionQuery>, null>
+      ManageQuery<RolePermissionQuery>
     >({
       query: ({ query }) => ({
         url: endpoints.role_list,
@@ -71,7 +71,7 @@ const userManagementQuery = API.injectEndpoints({
     // POST
     manageRolePermission: builder.mutation<
       any,
-      ManagePayload<RolePermissionPayLoad, Partial<RolePermissionQuery>>
+      ManagePayload<RolePermissionPayLoad, RolePermissionQuery>
     >({
       query: ({ data, id }) => ({
         url: endpoints.role_list,
@@ -107,7 +107,7 @@ const userManagementQuery = API.injectEndpoints({
 
     deleteRolePermission: builder.mutation<
       any,
-      ManagePayloadQuery<Partial<RolePermissionQuery>>
+      ManagePayloadQuery<RolePermissionQuery>
     >({
       query: ({ id }) => ({
         url: endpoints.role_list,
@@ -150,7 +150,7 @@ const userManagementQuery = API.injectEndpoints({
 
     getAdminUsers: builder.query<
       ApiResponse<UserManagementResponse[]>,
-      ManageQuery<Partial<RolePermissionQuery>>
+      ManageQuery<RolePermissionQuery>
     >({
       query: ({ query }) => {
         return {
@@ -175,7 +175,7 @@ const userManagementQuery = API.injectEndpoints({
 
     getAdminUserById: builder.query<
       ApiResponse<UserManagementResponse>,
-      ManageQuery<Partial<RolePermissionQuery>, null>
+      ManageQuery<RolePermissionQuery>
     >({
       query: ({ query }) => ({
         url: endpoints.category,
@@ -199,7 +199,7 @@ const userManagementQuery = API.injectEndpoints({
     // POST
     manageAdminUser: builder.mutation<
       any,
-      ManagePayload<UserManagementPayLoad, Partial<RolePermissionQuery>>
+      ManagePayload<UserManagementPayLoad, RolePermissionQuery>
     >({
       query: ({ data, id }) => {
         return {
@@ -237,7 +237,7 @@ const userManagementQuery = API.injectEndpoints({
 
     deleteAdminUser: builder.mutation<
       any,
-      ManagePayloadQuery<Partial<RolePermissionQuery>>
+      ManagePayloadQuery<RolePermissionQuery>
     >({
       query: ({ id }) => ({
         url: endpoints.subAdmin_list,

@@ -1,10 +1,13 @@
 /* eslint-disable react-refresh/only-export-components */
-import ManageRole from "@/pages/admin/user-management/ManageRole";
-import RoleList from "@/pages/admin/user-management/RoleList";
-import UserList from "@/pages/admin/user-management/UserList";
 import { lazy } from "react";
 import { Navigate, createBrowserRouter } from "react-router-dom";
 
+const PublisherList = lazy(() => import("@/pages/admin/publisher"));
+const ManageRole = lazy(
+  () => import("@/pages/admin/user-management/ManageRole")
+);
+const RoleList = lazy(() => import("@/pages/admin/user-management/RoleList"));
+const UserList = lazy(() => import("@/pages/admin/user-management/UserList"));
 const ErrorPage = lazy(() => import("../pages/NotFound"));
 const AdminDashboard = lazy(() => import("../pages/admin/dashboard"));
 const MainCategoryList = lazy(() => import("../pages/admin/main-category"));
@@ -72,6 +75,14 @@ const router = createBrowserRouter([
         children: [
           { path: "main-category", element: <MainCategoryList /> },
           { path: "sub-category", element: <SubCategoryList /> },
+          // { path: "edit/:id", element: <EditProduct /> },
+        ],
+      },
+      {
+        path: "publisher",
+        element: <AppWrapper />,
+        children: [
+          { path: "publisher-list", element: <PublisherList /> },
           // { path: "edit/:id", element: <EditProduct /> },
         ],
       },

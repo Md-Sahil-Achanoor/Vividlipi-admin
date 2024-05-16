@@ -95,6 +95,7 @@ const categoryQuery = API.injectEndpoints({
             options?.setSubmitting(false);
             toast.success(result?.data?.message || "Success");
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            dispatch(categoryAction.resetCategory());
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
           }
@@ -219,6 +220,7 @@ const categoryQuery = API.injectEndpoints({
             options?.setSubmitting(false);
             toast.success(result?.data?.message || "Success");
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            dispatch(categoryAction.resetSubCategory());
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
           }

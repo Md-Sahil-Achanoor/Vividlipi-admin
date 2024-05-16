@@ -6,6 +6,7 @@ import commonSlice from "./common/commonSlice";
 import coreSlice from "./core/coreSlice";
 import layoutSlice from "./layout/layoutSlice";
 import productSlice from "./product/productSlice";
+import publisherSlice from "./publisher/publisherSlice";
 import userManagementSlice from "./user-management/userManagementSlice";
 
 const rootReducer = combineReducers({
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   category: categorySlice,
   product: productSlice,
   userManagement: userManagementSlice,
+  publisher: publisherSlice,
   [API.reducerPath]: API.reducer,
 });
 

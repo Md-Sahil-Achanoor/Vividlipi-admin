@@ -9,4 +9,5 @@ export * from "./inputComponents/Yup";
 export * from "./inputComponents/common";
 export * from "./layouts";
 export * from "./product";
+export * from "./publisher";
 export * from "./user-management";

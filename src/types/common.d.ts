@@ -293,7 +293,7 @@ export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 export interface ManagePayload<T, Q = {}> {
   id?: string | number;
   data: T;
-  query?: Q;
+  query?: Partial<Q>;
   options?: FormikSubmitOption;
   secondId?: string;
 }
@@ -303,7 +303,7 @@ export interface ManagePayload<T, Q = {}> {
  */
 export interface ManagePayloadQuery<Q> {
   id?: string | number;
-  query?: Q;
+  query?: Partial<Q>;
   options?: FormikSubmitOption;
   secondId?: string;
   type?: string;
@@ -313,7 +313,7 @@ export interface ManagePayloadQuery<Q> {
  * @type { Manage Get module Base Payload }
  */
 export interface ManageQuery<Q, U = {}> {
-  query?: Q;
+  query?: Partial<Q>;
   urlParams?: U;
   options?: FormikSubmitOption;
   conditions?: Record<string, any>;
