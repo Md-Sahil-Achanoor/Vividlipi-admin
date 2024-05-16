@@ -1,15 +1,17 @@
 import { IBulkProduct } from "@/models/product";
 import { CategoryResponse } from "../category";
 import { IStore, ReqQuery } from "../common";
+import { PublisherResponse } from "../publisher";
 
-export interface IProduct<T> {
+export interface IProduct<T, P> {
   book_title: string;
   thumbnail: string;
+  url_slug: string;
   cat1: T | null;
   cat2: T | null;
   description: string;
   author_name: string;
-  publisher: string;
+  publisher: P | null;
   release_date: string;
   digital_product_url: string;
   sale_price: string | number;
@@ -33,9 +35,10 @@ export interface IProduct<T> {
   allow_comments: string; // Yes / No
 }
 
-export type Product = IProduct<CategoryResponse>;
+export type Product = IProduct<CategoryResponse, PublisherResponse>;
 
-export interface ProductPayload extends IProduct<number | string> {}
+export interface ProductPayload
+  extends IProduct<number | string, number | string> {}
 
 export type BulkProduct = Omit<IBulkProduct, "translator_name"> & {
   translator_name?: string;
@@ -44,7 +47,8 @@ export type BulkProduct = Omit<IBulkProduct, "translator_name"> & {
   cat2?: string;
 };
 
-export interface ProductResponse extends IProduct<CategoryResponse> {
+export interface ProductResponse
+  extends IProduct<CategoryResponse, PublisherResponse> {
   id: string;
   createdAt: string;
   isDeleted: Number;

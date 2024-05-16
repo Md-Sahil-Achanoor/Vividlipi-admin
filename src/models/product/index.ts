@@ -1,11 +1,17 @@
+import { alphanumericOnly } from "@/utils/valid-image";
 import * as Yup from "yup";
 
+// title only
+
 export const productBaseSchema = Yup.object({
-  book_title: Yup.string().required("Book title is required"),
+  book_title: Yup.string()
+    .matches(alphanumericOnly, "Must be alphanumeric only")
+    .required("Book title is required"),
+  url_slug: Yup.string().required("URL slug is required"),
   thumbnail: Yup.string().required("Thumbnail is required"),
   description: Yup.string().required("Description is required"),
   author_name: Yup.string().required("Author name is required"),
-  publisher: Yup.string().required("Publisher is required"),
+  // publisher: Yup.string().required("Publisher is required"),
   release_date: Yup.string().required("Release date is required"),
   digital_product_url: Yup.string().required("Digital product URL is required"),
   sale_price: Yup.number()
@@ -81,6 +87,15 @@ export const manageProductSchema = productBaseSchema.concat(
           return value !== null;
         },
       }),
+    publisher: Yup.mixed()
+      .nullable()
+      .test({
+        name: "publisher",
+        message: "Publisher is Required.",
+        test: function (value) {
+          return value !== null;
+        },
+      }),
   })
 );
 
@@ -88,6 +103,7 @@ export const productBulkUploadSchema = productBaseSchema.concat(
   Yup.object({
     category1: Yup.string().required("Category 1 is required"),
     category2: Yup.string().required("Category 2 is required"),
+    publisher: Yup.string().required("Publisher is required"),
     tags: Yup.string().required("Tags is required"),
   })
 );

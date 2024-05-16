@@ -4,7 +4,7 @@ import { IStore, ReqQuery } from "../common";
 export interface PublisherPayload extends IManagePublisher {}
 
 export interface PublisherResponse extends IManagePublisher {
-  id: string;
+  id: string | number;
 }
 
 export interface PublisherQuery extends ReqQuery {

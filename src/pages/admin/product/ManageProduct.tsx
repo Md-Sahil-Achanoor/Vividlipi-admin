@@ -12,14 +12,17 @@ import {
   useGetProductByIdQuery,
   useManageProductMutation,
 } from "@/feature/product/productQuery";
+import { useGetPublishersQuery } from "@/feature/publisher/publisherQuery";
 import PageLayout from "@/layout/PageLayout";
 import { manageProductSchema } from "@/models/product";
 import {
   BreadCrumbItem,
   CategoryQuery,
   CategoryResponse,
+  ChangeEventType,
   Product,
   ProductPayload,
+  PublisherResponse,
 } from "@/types";
 import { cn } from "@/utils/twmerge";
 import { Field, Form, Formik, FormikHelpers } from "formik";
@@ -29,12 +32,13 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const initialValues: Product = {
   book_title: "",
+  url_slug: "",
   cat1: null,
   cat2: null,
   thumbnail: "https://example.com/book_cover.jpg",
   description: "",
   author_name: "",
-  publisher: "",
+  publisher: null,
   release_date: "",
   digital_product_url: "",
   sale_price: "",
@@ -92,6 +96,7 @@ const ManageProduct = () => {
       ...values,
       cat1: values.cat1?.id as number,
       cat2: values.cat2?.id as number,
+      publisher: values?.publisher?.id as number,
       translator_name:
         values?.translated === "Yes" ? values?.translator_name : null,
       category: [],
@@ -120,6 +125,16 @@ const ManageProduct = () => {
     conditions: {
       type: "category1",
     },
+  });
+
+  const {
+    isLoading: publisherLoading,
+    refetch: publisherRefetch,
+    data: publisherList,
+    isError: publisherIsError,
+    error: publisherErrorMessage,
+  } = useGetPublishersQuery({
+    query: {},
   });
 
   const getQuery = () => {
@@ -154,8 +169,12 @@ const ManageProduct = () => {
     if (category2) {
       category2Refetch();
     }
-    categoryRefetch();
   }, [category2]);
+
+  useEffect(() => {
+    categoryRefetch();
+    publisherRefetch();
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -194,6 +213,24 @@ const ManageProduct = () => {
                         type="text"
                         component={CustomInput}
                         tooltip="Book title"
+                        onBlurCallback={(e: ChangeEventType) => {
+                          let slug = e.target.value
+                            .toLowerCase()
+                            .replace(/ /g, "-")
+                            .replace(/[^\w-]+/g, "");
+                          setFieldValue("url_slug", slug);
+                        }}
+                        placeholder="Type your products name"
+                        isRequired
+                      />
+                      <Field
+                        name="url_slug"
+                        label={"URL Slug"}
+                        horizontal
+                        type="text"
+                        component={CustomInput}
+                        disabled
+                        tooltip="URL Slug"
                         placeholder="Type your products name"
                         isRequired
                       />
@@ -319,7 +356,7 @@ const ManageProduct = () => {
                         placeholder="Type your products author name"
                         isRequired
                       />
-                      <Field
+                      {/* <Field
                         name="publisher"
                         label={"Publisher"}
                         horizontal
@@ -328,7 +365,50 @@ const ManageProduct = () => {
                         tooltip="Publisher"
                         placeholder="Type your products publisher"
                         isRequired
-                      />
+                      /> */}
+                      <div>
+                        <Field
+                          label={"Publisher"}
+                          name="publisher"
+                          isRequired
+                          renderData={publisherList?.data}
+                          isLoading={publisherLoading}
+                          isError={publisherIsError}
+                          errorMessage={publisherErrorMessage}
+                          // reload={()}
+                          // listRef={batchListRef}
+                          horizontal
+                          tooltip="Publisher"
+                          renderItem={(item: PublisherResponse) => (
+                            <span className="">{item?.Name}</span>
+                          )}
+                          isActive={(item: PublisherResponse) =>
+                            values?.publisher?.id === item?.id
+                          }
+                          renderName={() => {
+                            return (
+                              <span
+                                className={cn(
+                                  "text-sm text-gray-700 truncate",
+                                  values?.publisher?.Name && "uppercase"
+                                )}
+                              >
+                                {values?.publisher?.Name || "Select Publisher"}
+                              </span>
+                            );
+                          }}
+                          onChangeCallback={(item: PublisherResponse) => {
+                            setFieldValue(`publisher`, item);
+                          }}
+                          clearData={() => {
+                            setFieldValue(`publisher`, null);
+                          }}
+                          isSelected={values?.publisher !== null}
+                          component={InfiniteSelect}
+                          isAuth
+                        />
+                      </div>
+
                       <Field
                         name="release_date"
                         label={"Release Date"}
