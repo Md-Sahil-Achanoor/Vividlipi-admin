@@ -4,7 +4,7 @@ import { BulkProduct, BulkUploadReturn } from "../../types";
 import { ExcelDateToJSDate, formatDate } from "../time";
 import validateSchema from "../validateSchema";
 
-export const sampleProduct: BulkProduct[] = [
+export const sampleProduct: Omit<BulkProduct, "url_slug">[] = [
   {
     book_title: "",
     category1: "",
@@ -107,6 +107,11 @@ const checkProduct = async <T extends BulkProduct>(
     // obj.status = product?.status;
     delete obj.category1;
     delete obj.category2;
+    let slug = product?.book_title
+      .toLowerCase()
+      .replace(/ /g, "-")
+      .replace(/[^\w-]+/g, "");
+    obj.url_slug = slug;
     obj.tags = tags as any;
     obj.category = [];
     obj.cat1 = product?.category1;
