@@ -156,7 +156,7 @@ const ProductList = () => {
                 <td className="table_td">{item?.book_title}</td>
                 <td className="table_td">{item?.author_name}</td>
                 <td className="table_td">{item?.price}</td>
-                <td className="table_td">{item?.publisher}</td>
+                <td className="table_td">{item?.publisher?.Name || "N/A"}</td>
                 <td className="table_td">{item?.release_date}</td>
                 <td className="table_td">{item?.sale_price}</td>
                 <td className="table_td">{item?.sale_quantity}</td>
