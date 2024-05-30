@@ -19,7 +19,6 @@ const SubCategoryList = lazy(() => import("../pages/admin/sub-category"));
 const NonAuth = lazy(() => import("../layout/NonAuth"));
 const Home = lazy(() => import("../pages/Home"));
 const Login = lazy(() => import("../pages/auth/Login"));
-// const Register = lazy(() => import("../pages/auth/Register"));
 const AppWrapper = lazy(() => import("./middleware/AppWrapper"));
 const PrivateOutlet = lazy(() => import("./middleware/PrivateOutlet"));
 

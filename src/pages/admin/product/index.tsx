@@ -53,7 +53,7 @@ const ProductList = () => {
     },
   });
 
-  console.log(`\n\n ~ ProductList ~ data:`, data?.data?.data);
+  // console.log(`\n\n ~ ProductList ~ data:`, data?.data?.data);
   useEffect(() => {
     refetch();
   }, [reRenderBulk]);

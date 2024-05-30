@@ -11,6 +11,9 @@ export interface CategoryQuery extends ReqQuery {
   cat1: number;
 }
 
+/**
+ * @module SubCategory { ISubCategory } @public
+ */
 export interface ISubCategory<T> extends IManageCategory {
   category: T | null;
 }

@@ -31,23 +31,6 @@ const Login = () => {
       data: castData,
       options: { router, setSubmitting, resetForm },
     });
-    // const res = {
-    //   user: {
-    //     ID: "1",
-    //     email: castData.email_phone,
-    //     name: "John Doe",
-    //     role: "Admin",
-    //   },
-    //   status: 1,
-    //   message: "success",
-    //   jwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.4S5J1j6ZJY2",
-    // };
-    // dispatch(authAction.loginSuccess(res as any));
-    // localStorage.setItem("user", JSON.stringify(res));
-    // router("/admin/dashboard");
-    // setSubmitting(false);
-    // resetForm();
-    // console.log(values);
   };
 
   useEffect(() => {

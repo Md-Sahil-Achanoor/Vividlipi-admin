@@ -88,15 +88,6 @@ export interface RouterPush {
   query: SampleObject;
 }
 
-export interface ApiError {
-  response: never;
-}
-
-export interface ListParams {
-  pageNo?: number;
-  limit?: number;
-}
-
 export interface ErrorData {
   message?: string;
   code?: number;
@@ -118,7 +109,6 @@ export interface SubmitOption {
 }
 
 /** @type {next router history} */
-
 export interface HistoryType {
   pathname: string;
   asPath: string;
@@ -128,7 +118,6 @@ export interface HistoryType {
 }
 
 /** @type {formik form submit prop} */
-
 export interface FormikSubmitOption {
   setSubmitting: (e: boolean) => void;
   resetForm: () => void;
@@ -154,11 +143,6 @@ export interface FormSubmitPayload<T> {
 export interface FormDataPayload<T> {
   formData: T;
   id: string;
-}
-
-export interface HandlePage {
-  page: number;
-  hasMore: boolean;
 }
 
 export interface ReqQuery {

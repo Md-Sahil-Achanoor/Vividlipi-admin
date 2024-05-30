@@ -24,21 +24,12 @@ const categorySlice = createSlice({
       state.selectedSubCategory = null;
       state.singleSubCategory = null;
     },
-    // resetWithReload: (state) => {
-    //   state.reRender = !state.reRender;
-    // },
     resetData: (state) => {
       state.selectedCategory = null;
       state.selectedSubCategory = null;
       state.singleCategory = null;
       state.singleSubCategory = null;
     },
-    // setSelectedVendor: (
-    //   state,
-    //   action: PayloadAction<VendorResponse | null>
-    // ) => {
-    //   state.selectedVendor = action.payload;
-    // },
     setSelectedCategory: (
       state,
       action: PayloadAction<CategoryResponse | null>

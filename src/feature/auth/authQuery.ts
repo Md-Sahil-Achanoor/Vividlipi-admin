@@ -28,7 +28,7 @@ const authQuery = API.injectEndpoints({
         try {
           const result = await queryFulfilled;
           const res = result.data;
-          console.log(res);
+          // console.log(res);
           if (res?.status === 1) {
             dispatch(authAction.loginSuccess(res));
             localStorage.setItem("user", JSON.stringify(res));
