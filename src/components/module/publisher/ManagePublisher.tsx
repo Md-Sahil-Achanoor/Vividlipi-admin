@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/app/store";
-import CustomModal from "@/components/elements/common/CustomModal";
 import CustomInput from "@/components/form/CustomInput";
+import Modal from "@/components/ui/Modal";
 import { coreAction } from "@/feature/core/coreSlice";
 import { useManagePublisherMutation } from "@/feature/publisher/publisherQuery";
 import { publisherAction } from "@/feature/publisher/publisherSlice";
@@ -48,7 +48,7 @@ const ManagePublisher = () => {
     });
   };
   return (
-    <CustomModal
+    <Modal
       classes={
         type === "manage-publisher" && open
           ? {
@@ -122,7 +122,7 @@ const ManagePublisher = () => {
           )}
         </Formik>
       </div>
-    </CustomModal>
+    </Modal>
   );
 };
 

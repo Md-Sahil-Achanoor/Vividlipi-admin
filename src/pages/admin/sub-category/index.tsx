@@ -1,5 +1,4 @@
 import NoTableData from "@/components/atoms/NoTableData";
-import CustomTable from "@/components/elements/common/custom-table/CustomTable";
 
 import { useAppDispatch, useAppSelector } from "@/app/store";
 import TableWrapper from "@/components/elements/common/TableWrapper";
@@ -7,6 +6,7 @@ import InfiniteFilter from "@/components/elements/filters/InfiniteFilter";
 import ManageModule from "@/components/elements/modal/ManageModule";
 import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
 import ManageSubCategory from "@/components/module/category/ManageSubCategory";
+import Table from "@/components/ui/Table";
 import {
   useDeleteSubCategoryMutation,
   useGetCategoriesQuery,
@@ -200,7 +200,7 @@ const SubCategoryList = () => {
             </>
           )}
         >
-          <CustomTable headList={tableHead}>
+          <Table headList={tableHead}>
             {isLoading || (selectedCategory && isFetching) ? (
               <SkeletonTable total={6} tableCount={4} />
             ) : data?.data &&
@@ -244,7 +244,7 @@ const SubCategoryList = () => {
                 </span>
               </NoTableData>
             )}
-          </CustomTable>
+          </Table>
         </TableWrapper>
         {/* </Card> */}
       </PageLayout>

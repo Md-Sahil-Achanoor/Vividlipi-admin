@@ -2,7 +2,7 @@ import type { Middleware } from "@reduxjs/toolkit";
 import { isRejectedWithValue } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import toast from "react-hot-toast";
-import { baseURL } from "../../constants/service";
+import { baseURL } from "../../constants";
 import { RootState } from "../store";
 
 /**
@@ -69,6 +69,7 @@ const API = createApi({
     "AdminUsers",
     "RoleList",
     "Publisher",
+    "HomeFeatureSlider",
   ],
   /**
    * This api has endpoints injected in adjacent files,

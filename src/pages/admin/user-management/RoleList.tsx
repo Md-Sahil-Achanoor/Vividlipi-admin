@@ -1,10 +1,10 @@
 import { useAppDispatch, useAppSelector } from "@/app/store";
 import NoTableData from "@/components/atoms/NoTableData";
 import TableWrapper from "@/components/elements/common/TableWrapper";
-import CustomTable from "@/components/elements/common/custom-table/CustomTable";
 import ManageModule from "@/components/elements/modal/ManageModule";
 import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
 import { Capsule } from "@/components/ui/Capsule";
+import Table from "@/components/ui/Table";
 import { getActualRole } from "@/constants/role-constant";
 import { coreAction } from "@/feature/core/coreSlice";
 import {
@@ -126,7 +126,7 @@ const RoleList = () => {
       >
         {/* <Card className="p-3 border-0 shadow-md"> */}
         <TableWrapper isActiveInactive={false} isSort={false}>
-          <CustomTable headList={tableHead}>
+          <Table headList={tableHead}>
             {isLoading ? (
               <SkeletonTable total={6} tableCount={4} />
             ) : data?.data &&
@@ -173,7 +173,7 @@ const RoleList = () => {
                 <span className="font-medium">{"No data found!"}</span>
               </NoTableData>
             )}
-          </CustomTable>
+          </Table>
         </TableWrapper>
         {/* </Card> */}
       </PageLayout>

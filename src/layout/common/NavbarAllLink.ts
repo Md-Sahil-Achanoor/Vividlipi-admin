@@ -11,6 +11,20 @@ const NavbarAllLink: MenuType[] = [
     icon: LuLayoutDashboard,
   },
   {
+    title: "CMS",
+    link: "/#",
+    role: ["admin"],
+    icon: MdLibraryBooks,
+    list: [
+      {
+        title: "Home",
+        link: "/admin/cms/home-page",
+        role: ["admin"],
+        icon: null,
+      },
+    ],
+  },
+  {
     title: "Product Management",
     link: "/#",
     role: ["admin"],

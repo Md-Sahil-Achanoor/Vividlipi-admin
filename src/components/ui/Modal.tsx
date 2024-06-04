@@ -1,7 +1,7 @@
 import { ModalProps } from "@/types";
 import { BiX } from "react-icons/bi";
 
-const CustomModal = ({
+const Modal = ({
   classes,
   handleModal,
   outSideClick,
@@ -44,4 +44,4 @@ const CustomModal = ({
   );
 };
 
-export default CustomModal;
+export default Modal;

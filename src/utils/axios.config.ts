@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-import { baseURL } from "../constants/service";
+import { baseURL } from "../constants";
 
 export const instance = axios.create({
   baseURL: baseURL,

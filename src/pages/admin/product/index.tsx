@@ -1,9 +1,9 @@
 import { useAppDispatch, useAppSelector } from "@/app/store";
 import NoTableData from "@/components/atoms/NoTableData";
-import CustomTable from "@/components/elements/common/custom-table/CustomTable";
 import ManageModule from "@/components/elements/modal/ManageModule";
 import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
 import BulkUpload from "@/components/module/bulk/BulkUpload";
+import Table from "@/components/ui/Table";
 import { coreAction } from "@/feature/core/coreSlice";
 import {
   useDeleteProductMutation,
@@ -137,7 +137,7 @@ const ProductList = () => {
       >
         {/* <Card className="p-3 border-0 shadow-md"> */}
         {/* <TableWrapper isActiveInactive isSort={false}> */}
-        <CustomTable headList={tableHead}>
+        <Table headList={tableHead}>
           {isLoading ? (
             <SkeletonTable total={6} tableCount={9} />
           ) : productList && productList?.length > 0 ? (
@@ -191,7 +191,7 @@ const ProductList = () => {
               <span className="font-medium">No data found!</span>
             </NoTableData>
           )}
-        </CustomTable>
+        </Table>
         {/* </TableWrapper> */}
         {/* </Card> */}
       </PageLayout>

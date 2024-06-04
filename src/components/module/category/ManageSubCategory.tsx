@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/app/store";
-import CustomModal from "@/components/elements/common/CustomModal";
 import CustomInput from "@/components/form/CustomInput";
 import InfiniteSelect from "@/components/form/InfiniteSelect";
+import Modal from "@/components/ui/Modal";
 import {
   useGetCategoriesQuery,
   useManageSubCategoryMutation,
@@ -75,7 +75,7 @@ const ManageSubCategory = () => {
   }, [open]);
 
   return (
-    <CustomModal
+    <Modal
       classes={
         type === "manage-sub-category" && open
           ? {
@@ -181,7 +181,7 @@ const ManageSubCategory = () => {
           )}
         </Formik>
       </div>
-    </CustomModal>
+    </Modal>
   );
 };
 

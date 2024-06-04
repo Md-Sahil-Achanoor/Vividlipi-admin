@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/app/store";
 import Loader from "@/components/atoms/Loader";
-import Dropdown from "@/components/elements/common/Dropdown";
+import Dropdown from "@/components/ui/Dropdown";
 import { useGlobalSearchQuery } from "@/feature/common/commonQuery";
 import useDebounce from "@/hooks/useDebounce";
 import { Role } from "@/types";

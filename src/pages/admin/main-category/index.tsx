@@ -1,9 +1,10 @@
 import { useAppDispatch, useAppSelector } from "@/app/store";
 import NoTableData from "@/components/atoms/NoTableData";
-import CustomTable from "@/components/elements/common/custom-table/CustomTable";
 import ManageModule from "@/components/elements/modal/ManageModule";
 import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
 import ManageCategory from "@/components/module/category/ManageCategory";
+import { Card } from "@/components/ui/Card";
+import Table from "@/components/ui/Table";
 import {
   useDeleteCategoryMutation,
   useGetCategoriesQuery,
@@ -126,50 +127,50 @@ const MainCategoryList = () => {
           onClick: () => handleModal(),
         }}
       >
-        {/* <Card className="p-3 border-0 shadow-md"> */}
-        {/* <TableWrapper isActiveInactive isSort={false}> */}
-        <CustomTable headList={tableHead}>
-          {isLoading ? (
-            <SkeletonTable total={6} tableCount={3} />
-          ) : data?.data &&
-            typeof data?.data === "object" &&
-            data?.data?.length > 0 ? (
-            data?.data?.map((item, index) => (
-              <tr className="table_tr" key={item?.id}>
-                <td className="table_td">{index + 1}</td>
-                <td className="table_td">{item?.title}</td>
-                <td className="table_td">
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={() => handleModal("edit", item)}
-                      className={cn(
-                        "font-medium hover:underline",
-                        "text-blue-600 dark:text-blue-500"
-                      )}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleModal("delete", item)}
-                      className={cn(
-                        "font-medium hover:underline",
-                        "text-red-600 dark:text-red-500"
-                      )}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <NoTableData colSpan={7} parentClass="h-40">
-              <span className="font-medium">No data found!</span>
-            </NoTableData>
-          )}
-        </CustomTable>
-        {/* </TableWrapper> */}
-        {/* </Card> */}
+        <Card className="px-0">
+          {/* <TableWrapper isActiveInactive isSort={false}> */}
+          <Table headList={tableHead}>
+            {isLoading ? (
+              <SkeletonTable total={6} tableCount={3} />
+            ) : data?.data &&
+              typeof data?.data === "object" &&
+              data?.data?.length > 0 ? (
+              data?.data?.map((item, index) => (
+                <tr className="table_tr" key={item?.id}>
+                  <td className="table_td">{index + 1}</td>
+                  <td className="table_td">{item?.title}</td>
+                  <td className="table_td">
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => handleModal("edit", item)}
+                        className={cn(
+                          "font-medium hover:underline",
+                          "text-blue-600 dark:text-blue-500"
+                        )}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleModal("delete", item)}
+                        className={cn(
+                          "font-medium hover:underline",
+                          "text-red-600 dark:text-red-500"
+                        )}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <NoTableData colSpan={7} parentClass="h-40">
+                <span className="font-medium">No data found!</span>
+              </NoTableData>
+            )}
+          </Table>
+          {/* </TableWrapper> */}
+        </Card>
       </PageLayout>
     </>
   );

@@ -3,31 +3,29 @@ import API from "../../app/services/api";
 import { endpoints } from "../../constants/endpoints";
 import {
   ApiResponse,
+  FeatureSliderQuery,
+  FeatureSliderResponse,
   ManagePayload,
   ManagePayloadQuery,
   ManageQuery,
-  PublisherPayload,
-  PublisherQuery,
-  PublisherResponse,
 } from "../../types";
 import { coreAction } from "../core/coreSlice";
-import { publisherAction } from "./publisherSlice";
 
-const publisherQuery = API.injectEndpoints({
+const homeQuery = API.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
-    getPublishers: builder.query<
-      ApiResponse<PublisherResponse[]>,
-      ManageQuery<Partial<PublisherQuery>>
+    getHomeFeatureSlider: builder.query<
+      ApiResponse<FeatureSliderResponse[]>,
+      ManageQuery<Partial<FeatureSliderQuery>>
     >({
       query: ({ query }) => {
         return {
-          url: endpoints.publisher,
+          url: endpoints.list_home_slider,
           method: "GET",
           params: query,
         };
       },
-      providesTags: ["Publisher"],
+      providesTags: ["HomeFeatureSlider"],
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           await queryFulfilled;
@@ -41,65 +39,26 @@ const publisherQuery = API.injectEndpoints({
       },
     }),
 
-    getPublisherById: builder.query<
-      ApiResponse<PublisherResponse>,
-      ManageQuery<PublisherQuery>
-    >({
-      query: ({ query }) => ({
-        url: endpoints.publisher,
-        method: "GET",
-        params: query,
-      }),
-      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
-        try {
-          const result = await queryFulfilled;
-          dispatch(publisherAction.setSelectedPublisher(result?.data?.data));
-        } catch (err: unknown) {
-          // do nothing
-          const error = err as any;
-          const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
-        }
-      },
-    }),
-
     // POST
-    managePublisher: builder.mutation<any, ManagePayload<PublisherPayload>>({
-      query: ({ data, id }) => ({
-        url: endpoints.publisher,
-        method: id ? "PUT" : "POST",
-        body: data,
-        params: {
-          id,
-        },
-      }),
-      invalidatesTags: ["Publisher"],
+    manageFeatureSlide: builder.mutation<any, ManagePayload<FormData>>({
+      query: ({ data, id }) => {
+        return {
+          url: id ? endpoints.edit_home_slider : endpoints.add_home_slider,
+          method: "POST",
+          body: data,
+          params: {
+            sliderid: id,
+          },
+        };
+      },
+      invalidatesTags: ["HomeFeatureSlider"],
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
           if (result?.data?.status === 1) {
             options?.resetForm();
             options?.setSubmitting(false);
-            dispatch(publisherAction.resetPublisher());
             toast.success(result?.data?.message || "Success");
-            // dispatch(
-            //   publisherQuery.util.updateQueryData(
-            //     "getPublishers",
-            //     {
-            //       query: {},
-            //     },
-            //     (draft) => {
-            //       if (id) {
-            //         draft.data = draft?.data?.map((item) =>
-            //           item?.id === id ? { ...data, id } : item
-            //         );
-            //       } else {
-            //         draft?.data?.push(data as PublisherResponse);
-            //       }
-            //     }
-            //   )
-            // );
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
@@ -116,12 +75,12 @@ const publisherQuery = API.injectEndpoints({
       },
     }),
 
-    deletePublisher: builder.mutation<
+    deleteFeatureSlide: builder.mutation<
       any,
-      ManagePayloadQuery<Partial<PublisherQuery>>
+      ManagePayloadQuery<Partial<FeatureSliderQuery>>
     >({
       query: ({ id }) => ({
-        url: endpoints.publisher,
+        url: endpoints.delete_home_slider,
         method: "DELETE",
         params: {
           id,
@@ -132,11 +91,9 @@ const publisherQuery = API.injectEndpoints({
           const result = await queryFulfilled;
           if (result?.data?.status === 1) {
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            // dispatch(publisherAction.resetWithReload());
-            dispatch(publisherAction.resetPublisher());
             dispatch(
-              publisherQuery.util.updateQueryData(
-                "getPublishers",
+              homeQuery.util.updateQueryData(
+                "getHomeFeatureSlider",
                 {
                   query: _arg.query,
                 },
@@ -163,10 +120,9 @@ const publisherQuery = API.injectEndpoints({
 });
 
 export const {
-  useGetPublishersQuery,
-  useGetPublisherByIdQuery,
-  useManagePublisherMutation,
-  useDeletePublisherMutation,
-} = publisherQuery;
+  useGetHomeFeatureSliderQuery,
+  useManageFeatureSlideMutation,
+  useDeleteFeatureSlideMutation,
+} = homeQuery;
 
-export default publisherQuery;
+export default homeQuery;

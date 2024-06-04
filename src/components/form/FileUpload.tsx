@@ -1,7 +1,6 @@
 /* eslint-disable no-unsafe-optional-chaining */
 import logo from "@/assets/Images/male.png";
 import Loader from "@/components/atoms/Loader";
-import UploadFile from "@/components/elements/common/Upload";
 import useFileUploader from "@/hooks/useFileUploader";
 import { ChangeEventType, FormikFileUploadProps } from "@/types";
 import { displayFileName } from "@/utils/file";
@@ -10,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { BiLoaderCircle, BiTrash } from "react-icons/bi";
 import { LuImagePlus } from "react-icons/lu";
+import UploadFile from "../ui/Upload";
 import TextError from "./TextError";
 
 const FileUpload = ({
@@ -211,16 +211,20 @@ const FileUpload = ({
         ) : (
           !isEdit && (
             <div>
-              <a
-                title="Click to download"
-                className="text-primary-main hover:underline"
-                href={isUpload ? values?.[name] : ""}
-                download={isUpload}
-              >
-                {isUpload
-                  ? displayFileName(values?.[name])
-                  : values?.[name]?.name}
-              </a>
+              {!isUpload ? (
+                <span className="text-primary-main hover:underline">
+                  {values?.[name]?.name}
+                </span>
+              ) : (
+                <a
+                  title="Click to download"
+                  className="text-primary-main hover:underline"
+                  href={values?.[name]}
+                  download={isUpload}
+                >
+                  {displayFileName(values?.[name])}
+                </a>
+              )}
             </div>
           )
         )}

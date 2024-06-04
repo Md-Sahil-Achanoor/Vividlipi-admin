@@ -5,14 +5,14 @@ import { Field, Form, Formik, FormikProps } from "formik";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useAppDispatch, useAppSelector } from "../../../app/store";
-import { endpoints } from "../../../constants/api/endpoints";
+import { endpoints } from "../../../constants/endpoints";
 import { useBulkUploadMutation } from "../../../feature/common/commonQuery";
 import { coreAction } from "../../../feature/core/coreSlice";
 import useExcelReader from "../../../hooks/useExcelReader";
 import { bulkUploadSchema } from "../../../models/Common";
 import { bulkUploadPayload } from "../../../types/common/common";
 import { downloadXlsx } from "../../../utils/excel";
-import CustomModal from "../../elements/common/CustomModal";
+import CustomModal from "../../ui/Modal";
 
 interface FileUploadType {
   image: File | null;

@@ -2,7 +2,6 @@ import React from "react";
 import { BiFullscreen, BiMenu } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../app/store";
-import Logo from "../../components/atoms/Logo";
 import { changeSidebarType } from "../../feature/layout/layoutSlice";
 import { cn } from "../../utils/twmerge";
 import ProfileMenu from "../common/TopbarDropdown/ProfileMenu";
@@ -85,35 +84,16 @@ const Header = () => {
     <React.Fragment>
       <header
         className={cn(
-          "fixed top-0 right-0 ml-0 left-0 bg-white shadow-header z-[1002] ",
-          leftSideBarType === "condensed" || isMobile ? "ml-0" : ""
+          "fixed top-0 right-0 ml-0 left-0 md:left-[250px] bg-white shadow-header z-[1002] ",
+          leftSideBarType === "condensed" || isMobile ? "ml-0" : "",
+          leftSideBarType === "condensed" ? "md:left-[70px]" : "",
+          isMobile ? "md:left-0" : ""
         )}
       >
         <div className="h-16 flex justify-between items-center mx-auto">
-          <div className="flex h-full items-center">
-            <div
-              className={cn(
-                "w-[70px] md:w-[250px] h-full bg-[#fdfbfb] text-black flex items-center justify-center",
-                leftSideBarType === "condensed" && !isMobile
-                  ? "w-[70px] md:w-[70px]"
-                  : ""
-              )}
-            >
-              <Logo />
-            </div>
-            <button
-              type="button"
-              onClick={tToggle}
-              className="px-3 header-item"
-            >
-              <BiMenu className="text-2xl" />
-            </button>
-            {/* {(type === "admin" || type === "operator") && (
-              <div>
-                <SearchBar />
-              </div>
-            )} */}
-          </div>
+          <button type="button" onClick={tToggle} className="px-3 header-item">
+            <BiMenu className="text-2xl" />
+          </button>
           <div className="flex items-center  gap-3 px-4">
             <div className="hidden lg:inline-block ml-1">
               <button

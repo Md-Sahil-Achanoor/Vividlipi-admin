@@ -56,4 +56,12 @@ export const endpoints = {
    * @module Publisher
    * */
   publisher: "/api/Publisher",
+
+  /**
+   * @module CMS
+   * */
+  add_home_slider: "/api/add-home-sliders",
+  list_home_slider: "/api/list-home-sliders",
+  edit_home_slider: "/api/replace-home-sliders",
+  delete_home_slider: "/api/delete-home-sliders",
 };

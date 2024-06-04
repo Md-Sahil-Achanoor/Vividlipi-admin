@@ -3,7 +3,7 @@ import { InputType } from "@/types";
 import { cn } from "@/utils/twmerge";
 import { Dispatch, FC, SetStateAction } from "react";
 
-interface Table {
+interface TableT {
   children: React.ReactNode;
   headList: string[];
   reInitialize?: boolean;
@@ -15,7 +15,7 @@ interface Table {
   checkboxProps?: InputType;
 }
 
-const CustomTable: FC<Table> = ({
+const Table: FC<TableT> = ({
   children,
   headList,
   reInitialize = false,
@@ -30,7 +30,7 @@ const CustomTable: FC<Table> = ({
     <div className="">
       <div
         className={cn(
-          `relative overflow-x-auto shadow-md sm:rounded-lg customTable`,
+          `relative overflow-x-auto shadow-md rounded-md customTable h-max`,
           tableClass
         )}
       >
@@ -73,4 +73,4 @@ const CustomTable: FC<Table> = ({
   );
 };
 
-export default CustomTable;
+export default Table;

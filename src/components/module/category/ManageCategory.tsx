@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/app/store";
-import CustomModal from "@/components/elements/common/CustomModal";
 import CustomInput from "@/components/form/CustomInput";
+import Modal from "@/components/ui/Modal";
 import { useManageCategoryMutation } from "@/feature/category/categoryQuery";
 import { categoryAction } from "@/feature/category/categorySlice";
 import { coreAction } from "@/feature/core/coreSlice";
@@ -47,7 +47,7 @@ const ManageCategory = () => {
     });
   };
   return (
-    <CustomModal
+    <Modal
       classes={
         type === "manage-category" && open
           ? {
@@ -111,7 +111,7 @@ const ManageCategory = () => {
           )}
         </Formik>
       </div>
-    </CustomModal>
+    </Modal>
   );
 };
 

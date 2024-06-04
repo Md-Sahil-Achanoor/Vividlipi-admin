@@ -1,5 +1,5 @@
 import { ButtonType, ModalProps } from "@/types";
-import CustomModal from "../common/CustomModal";
+import Modal from "../../ui/Modal";
 
 interface Props extends ModalProps {
   heading: string;
@@ -20,7 +20,7 @@ const ManageModule = ({
   ...props
 }: Props) => {
   return (
-    <CustomModal {...props}>
+    <Modal {...props}>
       <div className="">
         <h3 className="text-lg sm:text-xl font-bold">{heading}</h3>
         <p className="font-normal text-sm mt-2">{details}</p>
@@ -41,7 +41,7 @@ const ManageModule = ({
           </button>
         </div>
       </div>
-    </CustomModal>
+    </Modal>
   );
 };
 

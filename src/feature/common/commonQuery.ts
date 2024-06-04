@@ -1,7 +1,7 @@
 import { AxiosProgressEvent } from "axios";
 import toast from "react-hot-toast";
 import API from "../../app/services/api";
-import { endpoints } from "../../constants/api/endpoints";
+import { endpoints } from "../../constants/endpoints";
 import { ManagePayload } from "../../types";
 import {
   BulkUploadQuery,

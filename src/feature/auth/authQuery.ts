@@ -1,5 +1,5 @@
 import API from "@/app/services/api";
-import { endpoints } from "@/constants/api/endpoints";
+import { endpoints } from "@/constants/endpoints";
 import { ISignIn } from "@/models/auth/signup-validation";
 import { ManagePayload } from "@/types";
 import type { AuthResponse } from "@/types/auth";
