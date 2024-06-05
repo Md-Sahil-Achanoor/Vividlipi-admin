@@ -70,6 +70,8 @@ const API = createApi({
     "RoleList",
     "Publisher",
     "HomeFeatureSlider",
+    "HomeFeatureSubSlider",
+    "HomeFeatureProducts",
   ],
   /**
    * This api has endpoints injected in adjacent files,

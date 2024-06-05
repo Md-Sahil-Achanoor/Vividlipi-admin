@@ -59,9 +59,30 @@ export const endpoints = {
 
   /**
    * @module CMS
+   * @description Content Management System Main Home Module
+   * */
+  /**
+   * @module Feature Slider
+   * @submodule of CMS
    * */
   add_home_slider: "/api/add-home-sliders",
   list_home_slider: "/api/list-home-sliders",
   edit_home_slider: "/api/replace-home-sliders",
   delete_home_slider: "/api/delete-home-sliders",
+  /**
+   * @module Feature Sub Slider
+   * @submodule of CMS
+   * */
+  add_home_sub_slider: "/api/add-home-sub-sliders",
+  list_home_sub_slider: "/api/list-home-sub-sliders",
+  edit_home_sub_slider: "/api/replace-home-sub-sliders",
+  delete_home_sub_slider: "/api/delete-home-sub-sliders",
+  /**
+   * @module Feature Product
+   * @submodule of CMS
+   * */
+  add_home_product: "/api/add-featured-products",
+  list_home_product: "/api/list-featured-products",
+  edit_home_product: "/api/replace-featured-products",
+  delete_home_product: "/api/remove-featured-products",
 };

@@ -22,6 +22,7 @@ const initialValues: IHomeFeatureSlider = {
 const ManageFeatureSlider = () => {
   const { type, open } = useAppSelector((state) => state.core);
   const [manageFeatureSlide, { isLoading }] = useManageFeatureSlideMutation();
+  const { selectedFeatureSlider } = useAppSelector((state) => state.home);
   const dispatch = useAppDispatch();
   const handleModal = (type: string) => {
     if (type === "cancelled") {
@@ -67,7 +68,11 @@ const ManageFeatureSlider = () => {
       }
       handleModal={handleModal}
       wrapperClass="h-full"
-      headText={false ? "Update Feature Slide" : "Create Feature Slide"}
+      headText={
+        selectedFeatureSlider?.id
+          ? "Update Feature Slide"
+          : "Create Feature Slide"
+      }
       isModalHeader
       outSideClick
     >

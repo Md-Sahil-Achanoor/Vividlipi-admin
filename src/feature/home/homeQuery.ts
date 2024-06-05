@@ -3,8 +3,13 @@ import API from "../../app/services/api";
 import { endpoints } from "../../constants/endpoints";
 import {
   ApiResponse,
+  FeatureProductPayload,
+  FeatureProductQuery,
+  FeatureProductResponse,
   FeatureSliderQuery,
   FeatureSliderResponse,
+  FeatureSubSliderQuery,
+  FeatureSubSliderResponse,
   ManagePayload,
   ManagePayloadQuery,
   ManageQuery,
@@ -14,6 +19,18 @@ import { coreAction } from "../core/coreSlice";
 const homeQuery = API.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
+    /**
+     * **************** ----------------------------- ****************
+     * **************** @module FeatureSlider Module ****************
+     * **************** ----------------------------- ****************
+     * */
+
+    /**
+     * @module GetFeatureSliders
+     * @param { Partial<FeatureSliderQuery> }
+     * @returns { ApiResponse<FeatureSliderResponse[]> }
+     * @description Get Home Feature Slider List
+     */
     getHomeFeatureSlider: builder.query<
       ApiResponse<FeatureSliderResponse[]>,
       ManageQuery<Partial<FeatureSliderQuery>>
@@ -39,7 +56,12 @@ const homeQuery = API.injectEndpoints({
       },
     }),
 
-    // POST
+    /**
+     * @module ManageFeatureSlider
+     * @param { FormData }
+     * @returns { any }
+     * @description Manage Home Feature Slider
+     */
     manageFeatureSlide: builder.mutation<any, ManagePayload<FormData>>({
       query: ({ data, id }) => {
         return {
@@ -75,6 +97,12 @@ const homeQuery = API.injectEndpoints({
       },
     }),
 
+    /**
+     * @module DeleteFeatureSlider
+     * @param { Partial<FeatureSliderQuery> }
+     * @returns { any }
+     * @description Delete Home Feature Slider
+     */
     deleteFeatureSlide: builder.mutation<
       any,
       ManagePayloadQuery<Partial<FeatureSliderQuery>>
@@ -83,7 +111,7 @@ const homeQuery = API.injectEndpoints({
         url: endpoints.delete_home_slider,
         method: "DELETE",
         params: {
-          id,
+          picid: id,
         },
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
@@ -116,6 +144,261 @@ const homeQuery = API.injectEndpoints({
         }
       },
     }),
+
+    /**
+     * **************** ----------------------------- ****************
+     * **************** @module FeatureSubSlider Module ****************
+     * **************** ----------------------------- ****************
+     * */
+
+    /**
+     *  * @module GetFeatureSubSlider
+     *  * @param { Partial<FeatureSubSliderQuery> }
+     *  * @returns { ApiResponse<FeatureSubSliderResponse[]> }
+     * */
+    getHomeFeatureSubSlider: builder.query<
+      ApiResponse<FeatureSubSliderResponse[]>,
+      ManageQuery<Partial<FeatureSubSliderQuery>>
+    >({
+      query: ({ query }) => {
+        return {
+          url: endpoints.list_home_sub_slider,
+          method: "GET",
+          params: query,
+        };
+      },
+      providesTags: ["HomeFeatureSubSlider"],
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any;
+          const message =
+            error?.response?.data?.message || "Something went wrong!";
+          toast.error(message);
+        }
+      },
+    }),
+
+    /**
+     * @module ManageFeatureSubSlider
+     * @param { FormData }
+     * @returns { any }
+     * @description Manage Home Feature Sub Slider
+     */
+    manageFeatureSubSlide: builder.mutation<any, ManagePayload<FormData>>({
+      query: ({ data, id }) => {
+        return {
+          url: id
+            ? endpoints.edit_home_sub_slider
+            : endpoints.add_home_sub_slider,
+          method: "POST",
+          body: data,
+          params: {
+            sliderid: id,
+          },
+        };
+      },
+      invalidatesTags: ["HomeFeatureSubSlider"],
+      async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          if (result?.data?.status === 1) {
+            options?.resetForm();
+            options?.setSubmitting(false);
+            toast.success(result?.data?.message || "Success");
+            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+          } else {
+            toast.error(result?.data?.message || "Something went wrong!");
+          }
+        } catch (err: unknown) {
+          // do nothing
+          options?.setSubmitting(false);
+          const error = err as any;
+          const message =
+            error?.response?.data?.message || "Something went wrong!";
+          toast.error(message);
+        }
+      },
+    }),
+
+    /**
+     * @module DeleteFeatureSubSlider
+     * @param { Partial<FeatureSubSliderQuery> }
+     * @returns { any }
+     * @description Delete Home Feature Sub Slider
+     */
+    deleteFeatureSubSlide: builder.mutation<
+      any,
+      ManagePayloadQuery<Partial<FeatureSubSliderQuery>>
+    >({
+      query: ({ id }) => ({
+        url: endpoints.delete_home_sub_slider,
+        method: "DELETE",
+        params: {
+          picid: id,
+        },
+      }),
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          const result = await queryFulfilled;
+          if (result?.data?.status === 1) {
+            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            dispatch(
+              homeQuery.util.updateQueryData(
+                "getHomeFeatureSubSlider",
+                {
+                  query: _arg.query,
+                },
+                (draft) => {
+                  draft.data = draft?.data?.filter(
+                    (item) => item?.id !== _arg.id
+                  );
+                }
+              )
+            );
+          } else {
+            toast.error(result?.data?.message || "Something went wrong!");
+          }
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any;
+          const message =
+            error?.response?.data?.message || "Something went wrong!";
+          toast.error(message);
+        }
+      },
+    }),
+
+    /**
+     * **************** ----------------------------- ****************
+     * **************** @module FeatureProduct Module ****************
+     * **************** ----------------------------- ****************
+     * */
+
+    /**
+     * @module GetFeatureProducts
+     * @param { Partial<FeatureProductPayload> }
+     * @returns { any }
+     * @description  Home Feature Products
+     */
+    getHomeFeatureProducts: builder.query<
+      ApiResponse<FeatureProductResponse[]>,
+      ManageQuery<Partial<FeatureProductQuery>>
+    >({
+      query: ({ query }) => {
+        return {
+          url: endpoints.list_home_product,
+          method: "GET",
+          params: query,
+        };
+      },
+      providesTags: ["HomeFeatureProducts"],
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any;
+          const message =
+            error?.response?.data?.message || "Something went wrong!";
+          toast.error(message);
+        }
+      },
+    }),
+
+    /**
+     * @module ManageFeatureProducts
+     * @param { FormData }
+     * @returns { any }
+     * @description Manage Home Feature Products
+     */
+    manageFeatureProduct: builder.mutation<
+      any,
+      ManagePayload<FeatureProductPayload>
+    >({
+      query: ({ data, id }) => {
+        return {
+          url: id ? endpoints.edit_home_product : endpoints.add_home_product,
+          method: "POST",
+          body: data,
+          params: {
+            sliderid: id,
+          },
+        };
+      },
+      invalidatesTags: ["HomeFeatureProducts"],
+      async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          if (result?.data?.status === 1) {
+            options?.resetForm();
+            options?.setSubmitting(false);
+            toast.success(result?.data?.message || "Success");
+            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+          } else {
+            toast.error(result?.data?.message || "Something went wrong!");
+          }
+        } catch (err: unknown) {
+          // do nothing
+          options?.setSubmitting(false);
+          const error = err as any;
+          const message =
+            error?.response?.data?.message || "Something went wrong!";
+          toast.error(message);
+        }
+      },
+    }),
+
+    /**
+     * @module DeleteFeatureProducts
+     * @param { Partial<FeatureProductQuery> }
+     * @returns { any }
+     * @description Delete Home Feature Products
+     */
+
+    deleteFeatureProduct: builder.mutation<
+      any,
+      ManagePayloadQuery<Partial<FeatureProductQuery>>
+    >({
+      query: ({ id }) => ({
+        url: endpoints.delete_home_product,
+        method: "DELETE",
+        params: {
+          picid: id,
+        },
+      }),
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          const result = await queryFulfilled;
+          if (result?.data?.status === 1) {
+            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            dispatch(
+              homeQuery.util.updateQueryData(
+                "getHomeFeatureProducts",
+                {
+                  query: _arg.query,
+                },
+                (draft) => {
+                  draft.data = draft?.data?.filter(
+                    (item) => item?.id !== _arg.id
+                  );
+                }
+              )
+            );
+          } else {
+            toast.error(result?.data?.message || "Something went wrong!");
+          }
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any;
+          const message =
+            error?.response?.data?.message || "Something went wrong!";
+          toast.error(message);
+        }
+      },
+    }),
   }),
 });
 
@@ -123,6 +406,14 @@ export const {
   useGetHomeFeatureSliderQuery,
   useManageFeatureSlideMutation,
   useDeleteFeatureSlideMutation,
+
+  useGetHomeFeatureSubSliderQuery,
+  useManageFeatureSubSlideMutation,
+  useDeleteFeatureSubSlideMutation,
+
+  useGetHomeFeatureProductsQuery,
+  useManageFeatureProductMutation,
+  useDeleteFeatureProductMutation,
 } = homeQuery;
 
 export default homeQuery;

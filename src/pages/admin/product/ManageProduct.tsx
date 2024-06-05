@@ -120,7 +120,7 @@ const ManageProduct = () => {
     refetch: categoryRefetch,
     data: categoryList,
     isError: categoryIsError,
-    error: categoryErrorMessage,
+    // error: categoryErrorMessage,
   } = useGetCategoriesQuery({
     conditions: {
       type: "category1",
@@ -132,7 +132,7 @@ const ManageProduct = () => {
     refetch: publisherRefetch,
     data: publisherList,
     isError: publisherIsError,
-    error: publisherErrorMessage,
+    // error: publisherErrorMessage,
   } = useGetPublishersQuery({
     query: {},
   });
@@ -152,7 +152,7 @@ const ManageProduct = () => {
     refetch: category2Refetch,
     data: category2List,
     isError: category2IsError,
-    error: category2ErrorMessage,
+    // error: category2ErrorMessage,
   } = useGetCategoriesQuery(
     {
       query: getQuery(),
@@ -242,7 +242,8 @@ const ManageProduct = () => {
                           renderData={categoryList?.data}
                           isLoading={categoryLoading}
                           isError={categoryIsError}
-                          errorMessage={categoryErrorMessage}
+                          // errorMessage={categoryErrorMessage}
+                          errorMessage={"Failed to fetch categories"}
                           // reload={()}
                           // listRef={batchListRef}
                           horizontal
@@ -289,7 +290,8 @@ const ManageProduct = () => {
                             renderData={category2List?.data}
                             isLoading={category2Loading}
                             isError={category2IsError}
-                            errorMessage={category2ErrorMessage}
+                            // errorMessage={category2ErrorMessage}
+                            errorMessage={"Failed to fetch sub categories"}
                             // reload={()}
                             // listRef={batchListRef}
                             horizontal
@@ -374,7 +376,8 @@ const ManageProduct = () => {
                           renderData={publisherList?.data}
                           isLoading={publisherLoading}
                           isError={publisherIsError}
-                          errorMessage={publisherErrorMessage}
+                          // errorMessage={publisherErrorMessage}
+                          errorMessage={"Failed to fetch publishers"}
                           // reload={()}
                           // listRef={batchListRef}
                           horizontal
@@ -608,80 +611,6 @@ const ManageProduct = () => {
                         placeholder="Type your products language"
                         isRequired
                       />
-
-                      {/* <Field
-                        name="category"
-                        label={"Category"}
-                        horizontal
-                        type="text"
-                        component={CustomInput}
-                        tooltip="Category"
-                        placeholder="Type your products category"
-                        isRequired
-                      /> */}
-
-                      {/* <div>
-                        <Field
-                          label={"Category"}
-                          name="category"
-                          isRequired
-                          renderData={categoryData}
-                          isLoading={false}
-                          isError={false}
-                          errorMessage={""}
-                          // reload={()}
-                          // listRef={batchListRef}
-                          horizontal
-                          tooltip="Category"
-                          renderItem={(item: CategoryResponse) => (
-                            <>{item?.name}</>
-                          )}
-                          isActive={(item: CategoryResponse) =>
-                            values?.category?.find(
-                              (category) => category?.id === item?.id
-                            )
-                          }
-                          renderName={() => (
-                            <MultiSelectItem<CategoryResponse>
-                              data={values?.category}
-                              defaultName="Select Category"
-                              displayName="name"
-                              onClick={(item) => {
-                                setFieldValue(
-                                  "category",
-                                  values?.category?.filter(
-                                    (category) => category?.id !== item?.id
-                                  )
-                                );
-                              }}
-                            />
-                          )}
-                          onChangeCallback={(item: CategoryResponse) => {
-                            // check unique item in array
-                            let isUnique = values?.category?.find(
-                              (category) => category?.id === item?.id
-                            );
-                            if (!isUnique) {
-                              setFieldValue("category", [
-                                ...values?.category,
-                                item,
-                              ]);
-                            } else {
-                              return;
-                            }
-                          }}
-                          clearData={(item: CategoryResponse) => {
-                            // find data and clear
-                            let data = values?.category?.filter(
-                              (category) => category?.id !== item?.id
-                            );
-                            setFieldValue("category", data);
-                          }}
-                          isSelected={false}
-                          component={InfiniteSelect}
-                          isAuth
-                        />
-                      </div> */}
 
                       <CheckboxGroup
                         name="allow_comments"

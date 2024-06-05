@@ -56,7 +56,7 @@ const ManageSubCategory = () => {
     refetch: categoryRefetch,
     data: categoryList,
     isError: categoryIsError,
-    error: categoryErrorMessage,
+    // error: categoryErrorMessage,
   } = useGetCategoriesQuery(
     {
       conditions: {
@@ -114,7 +114,7 @@ const ManageSubCategory = () => {
                     renderData={categoryList?.data}
                     isLoading={categoryLoading}
                     isError={categoryIsError}
-                    errorMessage={categoryErrorMessage}
+                    errorMessage={"Failed to fetch categories"}
                     renderItem={(item: CategoryResponse) => (
                       <span className="uppercase">{item?.title}</span>
                     )}

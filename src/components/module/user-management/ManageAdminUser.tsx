@@ -70,7 +70,7 @@ const ManageAdminUser = () => {
     refetch: adminUserRefetch,
     data: adminUserList,
     isError: adminUserIsError,
-    error: adminUserErrorMessage,
+    // error: adminUserErrorMessage,
   } = useGetRolePermissionsQuery(
     {
       query: {},
@@ -124,7 +124,8 @@ const ManageAdminUser = () => {
                     renderData={adminUserList?.data}
                     isLoading={adminUserLoading}
                     isError={adminUserIsError}
-                    errorMessage={adminUserErrorMessage}
+                    // errorMessage={adminUserErrorMessage}
+                    errorMessage={"Failed to fetch roles"}
                     renderItem={(item: RolePermissionResponse) => (
                       <span className="uppercase">{item?.Title}</span>
                     )}

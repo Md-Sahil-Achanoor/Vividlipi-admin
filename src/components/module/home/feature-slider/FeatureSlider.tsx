@@ -4,17 +4,14 @@ import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
 import Table from "@/components/ui/Table";
 import { featureSliderHeader } from "@/constants/tableHeader";
 import { coreAction } from "@/feature/core/coreSlice";
+import { useGetHomeFeatureSliderQuery } from "@/feature/home/homeQuery";
 import { homeAction } from "@/feature/home/homeSlice";
-import { FeatureSliderResponse } from "@/types";
 import { cn } from "@/utils/twmerge";
 import ModuleHeader from "../ModuleHeader";
 
-type FeatureSliderProps = {
-  data: FeatureSliderResponse[];
-  isLoading: boolean;
-};
-
-const FeatureSlider = ({ data, isLoading }: FeatureSliderProps) => {
+const FeatureSlider = () => {
+  const { data, isLoading } = useGetHomeFeatureSliderQuery({});
+  console.log(`\n\n ~ FeatureSlider ~ data:`, data);
   const dispatch = useAppDispatch();
   const handleModal = (type: string, item?: any) => {
     if (type === "cancelled") {
@@ -36,6 +33,7 @@ const FeatureSlider = ({ data, isLoading }: FeatureSliderProps) => {
       );
     }
   };
+
   return (
     <div>
       <ModuleHeader
@@ -45,8 +43,8 @@ const FeatureSlider = ({ data, isLoading }: FeatureSliderProps) => {
       <Table headList={featureSliderHeader}>
         {isLoading ? (
           <SkeletonTable total={6} tableCount={5} />
-        ) : data && data?.length > 0 ? (
-          data?.map((item, index) => (
+        ) : data?.data && data?.data?.length > 0 ? (
+          data?.data?.map((item, index) => (
             <tr className="table_tr" key={item?.id}>
               <td className="table_td">{index + 1}</td>
               <td className="table_td">{item?.text}</td>

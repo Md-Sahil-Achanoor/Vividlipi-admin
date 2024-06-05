@@ -1,68 +1,46 @@
 import { useAppDispatch, useAppSelector } from "@/app/store";
 import ManageModule from "@/components/elements/modal/ManageModule";
-import FeatureSlider from "@/components/module/home/FeatureSlider";
-import ManageFeatureSlider from "@/components/module/home/ManageFeatureSlider";
+import FeatureProducts from "@/components/module/home/feature-product/FeatureProducts";
+import ManageFeatureProduct from "@/components/module/home/feature-product/ManageFeatureProduct";
+import FeatureSlider from "@/components/module/home/feature-slider/FeatureSlider";
+import { default as ManageFeatureSlider } from "@/components/module/home/feature-slider/ManageFeatureSlider";
+import FeatureSubSlider from "@/components/module/home/feature-sub-slider/FeatureSubSlider";
+import ManageFeatureSubSlider from "@/components/module/home/feature-sub-slider/ManageFeatureSubSlider";
 import { Card } from "@/components/ui/Card";
 import TabButtons from "@/components/ui/TabButtons";
+import { tabItems } from "@/constants/tableHeader";
 import { coreAction } from "@/feature/core/coreSlice";
 import {
+  useDeleteFeatureProductMutation,
   useDeleteFeatureSlideMutation,
-  useGetHomeFeatureSliderQuery,
+  useDeleteFeatureSubSlideMutation,
 } from "@/feature/home/homeQuery";
 import PageLayout from "@/layout/PageLayout";
-import { TabItem } from "@/types";
+import { checkType, getModuleName, getTitle } from "@/utils/modules/home";
 import { useState } from "react";
 
-const tabItems: TabItem[] = [
-  {
-    name: "Feature Slider",
-    type: "feature-slider",
-  },
-  {
-    name: "Feature Products",
-    type: "feature-product",
-  },
-];
-
-const checkType = (type: string) => {
-  switch (type) {
-    case "manage-feature-slider":
-      return true;
-    case "delete-feature-slider":
-      return true;
-    case "manage-feature-product":
-      return true;
-    default:
-      return false;
-  }
-};
-
-const getTitle = (type: string, data: any) => {
-  switch (type) {
-    case "manage-feature-slider":
-      return data?.text;
-    case "delete-feature-slider":
-      return data?.text;
-    default:
-      return "";
-  }
-};
-
 const HomePage = () => {
+  const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = useState<string>("feature-slider");
-  const { data, isLoading } = useGetHomeFeatureSliderQuery({});
+
   const { type } = useAppSelector((state) => state.core);
+  const { selectedFeatureSlider } = useAppSelector((state) => state.home);
 
   const [deleteFeatureSlider, { isLoading: isDeleteCategory }] =
     useDeleteFeatureSlideMutation();
-  const dispatch = useAppDispatch();
+  const [deleteFeatureSubSlider, { isLoading: isDeleteSubCategory }] =
+    useDeleteFeatureSubSlideMutation();
+  const [deleteFeatureProduct, { isLoading: isDeleteProduct }] =
+    useDeleteFeatureProductMutation();
 
   const renderItems = () => {
     switch (activeTab) {
       case "feature-product":
-        return <FeatureSlider data={data?.data || []} isLoading={isLoading} />;
+        return <FeatureProducts />;
+      case "feature-sub-slider":
+        return <FeatureSubSlider />;
       default:
-        return <FeatureSlider data={data?.data || []} isLoading={isLoading} />;
+        return <FeatureSlider />;
     }
   };
 
@@ -73,15 +51,29 @@ const HomePage = () => {
   };
 
   const handleUpdateStatus = async () => {
-    // await deleteFeatureSlider({
-    //   id: selectedCategory?.id,
-    //   query: {},
-    // });
+    if (type === "delete-feature-slider") {
+      await deleteFeatureSlider({
+        id: selectedFeatureSlider?.id,
+        query: {},
+      });
+    } else if (type === "delete-feature-sub-slider") {
+      await deleteFeatureSubSlider({
+        id: selectedFeatureSlider?.id,
+        query: {},
+      });
+    } else {
+      await deleteFeatureProduct({
+        id: selectedFeatureSlider?.id,
+        query: {},
+      });
+    }
   };
 
   return (
     <PageLayout title="Home Page CMS">
       <ManageFeatureSlider />
+      <ManageFeatureSubSlider />
+      <ManageFeatureProduct />
       <ManageModule
         classes={
           checkType(type)
@@ -98,14 +90,14 @@ const HomePage = () => {
         wrapperClass="h-full"
         isModalHeader
         outSideClick
-        headText={`Delete the Sub Category?`}
-        heading={getTitle(type, {})}
+        headText={`Delete the ${getModuleName(type)}?`}
+        heading={getTitle(type, selectedFeatureSlider)}
         details={`Are you certain you want to delete?`}
         type={"delete"}
         buttonText={isDeleteCategory ? "Deleting..." : "Delete"}
         buttonProps={{
           onClick: handleUpdateStatus,
-          disabled: isDeleteCategory,
+          disabled: isDeleteCategory || isDeleteSubCategory || isDeleteProduct,
         }}
       />
       <Card>
