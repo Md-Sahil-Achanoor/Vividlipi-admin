@@ -20,6 +20,7 @@ const FeatureProducts = () => {
   const dispatch = useAppDispatch();
   const handleModal = (type: string, item?: any) => {
     if (type === "cancelled") {
+      dispatch(homeAction.resetHome());
       dispatch(coreAction.toggleModal({ type: "", open: false }));
     } else if (item) {
       dispatch(
@@ -53,9 +54,9 @@ const FeatureProducts = () => {
       />
       <Table headList={featureProductHeader}>
         {isLoading ? (
-          <SkeletonTable total={6} tableCount={5} />
-        ) : data?.list && data?.list?.length > 0 ? (
-          data?.list?.map((item, index) => (
+          <SkeletonTable total={6} tableCount={6} />
+        ) : data?.data && data?.data?.length > 0 ? (
+          data?.data?.map((item, index) => (
             <tr className="table_tr" key={item?.id}>
               <td className="table_td">{index + 1}</td>
               <td className="table_td">{item?.productDetails?.book_title}</td>
@@ -66,6 +67,7 @@ const FeatureProducts = () => {
                   <span>{item?.productDetails?.price}</span>
                 </div>
               </td>
+              <td className="table_td">{item?.main == 1 ? "Yes" : "No"}</td>
               <td className="table_td">
                 <div className="flex items-center gap-3">
                   {/* <button

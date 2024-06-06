@@ -18,6 +18,7 @@ const FeatureSubSlider = () => {
   const handleModal = (type: string, item?: FeatureSubSliderResponse) => {
     if (type === "cancelled") {
       dispatch(coreAction.toggleModal({ type: "", open: false }));
+      dispatch(homeAction.resetHome());
     } else if (item) {
       dispatch(
         coreAction.toggleModal({
@@ -67,17 +68,21 @@ const FeatureSubSlider = () => {
               </td>
               <td className="table_td">
                 <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => handleModal("manage-feature-slider", item)}
+                  {/* <button
+                    onClick={() =>
+                      handleModal("manage-feature-sub-slider", item)
+                    }
                     className={cn(
                       "font-medium hover:underline",
                       "text-blue-600 dark:text-blue-500"
                     )}
                   >
                     Edit
-                  </button>
+                  </button> */}
                   <button
-                    onClick={() => handleModal("delete-feature-slider", item)}
+                    onClick={() =>
+                      handleModal("delete-feature-sub-slider", item)
+                    }
                     className={cn(
                       "font-medium hover:underline",
                       "text-red-600 dark:text-red-500"

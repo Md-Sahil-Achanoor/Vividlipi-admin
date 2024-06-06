@@ -19,6 +19,7 @@ const FeatureSlider = () => {
   const dispatch = useAppDispatch();
   const handleModal = (type: string, item?: FeatureSliderResponse) => {
     if (type === "cancelled") {
+      dispatch(homeAction.resetHome());
       dispatch(coreAction.toggleModal({ type: "", open: false }));
     } else if (item) {
       dispatch(

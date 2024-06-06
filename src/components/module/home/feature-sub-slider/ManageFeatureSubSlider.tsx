@@ -25,6 +25,7 @@ const ManageFeatureSubSlider = () => {
     if (type === "cancelled") {
       // do nothing
       dispatch(homeAction.resetHome());
+      formRef.current?.resetForm();
       dispatch(coreAction.toggleModal({ open: false, type: "" }));
     }
   };
@@ -119,7 +120,7 @@ const ManageFeatureSubSlider = () => {
                 ) : (
                   <>
                     <span className="font-medium">
-                      {false ? "Update" : "Create"}
+                      {selectedFeatureSubSlider?.id ? "Update" : "Create"}
                     </span>
                     <span className="text-2xl ml-1">
                       <BsArrowRightShort />

@@ -24,5 +24,5 @@ export interface AuthState {
   reRender: boolean;
   role: Role;
   type: string;
-  selectedUser: UpdateAdmin | null;
+  selectedUser: null;
 }

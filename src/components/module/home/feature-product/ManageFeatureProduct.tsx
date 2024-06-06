@@ -9,8 +9,8 @@ import { useGetProductsQuery } from "@/feature/product/productQuery";
 import { IHomeFeatureProduct, featureProductsSchema } from "@/models/home";
 import { ProductResponse } from "@/types";
 import { cn } from "@/utils/twmerge";
-import { Field, Form, Formik, FormikHelpers } from "formik";
-import { useEffect } from "react";
+import { Field, Form, Formik, FormikHelpers, FormikProps } from "formik";
+import { useEffect, useRef } from "react";
 import { BsArrowRightShort } from "react-icons/bs";
 
 const initialValues: IHomeFeatureProduct = {
@@ -20,6 +20,7 @@ const initialValues: IHomeFeatureProduct = {
 
 const ManageFeatureProduct = () => {
   const { type, open } = useAppSelector((state) => state.core);
+  const formRef = useRef<FormikProps<IHomeFeatureProduct>>(null);
   const { selectedFeatureProduct } = useAppSelector((state) => state.home);
   const [manageFeatureProduct, { isLoading }] =
     useManageFeatureProductMutation();
@@ -57,6 +58,7 @@ const ManageFeatureProduct = () => {
     if (type === "cancelled") {
       // do nothing
       dispatch(homeAction.resetHome());
+      formRef.current?.resetForm();
       dispatch(coreAction.toggleModal({ open: false, type: "" }));
     }
   };
@@ -107,6 +109,7 @@ const ManageFeatureProduct = () => {
           validationSchema={featureProductsSchema}
           onSubmit={onSubmit}
           enableReinitialize
+          innerRef={formRef}
         >
           {({ isSubmitting, setFieldValue, values }) => (
             <Form noValidate>

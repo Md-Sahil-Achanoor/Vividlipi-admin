@@ -69,7 +69,7 @@ const HomePage = () => {
       });
     } else if (type === "delete-feature-sub-slider") {
       await deleteFeatureSubSlider({
-        id: selectedFeatureSlider?.id,
+        id: selectedFeatureSubSlider?.id,
         query: {},
       });
     } else {

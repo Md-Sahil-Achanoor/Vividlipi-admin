@@ -15,6 +15,7 @@ import {
   ManageQuery,
 } from "../../types";
 import { coreAction } from "../core/coreSlice";
+import { homeAction } from "./homeSlice";
 
 const homeQuery = API.injectEndpoints({
   overrideExisting: false,
@@ -81,6 +82,7 @@ const homeQuery = API.injectEndpoints({
             options?.resetForm();
             options?.setSubmitting(false);
             toast.success(result?.data?.message || "Success");
+            dispatch(homeAction.resetHome());
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
@@ -134,6 +136,7 @@ const homeQuery = API.injectEndpoints({
             //     }
             //   )
             // );
+            dispatch(homeAction.resetHome());
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
@@ -211,6 +214,7 @@ const homeQuery = API.injectEndpoints({
             options?.resetForm();
             options?.setSubmitting(false);
             toast.success(result?.data?.message || "Success");
+            dispatch(homeAction.resetHome());
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
@@ -249,6 +253,7 @@ const homeQuery = API.injectEndpoints({
           const result = await queryFulfilled;
           if (result?.data?.status === 1) {
             toast.success(result?.data?.message || "Success");
+            dispatch(homeAction.resetHome());
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
             // dispatch(
             //   homeQuery.util.updateQueryData(
@@ -341,6 +346,7 @@ const homeQuery = API.injectEndpoints({
             options?.resetForm();
             options?.setSubmitting(false);
             toast.success(result?.data?.message || "Success");
+            dispatch(homeAction.resetHome());
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
@@ -380,6 +386,7 @@ const homeQuery = API.injectEndpoints({
           const result = await queryFulfilled;
           if (result?.data?.status === 1) {
             toast.success(result?.data?.message || "Success");
+            dispatch(homeAction.resetHome());
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
             // dispatch(
             //   homeQuery.util.updateQueryData(

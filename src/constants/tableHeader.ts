@@ -10,7 +10,14 @@ export const featureSliderHeader = [
 
 export const featureSubSliderHeader = ["SL", "Image", "Action"];
 
-export const featureProductHeader = ["SL", "Name", "Author", "Price", "Action"];
+export const featureProductHeader = [
+  "SL",
+  "Name",
+  "Author",
+  "Price",
+  "Banner",
+  "Action",
+];
 
 export const tabItems: TabItem[] = [
   {

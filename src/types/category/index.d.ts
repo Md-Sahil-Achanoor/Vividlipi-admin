@@ -30,5 +30,5 @@ export interface CategoryState extends IStore {
   selectedCategory: CategoryResponse | null;
   selectedSubCategory: CategoryResponse | null;
   singleCategory: Pick<CategoryResponse, "title"> | null;
-  singleSubCategory: Pick<SubCategoryResponse, "title", "category"> | null;
+  singleSubCategory: Pick<SubCategoryResponse, "title" | "category"> | null;
 }
