@@ -212,8 +212,10 @@ const FileUpload = ({
           !isEdit && (
             <div>
               {!isUpload ? (
-                <span className="text-primary-main hover:underline">
-                  {values?.[name]?.name}
+                <span className="text-primary-main hover:underline flex-1 break-all">
+                  {typeof values?.[name] === "string"
+                    ? values?.[name]
+                    : values?.[name]?.name}
                 </span>
               ) : (
                 <a

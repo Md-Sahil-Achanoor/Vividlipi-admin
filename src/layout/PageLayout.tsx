@@ -1,9 +1,9 @@
+import config from "@/config/config";
 import React, { useEffect } from "react";
 import { BiPlus } from "react-icons/bi";
 import { twMerge } from "tailwind-merge";
 import { useAppDispatch } from "../app/store";
 import BreadcrumbItem from "../components/atoms/BreadCrumbItem";
-import { projectName } from "../constants";
 import { coreAction } from "../feature/core/coreSlice";
 import { BreadCrumbItem, ButtonType } from "../types";
 
@@ -29,8 +29,9 @@ const PageLayout = ({
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(coreAction.resetSort());
-    document.title = `${title} - ${projectName}`;
+    document.title = `${title} - ${config?.projectName}`;
   }, []);
+
   return (
     <div className="pt-[60px] md:pt-[90px] pb-[80px] px-[24px] container mx-auto h-full">
       <div className="flex item-center justify-between gap-2">

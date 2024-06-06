@@ -13,7 +13,7 @@ export const featureSliderSchema = Yup.object({
     }),
   redirectUrl: Yup.string().required("Redirect URL is Required"),
   contentpostionX: Yup.number().required("Position X is Required"),
-  contentpostionY: Yup.number().required("Position Y is Required"),
+  contentpositionY: Yup.number().required("Position Y is Required"),
   type: Yup.number(),
   typeid: Yup.number(),
 });
@@ -21,7 +21,6 @@ export const featureSliderSchema = Yup.object({
 export type IHomeFeatureSlider = Yup.InferType<typeof featureSliderSchema>;
 
 export const featureSubSliderSchema = Yup.object({
-  text: Yup.string().required("Name is Required"),
   file: Yup.mixed()
     .nullable()
     .test({
@@ -31,22 +30,17 @@ export const featureSubSliderSchema = Yup.object({
         return value !== null;
       },
     }),
-  redirectUrl: Yup.string().required("Redirect URL is Required"),
-  contentpostionX: Yup.number().required("Position X is Required"),
-  contentpostionY: Yup.number().required("Position Y is Required"),
-  type: Yup.number(),
-  typeid: Yup.number(),
 });
 
 export type IHomeFeatureSubSlider = Yup.InferType<
   typeof featureSubSliderSchema
 >;
 
-export const featureProducts = Yup.object({
+export const featureProductsSchema = Yup.object({
   productId: Yup.object()
     .shape({
       id: Yup.number(),
-      boot_title: Yup.string(),
+      book_title: Yup.string(),
     })
     .nullable()
     .test({
@@ -60,4 +54,4 @@ export const featureProducts = Yup.object({
   main: Yup.number().oneOf([0, 1], "Main must be 0 or 1"),
 });
 
-export type IHomeFeatureProduct = Yup.InferType<typeof featureProducts>;
+export type IHomeFeatureProduct = Yup.InferType<typeof featureProductsSchema>;

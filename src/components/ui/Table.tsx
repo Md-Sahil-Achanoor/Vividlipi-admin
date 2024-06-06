@@ -34,8 +34,8 @@ const Table: FC<TableT> = ({
           tableClass
         )}
       >
-        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+        <table className="w-full text-sm text-left">
+          <thead className="text-xs bg-table-background-gray">
             <tr>
               {isCheckbox && (
                 <th scope="col" className="p-4">

@@ -1,6 +1,6 @@
 import logo from "@/assets/Images/logo.png";
 import CustomInput from "@/components/form/CustomInput";
-import { projectName } from "@/constants/service";
+import config from "@/config/config";
 import { useSignInMutation } from "@/feature/auth/authQuery";
 import { ISignIn, signInSchema } from "@/models/auth/signup-validation";
 import { FormikSubmitOption } from "@/types";
@@ -34,7 +34,7 @@ const Login = () => {
   };
 
   useEffect(() => {
-    document.title = `Login | ${projectName}`;
+    document.title = `Login | ${config.projectName}`;
   }, []);
 
   return (

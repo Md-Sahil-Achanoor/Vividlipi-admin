@@ -114,24 +114,27 @@ const homeQuery = API.injectEndpoints({
           picid: id,
         },
       }),
+      invalidatesTags: ["HomeFeatureSlider"],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled;
+          // console.log(`\n\n result:`, result?.data, _arg.query, _arg.id);
           if (result?.data?.status === 1) {
+            toast.success(result?.data?.message || "Success");
+            // dispatch(
+            //   homeQuery.util.updateQueryData(
+            //     "getHomeFeatureSlider",
+            //     {
+            //       query: _arg.query,
+            //     },
+            //     (draft) => {
+            //       draft.data = draft?.data?.filter(
+            //         (item) => Number(item?.id) !== Number(_arg.id)
+            //       );
+            //     }
+            //   )
+            // );
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            dispatch(
-              homeQuery.util.updateQueryData(
-                "getHomeFeatureSlider",
-                {
-                  query: _arg.query,
-                },
-                (draft) => {
-                  draft.data = draft?.data?.filter(
-                    (item) => item?.id !== _arg.id
-                  );
-                }
-              )
-            );
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
           }
@@ -240,24 +243,26 @@ const homeQuery = API.injectEndpoints({
           picid: id,
         },
       }),
+      invalidatesTags: ["HomeFeatureSubSlider"],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled;
           if (result?.data?.status === 1) {
+            toast.success(result?.data?.message || "Success");
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            dispatch(
-              homeQuery.util.updateQueryData(
-                "getHomeFeatureSubSlider",
-                {
-                  query: _arg.query,
-                },
-                (draft) => {
-                  draft.data = draft?.data?.filter(
-                    (item) => item?.id !== _arg.id
-                  );
-                }
-              )
-            );
+            // dispatch(
+            //   homeQuery.util.updateQueryData(
+            //     "getHomeFeatureSubSlider",
+            //     {
+            //       query: _arg.query,
+            //     },
+            //     (draft) => {
+            //       draft.data = draft?.data?.filter(
+            //         (item) => item?.id !== _arg.id
+            //       );
+            //     }
+            //   )
+            // );
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
           }
@@ -366,27 +371,29 @@ const homeQuery = API.injectEndpoints({
         url: endpoints.delete_home_product,
         method: "DELETE",
         params: {
-          picid: id,
+          productId: id,
         },
       }),
+      invalidatesTags: ["HomeFeatureProducts"],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled;
           if (result?.data?.status === 1) {
+            toast.success(result?.data?.message || "Success");
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            dispatch(
-              homeQuery.util.updateQueryData(
-                "getHomeFeatureProducts",
-                {
-                  query: _arg.query,
-                },
-                (draft) => {
-                  draft.data = draft?.data?.filter(
-                    (item) => item?.id !== _arg.id
-                  );
-                }
-              )
-            );
+            // dispatch(
+            //   homeQuery.util.updateQueryData(
+            //     "getHomeFeatureProducts",
+            //     {
+            //       query: _arg.query,
+            //     },
+            //     (draft) => {
+            //       draft.data = draft?.data?.filter(
+            //         (item) => item?.id !== _arg.id
+            //       );
+            //     }
+            //   )
+            // );
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
           }

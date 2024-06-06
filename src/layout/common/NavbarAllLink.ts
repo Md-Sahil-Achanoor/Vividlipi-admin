@@ -1,3 +1,4 @@
+import { BiBookContent } from "react-icons/bi";
 import { FaUsersCog } from "react-icons/fa";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { MdLibraryBooks } from "react-icons/md";
@@ -14,7 +15,7 @@ const NavbarAllLink: MenuType[] = [
     title: "CMS",
     link: "/#",
     role: ["admin"],
-    icon: MdLibraryBooks,
+    icon: BiBookContent,
     list: [
       {
         title: "Home",

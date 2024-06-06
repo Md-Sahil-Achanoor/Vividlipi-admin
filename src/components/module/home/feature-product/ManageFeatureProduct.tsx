@@ -4,8 +4,9 @@ import InfiniteSelect from "@/components/form/InfiniteSelect";
 import Modal from "@/components/ui/Modal";
 import { coreAction } from "@/feature/core/coreSlice";
 import { useManageFeatureProductMutation } from "@/feature/home/homeQuery";
+import { homeAction } from "@/feature/home/homeSlice";
 import { useGetProductsQuery } from "@/feature/product/productQuery";
-import { IHomeFeatureProduct, featureSliderSchema } from "@/models/home";
+import { IHomeFeatureProduct, featureProductsSchema } from "@/models/home";
 import { ProductResponse } from "@/types";
 import { cn } from "@/utils/twmerge";
 import { Field, Form, Formik, FormikHelpers } from "formik";
@@ -28,13 +29,22 @@ const ManageFeatureProduct = () => {
     refetch: productRefetch,
     data: productList,
     isError: productIsError,
-    error: productErrorMessage,
-  } = useGetProductsQuery({});
-  console.log(
-    `\n\n ~ ManageFeatureProduct ~ productList:`,
-    productList,
-    productErrorMessage
+    // error: productErrorMessage,
+  } = useGetProductsQuery(
+    {
+      query: {
+        page: 1,
+      },
+    },
+    {
+      skip: !open || type !== "manage-feature-product",
+    }
   );
+  // console.log(
+  //   `\n\n ~ ManageFeatureProduct ~ productList:`,
+  //   productList,
+  //   productErrorMessage
+  // );
 
   useEffect(() => {
     if (open && type === "manage-feature-product") {
@@ -46,6 +56,7 @@ const ManageFeatureProduct = () => {
   const handleModal = (type: string) => {
     if (type === "cancelled") {
       // do nothing
+      dispatch(homeAction.resetHome());
       dispatch(coreAction.toggleModal({ open: false, type: "" }));
     }
   };
@@ -54,7 +65,7 @@ const ManageFeatureProduct = () => {
     values: IHomeFeatureProduct,
     { setSubmitting, resetForm }: FormikHelpers<IHomeFeatureProduct>
   ) => {
-    console.log("values", values);
+    // console.log("values", values);
     await manageFeatureProduct({
       id: selectedFeatureProduct?.id || "",
       data: {
@@ -92,13 +103,14 @@ const ManageFeatureProduct = () => {
     >
       <div className="w-full h-full">
         <Formik
-          initialValues={null || initialValues}
-          validationSchema={featureSliderSchema}
+          initialValues={selectedFeatureProduct || initialValues}
+          validationSchema={featureProductsSchema}
           onSubmit={onSubmit}
           enableReinitialize
         >
           {({ isSubmitting, setFieldValue, values }) => (
             <Form noValidate>
+              {/* {JSON.stringify(values?.productId)} */}
               <div className="mt-2">
                 <div className="grid grid-cols-2 gap-2">
                   <div className="col-span-2">
@@ -106,7 +118,7 @@ const ManageFeatureProduct = () => {
                       label={"Product"}
                       name="productId"
                       isRequired
-                      renderData={productList?.data || []}
+                      renderData={productList?.data?.data || []}
                       isLoading={productLoading}
                       isError={productIsError}
                       errorMessage={"Failed to fetch products"}
@@ -121,10 +133,10 @@ const ManageFeatureProduct = () => {
                           <span
                             className={cn(
                               "text-sm text-gray-700 truncate",
-                              values?.productId?.id && "uppercase"
+                              values?.productId?.book_title && "uppercase"
                             )}
                           >
-                            {values?.productId?.id || "Select Category"}
+                            {values?.productId?.book_title || "Select Category"}
                           </span>
                         );
                       }}
@@ -164,7 +176,7 @@ const ManageFeatureProduct = () => {
                 ) : (
                   <>
                     <span className="font-medium">
-                      {false ? "Update" : "Create"}
+                      {selectedFeatureProduct?.id ? "Update" : "Create"}
                     </span>
                     <span className="text-2xl ml-1">
                       <BsArrowRightShort />

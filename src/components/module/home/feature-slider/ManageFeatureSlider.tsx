@@ -4,9 +4,11 @@ import FileUpload from "@/components/form/FileUpload";
 import Modal from "@/components/ui/Modal";
 import { coreAction } from "@/feature/core/coreSlice";
 import { useManageFeatureSlideMutation } from "@/feature/home/homeQuery";
+import { homeAction } from "@/feature/home/homeSlice";
 import { IHomeFeatureSlider, featureSliderSchema } from "@/models/home";
 import { File } from "buffer";
-import { Field, Form, Formik, FormikHelpers } from "formik";
+import { Field, Form, Formik, FormikHelpers, FormikProps } from "formik";
+import { useRef } from "react";
 import { BsArrowRightShort } from "react-icons/bs";
 
 const initialValues: IHomeFeatureSlider = {
@@ -14,13 +16,14 @@ const initialValues: IHomeFeatureSlider = {
   file: null,
   redirectUrl: "",
   contentpostionX: 0,
-  contentpostionY: 0,
+  contentpositionY: 0,
   type: 1,
   typeid: 1,
 };
 
 const ManageFeatureSlider = () => {
   const { type, open } = useAppSelector((state) => state.core);
+  const formRef = useRef<FormikProps<IHomeFeatureSlider>>(null);
   const [manageFeatureSlide, { isLoading }] = useManageFeatureSlideMutation();
   const { selectedFeatureSlider } = useAppSelector((state) => state.home);
   const dispatch = useAppDispatch();
@@ -28,6 +31,8 @@ const ManageFeatureSlider = () => {
     if (type === "cancelled") {
       // do nothing
       dispatch(coreAction.toggleModal({ open: false, type: "" }));
+      dispatch(homeAction.resetHome());
+      formRef.current?.resetForm();
     }
   };
 
@@ -35,17 +40,17 @@ const ManageFeatureSlider = () => {
     values: IHomeFeatureSlider,
     { setSubmitting, resetForm }: FormikHelpers<IHomeFeatureSlider>
   ) => {
-    console.log("values", values);
-    setSubmitting(false);
+    // console.log("values", values);
+    // setSubmitting(false);
     const fd = new FormData();
     for (const key in values) {
-      fd.append(key, (values as any)[key] as string | Blob);
+      if (key !== "id") fd.append(key, (values as any)[key] as string | Blob);
     }
-    for (var pair of fd.entries()) {
-      console.log(pair);
-    }
+    // for (var pair of fd.entries()) {
+    //   console.log(pair);
+    // }
     await manageFeatureSlide({
-      id: "",
+      id: selectedFeatureSlider?.id,
       data: fd,
       options: {
         setSubmitting,
@@ -78,13 +83,15 @@ const ManageFeatureSlider = () => {
     >
       <div className="w-full h-full">
         <Formik
-          initialValues={null || initialValues}
+          initialValues={selectedFeatureSlider || initialValues}
           validationSchema={featureSliderSchema}
           onSubmit={onSubmit}
           enableReinitialize
+          innerRef={formRef}
         >
           {({ isSubmitting, setFieldValue }) => (
             <Form noValidate>
+              {/* {JSON.stringify(errors)} */}
               <div className="mt-2">
                 <div className="grid grid-cols-2 gap-2">
                   <div className="col-span-2">
@@ -127,7 +134,7 @@ const ManageFeatureSlider = () => {
                     placeholder="Enter position"
                   />
                   <Field
-                    name="contentpostionY"
+                    name="contentpositionY"
                     label="Content position Y"
                     component={CustomInput}
                     placeholder="Enter position"
@@ -160,7 +167,7 @@ const ManageFeatureSlider = () => {
                 ) : (
                   <>
                     <span className="font-medium">
-                      {false ? "Update" : "Create"}
+                      {selectedFeatureSlider?.id ? "Update" : "Create"}
                     </span>
                     <span className="text-2xl ml-1">
                       <BsArrowRightShort />

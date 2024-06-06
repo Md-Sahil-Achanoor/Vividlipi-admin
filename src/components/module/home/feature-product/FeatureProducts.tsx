@@ -7,6 +7,7 @@ import { coreAction } from "@/feature/core/coreSlice";
 import { useGetHomeFeatureProductsQuery } from "@/feature/home/homeQuery";
 import { homeAction } from "@/feature/home/homeSlice";
 import { cn } from "@/utils/twmerge";
+import { BiRupee } from "react-icons/bi";
 import ModuleHeader from "../ModuleHeader";
 
 // type FeatureProductsProps = {
@@ -27,7 +28,13 @@ const FeatureProducts = () => {
           open: true,
         })
       );
-      dispatch(homeAction.setSelectedFeatureProduct(item));
+      dispatch(
+        homeAction.setSelectedFeatureProduct({
+          id: item?.id,
+          main: item?.main,
+          productId: item?.productDetails,
+        })
+      );
     } else {
       dispatch(
         coreAction.toggleModal({
@@ -37,6 +44,7 @@ const FeatureProducts = () => {
       );
     }
   };
+
   return (
     <div>
       <ModuleHeader
@@ -45,38 +53,32 @@ const FeatureProducts = () => {
       />
       <Table headList={featureProductHeader}>
         {isLoading ? (
-          <SkeletonTable total={6} tableCount={4} />
-        ) : data?.data && data?.data?.length > 0 ? (
-          data?.data?.map((item, index) => (
+          <SkeletonTable total={6} tableCount={5} />
+        ) : data?.list && data?.list?.length > 0 ? (
+          data?.list?.map((item, index) => (
             <tr className="table_tr" key={item?.id}>
               <td className="table_td">{index + 1}</td>
-              <td className="table_td">{item?.text}</td>
+              <td className="table_td">{item?.productDetails?.book_title}</td>
+              <td className="table_td">{item?.productDetails?.author_name}</td>
               <td className="table_td">
-                <img
-                  src={item?.imageurl}
-                  alt={item?.text}
-                  className="w-10 h-10 object-cover rounded-full"
-                />
-              </td>
-              <td className="table_td">
-                <div className="flex items-center gap-2">
-                  <span>X: {item?.contentpostionX}</span>
-                  <span>Y: {item?.contentpostionY}</span>
+                <div className="flex items-center gap-1">
+                  <BiRupee />
+                  <span>{item?.productDetails?.price}</span>
                 </div>
               </td>
               <td className="table_td">
                 <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => handleModal("manage-feature-slider", item)}
+                  {/* <button
+                    onClick={() => handleModal("manage-feature-product", item)}
                     className={cn(
                       "font-medium hover:underline",
                       "text-blue-600 dark:text-blue-500"
                     )}
                   >
                     Edit
-                  </button>
+                  </button> */}
                   <button
-                    onClick={() => handleModal("delete-feature-slider", item)}
+                    onClick={() => handleModal("delete-feature-product", item)}
                     className={cn(
                       "font-medium hover:underline",
                       "text-red-600 dark:text-red-500"

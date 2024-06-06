@@ -24,7 +24,7 @@ const TableWrapper = ({
   const dispatch = useAppDispatch();
   const { sortType, selectedStatus } = useAppSelector((state) => state.core);
   return (
-    <Card className="py-1 shadow-none">
+    <Card className="h-max py-5">
       <div className="flex justify-end mb-2 w-full gap-2">
         {/* ASC/DESC Select */}
         {isSort && (

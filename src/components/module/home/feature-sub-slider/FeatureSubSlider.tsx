@@ -1,4 +1,5 @@
 import { useAppDispatch } from "@/app/store";
+import PlaceholderImage from "@/assets/svg/placeholder";
 import NoTableData from "@/components/atoms/NoTableData";
 import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
 import Table from "@/components/ui/Table";
@@ -6,18 +7,15 @@ import { featureSubSliderHeader } from "@/constants/tableHeader";
 import { coreAction } from "@/feature/core/coreSlice";
 import { useGetHomeFeatureSubSliderQuery } from "@/feature/home/homeQuery";
 import { homeAction } from "@/feature/home/homeSlice";
+import { FeatureSubSliderResponse } from "@/types";
 import { cn } from "@/utils/twmerge";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import ModuleHeader from "../ModuleHeader";
-
-// type FeatureSubSliderProps = {
-//   data: FeatureSubSliderResponse[];
-//   isLoading: boolean;
-// };
 
 const FeatureSubSlider = () => {
   const { data, isLoading } = useGetHomeFeatureSubSliderQuery({});
   const dispatch = useAppDispatch();
-  const handleModal = (type: string, item?: any) => {
+  const handleModal = (type: string, item?: FeatureSubSliderResponse) => {
     if (type === "cancelled") {
       dispatch(coreAction.toggleModal({ type: "", open: false }));
     } else if (item) {
@@ -27,7 +25,7 @@ const FeatureSubSlider = () => {
           open: true,
         })
       );
-      dispatch(homeAction.setSelectedFeatureSubSlider(item));
+      dispatch(homeAction.setSelectedFeatureSubSlider({ ...item }));
     } else {
       dispatch(
         coreAction.toggleModal({
@@ -46,18 +44,26 @@ const FeatureSubSlider = () => {
       />
       <Table headList={featureSubSliderHeader}>
         {isLoading ? (
-          <SkeletonTable total={6} tableCount={4} />
+          <SkeletonTable total={6} tableCount={3} />
         ) : data?.data && data?.data?.length > 0 ? (
           data?.data?.map((item, index) => (
             <tr className="table_tr" key={item?.id}>
               <td className="table_td">{index + 1}</td>
-              <td className="table_td">{item?.text}</td>
               <td className="table_td">
-                <img
-                  src={item?.imageurl}
-                  alt={item?.text}
+                <LazyLoadImage
+                  src={item?.image as string}
+                  alt={item?.image}
+                  placeholder={<PlaceholderImage />}
+                  effect="blur"
+                  width={40}
+                  height={40}
                   className="w-10 h-10 object-cover rounded-full"
                 />
+                {/* <img
+                  src={item?.image as string}
+                  alt={item?.image as string}
+                  className="w-10 h-10 object-cover rounded-full"
+                /> */}
               </td>
               <td className="table_td">
                 <div className="flex items-center gap-3">

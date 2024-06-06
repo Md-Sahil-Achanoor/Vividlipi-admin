@@ -83,6 +83,7 @@ const ProductList = () => {
       })
     );
   };
+  // const totalPage = data?.data?.last_page || 1;
   const productList = data?.data?.data || [];
 
   return (

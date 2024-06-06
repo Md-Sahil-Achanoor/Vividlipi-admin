@@ -1,51 +1,49 @@
 import { useAppDispatch, useAppSelector } from "@/app/store";
-import CustomInput from "@/components/form/CustomInput";
 import FileUpload from "@/components/form/FileUpload";
 import Modal from "@/components/ui/Modal";
 import { coreAction } from "@/feature/core/coreSlice";
-import { useManageFeatureSlideMutation } from "@/feature/home/homeQuery";
-import { IHomeFeatureSlider, featureSliderSchema } from "@/models/home";
+import { useManageFeatureSubSlideMutation } from "@/feature/home/homeQuery";
+import { homeAction } from "@/feature/home/homeSlice";
+import { IHomeFeatureSubSlider, featureSubSliderSchema } from "@/models/home";
 import { File } from "buffer";
-import { Field, Form, Formik, FormikHelpers } from "formik";
+import { Field, Form, Formik, FormikHelpers, FormikProps } from "formik";
+import { useRef } from "react";
 import { BsArrowRightShort } from "react-icons/bs";
 
-const initialValues: IHomeFeatureSlider = {
-  text: "",
+const initialValues: IHomeFeatureSubSlider = {
   file: null,
-  redirectUrl: "",
-  contentpostionX: 0,
-  contentpostionY: 0,
-  type: 1,
-  typeid: 1,
 };
 
 const ManageFeatureSubSlider = () => {
   const { type, open } = useAppSelector((state) => state.core);
+  const formRef = useRef<FormikProps<IHomeFeatureSubSlider>>(null);
   const { selectedFeatureSubSlider } = useAppSelector((state) => state.home);
-  const [manageFeatureSlide, { isLoading }] = useManageFeatureSlideMutation();
+  const [manageFeatureSubSlide, { isLoading }] =
+    useManageFeatureSubSlideMutation();
   const dispatch = useAppDispatch();
   const handleModal = (type: string) => {
     if (type === "cancelled") {
       // do nothing
+      dispatch(homeAction.resetHome());
       dispatch(coreAction.toggleModal({ open: false, type: "" }));
     }
   };
 
   const onSubmit = async (
-    values: IHomeFeatureSlider,
-    { setSubmitting, resetForm }: FormikHelpers<IHomeFeatureSlider>
+    values: IHomeFeatureSubSlider,
+    { setSubmitting, resetForm }: FormikHelpers<IHomeFeatureSubSlider>
   ) => {
-    console.log("values", values);
-    setSubmitting(false);
+    // console.log("values", values);
+    // setSubmitting(false);
     const fd = new FormData();
     for (const key in values) {
       fd.append(key, (values as any)[key] as string | Blob);
     }
-    for (var pair of fd.entries()) {
-      console.log(pair);
-    }
-    await manageFeatureSlide({
-      id: "",
+    // for (var pair of fd.entries()) {
+    //   console.log(pair);
+    // }
+    await manageFeatureSubSlide({
+      id: selectedFeatureSubSlider?.id,
       data: fd,
       options: {
         setSubmitting,
@@ -79,30 +77,15 @@ const ManageFeatureSubSlider = () => {
       <div className="w-full h-full">
         <Formik
           initialValues={null || initialValues}
-          validationSchema={featureSliderSchema}
+          validationSchema={featureSubSliderSchema}
           onSubmit={onSubmit}
           enableReinitialize
+          innerRef={formRef}
         >
           {({ isSubmitting, setFieldValue }) => (
             <Form noValidate>
               <div className="mt-2">
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="col-span-2">
-                    <Field
-                      name="text"
-                      label="Text"
-                      component={CustomInput}
-                      placeholder="Text"
-                    />
-                  </div>
-                  <div className="col-span-2">
-                    <Field
-                      name="redirectUrl"
-                      label="Redirect Url"
-                      component={CustomInput}
-                      placeholder="Enter Url"
-                    />
-                  </div>
                   <div className="col-span-2">
                     <Field
                       name="file"
@@ -120,30 +103,6 @@ const ManageFeatureSubSlider = () => {
                       placeholder="Image"
                     />
                   </div>
-                  <Field
-                    name="contentpostionX"
-                    label="Content Position X"
-                    component={CustomInput}
-                    placeholder="Enter position"
-                  />
-                  <Field
-                    name="contentpostionY"
-                    label="Content position Y"
-                    component={CustomInput}
-                    placeholder="Enter position"
-                  />
-                  {/* <Field
-                    name="type"
-                    label="Type"
-                    component={CustomInput}
-                    placeholder="Type"
-                  />
-                  <Field
-                    name="typeid"
-                    label="Typeid"
-                    component={CustomInput}
-                    placeholder="Typeid"
-                  /> */}
                 </div>
               </div>
               {/* <div className="flex"> */}

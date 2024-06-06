@@ -115,7 +115,7 @@ body {
   }
 
   .table_tr {
-    @apply h-max bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 even:bg-gray-100;
+    @apply h-max bg-white border-b;
   }
 
   .table_td {

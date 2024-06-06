@@ -46,6 +46,7 @@ export interface ListResponse<T> {
 
 export interface ApiResponse<T> {
   data: T;
+  list: T;
   profile?: T;
   error?: never;
   count: number;

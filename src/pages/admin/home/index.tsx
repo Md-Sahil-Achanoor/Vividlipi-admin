@@ -15,6 +15,7 @@ import {
   useDeleteFeatureSlideMutation,
   useDeleteFeatureSubSlideMutation,
 } from "@/feature/home/homeQuery";
+import { homeAction } from "@/feature/home/homeSlice";
 import PageLayout from "@/layout/PageLayout";
 import { checkType, getModuleName, getTitle } from "@/utils/modules/home";
 import { useState } from "react";
@@ -22,9 +23,12 @@ import { useState } from "react";
 const HomePage = () => {
   const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = useState<string>("feature-slider");
-
   const { type } = useAppSelector((state) => state.core);
-  const { selectedFeatureSlider } = useAppSelector((state) => state.home);
+  const {
+    selectedFeatureSlider,
+    selectedFeatureSubSlider,
+    selectedFeatureProduct,
+  } = useAppSelector((state) => state.home);
 
   const [deleteFeatureSlider, { isLoading: isDeleteCategory }] =
     useDeleteFeatureSlideMutation();
@@ -46,10 +50,17 @@ const HomePage = () => {
 
   const handleModal = (type: string) => {
     if (type === "cancelled") {
+      dispatch(homeAction.resetHome());
       dispatch(coreAction.toggleModal({ type: "", open: false }));
     }
   };
 
+  console.log(
+    `\n\n ~ HomePage ~ selectedFeatureSlider, selectedFeatureSubSlider:`,
+    selectedFeatureSlider,
+    selectedFeatureSubSlider,
+    selectedFeatureProduct
+  );
   const handleUpdateStatus = async () => {
     if (type === "delete-feature-slider") {
       await deleteFeatureSlider({
@@ -63,7 +74,7 @@ const HomePage = () => {
       });
     } else {
       await deleteFeatureProduct({
-        id: selectedFeatureSlider?.id,
+        id: selectedFeatureProduct?.id,
         query: {},
       });
     }
@@ -91,10 +102,19 @@ const HomePage = () => {
         isModalHeader
         outSideClick
         headText={`Delete the ${getModuleName(type)}?`}
-        heading={getTitle(type, selectedFeatureSlider)}
+        heading={getTitle(
+          type,
+          selectedFeatureSlider ||
+            selectedFeatureSubSlider ||
+            selectedFeatureProduct
+        )}
         details={`Are you certain you want to delete?`}
         type={"delete"}
-        buttonText={isDeleteCategory ? "Deleting..." : "Delete"}
+        buttonText={
+          isDeleteCategory || isDeleteSubCategory || isDeleteProduct
+            ? "Deleting..."
+            : "Delete"
+        }
         buttonProps={{
           onClick: handleUpdateStatus,
           disabled: isDeleteCategory || isDeleteSubCategory || isDeleteProduct,

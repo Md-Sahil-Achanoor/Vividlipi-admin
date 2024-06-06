@@ -1,8 +1,8 @@
+import config from "@/config/config";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-import { baseURL } from "../constants";
 
 export const instance = axios.create({
-  baseURL: baseURL,
+  baseURL: config.baseURL,
 });
 
 instance.interceptors.request.use(

@@ -1,6 +1,6 @@
+import config from "@/config/config";
 import React from "react";
 import { useAppSelector } from "../../app/store";
-import { projectName } from "../../constants";
 import { cn } from "../../utils/twmerge";
 
 const Footer = () => {
@@ -17,7 +17,7 @@ const Footer = () => {
         <div className="grid grid-cols-12 items-center">
           <div className="col-span-6">
             <span className="text-xs sm:text-sm">
-              {new Date().getFullYear()} © Copyright {projectName}.
+              {new Date().getFullYear()} © Copyright {config?.projectName}.
             </span>
           </div>
           <div className="col-span-6">
