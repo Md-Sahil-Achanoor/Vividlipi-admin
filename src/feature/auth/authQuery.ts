@@ -1,5 +1,5 @@
 import API from "@/app/services/api";
-import { endpoints } from "@/constants/api/endpoints";
+import { endpoints } from "@/constants/endpoints";
 import { ISignIn } from "@/models/auth/signup-validation";
 import { ManagePayload } from "@/types";
 import type { AuthResponse } from "@/types/auth";
@@ -28,7 +28,7 @@ const authQuery = API.injectEndpoints({
         try {
           const result = await queryFulfilled;
           const res = result.data;
-          console.log(res);
+          // console.log(res);
           if (res?.status === 1) {
             dispatch(authAction.loginSuccess(res));
             localStorage.setItem("user", JSON.stringify(res));

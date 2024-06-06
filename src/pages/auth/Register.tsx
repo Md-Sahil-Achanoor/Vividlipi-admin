@@ -1,6 +1,6 @@
 import CheckboxGroup from "@/components/form/CheckboxGroup";
 import CustomInput from "@/components/form/CustomInput";
-import { projectName } from "@/constants/service";
+import config from "@/config/config";
 import { operatorSignUpSchema } from "@/models/auth/signup-validation";
 import { FormikSubmitOption } from "@/types";
 import { Field, Form, Formik } from "formik";
@@ -56,7 +56,7 @@ const Register = () => {
   };
 
   useEffect(() => {
-    document.title = `Register | ${projectName}`;
+    document.title = `Register | ${config.projectName}`;
   }, []);
 
   return (

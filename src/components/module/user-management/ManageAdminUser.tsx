@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/app/store";
-import CustomModal from "@/components/elements/common/CustomModal";
 import CustomInput from "@/components/form/CustomInput";
 import InfiniteSelect from "@/components/form/InfiniteSelect";
+import Modal from "@/components/ui/Modal";
 import { coreAction } from "@/feature/core/coreSlice";
 import {
   useGetRolePermissionsQuery,
@@ -70,7 +70,7 @@ const ManageAdminUser = () => {
     refetch: adminUserRefetch,
     data: adminUserList,
     isError: adminUserIsError,
-    error: adminUserErrorMessage,
+    // error: adminUserErrorMessage,
   } = useGetRolePermissionsQuery(
     {
       query: {},
@@ -87,7 +87,7 @@ const ManageAdminUser = () => {
   }, [open]);
 
   return (
-    <CustomModal
+    <Modal
       classes={
         type === "manage-admin-user" && open
           ? {
@@ -124,7 +124,8 @@ const ManageAdminUser = () => {
                     renderData={adminUserList?.data}
                     isLoading={adminUserLoading}
                     isError={adminUserIsError}
-                    errorMessage={adminUserErrorMessage}
+                    // errorMessage={adminUserErrorMessage}
+                    errorMessage={"Failed to fetch roles"}
                     renderItem={(item: RolePermissionResponse) => (
                       <span className="uppercase">{item?.Title}</span>
                     )}
@@ -211,7 +212,7 @@ const ManageAdminUser = () => {
           )}
         </Formik>
       </div>
-    </CustomModal>
+    </Modal>
   );
 };
 

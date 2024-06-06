@@ -1,16 +1,9 @@
 import {
   AssetPayload,
-  AssetResponse,
-  BrandResponse,
   EmployeePayload,
-  EmployeeResponse,
-  OperatorResponse,
-  PosResponse,
+  FeatureSliderResponse,
   PostBulkPayload,
-  RouteResponse,
   StagePayload,
-  StageResponse,
-  VendorResponse,
 } from "..";
 
 export interface CommonState {
@@ -35,19 +28,4 @@ export interface BulkUploadQuery {
   type?: string;
 }
 
-export interface GlobalSearchResponse {
-  Employees: EmployeeResponse[];
-  Assets: AssetResponse[];
-  Stages: StageResponse[];
-  Route: RouteResponse[];
-  Operator: OperatorResponse[];
-  EventManager: EmployeeResponse[];
-  AdPartner: [];
-  Vendors: VendorResponse[];
-  Brands: BrandResponse[];
-  POS: PosResponse[];
-}
-
-export interface GlobalSearchPayload {
-  Keyword: string;
-}
+export type TabItemData = Partial<FeatureSliderResponse>;

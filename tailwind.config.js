@@ -5,6 +5,9 @@ export default {
   darkMode: "class",
   theme: {
     extend: {
+      boxShadow: {
+        card: "0 .75rem 1.5rem rgba(18, 38, 63, .03)",
+      },
       colors: {
         "table-background-gray": "rgba(var(--table-background-gray), 1)",
         custom: {
@@ -21,6 +24,7 @@ export default {
           light: "#EEF2FF",
         },
         bg: {
+          body: "var(--bg-body)",
           gray: "#F5F5F5",
           danger: "#EF4444",
           transparent: "#1212120D",

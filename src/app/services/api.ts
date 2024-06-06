@@ -1,8 +1,8 @@
+import config from "@/config/config";
 import type { Middleware } from "@reduxjs/toolkit";
 import { isRejectedWithValue } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import toast from "react-hot-toast";
-import { baseURL } from "../../constants/service";
 import { RootState } from "../store";
 
 /**
@@ -25,7 +25,7 @@ export const rtkQueryErrorLogger: Middleware = () => (next) => (action) => {
 
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
-  baseUrl: baseURL,
+  baseUrl: config.baseURL,
   prepareHeaders: (headers, { getState }) => {
     // By default, if we have a token in the store, let's use that for authenticated requests
     const store = getState() as RootState;
@@ -69,6 +69,9 @@ const API = createApi({
     "AdminUsers",
     "RoleList",
     "Publisher",
+    "HomeFeatureSlider",
+    "HomeFeatureSubSlider",
+    "HomeFeatureProducts",
   ],
   /**
    * This api has endpoints injected in adjacent files,

@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/app/store";
-import CustomModal from "@/components/elements/common/CustomModal";
 import CustomInput from "@/components/form/CustomInput";
 import InfiniteSelect from "@/components/form/InfiniteSelect";
+import Modal from "@/components/ui/Modal";
 import {
   useGetCategoriesQuery,
   useManageSubCategoryMutation,
@@ -56,7 +56,7 @@ const ManageSubCategory = () => {
     refetch: categoryRefetch,
     data: categoryList,
     isError: categoryIsError,
-    error: categoryErrorMessage,
+    // error: categoryErrorMessage,
   } = useGetCategoriesQuery(
     {
       conditions: {
@@ -75,7 +75,7 @@ const ManageSubCategory = () => {
   }, [open]);
 
   return (
-    <CustomModal
+    <Modal
       classes={
         type === "manage-sub-category" && open
           ? {
@@ -114,7 +114,7 @@ const ManageSubCategory = () => {
                     renderData={categoryList?.data}
                     isLoading={categoryLoading}
                     isError={categoryIsError}
-                    errorMessage={categoryErrorMessage}
+                    errorMessage={"Failed to fetch categories"}
                     renderItem={(item: CategoryResponse) => (
                       <span className="uppercase">{item?.title}</span>
                     )}
@@ -181,7 +181,7 @@ const ManageSubCategory = () => {
           )}
         </Formik>
       </div>
-    </CustomModal>
+    </Modal>
   );
 };
 

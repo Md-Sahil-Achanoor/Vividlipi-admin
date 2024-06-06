@@ -11,6 +11,9 @@ export interface CategoryQuery extends ReqQuery {
   cat1: number;
 }
 
+/**
+ * @module SubCategory { ISubCategory } @public
+ */
 export interface ISubCategory<T> extends IManageCategory {
   category: T | null;
 }
@@ -27,5 +30,5 @@ export interface CategoryState extends IStore {
   selectedCategory: CategoryResponse | null;
   selectedSubCategory: CategoryResponse | null;
   singleCategory: Pick<CategoryResponse, "title"> | null;
-  singleSubCategory: Pick<SubCategoryResponse, "title", "category"> | null;
+  singleSubCategory: Pick<SubCategoryResponse, "title" | "category"> | null;
 }

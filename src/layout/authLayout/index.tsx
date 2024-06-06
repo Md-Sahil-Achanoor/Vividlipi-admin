@@ -1,3 +1,4 @@
+import { cn } from "@/utils/twmerge";
 import React, { PropsWithChildren, useLayoutEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import { changeSidebarType } from "../../feature/layout/layoutSlice";
@@ -82,7 +83,7 @@ const AuthLayout = ({ children }: Props) => {
       <Header />
       {layout.isMobile ? (
         <div
-          className={`${
+          className={`bg-[#fff] ${
             layout.showMenu
               ? "fixed w-full h-screen top-[70px] z-[999999999]"
               : "w-auto"
@@ -95,7 +96,7 @@ const AuthLayout = ({ children }: Props) => {
             />
           )}
           <div
-            className={`fixed top-0 left-0 z-40 h-screen overflow-y-auto transition-all bg-white ${
+            className={`fixed top-0 left-0 z-40 h-screen overflow-y-auto transition-all  ${
               layout.showMenu ? "transform-none w-60 p-4" : "-translate-x-full"
             }`}
           >
@@ -112,7 +113,8 @@ const AuthLayout = ({ children }: Props) => {
         />
       )}
       <div
-        className={
+        className={cn(
+          "h-full !bg-bg-body",
           !layout.isMobile
             ? `${
                 layout?.leftSideBarType === "condensed"
@@ -120,7 +122,7 @@ const AuthLayout = ({ children }: Props) => {
                   : "ml-[250px]"
               } transition-all`
             : ""
-        }
+        )}
       >
         {children}
       </div>

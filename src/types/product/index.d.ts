@@ -49,7 +49,7 @@ export type BulkProduct = Omit<IBulkProduct, "translator_name"> & {
 
 export interface ProductResponse
   extends IProduct<CategoryResponse, PublisherResponse> {
-  id: string;
+  id: string | number;
   createdAt: string;
   isDeleted: Number;
 }

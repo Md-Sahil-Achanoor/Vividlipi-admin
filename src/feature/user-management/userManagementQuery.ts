@@ -1,5 +1,5 @@
 import API from "@/app/services/api";
-import { endpoints } from "@/constants/api/endpoints";
+import { endpoints } from "@/constants/endpoints";
 import { coreAction } from "@/feature/core/coreSlice";
 import {
   ApiResponse,

@@ -2,7 +2,7 @@ import { cn } from "@/utils/twmerge";
 import { ErrorMessage } from "formik";
 import React from "react";
 import { FaRegQuestionCircle } from "react-icons/fa";
-import Quill from "../elements/editor/Quill";
+import Quill from "../ui/Quill";
 import TextError from "./TextError";
 
 const QuillComponent = ({

@@ -1,4 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
+import HomePage from "@/pages/admin/home";
 import { lazy } from "react";
 import { Navigate, createBrowserRouter } from "react-router-dom";
 
@@ -19,7 +20,6 @@ const SubCategoryList = lazy(() => import("../pages/admin/sub-category"));
 const NonAuth = lazy(() => import("../layout/NonAuth"));
 const Home = lazy(() => import("../pages/Home"));
 const Login = lazy(() => import("../pages/auth/Login"));
-// const Register = lazy(() => import("../pages/auth/Register"));
 const AppWrapper = lazy(() => import("./middleware/AppWrapper"));
 const PrivateOutlet = lazy(() => import("./middleware/PrivateOutlet"));
 
@@ -56,19 +56,48 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { path: "", element: <Navigate to="/admin/dashboard" /> },
+
+      /**
+       * @Sub Module { Dashboard }
+       * @Role Admin
+       * */
       {
         path: "dashboard",
         element: <AdminDashboard />,
       },
+      /**
+       * @Sub Module { CMS }
+       * @Role Admin
+       * */
+      {
+        path: "cms",
+        element: <AppWrapper />,
+        children: [
+          { path: "", element: <Navigate to={"/admin/cms/home-page"} /> },
+          { path: "home-page", element: <HomePage /> },
+        ],
+      },
+      /**
+       * @Sub Module { Products }
+       * @Role Admin
+       * */
       {
         path: "products",
         element: <AppWrapper />,
         children: [
+          {
+            path: "",
+            element: <Navigate to={"/admin/products/product-list"} />,
+          },
           { path: "product-list", element: <ProductList /> },
           { path: "product-list/add-product", element: <ManageProduct /> },
           { path: "product-list/edit-product/:id", element: <ManageProduct /> },
         ],
       },
+      /**
+       * @Sub Module { Categories }
+       * @Role Admin
+       * */
       {
         path: "categories",
         element: <AppWrapper />,
@@ -78,6 +107,10 @@ const router = createBrowserRouter([
           // { path: "edit/:id", element: <EditProduct /> },
         ],
       },
+      /**
+       * @Sub Module { Publisher }
+       * @Role Admin
+       * */
       {
         path: "publisher",
         element: <AppWrapper />,
@@ -86,6 +119,10 @@ const router = createBrowserRouter([
           // { path: "edit/:id", element: <EditProduct /> },
         ],
       },
+      /**
+       * @Sub Module { User Management }
+       * @Role Admin
+       * */
       {
         path: "user-management",
         element: <AppWrapper />,

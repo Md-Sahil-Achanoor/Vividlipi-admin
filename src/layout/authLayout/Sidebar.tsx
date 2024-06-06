@@ -1,3 +1,4 @@
+import Logo from "@/components/atoms/Logo";
 import { useCallback, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { useAppSelector } from "../../app/store";
@@ -28,11 +29,19 @@ const Sidebar = ({
   return (
     <div
       className={cn(
-        `fixed left-0 top-0 w-auto md:w-[250px] bg-[#f6f6f6] shadow transition-all duration-300`,
+        `fixed left-0 top-0 w-auto md:w-[250px] bg-white transition-all duration-300 z-[1002]`,
         collapsed ? "w-[70px] md:w-[70px]" : "w-60",
-        isMobile ? "h-full" : "h-[calc(100vh-4rem)] mt-16"
+        isMobile ? "h-full" : "h-[calc(100vh)]"
       )}
     >
+      <div
+        className={cn(
+          "h-16 w-[70px] md:w-[250px] bg-white text-black flex items-center justify-center",
+          collapsed ? "md:w-[70px]" : "md:w-[250px]"
+        )}
+      >
+        <Logo />
+      </div>
       <div>
         <div className="px-5 py-3 text-xs uppercase relative">
           Menu

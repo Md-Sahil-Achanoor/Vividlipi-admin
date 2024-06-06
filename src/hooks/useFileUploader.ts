@@ -2,7 +2,7 @@ import { useField } from "formik";
 import { useRef } from "react";
 import toast from "react-hot-toast";
 import { useAppSelector } from "../app/store";
-import { endpoints } from "../constants/api/endpoints";
+import { endpoints } from "../constants/endpoints";
 import { useUploadMutation } from "../feature/common/commonQuery";
 
 interface Props {

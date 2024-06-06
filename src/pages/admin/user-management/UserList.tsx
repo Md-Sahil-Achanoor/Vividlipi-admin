@@ -1,10 +1,10 @@
 import { useAppDispatch, useAppSelector } from "@/app/store";
 import NoTableData from "@/components/atoms/NoTableData";
 import TableWrapper from "@/components/elements/common/TableWrapper";
-import CustomTable from "@/components/elements/common/custom-table/CustomTable";
 import ManageModule from "@/components/elements/modal/ManageModule";
 import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
 import ManageAdminUser from "@/components/module/user-management/ManageAdminUser";
+import Table from "@/components/ui/Table";
 import { coreAction } from "@/feature/core/coreSlice";
 import {
   useDeleteAdminUserMutation,
@@ -127,7 +127,7 @@ const UserList = () => {
       >
         {/* <Card className="p-3 border-0 shadow-md"> */}
         <TableWrapper isActiveInactive={false} isSort={false}>
-          <CustomTable headList={tableHead}>
+          <Table headList={tableHead}>
             {isLoading ? (
               <SkeletonTable total={6} tableCount={5} />
             ) : data?.data &&
@@ -168,7 +168,7 @@ const UserList = () => {
                 <span className="font-medium">{"No data found!"}</span>
               </NoTableData>
             )}
-          </CustomTable>
+          </Table>
         </TableWrapper>
         {/* </Card> */}
       </PageLayout>

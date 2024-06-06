@@ -4,6 +4,7 @@ import authSlice from "./auth/authSlice";
 import categorySlice from "./category/categorySlice";
 import commonSlice from "./common/commonSlice";
 import coreSlice from "./core/coreSlice";
+import homeSlice from "./home/homeSlice";
 import layoutSlice from "./layout/layoutSlice";
 import productSlice from "./product/productSlice";
 import publisherSlice from "./publisher/publisherSlice";
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   product: productSlice,
   userManagement: userManagementSlice,
   publisher: publisherSlice,
+  home: homeSlice,
   [API.reducerPath]: API.reducer,
 });
 

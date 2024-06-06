@@ -1,7 +1,7 @@
 import API from "@/app/services/api";
 import { useAppDispatch, useAppSelector } from "@/app/store";
 import logo from "@/assets/Images/male.png";
-import Dropdown from "@/components/elements/common/Dropdown";
+import Dropdown from "@/components/ui/Dropdown";
 import { authAction } from "@/feature/auth/authSlice";
 import { ResponseUser } from "@/types";
 import React from "react";
