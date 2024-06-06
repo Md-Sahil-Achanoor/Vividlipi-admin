@@ -1,14 +1,8 @@
 import { AxiosProgressEvent } from "axios";
 import toast from "react-hot-toast";
 import API from "../../app/services/api";
-import { endpoints } from "../../constants/endpoints";
 import { ManagePayload } from "../../types";
-import {
-  BulkUploadQuery,
-  GlobalSearchPayload,
-  GlobalSearchResponse,
-  bulkUploadPayload,
-} from "../../types/common/common";
+import { BulkUploadQuery, bulkUploadPayload } from "../../types/common/common";
 import { POST } from "../../utils/axios.config";
 import { coreAction } from "../core/coreSlice";
 import { commonAction } from "./commonSlice";
@@ -100,29 +94,29 @@ const commonQuery = API.injectEndpoints({
     }),
 
     // global search
-    globalSearch: builder.query<
-      GlobalSearchResponse,
-      ManagePayload<GlobalSearchPayload>
-    >({
-      query: ({ data }) => ({
-        url: endpoints.login,
-        method: "POST",
-        body: data,
-      }),
-      async onQueryStarted(_, { queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          // const data = response?.data?.data;
-          // dispatch(commonAction.setGlobalSearch(data));
-        } catch (err: unknown) {
-          // do nothing
-          const error = err as any;
-          const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
-        }
-      },
-    }),
+    // globalSearch: builder.query<
+    //   GlobalSearchResponse,
+    //   ManagePayload<GlobalSearchPayload>
+    // >({
+    //   query: ({ data }) => ({
+    //     url: endpoints.login,
+    //     method: "POST",
+    //     body: data,
+    //   }),
+    //   async onQueryStarted(_, { queryFulfilled }) {
+    //     try {
+    //       await queryFulfilled;
+    //       // const data = response?.data?.data;
+    //       // dispatch(commonAction.setGlobalSearch(data));
+    //     } catch (err: unknown) {
+    //       // do nothing
+    //       const error = err as any;
+    //       const message =
+    //         error?.response?.data?.message || "Something went wrong!";
+    //       toast.error(message);
+    //     }
+    //   },
+    // }),
   }),
 });
 
@@ -130,6 +124,5 @@ export const {
   useUploadImageMutation,
   useUploadMutation,
   useBulkUploadMutation,
-  useGlobalSearchQuery,
 } = commonQuery;
 export default commonQuery;
