@@ -1,27 +1,24 @@
 import { useAppDispatch } from "@/app/store";
+import PlaceholderImage from "@/assets/svg/placeholder";
 import NoTableData from "@/components/atoms/NoTableData";
 import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
 import Table from "@/components/ui/Table";
-import { featureProductHeader } from "@/constants/tableHeader";
+import { featureSubSliderHeader } from "@/constants/tableHeader";
 import { coreAction } from "@/feature/core/coreSlice";
-import { useGetHomeFeatureProductsQuery } from "@/feature/home/homeQuery";
+import { useGetHomeFeatureSubSliderQuery } from "@/feature/home/homeQuery";
 import { homeAction } from "@/feature/home/homeSlice";
+import { FeatureSubSliderResponse } from "@/types";
 import { cn } from "@/utils/twmerge";
-import { BiRupee } from "react-icons/bi";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import ModuleHeader from "../ModuleHeader";
 
-// type FeatureProductsProps = {
-//   data: FeatureProductResponse[];
-//   isLoading: boolean;
-// };
-
-const FeatureProducts = () => {
-  const { data, isLoading,isFetching } = useGetHomeFeatureProductsQuery({});
+const FeatureNewIn = () => {
+  const { data, isLoading } = useGetHomeFeatureSubSliderQuery({});
   const dispatch = useAppDispatch();
-  const handleModal = (type: string, item?: any) => {
+  const handleModal = (type: string, item?: FeatureSubSliderResponse) => {
     if (type === "cancelled") {
-      dispatch(homeAction.resetHome());
       dispatch(coreAction.toggleModal({ type: "", open: false }));
+      dispatch(homeAction.resetHome());
     } else if (item) {
       dispatch(
         coreAction.toggleModal({
@@ -29,13 +26,7 @@ const FeatureProducts = () => {
           open: true,
         })
       );
-      dispatch(
-        homeAction.setSelectedFeatureProduct({
-          id: item?.id,
-          main: item?.main,
-          productId: item?.productDetails,
-        })
-      );
+      dispatch(homeAction.setSelectedFeatureSubSlider({ ...item }));
     } else {
       dispatch(
         coreAction.toggleModal({
@@ -49,30 +40,38 @@ const FeatureProducts = () => {
   return (
     <div>
       <ModuleHeader
-        title="Feature Products"
-        isAdd={data?.data && data?.data?.length < 9}
-        handleModal={() => handleModal("manage-feature-product")}
+        title="New In"
+        handleModal={() => handleModal("manage-feature-sub-slider")}
       />
-      <Table headList={featureProductHeader}>
-        {isLoading || (data?.data && data?.data?.length > 0 && isFetching) ? (
-          <SkeletonTable total={6} tableCount={6} />
+      <Table headList={featureSubSliderHeader}>
+        {isLoading ? (
+          <SkeletonTable total={6} tableCount={3} />
         ) : data?.data && data?.data?.length > 0 ? (
           data?.data?.map((item, index) => (
             <tr className="table_tr" key={item?.id}>
               <td className="table_td">{index + 1}</td>
-              <td className="table_td">{item?.productDetails?.book_title}</td>
-              <td className="table_td">{item?.productDetails?.author_name}</td>
               <td className="table_td">
-                <div className="flex items-center gap-1">
-                  <BiRupee />
-                  <span>{item?.productDetails?.price}</span>
-                </div>
+                <LazyLoadImage
+                  src={item?.image as string}
+                  alt={item?.image}
+                  placeholder={<PlaceholderImage />}
+                  effect="blur"
+                  width={40}
+                  height={40}
+                  className="w-10 h-10 object-cover rounded-full"
+                />
+                {/* <img
+                  src={item?.image as string}
+                  alt={item?.image as string}
+                  className="w-10 h-10 object-cover rounded-full"
+                /> */}
               </td>
-              <td className="table_td">{item?.main == 1 ? "Yes" : "No"}</td>
               <td className="table_td">
                 <div className="flex items-center gap-3">
                   {/* <button
-                    onClick={() => handleModal("manage-feature-product", item)}
+                    onClick={() =>
+                      handleModal("manage-feature-sub-slider", item)
+                    }
                     className={cn(
                       "font-medium hover:underline",
                       "text-blue-600 dark:text-blue-500"
@@ -81,7 +80,9 @@ const FeatureProducts = () => {
                     Edit
                   </button> */}
                   <button
-                    onClick={() => handleModal("delete-feature-product", item)}
+                    onClick={() =>
+                      handleModal("delete-feature-sub-slider", item)
+                    }
                     className={cn(
                       "font-medium hover:underline",
                       "text-red-600 dark:text-red-500"
@@ -103,4 +104,4 @@ const FeatureProducts = () => {
   );
 };
 
-export default FeatureProducts;
+export default FeatureNewIn;

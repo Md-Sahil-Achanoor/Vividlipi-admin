@@ -19,10 +19,9 @@ import {
   BreadCrumbItem,
   CategoryQuery,
   CategoryResponse,
-  ChangeEventType,
   Product,
   ProductPayload,
-  PublisherResponse,
+  PublisherResponse
 } from "@/types";
 import { cn } from "@/utils/twmerge";
 import { Field, Form, Formik, FormikHelpers } from "formik";
@@ -213,13 +212,13 @@ const ManageProduct = () => {
                         type="text"
                         component={CustomInput}
                         tooltip="Book title"
-                        onBlurCallback={(e: ChangeEventType) => {
-                          let slug = e.target.value
-                            .toLowerCase()
-                            .replace(/ /g, "-")
-                            .replace(/[^\w-]+/g, "");
-                          setFieldValue("url_slug", slug);
-                        }}
+                        // onBlurCallback={(e: ChangeEventType) => {
+                        //   let slug = e.target.value
+                        //     .toLowerCase()
+                        //     .replace(/ /g, "-")
+                        //     .replace(/[^\w-]+/g, "");
+                        //   setFieldValue("url_slug", slug);
+                        // }}
                         placeholder="Type your products name"
                         isRequired
                       />
@@ -229,7 +228,7 @@ const ManageProduct = () => {
                         horizontal
                         type="text"
                         component={CustomInput}
-                        disabled
+                        // disabled
                         tooltip="URL Slug"
                         placeholder="Type your products name"
                         isRequired

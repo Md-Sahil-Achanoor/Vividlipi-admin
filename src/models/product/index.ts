@@ -1,11 +1,10 @@
-import { alphanumericOnly } from "@/utils/valid-image";
 import * as Yup from "yup";
 
 // title only
 
 export const productBaseSchema = Yup.object({
   book_title: Yup.string()
-    .matches(alphanumericOnly, "Must be alphanumeric only")
+    // .matches(alphanumericOnly, "Must be alphanumeric only")
     .required("Book title is required"),
   url_slug: Yup.string().required("URL slug is required"),
   thumbnail: Yup.string().required("Thumbnail is required"),

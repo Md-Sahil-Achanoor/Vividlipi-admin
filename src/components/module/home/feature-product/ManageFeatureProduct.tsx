@@ -6,11 +6,12 @@ import { coreAction } from "@/feature/core/coreSlice";
 import { useManageFeatureProductMutation } from "@/feature/home/homeQuery";
 import { homeAction } from "@/feature/home/homeSlice";
 import { useGetProductsQuery } from "@/feature/product/productQuery";
+import useDebounce from "@/hooks/useDebounce";
 import { IHomeFeatureProduct, featureProductsSchema } from "@/models/home";
-import { ProductResponse } from "@/types";
+import { ProductQuery, ProductResponse } from "@/types";
 import { cn } from "@/utils/twmerge";
 import { Field, Form, Formik, FormikHelpers, FormikProps } from "formik";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BsArrowRightShort } from "react-icons/bs";
 
 const initialValues: IHomeFeatureProduct = {
@@ -24,6 +25,19 @@ const ManageFeatureProduct = () => {
   const { selectedFeatureProduct } = useAppSelector((state) => state.home);
   const [manageFeatureProduct, { isLoading }] =
     useManageFeatureProductMutation();
+    const [searchValue, setSearchValue] = useState<string>("");
+    console.log(`\n\n ~ ManageFeatureProduct ~ searchValue:`, searchValue)
+  const { value, onChange } = useDebounce(() => setSearchValue(value), 1000);
+
+  const query = () => {
+    let query: Partial<ProductQuery> = {
+      page: 1,
+    }
+    if(searchValue){
+      query.searchKeyword = searchValue
+    }
+    return query;
+  }
 
   const {
     isLoading: productLoading,
@@ -33,9 +47,7 @@ const ManageFeatureProduct = () => {
     // error: productErrorMessage,
   } = useGetProductsQuery(
     {
-      query: {
-        page: 1,
-      },
+      query: query(),
     },
     {
       skip: !open || type !== "manage-feature-product",
@@ -85,13 +97,13 @@ const ManageFeatureProduct = () => {
       classes={
         type === "manage-feature-product" && open
           ? {
-              top: "visible",
-              body: `-translate-y-[0%] max-w-[500px] p-3 min-w-[500px]`,
-            }
+            top: "visible",
+            body: `-translate-y-[0%] max-w-[500px] p-3 min-w-[500px]`,
+          }
           : {
-              top: "invisible",
-              body: "-translate-y-[300%] max-w-[500px] p-3 min-w-[500px]",
-            }
+            top: "invisible",
+            body: "-translate-y-[300%] max-w-[500px] p-3 min-w-[500px]",
+          }
       }
       handleModal={handleModal}
       wrapperClass="h-full"
@@ -148,6 +160,13 @@ const ManageFeatureProduct = () => {
                       }}
                       clearData={() => {
                         setFieldValue(`productId`, null);
+                      }}
+                      isInsideSearch
+                      searchProps={{
+                        value,
+                        onChange,
+                        type: "search",
+                        placeholder: "Search Product",
                       }}
                       isSelected={values?.productId !== null}
                       component={InfiniteSelect}

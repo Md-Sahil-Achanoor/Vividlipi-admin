@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/app/store";
 import ManageModule from "@/components/elements/modal/ManageModule";
+import FeatureNewIn from "@/components/module/home/feature-new-in/FeatureNewIn";
 import FeatureProducts from "@/components/module/home/feature-product/FeatureProducts";
 import ManageFeatureProduct from "@/components/module/home/feature-product/ManageFeatureProduct";
 import FeatureSlider from "@/components/module/home/feature-slider/FeatureSlider";
@@ -43,6 +44,8 @@ const HomePage = () => {
         return <FeatureProducts />;
       case "feature-sub-slider":
         return <FeatureSubSlider />;
+      case 'feature-new-in':
+        return <FeatureNewIn />;
       default:
         return <FeatureSlider />;
     }
@@ -55,12 +58,12 @@ const HomePage = () => {
     }
   };
 
-  console.log(
-    `\n\n ~ HomePage ~ selectedFeatureSlider, selectedFeatureSubSlider:`,
-    selectedFeatureSlider,
-    selectedFeatureSubSlider,
-    selectedFeatureProduct
-  );
+  // console.log(
+  //   `\n\n ~ HomePage ~ selectedFeatureSlider, selectedFeatureSubSlider:`,
+  //   selectedFeatureSlider,
+  //   selectedFeatureSubSlider,
+  //   selectedFeatureProduct
+  // );
   const handleUpdateStatus = async () => {
     if (type === "delete-feature-slider") {
       await deleteFeatureSlider({
