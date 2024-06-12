@@ -15,10 +15,10 @@ export const sampleProduct: Omit<BulkProduct, "url_slug">[] = [
     publisher: "",
     release_date: "",
     digital_product_url: "",
-    sale_price: 0,
-    sale_quantity: 0,
-    price: 0,
-    inventory: 0,
+    // sale_price: 0,
+    // sale_quantity: 0,
+    // price: 0,
+    // inventory: 0,
     commission: 0,
     first_year_commission: 0,
     second_year_commission: 0,
@@ -69,11 +69,11 @@ const checkProduct = async <T extends BulkProduct>(
     obj.release_date = isMomentValidate
       ? formatDate(String(product?.release_date)?.trim(), "YYYY-MM-DD")
       : isDate
-      ? formatDate(
-          ExcelDateToJSDate(Number(product?.release_date)),
-          "YYYY-MM-DD"
-        )
-      : "";
+        ? formatDate(
+            ExcelDateToJSDate(Number(product?.release_date)),
+            "YYYY-MM-DD"
+          )
+        : "";
 
     const validate = await validateSchema(productBulkUploadSchema, product);
 
