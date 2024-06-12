@@ -11,6 +11,7 @@ interface InfiniteScroll<T> {
   isDisabled?: boolean;
   callBack?: (data: T[]) => void;
   isEnroll?: boolean;
+  method?: "GET" | "POST" | "PUT" | "DELETE";
 }
 
 const SIZE = 10;
@@ -27,6 +28,7 @@ const useInfiniteScroll = <T extends object>({
   isDisabled = false,
   callBack,
   isEnroll,
+  method = "GET",
 }: InfiniteScroll<T>) => {
   // console.log(`extraQuery:`, extraQuery);
   const [page, setPage] = useState<number>(1);
@@ -87,9 +89,9 @@ const useInfiniteScroll = <T extends object>({
     clearData();
     // console.log(`reCallApi ~ extraQuery:`, extraQuery);
     apiCall(
-      axiosClient(getUrl(url, SIZE, page, extraQuery)) as Promise<
-        ApiResponse<ListResponse<T>>
-      >
+      axiosClient(getUrl(url, SIZE, page, extraQuery), {
+        method,
+      }) as Promise<ApiResponse<ListResponse<T>>>
     );
   };
 

@@ -19,12 +19,13 @@ const productQuery = API.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query<
       ApiResponse<ListResponse<ProductResponse>>,
-      ManageQuery<Partial<ProductQuery>>
+      ManagePayload<Partial<ProductQuery>>
     >({
-      query: ({ query }) => ({
+      query: ({ query, data }) => ({
         url: endpoints.product_list,
         method: "POST",
-        body: query,
+        body: data,
+        params: query,
       }),
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
@@ -136,6 +137,9 @@ const productQuery = API.injectEndpoints({
                 "getProducts",
                 {
                   query: _arg.query,
+                  data: {
+                    page: 1,
+                  },
                 },
                 (draft) => {
                   draft.data.data = draft.data.data?.filter(

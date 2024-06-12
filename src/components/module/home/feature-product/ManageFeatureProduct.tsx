@@ -25,19 +25,19 @@ const ManageFeatureProduct = () => {
   const { selectedFeatureProduct } = useAppSelector((state) => state.home);
   const [manageFeatureProduct, { isLoading }] =
     useManageFeatureProductMutation();
-    const [searchValue, setSearchValue] = useState<string>("");
-    console.log(`\n\n ~ ManageFeatureProduct ~ searchValue:`, searchValue)
+  const [searchValue, setSearchValue] = useState<string>("");
+  console.log(`\n\n ~ ManageFeatureProduct ~ searchValue:`, searchValue);
   const { value, onChange } = useDebounce(() => setSearchValue(value), 1000);
 
   const query = () => {
     let query: Partial<ProductQuery> = {
-      page: 1,
-    }
-    if(searchValue){
-      query.searchKeyword = searchValue
+      // page: 1,
+    };
+    if (searchValue) {
+      query.search = searchValue;
     }
     return query;
-  }
+  };
 
   const {
     isLoading: productLoading,
@@ -47,6 +47,9 @@ const ManageFeatureProduct = () => {
     // error: productErrorMessage,
   } = useGetProductsQuery(
     {
+      data: {
+        page: 1,
+      },
       query: query(),
     },
     {
@@ -97,13 +100,13 @@ const ManageFeatureProduct = () => {
       classes={
         type === "manage-feature-product" && open
           ? {
-            top: "visible",
-            body: `-translate-y-[0%] max-w-[500px] p-3 min-w-[500px]`,
-          }
+              top: "visible",
+              body: `-translate-y-[0%] max-w-[500px] p-3 min-w-[500px]`,
+            }
           : {
-            top: "invisible",
-            body: "-translate-y-[300%] max-w-[500px] p-3 min-w-[500px]",
-          }
+              top: "invisible",
+              body: "-translate-y-[300%] max-w-[500px] p-3 min-w-[500px]",
+            }
       }
       handleModal={handleModal}
       wrapperClass="h-full"

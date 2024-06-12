@@ -1,21 +1,39 @@
 import { useAppDispatch } from "@/app/store";
-import PlaceholderImage from "@/assets/svg/placeholder";
 import NoTableData from "@/components/atoms/NoTableData";
+import FullTableSkeleton from "@/components/elements/skeleton/FullTableSkeleton";
 import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
+import ScreenLoader from "@/components/ui/ScreenLoader";
 import Table from "@/components/ui/Table";
-import { featureSubSliderHeader } from "@/constants/tableHeader";
+import { featureProductHeader } from "@/constants/tableHeader";
 import { coreAction } from "@/feature/core/coreSlice";
-import { useGetHomeFeatureSubSliderQuery } from "@/feature/home/homeQuery";
+import {
+  useGetHomeNewInQuery,
+  useGetHomeNewInStatusQuery,
+  useToggleHomeNewInStatusMutation,
+} from "@/feature/home/homeQuery";
 import { homeAction } from "@/feature/home/homeSlice";
-import { FeatureSubSliderResponse } from "@/types";
+import { FeatureProductResponse } from "@/types";
 import { cn } from "@/utils/twmerge";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import { BiRupee } from "react-icons/bi";
 import ModuleHeader from "../ModuleHeader";
 
 const FeatureNewIn = () => {
-  const { data, isLoading } = useGetHomeFeatureSubSliderQuery({});
+  const { data: newInStatus, isFetching: newInStatusLoading } =
+    useGetHomeNewInStatusQuery({});
+
+  const [toggleStatus, { isLoading: statusUpdateLoading }] =
+    useToggleHomeNewInStatusMutation();
+
+  const { data, isLoading, isFetching } = useGetHomeNewInQuery(
+    {},
+    {
+      skip: !newInStatus?.status,
+    }
+  );
+  console.log(`\n\n ~ FeatureNewIn ~ newInStatus:`, newInStatus, data);
+
   const dispatch = useAppDispatch();
-  const handleModal = (type: string, item?: FeatureSubSliderResponse) => {
+  const handleModal = (type: string, item?: FeatureProductResponse) => {
     if (type === "cancelled") {
       dispatch(coreAction.toggleModal({ type: "", open: false }));
       dispatch(homeAction.resetHome());
@@ -26,7 +44,7 @@ const FeatureNewIn = () => {
           open: true,
         })
       );
-      dispatch(homeAction.setSelectedFeatureSubSlider({ ...item }));
+      dispatch(homeAction.setSelectedFeatureProduct(item));
     } else {
       dispatch(
         coreAction.toggleModal({
@@ -39,67 +57,79 @@ const FeatureNewIn = () => {
 
   return (
     <div>
-      <ModuleHeader
-        title="New In"
-        handleModal={() => handleModal("manage-feature-sub-slider")}
-      />
-      <Table headList={featureSubSliderHeader}>
-        {isLoading ? (
-          <SkeletonTable total={6} tableCount={3} />
-        ) : data?.data && data?.data?.length > 0 ? (
-          data?.data?.map((item, index) => (
-            <tr className="table_tr" key={item?.id}>
-              <td className="table_td">{index + 1}</td>
-              <td className="table_td">
-                <LazyLoadImage
-                  src={item?.image as string}
-                  alt={item?.image}
-                  placeholder={<PlaceholderImage />}
-                  effect="blur"
-                  width={40}
-                  height={40}
-                  className="w-10 h-10 object-cover rounded-full"
-                />
-                {/* <img
-                  src={item?.image as string}
-                  alt={item?.image as string}
-                  className="w-10 h-10 object-cover rounded-full"
-                /> */}
-              </td>
-              <td className="table_td">
-                <div className="flex items-center gap-3">
-                  {/* <button
-                    onClick={() =>
-                      handleModal("manage-feature-sub-slider", item)
-                    }
-                    className={cn(
-                      "font-medium hover:underline",
-                      "text-blue-600 dark:text-blue-500"
-                    )}
-                  >
-                    Edit
-                  </button> */}
-                  <button
-                    onClick={() =>
-                      handleModal("delete-feature-sub-slider", item)
-                    }
-                    className={cn(
-                      "font-medium hover:underline",
-                      "text-red-600 dark:text-red-500"
-                    )}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))
-        ) : (
-          <NoTableData colSpan={7} parentClass="h-40">
-            <span className="font-medium">No data found!</span>
-          </NoTableData>
-        )}
-      </Table>
+      {statusUpdateLoading && <ScreenLoader />}
+      {newInStatusLoading ? (
+        <>
+          <div className="flex items-center justify-between my-4">
+            <div className="bg-gray-300 h-4 w-32 rounded-xl animate-pulse duration-100"></div>
+            <div className="bg-gray-300 h-8 w-14 rounded-xl animate-pulse duration-100"></div>
+          </div>
+          {/* table skeleton */}
+          <FullTableSkeleton total={6} tableCount={6} />
+        </>
+      ) : (
+        <ModuleHeader
+          title="New In"
+          isAdd={newInStatus?.toggle === "1" ? true : false}
+          status={newInStatus?.toggle === "1" ? true : false}
+          isButton={true}
+          handleModal={(type?: string) => {
+            if (type === "toggle")
+              toggleStatus({
+                data: { status: newInStatus?.toggle === "1" ? 0 : 1 },
+              });
+            else handleModal("manage-new-in");
+          }}
+        />
+      )}
+      {newInStatusLoading ? null : newInStatus?.toggle === "1" ? (
+        <Table headList={featureProductHeader}>
+          {isLoading || (data?.data && data?.data?.length > 0 && isFetching) ? (
+            <SkeletonTable total={6} tableCount={6} />
+          ) : data?.data && data?.data?.length > 0 ? (
+            data?.data?.map((item, index) => (
+              <tr className="table_tr" key={item?.id}>
+                <td className="table_td">{index + 1}</td>
+                <td className="table_td">{item?.productDetails?.book_title}</td>
+                <td className="table_td">
+                  {item?.productDetails?.author_name}
+                </td>
+                <td className="table_td">
+                  <div className="flex items-center gap-1">
+                    <BiRupee />
+                    <span>{item?.productDetails?.HardCopyPrice}</span>
+                  </div>
+                </td>
+                <td className="table_td">{item?.main == 1 ? "Yes" : "No"}</td>
+                <td className="table_td">
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => handleModal("delete-new-in", item)}
+                      className={cn(
+                        "font-medium hover:underline",
+                        "text-red-600 dark:text-red-500"
+                      )}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <NoTableData colSpan={7} parentClass="h-40">
+              <span className="font-medium">No data found!</span>
+            </NoTableData>
+          )}
+        </Table>
+      ) : (
+        <div className="h-60 flex items-center justify-center text-center">
+          <div>
+            <p className="font-medium">New In is disabled!</p>
+            <span>Latest 15 product will be displayed in "New In" section</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

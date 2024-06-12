@@ -6,6 +6,8 @@ const checkType = (type: string) => {
       return true;
     case "delete-feature-product":
       return true;
+    case "delete-new-in":
+      return true;
     default:
       return false;
   }
@@ -18,6 +20,8 @@ const getTitle = (type: string, data: any) => {
     case "delete-feature-slider":
       return data?.text;
     case "delete-feature-product":
+      return data?.productDetails?.book_title;
+    case "delete-new-in":
       return data?.productDetails?.book_title;
     default:
       return "";
@@ -32,6 +36,8 @@ const getModuleName = (type: string) => {
       return "Feature Sub Slider";
     case "delete-feature-product":
       return "Feature Product";
+    case "delete-new-in":
+      return "New In";
     default:
       return "";
   }

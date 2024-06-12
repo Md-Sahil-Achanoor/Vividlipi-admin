@@ -1,5 +1,6 @@
 import { useAppSelector } from "@/app/store";
 import Loader from "@/components/atoms/Loader";
+import MultiSelectItem from "@/components/atoms/MultiSelectItem";
 import CheckboxGroup from "@/components/form/CheckboxGroup";
 import CustomInput from "@/components/form/CustomInput";
 import InfiniteSelect from "@/components/form/InfiniteSelect";
@@ -7,6 +8,7 @@ import InputSelect from "@/components/form/InputSelect";
 import InputTagComponent from "@/components/form/InputTagComponent";
 import QuillComponent from "@/components/form/QuillComponent";
 import { Card } from "@/components/ui/Card";
+import { book_format, language_select } from "@/constants/filter-list";
 import { useGetCategoriesQuery } from "@/feature/category/categoryQuery";
 import {
   useGetProductByIdQuery,
@@ -21,7 +23,8 @@ import {
   CategoryResponse,
   Product,
   ProductPayload,
-  PublisherResponse
+  PublisherResponse,
+  SelectItem,
 } from "@/types";
 import { cn } from "@/utils/twmerge";
 import { Field, Form, Formik, FormikHelpers } from "formik";
@@ -40,10 +43,16 @@ const initialValues: Product = {
   publisher: null,
   release_date: "",
   digital_product_url: "",
-  sale_price: "",
-  sale_quantity: "",
-  price: "",
-  inventory: "",
+  // sale_price: "",
+  // sale_quantity: "",
+  // price: "",
+  // inventory: "",
+  HardCopyPrice: "",
+  AudioPrice: "",
+  EbookPrice: "",
+  Stock: "",
+  Audio_URL: "",
+  File_URL: "",
   commission: "",
   first_year_commission: "",
   second_year_commission: "",
@@ -53,7 +62,7 @@ const initialValues: Product = {
   shipping: "",
   genre: "",
   tags: [],
-  book_format: 1,
+  book_format: [],
   translated: "No", //Yes/No
   translator_name: "",
   language: "",
@@ -96,6 +105,7 @@ const ManageProduct = () => {
       cat1: values.cat1?.id as number,
       cat2: values.cat2?.id as number,
       publisher: values?.publisher?.id as number,
+      book_format: values?.book_format?.map((item) => item?.value) as number[],
       translator_name:
         values?.translated === "Yes" ? values?.translator_name : null,
       category: [],
@@ -196,7 +206,7 @@ const ManageProduct = () => {
           ) : (
             <div>
               <Formik
-                initialValues={selectedProduct || initialValues}
+                initialValues={(selectedProduct as any) || initialValues}
                 validationSchema={manageProductSchema}
                 onSubmit={onSubmit}
                 enableReinitialize
@@ -431,7 +441,7 @@ const ManageProduct = () => {
                         placeholder="Type your products digital product URL"
                         isRequired
                       />
-                      <Field
+                      {/* <Field
                         name="sale_price"
                         label={"Sale Price"}
                         horizontal
@@ -470,7 +480,7 @@ const ManageProduct = () => {
                         tooltip="Inventory"
                         placeholder="Type your products inventory"
                         isRequired
-                      />
+                      /> */}
                       <Field
                         name="commission"
                         label={"Commission"}
@@ -557,13 +567,67 @@ const ManageProduct = () => {
                         name="tags"
                         label={"Tags"}
                         horizontal
+                        tooltip="Tags"
                         type="text"
                         component={InputTagComponent}
-                        tooltip="Tags"
                         placeholder="Type your products tags"
                         isRequired
                       />
                       <Field
+                        label={"Book Format"}
+                        name="book_format"
+                        horizontal
+                        tooltip="Tags"
+                        isRequired={false}
+                        renderData={book_format}
+                        renderItem={(item: SelectItem) => <>{item?.name}</>}
+                        isActive={(item: SelectItem) =>
+                          values?.book_format?.find(
+                            (book_format) => book_format?.value === item?.value
+                          )
+                        }
+                        renderName={() => (
+                          <MultiSelectItem<any>
+                            data={values?.book_format as SelectItem[]}
+                            defaultName="Select..."
+                            displayName="name"
+                            onClick={(item: SelectItem) => {
+                              setFieldValue(
+                                "book_format",
+                                values?.book_format?.filter(
+                                  (book_format) =>
+                                    book_format?.value !== item?.value
+                                )
+                              );
+                            }}
+                          />
+                        )}
+                        onChangeCallback={(item: SelectItem) => {
+                          // check unique item in array
+                          let isUnique = values?.book_format?.find(
+                            (book_format) => book_format?.value === item?.value
+                          );
+                          if (!isUnique) {
+                            setFieldValue("book_format", [
+                              ...values?.book_format,
+                              item,
+                            ]);
+                          } else {
+                            return;
+                          }
+                        }}
+                        clearData={(item: SelectItem) => {
+                          // find data and clear
+                          let data = values?.book_format?.filter(
+                            (book_format) => book_format?.value !== item?.value
+                          );
+                          setFieldValue("book_format", data);
+                        }}
+                        isSelected={false}
+                        component={InfiniteSelect}
+                        isAuth
+                      />
+                      {/* <Field
                         name="book_format"
                         label={"Book Format"}
                         horizontal
@@ -575,7 +639,7 @@ const ManageProduct = () => {
                         ]}
                         tooltip="Book Format"
                         isRequired
-                      />
+                      /> */}
                       <Field
                         name="translated"
                         label={"Translated"}
@@ -600,14 +664,14 @@ const ManageProduct = () => {
                           isRequired
                         />
                       )}
+
                       <Field
                         name="language"
                         label={"Language"}
                         horizontal
-                        type="text"
-                        component={CustomInput}
+                        component={InputSelect}
+                        items={language_select}
                         tooltip="Language"
-                        placeholder="Type your products language"
                         isRequired
                       />
 

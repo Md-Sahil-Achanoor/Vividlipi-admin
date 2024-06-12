@@ -48,7 +48,7 @@ const ProductList = () => {
 
   const dispatch = useAppDispatch();
   const { data, isLoading, refetch } = useGetProductsQuery({
-    query: {
+    data: {
       page: 1,
     },
   });
@@ -156,11 +156,11 @@ const ProductList = () => {
                 </th>
                 <td className="table_td">{item?.book_title}</td>
                 <td className="table_td">{item?.author_name}</td>
-                <td className="table_td">{item?.price}</td>
+                <td className="table_td">{item?.HardCopyPrice}</td>
                 <td className="table_td">{item?.publisher?.Name || "N/A"}</td>
                 <td className="table_td">{item?.release_date}</td>
-                <td className="table_td">{item?.sale_price}</td>
-                <td className="table_td">{item?.sale_quantity}</td>
+                <td className="table_td">{item?.genre}</td>
+                <td className="table_td">{item?.language}</td>
                 <td className="table_td">
                   <div className="flex items-center gap-3">
                     <Link

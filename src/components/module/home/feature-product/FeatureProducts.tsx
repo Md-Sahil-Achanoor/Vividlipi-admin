@@ -16,7 +16,7 @@ import ModuleHeader from "../ModuleHeader";
 // };
 
 const FeatureProducts = () => {
-  const { data, isLoading,isFetching } = useGetHomeFeatureProductsQuery({});
+  const { data, isLoading, isFetching } = useGetHomeFeatureProductsQuery({});
   const dispatch = useAppDispatch();
   const handleModal = (type: string, item?: any) => {
     if (type === "cancelled") {
@@ -51,6 +51,7 @@ const FeatureProducts = () => {
       <ModuleHeader
         title="Feature Products"
         isAdd={data?.data && data?.data?.length < 9}
+        isButton={false}
         handleModal={() => handleModal("manage-feature-product")}
       />
       <Table headList={featureProductHeader}>
@@ -65,7 +66,7 @@ const FeatureProducts = () => {
               <td className="table_td">
                 <div className="flex items-center gap-1">
                   <BiRupee />
-                  <span>{item?.productDetails?.price}</span>
+                  <span>{item?.productDetails?.HardCopyPrice}</span>
                 </div>
               </td>
               <td className="table_td">{item?.main == 1 ? "Yes" : "No"}</td>
