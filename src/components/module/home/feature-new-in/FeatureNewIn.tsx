@@ -14,7 +14,6 @@ import {
 import { homeAction } from "@/feature/home/homeSlice";
 import { FeatureProductResponse } from "@/types";
 import { cn } from "@/utils/twmerge";
-import { BiRupee } from "react-icons/bi";
 import ModuleHeader from "../ModuleHeader";
 
 const FeatureNewIn = () => {
@@ -30,7 +29,7 @@ const FeatureNewIn = () => {
       skip: !newInStatus?.status,
     }
   );
-  console.log(`\n\n ~ FeatureNewIn ~ newInStatus:`, newInStatus, data);
+  // console.log(`\n\n ~ FeatureNewIn ~ newInStatus:`, newInStatus, data);
 
   const dispatch = useAppDispatch();
   const handleModal = (type: string, item?: FeatureProductResponse) => {
@@ -85,7 +84,7 @@ const FeatureNewIn = () => {
       {newInStatusLoading ? null : newInStatus?.toggle === "1" ? (
         <Table headList={featureProductHeader}>
           {isLoading || (data?.data && data?.data?.length > 0 && isFetching) ? (
-            <SkeletonTable total={6} tableCount={6} />
+            <SkeletonTable total={6} tableCount={7} />
           ) : data?.data && data?.data?.length > 0 ? (
             data?.data?.map((item, index) => (
               <tr className="table_tr" key={item?.id}>
@@ -95,12 +94,12 @@ const FeatureNewIn = () => {
                   {item?.productDetails?.author_name}
                 </td>
                 <td className="table_td">
-                  <div className="flex items-center gap-1">
-                    <BiRupee />
-                    <span>{item?.productDetails?.HardCopyPrice}</span>
-                  </div>
+                  {item?.productDetails?.publisher?.Name || "N/A"}
                 </td>
-                <td className="table_td">{item?.main == 1 ? "Yes" : "No"}</td>
+                <td className="table_td">
+                  {item?.productDetails?.language || "N/A"}
+                </td>
+                <td className="table_td">{item?.position}</td>
                 <td className="table_td">
                   <div className="flex items-center gap-3">
                     <button

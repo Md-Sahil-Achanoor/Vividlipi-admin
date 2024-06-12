@@ -7,7 +7,6 @@ import { coreAction } from "@/feature/core/coreSlice";
 import { useGetHomeFeatureProductsQuery } from "@/feature/home/homeQuery";
 import { homeAction } from "@/feature/home/homeSlice";
 import { cn } from "@/utils/twmerge";
-import { BiRupee } from "react-icons/bi";
 import ModuleHeader from "../ModuleHeader";
 
 // type FeatureProductsProps = {
@@ -56,7 +55,7 @@ const FeatureProducts = () => {
       />
       <Table headList={featureProductHeader}>
         {isLoading || (data?.data && data?.data?.length > 0 && isFetching) ? (
-          <SkeletonTable total={6} tableCount={6} />
+          <SkeletonTable total={6} tableCount={7} />
         ) : data?.data && data?.data?.length > 0 ? (
           data?.data?.map((item, index) => (
             <tr className="table_tr" key={item?.id}>
@@ -64,10 +63,10 @@ const FeatureProducts = () => {
               <td className="table_td">{item?.productDetails?.book_title}</td>
               <td className="table_td">{item?.productDetails?.author_name}</td>
               <td className="table_td">
-                <div className="flex items-center gap-1">
-                  <BiRupee />
-                  <span>{item?.productDetails?.HardCopyPrice}</span>
-                </div>
+                {item?.productDetails?.publisher?.Name || "N/A"}
+              </td>
+              <td className="table_td">
+                {item?.productDetails?.language || "N/A"}
               </td>
               <td className="table_td">{item?.main == 1 ? "Yes" : "No"}</td>
               <td className="table_td">

@@ -14,8 +14,9 @@ export const featureProductHeader = [
   "SL",
   "Name",
   "Author",
-  "Price",
-  "Banner",
+  "Publisher",
+  "Language",
+  "Position",
   "Action",
 ];
 
