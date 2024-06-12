@@ -64,7 +64,17 @@ const productQuery = API.injectEndpoints({
                 : [],
             translator_name: rest?.translator_name || "",
             category: [],
+            HardCopyPrice: rest?.HardCopyPrice || "",
+            AudioPrice: rest?.AudioPrice || "",
+            EbookPrice: rest?.EbookPrice || "",
+            Stock: rest?.Stock || "",
+            Audio_URL: rest?.Audio_URL || "",
+            File_URL: rest?.File_URL || "",
+            book_format: rest?.book_format?.length
+              ? rest?.book_format?.map((el) => Number(el))
+              : [],
           };
+          console.log(`\n\n data:`, data);
           dispatch(productAction.setSelectedProduct(data as ProductResponse));
         } catch (err: unknown) {
           // do nothing

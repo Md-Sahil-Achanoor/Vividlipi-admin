@@ -74,7 +74,7 @@ const homeQuery = API.injectEndpoints({
           },
         };
       },
-      // invalidatesTags: ["HomeFeatureSlider"],
+      invalidatesTags: ["HomeFeatureSlider"],
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
@@ -84,7 +84,6 @@ const homeQuery = API.injectEndpoints({
             toast.success(result?.data?.message || "Success");
             dispatch(homeAction.resetHome());
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            homeQuery.util.invalidateTags(["HomeFeatureSlider"]);
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
           }
@@ -117,7 +116,7 @@ const homeQuery = API.injectEndpoints({
           picid: id,
         },
       }),
-      // invalidatesTags: ["HomeFeatureSlider"],
+      invalidatesTags: ["HomeFeatureSlider"],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled;
@@ -137,7 +136,6 @@ const homeQuery = API.injectEndpoints({
             //     }
             //   )
             // );
-            homeQuery.util.invalidateTags(["HomeFeatureSlider"]);
             dispatch(homeAction.resetHome());
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
           } else {
@@ -208,7 +206,7 @@ const homeQuery = API.injectEndpoints({
           },
         };
       },
-      // invalidatesTags: ["HomeFeatureSubSlider"],
+      invalidatesTags: ["HomeFeatureSubSlider"],
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
@@ -218,7 +216,6 @@ const homeQuery = API.injectEndpoints({
             toast.success(result?.data?.message || "Success");
             dispatch(homeAction.resetHome());
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            homeQuery.util.invalidateTags(["HomeFeatureSubSlider"]);
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
           }
@@ -250,7 +247,7 @@ const homeQuery = API.injectEndpoints({
           picid: id,
         },
       }),
-      // invalidatesTags: ["HomeFeatureSubSlider"],
+      invalidatesTags: ["HomeFeatureSubSlider"],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled;
@@ -258,7 +255,6 @@ const homeQuery = API.injectEndpoints({
             toast.success(result?.data?.message || "Success");
             dispatch(homeAction.resetHome());
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            homeQuery.util.invalidateTags(["HomeFeatureSubSlider"]);
             // dispatch(
             //   homeQuery.util.updateQueryData(
             //     "getHomeFeatureSubSlider",
@@ -342,7 +338,7 @@ const homeQuery = API.injectEndpoints({
           },
         };
       },
-      // invalidatesTags: ["HomeFeatureProducts"],
+      invalidatesTags: ["HomeFeatureProducts"],
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
@@ -352,7 +348,6 @@ const homeQuery = API.injectEndpoints({
             toast.success(result?.data?.message || "Success");
             dispatch(homeAction.resetHome());
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            homeQuery.util.invalidateTags(["HomeFeatureProducts"]);
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
           }
@@ -385,7 +380,7 @@ const homeQuery = API.injectEndpoints({
           productId: id,
         },
       }),
-      // invalidatesTags: ["HomeFeatureProducts"],
+      invalidatesTags: ["HomeFeatureProducts"],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled;
@@ -393,7 +388,6 @@ const homeQuery = API.injectEndpoints({
             toast.success(result?.data?.message || "Success");
             dispatch(homeAction.resetHome());
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            homeQuery.util.invalidateTags(["HomeFeatureProducts"]);
             // dispatch(
             //   homeQuery.util.updateQueryData(
             //     "getHomeFeatureProducts",
@@ -469,9 +463,12 @@ const homeQuery = API.injectEndpoints({
           url: endpoints.add_new_in,
           method: "POST",
           body: data,
+          // params: {
+          //   sliderid: id,
+          // },
         };
       },
-      // invalidatesTags: ["NewInProduct"],
+      invalidatesTags: ["NewInProduct"],
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
@@ -481,7 +478,6 @@ const homeQuery = API.injectEndpoints({
             toast.success(result?.data?.message || "Success");
             dispatch(homeAction.resetHome());
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            homeQuery.util.invalidateTags(["NewInProduct"]);
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
           }
@@ -513,7 +509,7 @@ const homeQuery = API.injectEndpoints({
           productId: id,
         },
       }),
-      // invalidatesTags: ["NewInProduct"],
+      invalidatesTags: ["NewInProduct"],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled;
@@ -521,7 +517,6 @@ const homeQuery = API.injectEndpoints({
             toast.success(result?.data?.message || "Success");
             dispatch(homeAction.resetHome());
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            homeQuery.util.invalidateTags(["NewInProduct"]);
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
           }
@@ -536,7 +531,7 @@ const homeQuery = API.injectEndpoints({
     }),
 
     /**
-     * @module GetNewInStatus
+     * @module GetNewInStutus
      * @param { Partial<FeatureProductQuery> }
      * @returns { any }
      * @description Home New In Status
@@ -580,7 +575,7 @@ const homeQuery = API.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      // invalidatesTags: ["NewInProductToggle"],
+      invalidatesTags: ["NewInProductToggle"],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled;
@@ -588,7 +583,6 @@ const homeQuery = API.injectEndpoints({
             toast.success(result?.data?.message || "Success");
             dispatch(homeAction.resetHome());
             dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            homeQuery.util.invalidateTags(["NewInProductToggle"]);
           } else {
             toast.error(result?.data?.message || "Something went wrong!");
           }

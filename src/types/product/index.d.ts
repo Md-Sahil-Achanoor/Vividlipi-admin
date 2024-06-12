@@ -1,10 +1,9 @@
 import { IBulkProduct } from "@/models/product";
 import { CategoryResponse } from "../category";
 import { IStore, ReqQuery } from "../common";
-import { SelectItem } from "../filter";
 import { PublisherResponse } from "../publisher";
 
-export interface IProduct<T, P, F> {
+export interface IProduct<T, P> {
   book_title: string;
   thumbnail: string;
   url_slug: string;
@@ -34,7 +33,7 @@ export interface IProduct<T, P, F> {
   shipping: string | number;
   genre: string;
   tags: string[];
-  book_format: F[];
+  book_format: number[];
   translated: string; // Yes /No
   translator_name: string | null; // if yes then required
   language: string;
@@ -42,7 +41,7 @@ export interface IProduct<T, P, F> {
   allow_comments: string; // Yes / No
 }
 
-export type Product = IProduct<CategoryResponse, PublisherResponse, SelectItem>;
+export type Product = IProduct<CategoryResponse, PublisherResponse>;
 
 export interface ProductPayload
   extends IProduct<number | string, number | string, number> {}
@@ -55,7 +54,7 @@ export type BulkProduct = Omit<IBulkProduct, "translator_name"> & {
 };
 
 export interface ProductResponse
-  extends IProduct<CategoryResponse, PublisherResponse, number> {
+  extends IProduct<CategoryResponse, PublisherResponse> {
   id: string | number;
   createdAt: string;
   isDeleted: Number;

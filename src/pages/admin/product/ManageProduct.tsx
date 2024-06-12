@@ -3,6 +3,7 @@ import Loader from "@/components/atoms/Loader";
 import MultiSelectItem from "@/components/atoms/MultiSelectItem";
 import CheckboxGroup from "@/components/form/CheckboxGroup";
 import CustomInput from "@/components/form/CustomInput";
+import FileUpload from "@/components/form/FileUpload";
 import InfiniteSelect from "@/components/form/InfiniteSelect";
 import InputSelect from "@/components/form/InputSelect";
 import InputTagComponent from "@/components/form/InputTagComponent";
@@ -37,7 +38,7 @@ const initialValues: Product = {
   url_slug: "",
   cat1: null,
   cat2: null,
-  thumbnail: "https://example.com/book_cover.jpg",
+  thumbnail: "",
   description: "",
   author_name: "",
   publisher: null,
@@ -105,7 +106,6 @@ const ManageProduct = () => {
       cat1: values.cat1?.id as number,
       cat2: values.cat2?.id as number,
       publisher: values?.publisher?.id as number,
-      book_format: values?.book_format?.map((item) => item?.value) as number[],
       translator_name:
         values?.translated === "Yes" ? values?.translator_name : null,
       category: [],
@@ -213,7 +213,7 @@ const ManageProduct = () => {
               >
                 {({ isSubmitting, values, setFieldValue }) => (
                   <Form>
-                    {/* {console.log(values)} */}
+                    {/* {console.log(values, errors)} */}
                     <div className="mt-5">
                       <Field
                         name="book_title"
@@ -345,6 +345,16 @@ const ManageProduct = () => {
                         placeholder="Upload thumbnail"
                         isRequired
                       /> */}
+                      <Field
+                        name="thumbnail"
+                        label={"Thumbnail"}
+                        horizontal
+                        component={FileUpload}
+                        maxFileSize={10}
+                        supportedString="jpg, jpeg, png"
+                        tooltip="File URL"
+                        isRequired
+                      />
                       <Field
                         name="description"
                         label={"Description"}
@@ -582,21 +592,23 @@ const ManageProduct = () => {
                         renderData={book_format}
                         renderItem={(item: SelectItem) => <>{item?.name}</>}
                         isActive={(item: SelectItem) =>
-                          values?.book_format?.find(
-                            (book_format) => book_format?.value === item?.value
-                          )
+                          values?.book_format?.includes(item?.value as number)
                         }
                         renderName={() => (
                           <MultiSelectItem<any>
-                            data={values?.book_format as SelectItem[]}
+                            data={values?.book_format}
                             defaultName="Select..."
                             displayName="name"
-                            onClick={(item: SelectItem) => {
+                            name={(data) =>
+                              book_format?.find(
+                                (el) => Number(el?.value) == Number(data)
+                              )?.name || ""
+                            }
+                            onClick={(item: number) => {
                               setFieldValue(
                                 "book_format",
                                 values?.book_format?.filter(
-                                  (book_format) =>
-                                    book_format?.value !== item?.value
+                                  (book_format) => book_format !== item
                                 )
                               );
                             }}
@@ -604,13 +616,13 @@ const ManageProduct = () => {
                         )}
                         onChangeCallback={(item: SelectItem) => {
                           // check unique item in array
-                          let isUnique = values?.book_format?.find(
-                            (book_format) => book_format?.value === item?.value
+                          let isUnique = values?.book_format?.includes(
+                            item?.value as number
                           );
                           if (!isUnique) {
                             setFieldValue("book_format", [
                               ...values?.book_format,
-                              item,
+                              item?.value,
                             ]);
                           } else {
                             return;
@@ -619,7 +631,7 @@ const ManageProduct = () => {
                         clearData={(item: SelectItem) => {
                           // find data and clear
                           let data = values?.book_format?.filter(
-                            (book_format) => book_format?.value !== item?.value
+                            (book_format) => book_format !== item?.value
                           );
                           setFieldValue("book_format", data);
                         }}
@@ -627,19 +639,89 @@ const ManageProduct = () => {
                         component={InfiniteSelect}
                         isAuth
                       />
-                      {/* <Field
-                        name="book_format"
-                        label={"Book Format"}
-                        horizontal
-                        component={InputSelect}
-                        items={[
-                          { value: 1, name: "Physical" },
-                          { value: 2, name: "E-book" },
-                          { value: 3, name: "Audio Book" },
-                        ]}
-                        tooltip="Book Format"
-                        isRequired
-                      /> */}
+                      {values?.book_format?.includes(1) ? (
+                        <>
+                          <Field
+                            name="HardCopyPrice"
+                            label={"Hard Copy Price"}
+                            horizontal
+                            type="number"
+                            component={CustomInput}
+                            tooltip="Hard Copy Price"
+                            placeholder="Type your products hard copy price"
+                            isRequired
+                          />
+                          <Field
+                            name="Stock"
+                            label={"Hard Copy Stock"}
+                            horizontal
+                            type="number"
+                            component={CustomInput}
+                            tooltip="Stock"
+                            placeholder="Type your products stock"
+                            isRequired
+                          />
+                        </>
+                      ) : null}
+
+                      {values?.book_format?.includes(2) ? (
+                        <>
+                          <Field
+                            name="File_URL"
+                            label={"E-Book File"}
+                            horizontal
+                            component={FileUpload}
+                            maxFileSize={100}
+                            supportedString="pdf, doc, docx, epub"
+                            acceptFile={{
+                              "application/pdf": ["pdf"],
+                              "application/msword": ["doc", "docx"],
+                              "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                                ["docx"],
+                              "application/epub+zip": ["epub"],
+                            }}
+                            tooltip="File URL"
+                            isRequired
+                          />
+                          <Field
+                            name="EbookPrice"
+                            label={"E-book Price"}
+                            horizontal
+                            type="number"
+                            component={CustomInput}
+                            tooltip="Ebook Price"
+                            placeholder="Type your products ebook price"
+                            isRequired
+                          />
+                        </>
+                      ) : null}
+                      {values?.book_format?.includes(3) ? (
+                        <>
+                          <Field
+                            name="Audio_URL"
+                            label={"Audio URL"}
+                            horizontal
+                            component={FileUpload}
+                            maxFileSize={100}
+                            supportedString="mp3"
+                            acceptFile={{
+                              "audio/mpeg": ["mp3"],
+                            }}
+                            tooltip="Audio URL"
+                            isRequired
+                          />
+                          <Field
+                            name="AudioPrice"
+                            label={"Audio Price"}
+                            horizontal
+                            type="number"
+                            component={CustomInput}
+                            tooltip="Audio Price"
+                            placeholder="Type your products audio price"
+                            isRequired
+                          />
+                        </>
+                      ) : null}
                       <Field
                         name="translated"
                         label={"Translated"}

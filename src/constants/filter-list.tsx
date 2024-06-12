@@ -7,6 +7,6 @@ export const book_format: SelectItem[] = [
 ];
 
 export const language_select: SelectItem[] = [
-  { value: "Kannada", name: "Kannada" },
+  { value: "English", name: "English" },
   { value: "Kannada", name: "Kannada" },
 ];

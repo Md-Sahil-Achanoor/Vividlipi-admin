@@ -19,6 +19,18 @@ export const featureProductHeader = [
   "Action",
 ];
 
+export const productLIstTableHead = [
+  "SL",
+  "Name",
+  "Author",
+  "Price",
+  "Publisher",
+  "Release Date",
+  "Language",
+  "Book Formats",
+  "Action",
+];
+
 export const tabItems: TabItem[] = [
   {
     name: "Feature Slider",

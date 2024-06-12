@@ -42,13 +42,13 @@ const useFileUploader = ({
       for (let i = 0; i < file.length; i++) {
         const el = file[i];
         const formData = new FormData();
-        formData.append("image", el);
+        formData.append("file", el);
         const image: any = await upload({
           url: endpoints.imageUpload,
           data: formData,
         }).unwrap();
-        // console.log(`\n\n image:`, image);
-        res.push(image?.path);
+        console.log(`\n\n image:`, image);
+        res.push(image?.url);
       }
       if (isMultiple) {
         helpers.setValue([...values?.[name], ...res]);

@@ -2,7 +2,7 @@ export const endpoints = {
   /**
    * @module Global
    * */
-  imageUpload: "/UploadProfilePic",
+  imageUpload: "/api/uploadfile",
 
   /**
    * @module Auth
