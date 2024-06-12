@@ -7,5 +7,4 @@ export interface SelectItem {
   name: string;
   value: string | number;
   id?: number;
-  [key: string]: any;
 }

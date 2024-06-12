@@ -41,15 +41,19 @@ export interface FeatureSubSliderQuery extends ReqQuery {
  */
 export interface FeatureProductPayload extends IHomeFeatureProduct {
   productId: string | number;
+  position?: number;
 }
 
 export interface FeatureProductResponse extends IHomeFeatureProduct {
   id: string | number;
   productDetails?: ProductResponse | null;
+  position?: number;
+  products?: number;
 }
 
 export interface FeatureProductQuery extends ReqQuery {
   id: string;
+  status: string | number;
 }
 
 /**

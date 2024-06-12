@@ -7,7 +7,6 @@ import { coreAction } from "@/feature/core/coreSlice";
 import { useGetHomeFeatureProductsQuery } from "@/feature/home/homeQuery";
 import { homeAction } from "@/feature/home/homeSlice";
 import { cn } from "@/utils/twmerge";
-import { BiRupee } from "react-icons/bi";
 import ModuleHeader from "../ModuleHeader";
 
 // type FeatureProductsProps = {
@@ -16,7 +15,7 @@ import ModuleHeader from "../ModuleHeader";
 // };
 
 const FeatureProducts = () => {
-  const { data, isLoading } = useGetHomeFeatureProductsQuery({});
+  const { data, isLoading, isFetching } = useGetHomeFeatureProductsQuery({});
   const dispatch = useAppDispatch();
   const handleModal = (type: string, item?: any) => {
     if (type === "cancelled") {
@@ -50,11 +49,13 @@ const FeatureProducts = () => {
     <div>
       <ModuleHeader
         title="Feature Products"
+        isAdd={data?.data && data?.data?.length < 9}
+        isButton={false}
         handleModal={() => handleModal("manage-feature-product")}
       />
       <Table headList={featureProductHeader}>
-        {isLoading ? (
-          <SkeletonTable total={6} tableCount={6} />
+        {isLoading || (data?.data && data?.data?.length > 0 && isFetching) ? (
+          <SkeletonTable total={6} tableCount={7} />
         ) : data?.data && data?.data?.length > 0 ? (
           data?.data?.map((item, index) => (
             <tr className="table_tr" key={item?.id}>
@@ -62,10 +63,10 @@ const FeatureProducts = () => {
               <td className="table_td">{item?.productDetails?.book_title}</td>
               <td className="table_td">{item?.productDetails?.author_name}</td>
               <td className="table_td">
-                <div className="flex items-center gap-1">
-                  <BiRupee />
-                  <span>{item?.productDetails?.price}</span>
-                </div>
+                {item?.productDetails?.publisher?.Name || "N/A"}
+              </td>
+              <td className="table_td">
+                {item?.productDetails?.language || "N/A"}
               </td>
               <td className="table_td">{item?.main == 1 ? "Yes" : "No"}</td>
               <td className="table_td">

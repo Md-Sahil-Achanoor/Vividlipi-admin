@@ -14,8 +14,21 @@ export const featureProductHeader = [
   "SL",
   "Name",
   "Author",
+  "Publisher",
+  "Language",
+  "Position",
+  "Action",
+];
+
+export const productLIstTableHead = [
+  "SL",
+  "Name",
+  "Author",
   "Price",
-  "Banner",
+  "Publisher",
+  "Release Date",
+  "Language",
+  "Book Formats",
   "Action",
 ];
 
@@ -25,8 +38,8 @@ export const tabItems: TabItem[] = [
     type: "feature-slider",
   },
   {
-    name: "Feature Sub Slider",
-    type: "feature-sub-slider",
+    name: "New In",
+    type: "feature-new-in",
   },
   {
     name: "Feature Products",

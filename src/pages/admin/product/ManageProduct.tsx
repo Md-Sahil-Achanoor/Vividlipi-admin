@@ -1,12 +1,15 @@
 import { useAppSelector } from "@/app/store";
 import Loader from "@/components/atoms/Loader";
+import MultiSelectItem from "@/components/atoms/MultiSelectItem";
 import CheckboxGroup from "@/components/form/CheckboxGroup";
 import CustomInput from "@/components/form/CustomInput";
+import FileUpload from "@/components/form/FileUpload";
 import InfiniteSelect from "@/components/form/InfiniteSelect";
 import InputSelect from "@/components/form/InputSelect";
 import InputTagComponent from "@/components/form/InputTagComponent";
 import QuillComponent from "@/components/form/QuillComponent";
 import { Card } from "@/components/ui/Card";
+import { book_format, language_select } from "@/constants/filter-list";
 import { useGetCategoriesQuery } from "@/feature/category/categoryQuery";
 import {
   useGetProductByIdQuery,
@@ -19,10 +22,10 @@ import {
   BreadCrumbItem,
   CategoryQuery,
   CategoryResponse,
-  ChangeEventType,
   Product,
   ProductPayload,
   PublisherResponse,
+  SelectItem,
 } from "@/types";
 import { cn } from "@/utils/twmerge";
 import { Field, Form, Formik, FormikHelpers } from "formik";
@@ -35,16 +38,22 @@ const initialValues: Product = {
   url_slug: "",
   cat1: null,
   cat2: null,
-  thumbnail: "https://example.com/book_cover.jpg",
+  thumbnail: "",
   description: "",
   author_name: "",
   publisher: null,
   release_date: "",
   digital_product_url: "",
-  sale_price: "",
-  sale_quantity: "",
-  price: "",
-  inventory: "",
+  // sale_price: "",
+  // sale_quantity: "",
+  // price: "",
+  // inventory: "",
+  HardCopyPrice: "",
+  AudioPrice: "",
+  EbookPrice: "",
+  Stock: "",
+  Audio_URL: "",
+  File_URL: "",
   commission: "",
   first_year_commission: "",
   second_year_commission: "",
@@ -54,7 +63,7 @@ const initialValues: Product = {
   shipping: "",
   genre: "",
   tags: [],
-  book_format: 1,
+  book_format: [],
   translated: "No", //Yes/No
   translator_name: "",
   language: "",
@@ -197,14 +206,14 @@ const ManageProduct = () => {
           ) : (
             <div>
               <Formik
-                initialValues={selectedProduct || initialValues}
+                initialValues={(selectedProduct as any) || initialValues}
                 validationSchema={manageProductSchema}
                 onSubmit={onSubmit}
                 enableReinitialize
               >
                 {({ isSubmitting, values, setFieldValue }) => (
                   <Form>
-                    {/* {console.log(values)} */}
+                    {/* {console.log(values, errors)} */}
                     <div className="mt-5">
                       <Field
                         name="book_title"
@@ -213,13 +222,13 @@ const ManageProduct = () => {
                         type="text"
                         component={CustomInput}
                         tooltip="Book title"
-                        onBlurCallback={(e: ChangeEventType) => {
-                          let slug = e.target.value
-                            .toLowerCase()
-                            .replace(/ /g, "-")
-                            .replace(/[^\w-]+/g, "");
-                          setFieldValue("url_slug", slug);
-                        }}
+                        // onBlurCallback={(e: ChangeEventType) => {
+                        //   let slug = e.target.value
+                        //     .toLowerCase()
+                        //     .replace(/ /g, "-")
+                        //     .replace(/[^\w-]+/g, "");
+                        //   setFieldValue("url_slug", slug);
+                        // }}
                         placeholder="Type your products name"
                         isRequired
                       />
@@ -229,7 +238,7 @@ const ManageProduct = () => {
                         horizontal
                         type="text"
                         component={CustomInput}
-                        disabled
+                        // disabled
                         tooltip="URL Slug"
                         placeholder="Type your products name"
                         isRequired
@@ -337,6 +346,16 @@ const ManageProduct = () => {
                         isRequired
                       /> */}
                       <Field
+                        name="thumbnail"
+                        label={"Thumbnail"}
+                        horizontal
+                        component={FileUpload}
+                        maxFileSize={10}
+                        supportedString="jpg, jpeg, png"
+                        tooltip="File URL"
+                        isRequired
+                      />
+                      <Field
                         name="description"
                         label={"Description"}
                         horizontal
@@ -432,7 +451,7 @@ const ManageProduct = () => {
                         placeholder="Type your products digital product URL"
                         isRequired
                       />
-                      <Field
+                      {/* <Field
                         name="sale_price"
                         label={"Sale Price"}
                         horizontal
@@ -471,7 +490,7 @@ const ManageProduct = () => {
                         tooltip="Inventory"
                         placeholder="Type your products inventory"
                         isRequired
-                      />
+                      /> */}
                       <Field
                         name="commission"
                         label={"Commission"}
@@ -558,25 +577,151 @@ const ManageProduct = () => {
                         name="tags"
                         label={"Tags"}
                         horizontal
+                        tooltip="Tags"
                         type="text"
                         component={InputTagComponent}
-                        tooltip="Tags"
                         placeholder="Type your products tags"
                         isRequired
                       />
                       <Field
-                        name="book_format"
                         label={"Book Format"}
+                        name="book_format"
                         horizontal
-                        component={InputSelect}
-                        items={[
-                          { value: 1, name: "Physical" },
-                          { value: 2, name: "E-book" },
-                          { value: 3, name: "Audio Book" },
-                        ]}
-                        tooltip="Book Format"
-                        isRequired
+                        tooltip="Tags"
+                        isRequired={false}
+                        renderData={book_format}
+                        renderItem={(item: SelectItem) => <>{item?.name}</>}
+                        isActive={(item: SelectItem) =>
+                          values?.book_format?.includes(item?.value as number)
+                        }
+                        renderName={() => (
+                          <MultiSelectItem<any>
+                            data={values?.book_format}
+                            defaultName="Select..."
+                            displayName="name"
+                            name={(data) =>
+                              book_format?.find(
+                                (el) => Number(el?.value) == Number(data)
+                              )?.name || ""
+                            }
+                            onClick={(item: number) => {
+                              setFieldValue(
+                                "book_format",
+                                values?.book_format?.filter(
+                                  (book_format) => book_format !== item
+                                )
+                              );
+                            }}
+                          />
+                        )}
+                        onChangeCallback={(item: SelectItem) => {
+                          // check unique item in array
+                          let isUnique = values?.book_format?.includes(
+                            item?.value as number
+                          );
+                          if (!isUnique) {
+                            setFieldValue("book_format", [
+                              ...values?.book_format,
+                              item?.value,
+                            ]);
+                          } else {
+                            return;
+                          }
+                        }}
+                        clearData={(item: SelectItem) => {
+                          // find data and clear
+                          let data = values?.book_format?.filter(
+                            (book_format) => book_format !== item?.value
+                          );
+                          setFieldValue("book_format", data);
+                        }}
+                        isSelected={false}
+                        component={InfiniteSelect}
+                        isAuth
                       />
+                      {values?.book_format?.includes(1) ? (
+                        <>
+                          <Field
+                            name="HardCopyPrice"
+                            label={"Hard Copy Price"}
+                            horizontal
+                            type="number"
+                            component={CustomInput}
+                            tooltip="Hard Copy Price"
+                            placeholder="Type your products hard copy price"
+                            isRequired
+                          />
+                          <Field
+                            name="Stock"
+                            label={"Hard Copy Stock"}
+                            horizontal
+                            type="number"
+                            component={CustomInput}
+                            tooltip="Stock"
+                            placeholder="Type your products stock"
+                            isRequired
+                          />
+                        </>
+                      ) : null}
+
+                      {values?.book_format?.includes(2) ? (
+                        <>
+                          <Field
+                            name="File_URL"
+                            label={"E-Book File"}
+                            horizontal
+                            component={FileUpload}
+                            maxFileSize={100}
+                            supportedString="pdf, doc, docx, epub"
+                            acceptFile={{
+                              "application/pdf": ["pdf"],
+                              "application/msword": ["doc", "docx"],
+                              "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                                ["docx"],
+                              "application/epub+zip": ["epub"],
+                            }}
+                            tooltip="File URL"
+                            isRequired
+                          />
+                          <Field
+                            name="EbookPrice"
+                            label={"E-book Price"}
+                            horizontal
+                            type="number"
+                            component={CustomInput}
+                            tooltip="Ebook Price"
+                            placeholder="Type your products ebook price"
+                            isRequired
+                          />
+                        </>
+                      ) : null}
+                      {values?.book_format?.includes(3) ? (
+                        <>
+                          <Field
+                            name="Audio_URL"
+                            label={"Audio URL"}
+                            horizontal
+                            component={FileUpload}
+                            maxFileSize={100}
+                            supportedString="mp3"
+                            acceptFile={{
+                              "audio/mpeg": ["mp3"],
+                            }}
+                            tooltip="Audio URL"
+                            isRequired
+                          />
+                          <Field
+                            name="AudioPrice"
+                            label={"Audio Price"}
+                            horizontal
+                            type="number"
+                            component={CustomInput}
+                            tooltip="Audio Price"
+                            placeholder="Type your products audio price"
+                            isRequired
+                          />
+                        </>
+                      ) : null}
                       <Field
                         name="translated"
                         label={"Translated"}
@@ -601,14 +746,14 @@ const ManageProduct = () => {
                           isRequired
                         />
                       )}
+
                       <Field
                         name="language"
                         label={"Language"}
                         horizontal
-                        type="text"
-                        component={CustomInput}
+                        component={InputSelect}
+                        items={language_select}
                         tooltip="Language"
-                        placeholder="Type your products language"
                         isRequired
                       />
 

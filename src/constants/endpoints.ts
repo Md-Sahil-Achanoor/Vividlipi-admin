@@ -2,7 +2,7 @@ export const endpoints = {
   /**
    * @module Global
    * */
-  imageUpload: "/UploadProfilePic",
+  imageUpload: "/api/uploadfile",
 
   /**
    * @module Auth
@@ -85,4 +85,13 @@ export const endpoints = {
   list_home_product: "/api/list-featured-products",
   edit_home_product: "/api/replace-featured-products",
   delete_home_product: "/api/remove-featured-products",
+
+  /**
+   * @module Feature New In
+   * @submodule of CMS
+   * */
+  add_new_in: "/api/add-newin-products",
+  list_new_in: "/api/list-newin-products",
+  delete_new_in: "/api/remove-newin-products",
+  toggle_new_in: "/api/newin-toggle",
 };

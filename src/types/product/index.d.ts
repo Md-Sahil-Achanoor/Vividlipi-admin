@@ -14,11 +14,17 @@ export interface IProduct<T, P> {
   publisher: P | null;
   release_date: string;
   digital_product_url: string;
-  sale_price: string | number;
-  sale_quantity: number | string;
-  price: string | number;
-  inventory: string | number;
+  // sale_price: string | number;
+  // sale_quantity: number | string;
+  // price: string | number;
+  // inventory: string | number;
   commission: string;
+  HardCopyPrice: string | number;
+  AudioPrice: string | number;
+  EbookPrice: string | number;
+  Stock: string | number;
+  Audio_URL: string;
+  File_URL: string;
   first_year_commission: string | number;
   second_year_commission: string | number;
   there_after_commission: string | number;
@@ -27,7 +33,7 @@ export interface IProduct<T, P> {
   shipping: string | number;
   genre: string;
   tags: string[];
-  book_format: number;
+  book_format: number[];
   translated: string; // Yes /No
   translator_name: string | null; // if yes then required
   language: string;
@@ -38,7 +44,7 @@ export interface IProduct<T, P> {
 export type Product = IProduct<CategoryResponse, PublisherResponse>;
 
 export interface ProductPayload
-  extends IProduct<number | string, number | string> {}
+  extends IProduct<number | string, number | string, number> {}
 
 export type BulkProduct = Omit<IBulkProduct, "translator_name"> & {
   translator_name?: string;
@@ -56,7 +62,7 @@ export interface ProductResponse
 
 export interface ProductQuery extends ReqQuery {
   productid: string;
-  searchKeyword: string;
+  search: string;
   page: number;
 }
 

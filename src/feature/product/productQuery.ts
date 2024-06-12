@@ -19,12 +19,13 @@ const productQuery = API.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query<
       ApiResponse<ListResponse<ProductResponse>>,
-      ManageQuery<Partial<ProductQuery>>
+      ManagePayload<Partial<ProductQuery>>
     >({
-      query: ({ query }) => ({
+      query: ({ query, data }) => ({
         url: endpoints.product_list,
         method: "POST",
-        body: query,
+        body: data,
+        params: query,
       }),
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
@@ -63,7 +64,17 @@ const productQuery = API.injectEndpoints({
                 : [],
             translator_name: rest?.translator_name || "",
             category: [],
+            HardCopyPrice: rest?.HardCopyPrice || "",
+            AudioPrice: rest?.AudioPrice || "",
+            EbookPrice: rest?.EbookPrice || "",
+            Stock: rest?.Stock || "",
+            Audio_URL: rest?.Audio_URL || "",
+            File_URL: rest?.File_URL || "",
+            book_format: rest?.book_format?.length
+              ? rest?.book_format?.map((el) => Number(el))
+              : [],
           };
+          console.log(`\n\n data:`, data);
           dispatch(productAction.setSelectedProduct(data as ProductResponse));
         } catch (err: unknown) {
           // do nothing
@@ -136,6 +147,9 @@ const productQuery = API.injectEndpoints({
                 "getProducts",
                 {
                   query: _arg.query,
+                  data: {
+                    page: 1,
+                  },
                 },
                 (draft) => {
                   draft.data.data = draft.data.data?.filter(

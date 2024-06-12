@@ -7,6 +7,7 @@ interface Props<T> {
   onClick: (data: T) => void;
   displayName: AccessObjectKey;
   isRemoveAble?: boolean;
+  name?: (data: T) => string;
 }
 
 const MultiSelectItem = <T extends Partial<AccessObject>>({
@@ -15,6 +16,7 @@ const MultiSelectItem = <T extends Partial<AccessObject>>({
   displayName,
   onClick,
   isRemoveAble = false,
+  name,
 }: Props<T>) => {
   // console.log(`\n\n  data: ====>`, data);
   if (data?.length !== 0) {
@@ -23,9 +25,9 @@ const MultiSelectItem = <T extends Partial<AccessObject>>({
         {data?.map((item) => (
           <div
             className="flex justify-between items-center gap-1 bg-gray-200 rounded-md px-1"
-            key={item?.id}
+            key={item?.id || (item as any)}
           >
-            <span>{item[displayName]}</span>
+            <span>{name ? name(item) : item[displayName]}</span>
             {!isRemoveAble && (
               <span
                 className="cursor-pointer rounded-md"

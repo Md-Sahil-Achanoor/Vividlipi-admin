@@ -175,6 +175,8 @@ export interface FormikFileUploadProps extends IFormik, FileUploadProps {
   isEdit?: boolean;
   isProfile?: boolean;
   isSuggestion?: boolean;
+  horizontal?: boolean;
+  tooltip?: string;
 }
 
 /**

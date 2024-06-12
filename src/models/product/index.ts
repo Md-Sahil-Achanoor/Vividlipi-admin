@@ -1,11 +1,10 @@
-import { alphanumericOnly } from "@/utils/valid-image";
 import * as Yup from "yup";
 
 // title only
 
 export const productBaseSchema = Yup.object({
   book_title: Yup.string()
-    .matches(alphanumericOnly, "Must be alphanumeric only")
+    // .matches(alphanumericOnly, "Must be alphanumeric only")
     .required("Book title is required"),
   url_slug: Yup.string().required("URL slug is required"),
   thumbnail: Yup.string().required("Thumbnail is required"),
@@ -14,18 +13,18 @@ export const productBaseSchema = Yup.object({
   // publisher: Yup.string().required("Publisher is required"),
   release_date: Yup.string().required("Release date is required"),
   digital_product_url: Yup.string().required("Digital product URL is required"),
-  sale_price: Yup.number()
-    .min(0, "Negative value is not allowed")
-    .required("Sale price is required"),
-  sale_quantity: Yup.number()
-    .min(0, "Negative value is not allowed")
-    .required("Sale quantity is required"),
-  price: Yup.number()
-    .min(0, "Negative value is not allowed")
-    .required("Price is required"),
-  inventory: Yup.number()
-    .min(0, "Negative value is not allowed")
-    .required("Inventory is required"),
+  // sale_price: Yup.number()
+  //   .min(0, "Negative value is not allowed")
+  //   .required("Sale price is required"),
+  // sale_quantity: Yup.number()
+  //   .min(0, "Negative value is not allowed")
+  //   .required("Sale quantity is required"),
+  // price: Yup.number()
+  //   .min(0, "Negative value is not allowed")
+  //   .required("Price is required"),
+  // inventory: Yup.number()
+  //   .min(0, "Negative value is not allowed")
+  //   .required("Inventory is required"),
   commission: Yup.number()
     .min(0, "Negative value is not allowed")
     .max(100, "Commission should be less than 100")
@@ -50,7 +49,6 @@ export const productBaseSchema = Yup.object({
     .min(0, "Negative value is not allowed")
     .required("Shipping is required"),
   genre: Yup.string().required("Genre is required"),
-  book_format: Yup.number().required("Book format is required"),
   translated: Yup.string().required("Translate is required"), //Yes/No
   translator_name: Yup.string().test({
     name: "translator_name",
@@ -96,11 +94,94 @@ export const manageProductSchema = productBaseSchema.concat(
           return value !== null;
         },
       }),
+    book_format: Yup.array()
+      .of(
+        Yup.number()
+          .oneOf([1, 2, 3], "Invalid book format")
+          .required("Required")
+      )
+      .test({
+        name: "book_format",
+        message: "Book format is required",
+        test: function (value) {
+          return value && value.length > 0;
+        },
+      }),
+    HardCopyPrice: Yup.number()
+      .min(0, "Negative value is not allowed")
+      .test({
+        name: "HardCopyPrice",
+        message: "Hard copy price is required",
+        test: function (value) {
+          if (this.parent.book_format?.includes(1)) {
+            return value ? true : false;
+          }
+          return true;
+        },
+      }),
+    Stock: Yup.number()
+      .min(0, "Negative value is not allowed")
+      .test({
+        name: "EbookPrice",
+        message: "Ebook price is required",
+        test: function (value) {
+          if (this.parent.book_format?.includes(1)) {
+            return value ? true : false;
+          }
+          return true;
+        },
+      }),
+
+    EbookPrice: Yup.number()
+      .min(0, "Negative value is not allowed")
+      .test({
+        name: "EbookPrice",
+        message: "Ebook price is required",
+        test: function (value) {
+          if (this.parent.book_format?.includes(2)) {
+            return value ? true : false;
+          }
+          return true;
+        },
+      }),
+    File_URL: Yup.string().test({
+      name: "File_URL",
+      message: "File URL is required",
+      test: function (value) {
+        if (this.parent.book_format?.includes(2)) {
+          return value ? true : false;
+        }
+        return true;
+      },
+    }),
+    AudioPrice: Yup.number()
+      .min(0, "Negative value is not allowed")
+      .test({
+        name: "AudioPrice",
+        message: "Audio price is required",
+        test: function (value) {
+          if (this.parent.book_format?.includes(3)) {
+            return value ? true : false;
+          }
+          return true;
+        },
+      }),
+    Audio_URL: Yup.string().test({
+      name: "Audio_URL",
+      message: "Audio URL is required",
+      test: function (value) {
+        if (this.parent.book_format?.includes(3)) {
+          return value ? true : false;
+        }
+        return true;
+      },
+    }),
   })
 );
 
 export const productBulkUploadSchema = productBaseSchema.concat(
   Yup.object({
+    book_format: Yup.number().required("Book format is required"),
     category1: Yup.string().required("Category 1 is required"),
     category2: Yup.string().required("Category 2 is required"),
     publisher: Yup.string().required("Publisher is required"),

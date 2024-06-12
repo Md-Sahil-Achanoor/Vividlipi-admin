@@ -50,6 +50,7 @@ const FeatureSlider = () => {
     <div>
       <ModuleHeader
         title="Feature Slider"
+        isButton={false}
         handleModal={() => handleModal("manage-feature-slider")}
       />
       <Table headList={featureSliderHeader}>

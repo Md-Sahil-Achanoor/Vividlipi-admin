@@ -4,6 +4,7 @@ import ManageModule from "@/components/elements/modal/ManageModule";
 import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
 import BulkUpload from "@/components/module/bulk/BulkUpload";
 import Table from "@/components/ui/Table";
+import { productLIstTableHead } from "@/constants/tableHeader";
 import { coreAction } from "@/feature/core/coreSlice";
 import {
   useDeleteProductMutation,
@@ -24,17 +25,6 @@ const breadcrumbItem: BreadCrumbItem[] = [
 ];
 
 const LIMIT = 10;
-const tableHead = [
-  "SL",
-  "Name",
-  "Author",
-  "Price",
-  "Publisher",
-  "Release Date",
-  "Sale Price",
-  "Sale Quantity",
-  "Action",
-];
 
 const ProductList = () => {
   const navigate = useNavigate();
@@ -48,7 +38,7 @@ const ProductList = () => {
 
   const dispatch = useAppDispatch();
   const { data, isLoading, refetch } = useGetProductsQuery({
-    query: {
+    data: {
       page: 1,
     },
   });
@@ -136,9 +126,7 @@ const ProductList = () => {
           onClick: () => navigate("/admin/products/product-list/add-product"),
         }}
       >
-        {/* <Card className="p-3 border-0 shadow-md"> */}
-        {/* <TableWrapper isActiveInactive isSort={false}> */}
-        <Table headList={tableHead}>
+        <Table headList={productLIstTableHead}>
           {isLoading ? (
             <SkeletonTable total={6} tableCount={9} />
           ) : productList && productList?.length > 0 ? (
@@ -156,11 +144,24 @@ const ProductList = () => {
                 </th>
                 <td className="table_td">{item?.book_title}</td>
                 <td className="table_td">{item?.author_name}</td>
-                <td className="table_td">{item?.price}</td>
+                <td className="table_td">{item?.HardCopyPrice}</td>
                 <td className="table_td">{item?.publisher?.Name || "N/A"}</td>
                 <td className="table_td">{item?.release_date}</td>
-                <td className="table_td">{item?.sale_price}</td>
-                <td className="table_td">{item?.sale_quantity}</td>
+                <td className="table_td">{item?.language}</td>
+                <td className="table_td">
+                  <div className="flex flex-col">
+                    {item?.book_format?.map((el, index) => (
+                      <span key={el} className="text-xs">
+                        {index + 1}:{" "}
+                        {el == 1 ? "Hard Copy" : el === 2 ? "Audio" : "Ebook"}
+                        {el == 1 &&
+                          ` (Price: ₹${item?.HardCopyPrice}; Stock: ${item?.Stock})`}
+                        {el == 2 && item?.AudioPrice}
+                        {el == 3 && item?.EbookPrice}
+                      </span>
+                    ))}
+                  </div>
+                </td>
                 <td className="table_td">
                   <div className="flex items-center gap-3">
                     <Link
@@ -193,8 +194,6 @@ const ProductList = () => {
             </NoTableData>
           )}
         </Table>
-        {/* </TableWrapper> */}
-        {/* </Card> */}
       </PageLayout>
     </>
   );

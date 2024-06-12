@@ -72,6 +72,8 @@ const API = createApi({
     "HomeFeatureSlider",
     "HomeFeatureSubSlider",
     "HomeFeatureProducts",
+    "NewInProduct",
+    "NewInProductToggle",
   ],
   /**
    * This api has endpoints injected in adjacent files,

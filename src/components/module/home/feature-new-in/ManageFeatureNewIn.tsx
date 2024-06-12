@@ -3,30 +3,29 @@ import CustomInput from "@/components/form/CustomInput";
 import InfiniteSelect from "@/components/form/InfiniteSelect";
 import Modal from "@/components/ui/Modal";
 import { coreAction } from "@/feature/core/coreSlice";
-import { useManageFeatureProductMutation } from "@/feature/home/homeQuery";
+import { useManageNewInMutation } from "@/feature/home/homeQuery";
 import { homeAction } from "@/feature/home/homeSlice";
 import { useGetProductsQuery } from "@/feature/product/productQuery";
 import useDebounce from "@/hooks/useDebounce";
-import { IHomeFeatureProduct, featureProductsSchema } from "@/models/home";
+import { IHomeFeatureNewProduct, featureNewProductSchema } from "@/models/home";
 import { ProductQuery, ProductResponse } from "@/types";
 import { cn } from "@/utils/twmerge";
 import { Field, Form, Formik, FormikHelpers, FormikProps } from "formik";
 import { useEffect, useRef, useState } from "react";
 import { BsArrowRightShort } from "react-icons/bs";
 
-const initialValues: IHomeFeatureProduct = {
+const initialValues: IHomeFeatureNewProduct = {
   productId: null,
-  main: 0,
+  position: 1,
 };
 
-const ManageFeatureProduct = () => {
+const ManageFeatureNewIn = () => {
   const { type, open } = useAppSelector((state) => state.core);
-  const formRef = useRef<FormikProps<IHomeFeatureProduct>>(null);
+  const formRef = useRef<FormikProps<IHomeFeatureNewProduct>>(null);
   const { selectedFeatureProduct } = useAppSelector((state) => state.home);
-  const [manageFeatureProduct, { isLoading }] =
-    useManageFeatureProductMutation();
+  const [manageNewIn, { isLoading }] = useManageNewInMutation();
   const [searchValue, setSearchValue] = useState<string>("");
-  console.log(`\n\n ~ ManageFeatureProduct ~ searchValue:`, searchValue);
+  // console.log(`\n\n ~ ManageFeatureNewIn ~ searchValue:`, searchValue);
   const { value, onChange } = useDebounce(() => setSearchValue(value), 1000);
 
   const query = () => {
@@ -40,11 +39,10 @@ const ManageFeatureProduct = () => {
   };
 
   const {
-    isLoading: productLoading,
+    isFetching: productLoading,
     refetch: productRefetch,
     data: productList,
     isError: productIsError,
-    // error: productErrorMessage,
   } = useGetProductsQuery(
     {
       data: {
@@ -53,17 +51,17 @@ const ManageFeatureProduct = () => {
       query: query(),
     },
     {
-      skip: !open || type !== "manage-feature-product",
+      skip: !open || type !== "manage-new-in",
     }
   );
   // console.log(
-  //   `\n\n ~ ManageFeatureProduct ~ productList:`,
+  //   `\n\n ~ ManageFeatureNewIn ~ productList:`,
   //   productList,
   //   productErrorMessage
   // );
 
   useEffect(() => {
-    if (open && type === "manage-feature-product") {
+    if (open && type === "manage-new-in") {
       productRefetch();
     }
   }, [type]);
@@ -79,15 +77,15 @@ const ManageFeatureProduct = () => {
   };
 
   const onSubmit = async (
-    values: IHomeFeatureProduct,
-    { setSubmitting, resetForm }: FormikHelpers<IHomeFeatureProduct>
+    values: IHomeFeatureNewProduct,
+    { setSubmitting, resetForm }: FormikHelpers<IHomeFeatureNewProduct>
   ) => {
     // console.log("values", values);
-    await manageFeatureProduct({
+    await manageNewIn({
       id: selectedFeatureProduct?.id || "",
       data: {
         productId: values.productId?.id as number,
-        main: values.main,
+        position: values.position as number,
       },
       options: {
         setSubmitting,
@@ -98,7 +96,7 @@ const ManageFeatureProduct = () => {
   return (
     <Modal
       classes={
-        type === "manage-feature-product" && open
+        type === "manage-new-in" && open
           ? {
               top: "visible",
               body: `-translate-y-[0%] max-w-[500px] p-3 min-w-[500px]`,
@@ -110,18 +108,16 @@ const ManageFeatureProduct = () => {
       }
       handleModal={handleModal}
       wrapperClass="h-full"
-      headText={
-        selectedFeatureProduct?.id
-          ? "Update Feature Product"
-          : "Create Feature Product"
-      }
+      headText={selectedFeatureProduct?.id ? "Update New In" : "Create New In"}
       isModalHeader
       outSideClick
     >
       <div className="w-full h-full">
         <Formik
-          initialValues={selectedFeatureProduct || initialValues}
-          validationSchema={featureProductsSchema}
+          initialValues={
+            (selectedFeatureProduct as IHomeFeatureNewProduct) || initialValues
+          }
+          validationSchema={featureNewProductSchema}
           onSubmit={onSubmit}
           enableReinitialize
           innerRef={formRef}
@@ -154,7 +150,7 @@ const ManageFeatureProduct = () => {
                               values?.productId?.book_title && "uppercase"
                             )}
                           >
-                            {values?.productId?.book_title || "Select Category"}
+                            {values?.productId?.book_title || "Select Product"}
                           </span>
                         );
                       }}
@@ -178,11 +174,11 @@ const ManageFeatureProduct = () => {
                   </div>
                   <div className="col-span-2">
                     <Field
-                      name="main"
-                      label="Main"
+                      name="position"
+                      label="Position"
                       type="number"
                       component={CustomInput}
-                      placeholder="Main"
+                      placeholder="Position"
                     />
                   </div>
                 </div>
@@ -218,4 +214,4 @@ const ManageFeatureProduct = () => {
   );
 };
 
-export default ManageFeatureProduct;
+export default ManageFeatureNewIn;
