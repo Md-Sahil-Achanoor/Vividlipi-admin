@@ -169,11 +169,15 @@ const ProductList = () => {
                     {item?.book_format?.map((el, index) => (
                       <span key={el} className="text-xs">
                         {index + 1}:{" "}
-                        {el == 1 ? "Hard Copy" : el === 2 ? "Audio" : "Ebook"}
-                        {el == 1 &&
+                        {Number(el) == 1
+                          ? "Hard Copy"
+                          : Number(el) == 2
+                            ? "Ebook"
+                            : "Audio Book"}
+                        {Number(el) == 1 &&
                           ` (Price: ₹${item?.HardCopyPrice}; Stock: ${item?.Stock})`}
-                        {el == 2 && item?.AudioPrice}
-                        {el == 3 && item?.EbookPrice}
+                        {Number(el) == 3 && ` (Price: ₹${item?.AudioPrice})`}
+                        {Number(el) == 2 && ` (Price: ₹${item?.EbookPrice})`}
                       </span>
                     ))}
                   </div>
