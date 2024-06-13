@@ -23,6 +23,7 @@ export const featureProductHeader = [
 export const productLIstTableHead = [
   "SL",
   "Name",
+  "Thumbnail",
   "Author",
   "Price",
   "Publisher",
