@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/app/store";
+import PlaceholderImage from "@/assets/svg/placeholder";
 import NoTableData from "@/components/atoms/NoTableData";
 import ManageModule from "@/components/elements/modal/ManageModule";
 import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
@@ -15,6 +16,7 @@ import PageLayout from "@/layout/PageLayout";
 import { BreadCrumbItem } from "@/types";
 import { useEffect } from "react";
 import { BiUpload } from "react-icons/bi";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Link, useNavigate } from "react-router-dom";
 
 const breadcrumbItem: BreadCrumbItem[] = [
@@ -128,7 +130,7 @@ const ProductList = () => {
       >
         <Table headList={productLIstTableHead}>
           {isLoading ? (
-            <SkeletonTable total={6} tableCount={9} />
+            <SkeletonTable total={6} tableCount={10} />
           ) : productList && productList?.length > 0 ? (
             productList?.map((item, index) => (
               <tr
@@ -143,6 +145,20 @@ const ProductList = () => {
                   {index + 1 + (page - 1) * LIMIT}
                 </th>
                 <td className="table_td">{item?.book_title}</td>
+                <td className="table_td">
+                  <div className="w-full h-16 flex justify-center">
+                    <LazyLoadImage
+                      src={item?.thumbnail as string}
+                      alt={item?.book_title}
+                      placeholder={<PlaceholderImage />}
+                      wrapperClassName="w-15 h-full object-contain bg-gray-100 p-[1px] rounded-sm"
+                      effect="blur"
+                      width={"100%"}
+                      height={64}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                </td>
                 <td className="table_td">{item?.author_name}</td>
                 <td className="table_td">{item?.HardCopyPrice}</td>
                 <td className="table_td">{item?.publisher?.Name || "N/A"}</td>
@@ -153,11 +169,15 @@ const ProductList = () => {
                     {item?.book_format?.map((el, index) => (
                       <span key={el} className="text-xs">
                         {index + 1}:{" "}
-                        {el == 1 ? "Hard Copy" : el === 2 ? "Audio" : "Ebook"}
-                        {el == 1 &&
+                        {Number(el) == 1
+                          ? "Hard Copy"
+                          : Number(el) == 2
+                            ? "Ebook"
+                            : "Audio Book"}
+                        {Number(el) == 1 &&
                           ` (Price: ₹${item?.HardCopyPrice}; Stock: ${item?.Stock})`}
-                        {el == 2 && item?.AudioPrice}
-                        {el == 3 && item?.EbookPrice}
+                        {Number(el) == 3 && ` (Price: ₹${item?.AudioPrice})`}
+                        {Number(el) == 2 && ` (Price: ₹${item?.EbookPrice})`}
                       </span>
                     ))}
                   </div>
