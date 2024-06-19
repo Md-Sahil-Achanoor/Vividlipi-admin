@@ -1,4 +1,4 @@
-import * as Yup from "yup";
+import * as Yup from 'yup'
 
 // const MAX_FILE_SIZE = 102400; //100KB
 
@@ -13,16 +13,15 @@ import * as Yup from "yup";
 interface FileType extends File {}
 
 export const bulkUploadSchema = Yup.object({
-  image: Yup.mixed<FileType>().nullable().required("File is required"),
-  type: Yup.string().required("Type is required"),
+  image: Yup.mixed<FileType>().nullable().required('File is required'),
+  type: Yup.string().required('Type is required'),
   operatorId: Yup.mixed()
     .nullable()
-    .test("operatorId", "Operator Id is required.", (value, context) => {
-      const { type } = context.parent;
-      if (type === "Pos") {
-        return value !== null;
-      } else {
-        return true;
+    .test('operatorId', 'Operator Id is required.', (value, context) => {
+      const { type } = context.parent
+      if (type === 'Pos') {
+        return value !== null
       }
+      return true
     }),
-});
+})

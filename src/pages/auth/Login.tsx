@@ -1,49 +1,49 @@
-import logo from "@/assets/Images/logo.png";
-import CustomInput from "@/components/form/CustomInput";
-import config from "@/config/config";
-import { useSignInMutation } from "@/feature/auth/authQuery";
-import { ISignIn, signInSchema } from "@/models/auth/signup-validation";
-import { FormikSubmitOption } from "@/types";
-import { Field, Form, Formik } from "formik";
-import { useEffect, useState } from "react";
-import { BiLock } from "react-icons/bi";
-import { BsArrowRightShort } from "react-icons/bs";
-import { HiOutlineEnvelope } from "react-icons/hi2";
-import { Link, useNavigate } from "react-router-dom";
+import { Field, Form, Formik } from 'formik'
+import { useEffect, useState } from 'react'
+import { BiLock } from 'react-icons/bi'
+import { BsArrowRightShort } from 'react-icons/bs'
+import { HiOutlineEnvelope } from 'react-icons/hi2'
+import { Link, useNavigate } from 'react-router-dom'
+import logo from '@/assets/Images/logo.png'
+import CustomInput from '@/components/form/CustomInput'
+import config from '@/config/config'
+import { useSignInMutation } from '@/feature/auth/authQuery'
+import { ISignIn, signInSchema } from '@/models/auth/signup-validation'
+import { FormikSubmitOption } from '@/types'
 
 const initialValues: ISignIn = {
-  email: "",
-  password: "",
-};
+  email: '',
+  password: '',
+}
 
 const Login = () => {
-  const router = useNavigate();
+  const router = useNavigate()
   // const dispatch = useAppDispatch();
-  const [type, setType] = useState("password");
-  const [signIn, { isLoading }] = useSignInMutation();
+  const [type, setType] = useState('password')
+  const [signIn, { isLoading }] = useSignInMutation()
 
   const onSubmit = async (
     values: ISignIn,
-    { setSubmitting, resetForm }: FormikSubmitOption
+    { setSubmitting, resetForm }: FormikSubmitOption,
   ) => {
-    const castData = signInSchema.cast(values);
+    const castData = signInSchema.cast(values)
     await signIn({
       data: castData,
       options: { router, setSubmitting, resetForm },
-    });
-  };
+    })
+  }
 
   useEffect(() => {
-    document.title = `Login | ${config.projectName}`;
-  }, []);
+    document.title = `Login | ${config.projectName}`
+  }, [])
 
   return (
-    <div className="relative flex items-center justify-center mx-auto h-full">
-      <div className="max-w-[500px] w-full my-auto mt-[10%] p-8 rounded-md bg-white shadow-lg">
-        <div className="flex justify-center ">
-          <img src={logo} alt="logo" className="text-center" />
+    <div className='relative flex items-center justify-center mx-auto h-full'>
+      <div className='max-w-[500px] w-full my-auto mt-[10%] p-8 rounded-md bg-white shadow-lg'>
+        <div className='flex justify-center '>
+          <img src={logo} alt='logo' className='text-center' />
         </div>
-        <h2 className="text-2xl text-custom-primary-main text-center py-3">
+        <h2 className='text-2xl text-custom-primary-main text-center py-3'>
           Sign In
         </h2>
         <Formik
@@ -53,39 +53,39 @@ const Login = () => {
         >
           {({ isSubmitting }) => (
             <Form>
-              <div className="mt-2">
+              <div className='mt-2'>
                 <Field
-                  name="email"
-                  label={"Enter Email"}
-                  type="email"
+                  name='email'
+                  label='Enter Email'
+                  type='email'
                   component={CustomInput}
-                  placeholder="example@domain.com"
-                  min="0"
+                  placeholder='example@domain.com'
+                  min='0'
                   isRequired
                   // onChange={handleChange}
                   leftIcon={() => (
-                    <HiOutlineEnvelope className="text-gray-500 text-xl mr-2" />
+                    <HiOutlineEnvelope className='text-gray-500 text-xl mr-2' />
                   )}
                 />
                 <Field
-                  name="password"
-                  label={"Enter Your Password"}
+                  name='password'
+                  label='Enter Your Password'
                   type={type}
                   component={CustomInput}
-                  placeholder="Enter your password"
-                  min="0"
+                  placeholder='Enter your password'
+                  min='0'
                   isRequired
                   isPassword
                   // onChange={handleChange}
                   handleViewPassword={() => {
-                    setType(type === "password" ? "text" : "password");
+                    setType(type === 'password' ? 'text' : 'password')
                   }}
                   leftIcon={() => (
-                    <BiLock className="text-gray-500 text-xl mr-2" />
+                    <BiLock className='text-gray-500 text-xl mr-2' />
                   )}
                 />
 
-                <div className="flex justify-between">
+                <div className='flex justify-between'>
                   {/* <label htmlFor="RemeberMe" className="flex items-center">
                     <input
                       id="RemeberMe"
@@ -100,27 +100,27 @@ const Login = () => {
                     Remember Me
                   </label> */}
                   <Link
-                    to={"/account/forgot-password"}
-                    className="text-sm font-normal underline hover:text-custom-primary-main"
+                    to='/account/forgot-password'
+                    className='text-sm font-normal underline hover:text-custom-primary-main'
                   >
                     I forgot my password
                   </Link>
                 </div>
 
                 <button
-                  type="submit"
-                  className="border flex items-center justify-center w-full my-5 py-2 text-white bg-custom-primary-main rounded text-lg hover:bg-custom-primary-main duration-200"
+                  type='submit'
+                  className='border flex items-center justify-center w-full my-5 py-2 text-white bg-custom-primary-main rounded text-lg hover:bg-custom-primary-main duration-200'
                   disabled={isSubmitting || isLoading}
                 >
                   {isSubmitting || isLoading ? (
                     <>
-                      <span className="w-5 h-5 border-2 animate-spin rounded-full border-transparent border-t-white mr-2"></span>
-                      <span className="font-medium">Processing</span>
+                      <span className='w-5 h-5 border-2 animate-spin rounded-full border-transparent border-t-white mr-2' />
+                      <span className='font-medium'>Processing</span>
                     </>
                   ) : (
                     <>
-                      <span className="font-medium">Log in</span>
-                      <span className="text-2xl ml-1">
+                      <span className='font-medium'>Log in</span>
+                      <span className='text-2xl ml-1'>
                         <BsArrowRightShort />
                       </span>
                     </>
@@ -143,7 +143,7 @@ const Login = () => {
         </div> */}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

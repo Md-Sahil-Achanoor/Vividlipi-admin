@@ -1,6 +1,6 @@
-import toast from "react-hot-toast";
-import API from "../../app/services/api";
-import { endpoints } from "../../constants/endpoints";
+import toast from 'react-hot-toast'
+import API from '../../app/services/api'
+import { endpoints } from '../../constants/endpoints'
 import {
   ApiResponse,
   FeatureProductPayload,
@@ -13,9 +13,9 @@ import {
   ManagePayload,
   ManagePayloadQuery,
   ManageQuery,
-} from "../../types";
-import { coreAction } from "../core/coreSlice";
-import { homeAction } from "./homeSlice";
+} from '../../types'
+import { coreAction } from '../core/coreSlice'
+import { homeAction } from './homeSlice'
 
 const homeQuery = API.injectEndpoints({
   overrideExisting: false,
@@ -39,20 +39,20 @@ const homeQuery = API.injectEndpoints({
       query: ({ query }) => {
         return {
           url: endpoints.list_home_slider,
-          method: "GET",
+          method: 'GET',
           params: query,
-        };
+        }
       },
-      providesTags: ["HomeFeatureSlider"],
+      providesTags: ['HomeFeatureSlider'],
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
-          await queryFulfilled;
+          await queryFulfilled
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -67,34 +67,34 @@ const homeQuery = API.injectEndpoints({
       query: ({ data, id }) => {
         return {
           url: id ? endpoints.edit_home_slider : endpoints.add_home_slider,
-          method: "POST",
+          method: 'POST',
           body: data,
           params: {
             sliderid: id,
           },
-        };
+        }
       },
-      invalidatesTags: ["HomeFeatureSlider"],
+      invalidatesTags: ['HomeFeatureSlider'],
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
-          const result = await queryFulfilled;
+          const result = await queryFulfilled
           if (result?.data?.status === 1) {
-            options?.resetForm();
-            options?.setSubmitting(false);
-            toast.success(result?.data?.message || "Success");
-            dispatch(homeAction.resetHome());
-            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            options?.resetForm()
+            options?.setSubmitting(false)
+            toast.success(result?.data?.message || 'Success')
+            dispatch(homeAction.resetHome())
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
           } else {
-            toast.error(result?.data?.message || "Something went wrong!");
+            toast.error(result?.data?.message || 'Something went wrong!')
           }
         } catch (err: unknown) {
           // do nothing
-          options?.setSubmitting(false);
-          const error = err as any;
+          options?.setSubmitting(false)
+          const error = err as any
           // console.log(`\n\n error:`, error);
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -111,18 +111,18 @@ const homeQuery = API.injectEndpoints({
     >({
       query: ({ id }) => ({
         url: endpoints.delete_home_slider,
-        method: "DELETE",
+        method: 'DELETE',
         params: {
           picid: id,
         },
       }),
-      invalidatesTags: ["HomeFeatureSlider"],
+      invalidatesTags: ['HomeFeatureSlider'],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
-          const result = await queryFulfilled;
+          const result = await queryFulfilled
           // console.log(`\n\n result:`, result?.data, _arg.query, _arg.id);
           if (result?.data?.status === 1) {
-            toast.success(result?.data?.message || "Success");
+            toast.success(result?.data?.message || 'Success')
             // dispatch(
             //   homeQuery.util.updateQueryData(
             //     "getHomeFeatureSlider",
@@ -136,17 +136,17 @@ const homeQuery = API.injectEndpoints({
             //     }
             //   )
             // );
-            dispatch(homeAction.resetHome());
-            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            dispatch(homeAction.resetHome())
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
           } else {
-            toast.error(result?.data?.message || "Something went wrong!");
+            toast.error(result?.data?.message || 'Something went wrong!')
           }
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -169,20 +169,20 @@ const homeQuery = API.injectEndpoints({
       query: ({ query }) => {
         return {
           url: endpoints.list_home_sub_slider,
-          method: "GET",
+          method: 'GET',
           params: query,
-        };
+        }
       },
-      providesTags: ["HomeFeatureSubSlider"],
+      providesTags: ['HomeFeatureSubSlider'],
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
-          await queryFulfilled;
+          await queryFulfilled
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -199,33 +199,33 @@ const homeQuery = API.injectEndpoints({
           url: id
             ? endpoints.edit_home_sub_slider
             : endpoints.add_home_sub_slider,
-          method: "POST",
+          method: 'POST',
           body: data,
           params: {
             sliderid: id,
           },
-        };
+        }
       },
-      invalidatesTags: ["HomeFeatureSubSlider"],
+      invalidatesTags: ['HomeFeatureSubSlider'],
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
-          const result = await queryFulfilled;
+          const result = await queryFulfilled
           if (result?.data?.status === 1) {
-            options?.resetForm();
-            options?.setSubmitting(false);
-            toast.success(result?.data?.message || "Success");
-            dispatch(homeAction.resetHome());
-            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            options?.resetForm()
+            options?.setSubmitting(false)
+            toast.success(result?.data?.message || 'Success')
+            dispatch(homeAction.resetHome())
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
           } else {
-            toast.error(result?.data?.message || "Something went wrong!");
+            toast.error(result?.data?.message || 'Something went wrong!')
           }
         } catch (err: unknown) {
           // do nothing
-          options?.setSubmitting(false);
-          const error = err as any;
+          options?.setSubmitting(false)
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -242,19 +242,19 @@ const homeQuery = API.injectEndpoints({
     >({
       query: ({ id }) => ({
         url: endpoints.delete_home_sub_slider,
-        method: "DELETE",
+        method: 'DELETE',
         params: {
           picid: id,
         },
       }),
-      invalidatesTags: ["HomeFeatureSubSlider"],
+      invalidatesTags: ['HomeFeatureSubSlider'],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
-          const result = await queryFulfilled;
+          const result = await queryFulfilled
           if (result?.data?.status === 1) {
-            toast.success(result?.data?.message || "Success");
-            dispatch(homeAction.resetHome());
-            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            toast.success(result?.data?.message || 'Success')
+            dispatch(homeAction.resetHome())
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
             // dispatch(
             //   homeQuery.util.updateQueryData(
             //     "getHomeFeatureSubSlider",
@@ -269,14 +269,14 @@ const homeQuery = API.injectEndpoints({
             //   )
             // );
           } else {
-            toast.error(result?.data?.message || "Something went wrong!");
+            toast.error(result?.data?.message || 'Something went wrong!')
           }
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -300,20 +300,20 @@ const homeQuery = API.injectEndpoints({
       query: ({ query }) => {
         return {
           url: endpoints.list_home_product,
-          method: "GET",
+          method: 'GET',
           params: query,
-        };
+        }
       },
-      providesTags: ["HomeFeatureProducts"],
+      providesTags: ['HomeFeatureProducts'],
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
-          await queryFulfilled;
+          await queryFulfilled
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -331,33 +331,33 @@ const homeQuery = API.injectEndpoints({
       query: ({ data, id }) => {
         return {
           url: id ? endpoints.edit_home_product : endpoints.add_home_product,
-          method: "POST",
+          method: 'POST',
           body: data,
           params: {
             sliderid: id,
           },
-        };
+        }
       },
-      invalidatesTags: ["HomeFeatureProducts"],
+      invalidatesTags: ['HomeFeatureProducts'],
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
-          const result = await queryFulfilled;
+          const result = await queryFulfilled
           if (result?.data?.status === 1) {
-            options?.resetForm();
-            options?.setSubmitting(false);
-            toast.success(result?.data?.message || "Success");
-            dispatch(homeAction.resetHome());
-            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            options?.resetForm()
+            options?.setSubmitting(false)
+            toast.success(result?.data?.message || 'Success')
+            dispatch(homeAction.resetHome())
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
           } else {
-            toast.error(result?.data?.message || "Something went wrong!");
+            toast.error(result?.data?.message || 'Something went wrong!')
           }
         } catch (err: unknown) {
           // do nothing
-          options?.setSubmitting(false);
-          const error = err as any;
+          options?.setSubmitting(false)
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -375,19 +375,19 @@ const homeQuery = API.injectEndpoints({
     >({
       query: ({ id }) => ({
         url: endpoints.delete_home_product,
-        method: "DELETE",
+        method: 'DELETE',
         params: {
           productId: id,
         },
       }),
-      invalidatesTags: ["HomeFeatureProducts"],
+      invalidatesTags: ['HomeFeatureProducts'],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
-          const result = await queryFulfilled;
+          const result = await queryFulfilled
           if (result?.data?.status === 1) {
-            toast.success(result?.data?.message || "Success");
-            dispatch(homeAction.resetHome());
-            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            toast.success(result?.data?.message || 'Success')
+            dispatch(homeAction.resetHome())
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
             // dispatch(
             //   homeQuery.util.updateQueryData(
             //     "getHomeFeatureProducts",
@@ -402,14 +402,14 @@ const homeQuery = API.injectEndpoints({
             //   )
             // );
           } else {
-            toast.error(result?.data?.message || "Something went wrong!");
+            toast.error(result?.data?.message || 'Something went wrong!')
           }
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -433,20 +433,20 @@ const homeQuery = API.injectEndpoints({
       query: ({ query }) => {
         return {
           url: endpoints.list_new_in,
-          method: "GET",
+          method: 'GET',
           params: query,
-        };
+        }
       },
-      providesTags: ["NewInProduct"],
+      providesTags: ['NewInProduct'],
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
-          await queryFulfilled;
+          await queryFulfilled
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -461,33 +461,33 @@ const homeQuery = API.injectEndpoints({
       query: ({ data }) => {
         return {
           url: endpoints.add_new_in,
-          method: "POST",
+          method: 'POST',
           body: data,
           // params: {
           //   sliderid: id,
           // },
-        };
+        }
       },
-      invalidatesTags: ["NewInProduct"],
+      invalidatesTags: ['NewInProduct'],
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
-          const result = await queryFulfilled;
+          const result = await queryFulfilled
           if (result?.data?.status === 1) {
-            options?.resetForm();
-            options?.setSubmitting(false);
-            toast.success(result?.data?.message || "Success");
-            dispatch(homeAction.resetHome());
-            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            options?.resetForm()
+            options?.setSubmitting(false)
+            toast.success(result?.data?.message || 'Success')
+            dispatch(homeAction.resetHome())
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
           } else {
-            toast.error(result?.data?.message || "Something went wrong!");
+            toast.error(result?.data?.message || 'Something went wrong!')
           }
         } catch (err: unknown) {
           // do nothing
-          options?.setSubmitting(false);
-          const error = err as any;
+          options?.setSubmitting(false)
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -504,28 +504,28 @@ const homeQuery = API.injectEndpoints({
     >({
       query: ({ id }) => ({
         url: endpoints.delete_new_in,
-        method: "DELETE",
+        method: 'DELETE',
         params: {
           productId: id,
         },
       }),
-      invalidatesTags: ["NewInProduct"],
+      invalidatesTags: ['NewInProduct'],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
-          const result = await queryFulfilled;
+          const result = await queryFulfilled
           if (result?.data?.status === 1) {
-            toast.success(result?.data?.message || "Success");
-            dispatch(homeAction.resetHome());
-            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            toast.success(result?.data?.message || 'Success')
+            dispatch(homeAction.resetHome())
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
           } else {
-            toast.error(result?.data?.message || "Something went wrong!");
+            toast.error(result?.data?.message || 'Something went wrong!')
           }
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -543,19 +543,19 @@ const homeQuery = API.injectEndpoints({
       query: () => {
         return {
           url: endpoints.toggle_new_in,
-          method: "GET",
-        };
+          method: 'GET',
+        }
       },
-      providesTags: ["NewInProductToggle"],
+      providesTags: ['NewInProductToggle'],
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
-          await queryFulfilled;
+          await queryFulfilled
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -572,31 +572,31 @@ const homeQuery = API.injectEndpoints({
     >({
       query: ({ data }) => ({
         url: endpoints.toggle_new_in,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
-      invalidatesTags: ["NewInProductToggle"],
+      invalidatesTags: ['NewInProductToggle'],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
-          const result = await queryFulfilled;
+          const result = await queryFulfilled
           if (result?.data?.status === 1) {
-            toast.success(result?.data?.message || "Success");
-            dispatch(homeAction.resetHome());
-            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            toast.success(result?.data?.message || 'Success')
+            dispatch(homeAction.resetHome())
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
           } else {
-            toast.error(result?.data?.message || "Something went wrong!");
+            toast.error(result?.data?.message || 'Something went wrong!')
           }
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
   }),
-});
+})
 
 export const {
   useGetHomeFeatureSliderQuery,
@@ -616,6 +616,6 @@ export const {
   useDeleteNewInMutation,
   useGetHomeNewInStatusQuery,
   useToggleHomeNewInStatusMutation,
-} = homeQuery;
+} = homeQuery
 
-export default homeQuery;
+export default homeQuery

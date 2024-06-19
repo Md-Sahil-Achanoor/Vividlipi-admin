@@ -1,12 +1,11 @@
-
-import { cn } from '@/utils/twmerge';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react'
+import { cn } from '@/utils/twmerge'
 
 interface ToggleProps extends PropsWithChildren<{}> {
-  isOn: boolean;
-  isDisabled?: boolean;
-  defaultClass?: string;
-  defaultBGClass?: string;
+  isOn: boolean
+  isDisabled?: boolean
+  defaultClass?: string
+  defaultBGClass?: string
 }
 
 const Toggle = ({
@@ -19,11 +18,9 @@ const Toggle = ({
     <span
       className={cn(
         `border w-[35px] flex items-center rounded-xl py-0.5 px-0.5`,
-        isOn
-          ? 'justify-end border-green-600'
-          : 'justify-start border-red-600',
+        isOn ? 'justify-end border-green-600' : 'justify-start border-red-600',
         isDisabled && 'justify-start border-gray-400',
-        defaultClass
+        defaultClass,
       )}
     >
       <span
@@ -31,11 +28,11 @@ const Toggle = ({
           `w-3.5 h-3.5 rounded-full`,
           isOn ? 'bg-green-600' : 'bg-red-600',
           isDisabled && 'bg-gray-400',
-          defaultBGClass
+          defaultBGClass,
         )}
-      ></span>
+      />
     </span>
-  );
-};
+  )
+}
 
-export default Toggle;
+export default Toggle

@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { InputCheckbox } from "@/types";
-import { ErrorMessage } from "formik";
-import { Link } from "react-router-dom";
-import TextError from "./TextError";
+import { ErrorMessage } from 'formik'
+import { Link } from 'react-router-dom'
+import { InputCheckbox } from '@/types'
+import TextError from './TextError'
 
 const CheckBox = ({
   field: { onChange, ...rest },
@@ -14,30 +13,30 @@ const CheckBox = ({
   ...props
 }: InputCheckbox) => {
   return (
-    <div className={""}>
-      <div className="flex items-center">
+    <div className=''>
+      <div className='flex items-center'>
         <input
           id={id}
           onChange={(e) => {
-            const data = e;
-            onChange(e);
-            onChangeCallback && onChangeCallback(data);
+            const data = e
+            onChange(e)
+            onChangeCallback && onChangeCallback(data)
           }}
-          className="check_box"
+          className='check_box'
           {...rest}
           {...props}
         />
         {label ? (
-          <label className="ml-2 text-sm text-content-tertiary " htmlFor={id}>
+          <label className='ml-2 text-sm text-content-tertiary ' htmlFor={id}>
             {label}
             {isTerms ? (
               <>
                 <br />
                 <Link
-                  to="/termsandcondition"
-                  className="text-primary font-semibold font-inter text-sm"
+                  to='/termsandcondition'
+                  className='text-primary font-semibold font-inter text-sm'
                 >
-                  {"Terms & Conditions"}
+                  Terms & Conditions
                 </Link>
               </>
             ) : null}
@@ -48,7 +47,7 @@ const CheckBox = ({
         {(msg: string) => <TextError text={msg} />}
       </ErrorMessage>
     </div>
-  );
-};
+  )
+}
 
-export default CheckBox;
+export default CheckBox

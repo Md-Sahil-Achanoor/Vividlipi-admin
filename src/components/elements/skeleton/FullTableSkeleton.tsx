@@ -1,8 +1,8 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren } from 'react'
 
 interface SkeletonTableProps extends PropsWithChildren<{}> {
-  total: number;
-  tableCount: number;
+  total: number
+  tableCount: number
 }
 
 const FullTableSkeleton = ({
@@ -10,34 +10,32 @@ const FullTableSkeleton = ({
   tableCount = 1,
 }: SkeletonTableProps) => {
   return (
-    <>
-      <table className="w-full text-sm text-left">
-        <thead className="text-xs bg-table-background-gray">
-          <tr>
+    <table className='w-full text-sm text-left'>
+      <thead className='text-xs bg-table-background-gray'>
+        <tr>
+          {Array.from({ length: tableCount }).map((_, index) => (
+            <th key={index} scope='col' className='table_th'>
+              <div className='skeleton_table' />
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {Array.from({ length: total }).map((_, index) => (
+          <tr key={index} className='skeleton_table_tr'>
             {Array.from({ length: tableCount }).map((_, index) => (
-              <th key={index} scope="col" className="table_th">
-                <div className="skeleton_table"></div>
-              </th>
+              <td
+                key={index + 10}
+                className={`py-3.5 px-4 ${index === 0 ? 'w-[100px]' : ''}`}
+              >
+                <div className='skeleton_table' />
+              </td>
             ))}
           </tr>
-        </thead>
-        <tbody>
-          {Array.from({ length: total }).map((_, index) => (
-            <tr key={index} className="skeleton_table_tr">
-              {Array.from({ length: tableCount }).map((_, index) => (
-                <td
-                  key={index + 10}
-                  className={`py-3.5 px-4 ${index === 0 ? "w-[100px]" : ""}`}
-                >
-                  <div className="skeleton_table"></div>
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </>
-  );
-};
+        ))}
+      </tbody>
+    </table>
+  )
+}
 
-export default FullTableSkeleton;
+export default FullTableSkeleton

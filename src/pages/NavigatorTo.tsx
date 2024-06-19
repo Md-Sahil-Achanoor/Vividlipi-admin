@@ -1,19 +1,19 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface Props {
-  to: string;
+  to: string
 }
 
 const NavigatorTo = ({ to }: Props) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   useEffect(() => {
-    navigate(to);
+    navigate(to)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
-  return <></>;
-};
+  return <></>
+}
 
-export default NavigatorTo;
+export default NavigatorTo

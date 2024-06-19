@@ -1,6 +1,6 @@
-import toast from "react-hot-toast";
-import API from "../../app/services/api";
-import { endpoints } from "../../constants/endpoints";
+import toast from 'react-hot-toast'
+import API from '../../app/services/api'
+import { endpoints } from '../../constants/endpoints'
 import {
   ApiResponse,
   ListResponse,
@@ -10,9 +10,9 @@ import {
   ProductPayload,
   ProductQuery,
   ProductResponse,
-} from "../../types";
-import { coreAction } from "../core/coreSlice";
-import { productAction } from "./productSlice";
+} from '../../types'
+import { coreAction } from '../core/coreSlice'
+import { productAction } from './productSlice'
 
 const productQuery = API.injectEndpoints({
   overrideExisting: false,
@@ -23,21 +23,21 @@ const productQuery = API.injectEndpoints({
     >({
       query: ({ query, data }) => ({
         url: endpoints.product_list,
-        method: "POST",
+        method: 'POST',
         body: data,
         params: query,
       }),
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
-          const result = await queryFulfilled;
-          console.log(`\n\n result:`, result?.data);
+          const result = await queryFulfilled
+          console.log(`\n\n result:`, result?.data)
           // dispatch(productAction.setProductList(result?.data?.data));
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -48,40 +48,39 @@ const productQuery = API.injectEndpoints({
     >({
       query: ({ query }) => ({
         url: endpoints.product_list,
-        method: "POST",
+        method: 'POST',
         params: query,
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
-          const result = await queryFulfilled;
-          const { isDeleted, id, ...rest }: ProductResponse =
-            result?.data?.data;
+          const result = await queryFulfilled
+          const { isDeleted, id, ...rest }: ProductResponse = result?.data?.data
           const data: Partial<ProductResponse> = {
             ...rest,
             tags:
               rest?.tags?.length > 0
-                ? rest?.tags?.filter((el) => el !== "")
+                ? rest?.tags?.filter((el) => el !== '')
                 : [],
-            translator_name: rest?.translator_name || "",
+            translator_name: rest?.translator_name || '',
             category: [],
-            HardCopyPrice: rest?.HardCopyPrice || "",
-            AudioPrice: rest?.AudioPrice || "",
-            EbookPrice: rest?.EbookPrice || "",
-            Stock: rest?.Stock || "",
-            Audio_URL: rest?.Audio_URL || "",
-            File_URL: rest?.File_URL || "",
+            HardCopyPrice: rest?.HardCopyPrice || '',
+            AudioPrice: rest?.AudioPrice || '',
+            EbookPrice: rest?.EbookPrice || '',
+            Stock: rest?.Stock || '',
+            Audio_URL: rest?.Audio_URL || '',
+            File_URL: rest?.File_URL || '',
             book_format: rest?.book_format?.length
               ? rest?.book_format?.map((el) => Number(el))
               : [],
-          };
-          console.log(`\n\n data:`, data);
-          dispatch(productAction.setSelectedProduct(data as ProductResponse));
+          }
+          console.log(`\n\n data:`, data)
+          dispatch(productAction.setSelectedProduct(data as ProductResponse))
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -94,7 +93,7 @@ const productQuery = API.injectEndpoints({
       query: ({ data, query, id }) => ({
         url: id ? endpoints?.edit_product : endpoints.add_product,
         // method: id ? "PUT" : "POST",
-        method: "POST",
+        method: 'POST',
         body: data,
         params: query,
         headers: {
@@ -103,25 +102,25 @@ const productQuery = API.injectEndpoints({
       }),
       async onQueryStarted({ options }, { queryFulfilled }) {
         try {
-          const result = await queryFulfilled;
+          const result = await queryFulfilled
           if (result?.data?.status === 1) {
-            options?.resetForm();
-            toast.success(result?.data?.message || "Success");
+            options?.resetForm()
+            toast.success(result?.data?.message || 'Success')
             if (options?.router) {
-              options?.router("/admin/products/product-list");
+              options?.router('/admin/products/product-list')
             }
           } else {
-            toast.error(result?.data?.message || "Something went wrong!");
+            toast.error(result?.data?.message || 'Something went wrong!')
           }
-          options?.setSubmitting(false);
+          options?.setSubmitting(false)
         } catch (err: unknown) {
           // do nothing
-          options?.setSubmitting(false);
-          const error = err as any;
+          options?.setSubmitting(false)
+          const error = err as any
           // console.log(`\n\n error:`, error);
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -132,19 +131,19 @@ const productQuery = API.injectEndpoints({
     >({
       query: ({ id }) => ({
         url: endpoints.delete_product,
-        method: "POST",
+        method: 'POST',
         headers: {
           productid: String(id),
         },
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
-          const result = await queryFulfilled;
+          const result = await queryFulfilled
           if (result?.data?.status === 1) {
-            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
             dispatch(
               productQuery.util.updateQueryData(
-                "getProducts",
+                'getProducts',
                 {
                   query: _arg.query,
                   data: {
@@ -153,20 +152,20 @@ const productQuery = API.injectEndpoints({
                 },
                 (draft) => {
                   draft.data.data = draft.data.data?.filter(
-                    (item) => item.id !== _arg.id
-                  );
-                }
-              )
-            );
+                    (item) => item.id !== _arg.id,
+                  )
+                },
+              ),
+            )
           } else {
-            toast.error(result?.data?.message || "Something went wrong!");
+            toast.error(result?.data?.message || 'Something went wrong!')
           }
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -178,30 +177,30 @@ const productQuery = API.injectEndpoints({
     >({
       query: ({ data, query }) => ({
         url: endpoints.product,
-        method: "POST",
+        method: 'POST',
         body: data,
         params: query,
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
-          const result = await queryFulfilled;
+          const result = await queryFulfilled
           if (result?.data?.status === 1) {
-            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
             // dispatch(productAction.resetWithReload());
           } else {
-            toast.error(result?.data?.message || "Something went wrong!");
+            toast.error(result?.data?.message || 'Something went wrong!')
           }
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
   }),
-});
+})
 
 export const {
   useGetProductsQuery,
@@ -209,6 +208,6 @@ export const {
   useManageProductMutation,
   useDeleteProductMutation,
   useUpdateProductMutation,
-} = productQuery;
+} = productQuery
 
-export default productQuery;
+export default productQuery

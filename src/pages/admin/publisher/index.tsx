@@ -1,46 +1,46 @@
-import { useAppDispatch, useAppSelector } from "@/app/store";
-import NoTableData from "@/components/atoms/NoTableData";
-import ManageModule from "@/components/elements/modal/ManageModule";
-import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
-import ManagePublisher from "@/components/module/publisher/ManagePublisher";
-import Table from "@/components/ui/Table";
-import { coreAction } from "@/feature/core/coreSlice";
+import { useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from '@/app/store'
+import NoTableData from '@/components/atoms/NoTableData'
+import ManageModule from '@/components/elements/modal/ManageModule'
+import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
+import ManagePublisher from '@/components/module/publisher/ManagePublisher'
+import Table from '@/components/ui/Table'
+import { coreAction } from '@/feature/core/coreSlice'
 import {
   useDeletePublisherMutation,
   useGetPublishersQuery,
-} from "@/feature/publisher/publisherQuery";
-import { publisherAction } from "@/feature/publisher/publisherSlice";
-import PageLayout from "@/layout/PageLayout";
-import { BreadCrumbItem, PublisherResponse } from "@/types";
-import { cn } from "@/utils/twmerge";
-import { useEffect } from "react";
+} from '@/feature/publisher/publisherQuery'
+import { publisherAction } from '@/feature/publisher/publisherSlice'
+import PageLayout from '@/layout/PageLayout'
+import { BreadCrumbItem, PublisherResponse } from '@/types'
+import { cn } from '@/utils/twmerge'
 
 const breadcrumbItem: BreadCrumbItem[] = [
   {
-    name: "Publisher List",
-    link: "#",
+    name: 'Publisher List',
+    link: '#',
   },
-];
-const tableHead = ["SL", "Name", "Description", "Action"];
+]
+const tableHead = ['SL', 'Name', 'Description', 'Action']
 
 const PublisherList = () => {
   // const navigate = useNavigate();
-  const { type } = useAppSelector((state) => state.core);
-  const { selectedPublisher } = useAppSelector((state) => state.publisher);
-  const dispatch = useAppDispatch();
+  const { type } = useAppSelector((state) => state.core)
+  const { selectedPublisher } = useAppSelector((state) => state.publisher)
+  const dispatch = useAppDispatch()
   const { data, isLoading, refetch } = useGetPublishersQuery({
     query: {},
-  });
+  })
 
   const [deletePublisher, { isLoading: isDeletePublisher }] =
-    useDeletePublisherMutation();
+    useDeletePublisherMutation()
 
   useEffect(() => {
-    refetch();
+    refetch()
     return () => {
-      dispatch(publisherAction.resetPublisher());
-    };
-  }, []);
+      dispatch(publisherAction.resetPublisher())
+    }
+  }, [])
 
   // const handleModal = (type: string) => {
   //   // console.log(`\n\n handleModal ~ type:`, type);
@@ -54,63 +54,61 @@ const PublisherList = () => {
     await deletePublisher({
       id: selectedPublisher?.id,
       query: {},
-    });
-  };
+    })
+  }
 
   // const status = selectedPublisher?.isActive === 1 ? "Deactivate" : "Activate";
 
   const handleModal = (type?: string, data?: PublisherResponse) => {
-    if (type === "cancelled") {
+    if (type === 'cancelled') {
       // do nothing
-      dispatch(coreAction.toggleModal({ open: false, type: "" }));
-      dispatch(publisherAction.setSelectedPublisher(null));
-    } else if (type === "edit") {
+      dispatch(coreAction.toggleModal({ open: false, type: '' }))
+      dispatch(publisherAction.setSelectedPublisher(null))
+    } else if (type === 'edit') {
       dispatch(
         coreAction.toggleModal({
-          type: "manage-publisher",
+          type: 'manage-publisher',
           open: true,
-        })
-      );
-      dispatch(publisherAction.setSelectedPublisher(data as PublisherResponse));
+        }),
+      )
+      dispatch(publisherAction.setSelectedPublisher(data as PublisherResponse))
       // setSinglePublisher;
-    } else if (type === "delete") {
+    } else if (type === 'delete') {
       dispatch(
         coreAction.toggleModal({
-          type: "delete-publisher",
+          type: 'delete-publisher',
           open: true,
-        })
-      );
-      dispatch(publisherAction.setSelectedPublisher(data as PublisherResponse));
+        }),
+      )
+      dispatch(publisherAction.setSelectedPublisher(data as PublisherResponse))
     } else {
-      dispatch(
-        coreAction.toggleModal({ open: true, type: "manage-publisher" })
-      );
+      dispatch(coreAction.toggleModal({ open: true, type: 'manage-publisher' }))
     }
-  };
+  }
 
   return (
     <>
       <ManageModule
         classes={
-          type === "delete-publisher"
+          type === 'delete-publisher'
             ? {
-                top: "visible",
+                top: 'visible',
                 body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
               }
             : {
-                top: "invisible",
-                body: "-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]",
+                top: 'invisible',
+                body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
               }
         }
         handleModal={handleModal}
-        wrapperClass="h-full"
+        wrapperClass='h-full'
         isModalHeader
         outSideClick
-        headText={`Delete the Publisher?`}
-        heading={selectedPublisher?.Name || ""}
-        details={`Are you certain you want to delete?`}
-        type={"delete"}
-        buttonText={isDeletePublisher ? "Deleting..." : "Delete"}
+        headText='Delete the Publisher?'
+        heading={selectedPublisher?.Name || ''}
+        details='Are you certain you want to delete?'
+        type='delete'
+        buttonText={isDeletePublisher ? 'Deleting...' : 'Delete'}
         buttonProps={{
           onClick: handleDeletePublisher,
           disabled: isDeletePublisher,
@@ -118,9 +116,9 @@ const PublisherList = () => {
       />
       <ManagePublisher />
       <PageLayout
-        title="Publisher List"
+        title='Publisher List'
         breadcrumbItem={breadcrumbItem}
-        buttonText="Add Publisher"
+        buttonText='Add Publisher'
         buttonProps={{
           onClick: () => handleModal(),
         }}
@@ -131,29 +129,29 @@ const PublisherList = () => {
           {isLoading ? (
             <SkeletonTable total={6} tableCount={4} />
           ) : data?.data &&
-            typeof data?.data === "object" &&
+            typeof data?.data === 'object' &&
             data?.data?.length > 0 ? (
             data?.data?.map((item, index) => (
-              <tr className="table_tr" key={item?.id}>
-                <td className="table_td">{index + 1}</td>
-                <td className="table_td">{item?.Name}</td>
-                <td className="table_td">{item?.description}</td>
-                <td className="table_td">
-                  <div className="flex items-center gap-3">
+              <tr className='table_tr' key={item?.id}>
+                <td className='table_td'>{index + 1}</td>
+                <td className='table_td'>{item?.Name}</td>
+                <td className='table_td'>{item?.description}</td>
+                <td className='table_td'>
+                  <div className='flex items-center gap-3'>
                     <button
-                      onClick={() => handleModal("edit", item)}
+                      onClick={() => handleModal('edit', item)}
                       className={cn(
-                        "font-medium hover:underline",
-                        "text-blue-600 dark:text-blue-500"
+                        'font-medium hover:underline',
+                        'text-blue-600 dark:text-blue-500',
                       )}
                     >
                       Edit
                     </button>
                     <button
-                      onClick={() => handleModal("delete", item)}
+                      onClick={() => handleModal('delete', item)}
                       className={cn(
-                        "font-medium hover:underline",
-                        "text-red-600 dark:text-red-500"
+                        'font-medium hover:underline',
+                        'text-red-600 dark:text-red-500',
                       )}
                     >
                       Delete
@@ -163,8 +161,8 @@ const PublisherList = () => {
               </tr>
             ))
           ) : (
-            <NoTableData colSpan={7} parentClass="h-40">
-              <span className="font-medium">No data found!</span>
+            <NoTableData colSpan={7} parentClass='h-40'>
+              <span className='font-medium'>No data found!</span>
             </NoTableData>
           )}
         </Table>
@@ -172,7 +170,7 @@ const PublisherList = () => {
         {/* </Card> */}
       </PageLayout>
     </>
-  );
-};
+  )
+}
 
-export default PublisherList;
+export default PublisherList

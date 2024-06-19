@@ -1,12 +1,12 @@
-import Logo from "@/components/atoms/Logo";
-import { useCallback, useState } from "react";
-import { RxCross2 } from "react-icons/rx";
-import { useAppSelector } from "../../app/store";
-import { SidebarProps } from "../../types";
-import { cn } from "../../utils/twmerge";
-import NavbarAllLink from "../common/NavbarAllLink";
-import MultiMenu from "./Sidebar/MultiMenu";
-import SingleMenu from "./Sidebar/SingleMenu";
+import { useCallback, useState } from 'react'
+import { RxCross2 } from 'react-icons/rx'
+import Logo from '@/components/atoms/Logo'
+import { useAppSelector } from '../../app/store'
+import { SidebarProps } from '../../types'
+import { cn } from '../../utils/twmerge'
+import NavbarAllLink from '../common/NavbarAllLink'
+import MultiMenu from './Sidebar/MultiMenu'
+import SingleMenu from './Sidebar/SingleMenu'
 
 const Sidebar = ({
   collapsed,
@@ -14,53 +14,53 @@ const Sidebar = ({
   toggleMobileMenu,
 }: SidebarProps) => {
   // const location = useLocation();
-  const { isMobile } = useAppSelector((state) => state.layout);
-  const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
+  const { isMobile } = useAppSelector((state) => state.layout)
+  const [expandedMenu, setExpandedMenu] = useState<string | null>(null)
   // console.log(`\n\nexpandedMenu:`, expandedMenu);
 
-  const { role } = useAppSelector((state) => state.auth);
+  const { role } = useAppSelector((state) => state.auth)
 
-  const navItem = NavbarAllLink?.filter((item) => item?.role?.includes(role));
+  const navItem = NavbarAllLink?.filter((item) => item?.role?.includes(role))
 
   const handleMultiMenuClick = useCallback((name: string) => {
-    setExpandedMenu((prev) => (prev === name ? null : name));
-  }, []);
+    setExpandedMenu((prev) => (prev === name ? null : name))
+  }, [])
 
   return (
     <div
       className={cn(
         `fixed left-0 top-0 w-auto md:w-[250px] bg-white transition-all duration-300 z-[1002]`,
-        collapsed ? "w-[70px] md:w-[70px]" : "w-60",
-        isMobile ? "h-full" : "h-[calc(100vh)]"
+        collapsed ? 'w-[70px] md:w-[70px]' : 'w-60',
+        isMobile ? 'h-full' : 'h-[calc(100vh)]',
       )}
     >
       <div
         className={cn(
-          "h-16 w-[70px] md:w-[250px] bg-white text-black flex items-center justify-center",
-          collapsed ? "md:w-[70px]" : "md:w-[250px]"
+          'h-16 w-[70px] md:w-[250px] bg-white text-black flex items-center justify-center',
+          collapsed ? 'md:w-[70px]' : 'md:w-[250px]',
         )}
       >
         <Logo />
       </div>
       <div>
-        <div className="px-5 py-3 text-xs uppercase relative">
+        <div className='px-5 py-3 text-xs uppercase relative'>
           Menu
           {isMobile ? (
             <div
-              className="absolute right-4 cursor-pointer top-1/2 -translate-y-1/2"
+              className='absolute right-4 cursor-pointer top-1/2 -translate-y-1/2'
               onClick={(e) => {
-                e.stopPropagation();
-                console.log("close");
-                toggleMobileMenu(false);
+                e.stopPropagation()
+                console.log('close')
+                toggleMobileMenu(false)
               }}
             >
-              <RxCross2 className="text-2xl" />
+              <RxCross2 className='text-2xl' />
             </div>
           ) : null}
         </div>
 
         {navItem.map((menu, index) =>
-          "list" in menu ? (
+          'list' in menu ? (
             <MultiMenu
               key={index}
               menu={menu}
@@ -76,11 +76,11 @@ const Sidebar = ({
               collapsed={collapsed}
               setExpandedMenu={setExpandedMenu}
             />
-          )
+          ),
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar

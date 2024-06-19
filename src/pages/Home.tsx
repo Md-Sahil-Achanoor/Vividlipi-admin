@@ -15,13 +15,13 @@ const Home = () => {
   return (
     <div>
       {/* <Navbar /> */}
-      <div className="w-full">
+      <div className='w-full'>
         <h3>Home</h3>
         {/* <img className="w-full pt-12 h-screen" src={Banner} alt="/" /> */}
       </div>
       {/* <Footer /> */}
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

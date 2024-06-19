@@ -1,6 +1,6 @@
-import toast from "react-hot-toast";
-import API from "../../app/services/api";
-import { endpoints } from "../../constants/endpoints";
+import toast from 'react-hot-toast'
+import API from '../../app/services/api'
+import { endpoints } from '../../constants/endpoints'
 import {
   ApiResponse,
   CategoryPayload,
@@ -10,9 +10,9 @@ import {
   ManagePayloadQuery,
   ManageQuery,
   SubCategoryPayload,
-} from "../../types";
-import { coreAction } from "../core/coreSlice";
-import { categoryAction } from "./categorySlice";
+} from '../../types'
+import { coreAction } from '../core/coreSlice'
+import { categoryAction } from './categorySlice'
 
 const categoryQuery = API.injectEndpoints({
   overrideExisting: false,
@@ -22,26 +22,26 @@ const categoryQuery = API.injectEndpoints({
       ManageQuery<Partial<CategoryQuery>>
     >({
       query: ({ query, conditions }) => {
-        let url =
-          conditions?.type === "category1"
+        const url =
+          conditions?.type === 'category1'
             ? endpoints.category_list1
-            : endpoints.category_list2;
+            : endpoints.category_list2
         return {
           url,
-          method: "POST",
+          method: 'POST',
           params: query,
-        };
+        }
       },
-      providesTags: ["Category"],
+      providesTags: ['Category'],
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
-          await queryFulfilled;
+          await queryFulfilled
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -52,7 +52,7 @@ const categoryQuery = API.injectEndpoints({
     >({
       query: ({ query }) => ({
         url: endpoints.category,
-        method: "GET",
+        method: 'GET',
         params: query,
         headers: {
           id: String(query?.id),
@@ -60,14 +60,14 @@ const categoryQuery = API.injectEndpoints({
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
-          const result = await queryFulfilled;
-          dispatch(categoryAction.setSelectedCategory(result?.data?.data));
+          const result = await queryFulfilled
+          dispatch(categoryAction.setSelectedCategory(result?.data?.data))
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -80,33 +80,33 @@ const categoryQuery = API.injectEndpoints({
       query: ({ data, id }) => ({
         url: id ? endpoints.edit_category1 : endpoints.add_category1,
         // method: id ? "PUT" : "POST",
-        method: "POST",
+        method: 'POST',
         body: data,
         headers: {
           cat1: String(id),
         },
       }),
-      invalidatesTags: ["Category"],
+      invalidatesTags: ['Category'],
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
-          const result = await queryFulfilled;
+          const result = await queryFulfilled
           if (result?.data?.status === 1) {
-            options?.resetForm();
-            options?.setSubmitting(false);
-            toast.success(result?.data?.message || "Success");
-            dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            dispatch(categoryAction.resetCategory());
+            options?.resetForm()
+            options?.setSubmitting(false)
+            toast.success(result?.data?.message || 'Success')
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
+            dispatch(categoryAction.resetCategory())
           } else {
-            toast.error(result?.data?.message || "Something went wrong!");
+            toast.error(result?.data?.message || 'Something went wrong!')
           }
         } catch (err: unknown) {
           // do nothing
-          options?.setSubmitting(false);
-          const error = err as any;
+          options?.setSubmitting(false)
+          const error = err as any
           // console.log(`\n\n error:`, error);
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -117,7 +117,7 @@ const categoryQuery = API.injectEndpoints({
     >({
       query: ({ id }) => ({
         url: endpoints.delete_category1,
-        method: "POST",
+        method: 'POST',
         // params: query,
         headers: {
           cat1: String(id),
@@ -125,36 +125,36 @@ const categoryQuery = API.injectEndpoints({
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
-          const result = await queryFulfilled;
+          const result = await queryFulfilled
           if (result?.data?.status === 1) {
-            dispatch(coreAction.toggleModal({ open: false, type: "" }));
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
             // dispatch(categoryAction.resetWithReload());
-            dispatch(categoryAction.resetCategory());
+            dispatch(categoryAction.resetCategory())
             dispatch(
               categoryQuery.util.updateQueryData(
-                "getCategories",
+                'getCategories',
                 {
                   query: _arg.query,
                   conditions: {
-                    type: "category1",
+                    type: 'category1',
                   },
                 },
                 (draft) => {
                   draft.data = draft?.data?.filter(
-                    (item) => item?.id !== Number(_arg.id)
-                  );
-                }
-              )
-            );
+                    (item) => item?.id !== Number(_arg.id),
+                  )
+                },
+              ),
+            )
           } else {
-            toast.error(result?.data?.message || "Something went wrong!");
+            toast.error(result?.data?.message || 'Something went wrong!')
           }
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -165,7 +165,7 @@ const categoryQuery = API.injectEndpoints({
     >({
       query: ({ query }) => ({
         url: endpoints.category,
-        method: "GET",
+        method: 'GET',
         params: query,
         headers: {
           id: String(query?.id),
@@ -173,14 +173,14 @@ const categoryQuery = API.injectEndpoints({
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
-          const result = await queryFulfilled;
-          dispatch(categoryAction.setSelectedCategory(result?.data?.data));
+          const result = await queryFulfilled
+          dispatch(categoryAction.setSelectedCategory(result?.data?.data))
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -191,47 +191,47 @@ const categoryQuery = API.injectEndpoints({
       ManagePayload<SubCategoryPayload, Partial<CategoryQuery>>
     >({
       query: ({ data, query, id }) => {
-        const { category, ...rest } = data;
+        const { category, ...rest } = data
         const body: any = {
           ...rest,
-        };
+        }
         if (id) {
-          body.cat1id = category;
+          body.cat1id = category
         }
         return {
           url: id ? endpoints.edit_category2 : endpoints.add_category2,
           // url: endpoints.category,
           // method: id ? "PUT" : "POST",
-          method: "POST",
+          method: 'POST',
           body,
           params: query,
           headers: {
             cat1: String(category),
-            cat2: id ? String(id) : "",
+            cat2: id ? String(id) : '',
           },
-        };
+        }
       },
-      invalidatesTags: ["Category"],
+      invalidatesTags: ['Category'],
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
-          const result = await queryFulfilled;
+          const result = await queryFulfilled
           if (result?.data?.status === 1) {
-            options?.resetForm();
-            options?.setSubmitting(false);
-            toast.success(result?.data?.message || "Success");
-            dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            dispatch(categoryAction.resetSubCategory());
+            options?.resetForm()
+            options?.setSubmitting(false)
+            toast.success(result?.data?.message || 'Success')
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
+            dispatch(categoryAction.resetSubCategory())
           } else {
-            toast.error(result?.data?.message || "Something went wrong!");
+            toast.error(result?.data?.message || 'Something went wrong!')
           }
         } catch (err: unknown) {
           // do nothing
-          options?.setSubmitting(false);
-          const error = err as any;
+          options?.setSubmitting(false)
+          const error = err as any
           // console.log(`\n\n error:`, error);
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
@@ -242,7 +242,7 @@ const categoryQuery = API.injectEndpoints({
     >({
       query: ({ id }) => ({
         url: endpoints.delete_category2,
-        method: "POST",
+        method: 'POST',
         // params: query,
         headers: {
           cat2: String(id),
@@ -250,39 +250,39 @@ const categoryQuery = API.injectEndpoints({
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
-          const result = await queryFulfilled;
+          const result = await queryFulfilled
           if (result?.data?.status === 1) {
-            console.log(`\n\n _arg:`, _arg.query);
+            console.log(`\n\n _arg:`, _arg.query)
             dispatch(
               categoryQuery.util.updateQueryData(
-                "getCategories",
+                'getCategories',
                 {
                   query: _arg.query,
                 },
                 (draft) => {
                   draft.data = draft?.data?.filter(
-                    (item) => item?.id !== Number(_arg.id)
-                  );
-                }
-              )
-            );
-            dispatch(coreAction.toggleModal({ open: false, type: "" }));
-            dispatch(categoryAction.resetSubCategory());
-            toast.success(result?.data?.message || "Delete Successful!");
+                    (item) => item?.id !== Number(_arg.id),
+                  )
+                },
+              ),
+            )
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
+            dispatch(categoryAction.resetSubCategory())
+            toast.success(result?.data?.message || 'Delete Successful!')
           } else {
-            toast.error(result?.data?.message || "Something went wrong!");
+            toast.error(result?.data?.message || 'Something went wrong!')
           }
         } catch (err: unknown) {
           // do nothing
-          const error = err as any;
+          const error = err as any
           const message =
-            error?.response?.data?.message || "Something went wrong!";
-          toast.error(message);
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
         }
       },
     }),
   }),
-});
+})
 
 export const {
   useGetCategoriesQuery,
@@ -293,6 +293,6 @@ export const {
   useGetSubCategoryByIdQuery,
   useManageSubCategoryMutation,
   useDeleteSubCategoryMutation,
-} = categoryQuery;
+} = categoryQuery
 
-export default categoryQuery;
+export default categoryQuery

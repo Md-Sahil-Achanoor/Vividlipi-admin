@@ -1,98 +1,98 @@
-import { useAppDispatch, useAppSelector } from "@/app/store";
-import ManageModule from "@/components/elements/modal/ManageModule";
-import FeatureNewIn from "@/components/module/home/feature-new-in/FeatureNewIn";
-import ManageFeatureNewIn from "@/components/module/home/feature-new-in/ManageFeatureNewIn";
-import FeatureProducts from "@/components/module/home/feature-product/FeatureProducts";
-import ManageFeatureProduct from "@/components/module/home/feature-product/ManageFeatureProduct";
-import FeatureSlider from "@/components/module/home/feature-slider/FeatureSlider";
-import { default as ManageFeatureSlider } from "@/components/module/home/feature-slider/ManageFeatureSlider";
-import FeatureSubSlider from "@/components/module/home/feature-sub-slider/FeatureSubSlider";
-import ManageFeatureSubSlider from "@/components/module/home/feature-sub-slider/ManageFeatureSubSlider";
-import { Card } from "@/components/ui/Card";
-import TabButtons from "@/components/ui/TabButtons";
-import { tabItems } from "@/constants/tableHeader";
-import { coreAction } from "@/feature/core/coreSlice";
+import { useState } from 'react'
+import { useAppDispatch, useAppSelector } from '@/app/store'
+import ManageModule from '@/components/elements/modal/ManageModule'
+import FeatureNewIn from '@/components/module/home/feature-new-in/FeatureNewIn'
+import ManageFeatureNewIn from '@/components/module/home/feature-new-in/ManageFeatureNewIn'
+import FeatureProducts from '@/components/module/home/feature-product/FeatureProducts'
+import ManageFeatureProduct from '@/components/module/home/feature-product/ManageFeatureProduct'
+import FeatureSlider from '@/components/module/home/feature-slider/FeatureSlider'
+import { default as ManageFeatureSlider } from '@/components/module/home/feature-slider/ManageFeatureSlider'
+import FeatureSubSlider from '@/components/module/home/feature-sub-slider/FeatureSubSlider'
+import ManageFeatureSubSlider from '@/components/module/home/feature-sub-slider/ManageFeatureSubSlider'
+import { Card } from '@/components/ui/Card'
+import TabButtons from '@/components/ui/TabButtons'
+import { tabItems } from '@/constants/tableHeader'
+import { coreAction } from '@/feature/core/coreSlice'
 import {
   useDeleteFeatureProductMutation,
   useDeleteFeatureSlideMutation,
   useDeleteFeatureSubSlideMutation,
   useDeleteNewInMutation,
-} from "@/feature/home/homeQuery";
-import { homeAction } from "@/feature/home/homeSlice";
-import PageLayout from "@/layout/PageLayout";
-import { checkType, getModuleName, getTitle } from "@/utils/modules/home";
-import { useState } from "react";
+} from '@/feature/home/homeQuery'
+import { homeAction } from '@/feature/home/homeSlice'
+import PageLayout from '@/layout/PageLayout'
+import { checkType, getModuleName, getTitle } from '@/utils/modules/home'
 
 const HomePage = () => {
-  const dispatch = useAppDispatch();
-  const [activeTab, setActiveTab] = useState<string>("feature-slider");
-  const { type } = useAppSelector((state) => state.core);
+  const dispatch = useAppDispatch()
+  const [activeTab, setActiveTab] = useState<string>('feature-slider')
+  const { type } = useAppSelector((state) => state.core)
   const {
     selectedFeatureSlider,
     selectedFeatureSubSlider,
     selectedFeatureProduct,
-  } = useAppSelector((state) => state.home);
+  } = useAppSelector((state) => state.home)
 
   const [deleteFeatureSlider, { isLoading: isDeleteCategory }] =
-    useDeleteFeatureSlideMutation();
+    useDeleteFeatureSlideMutation()
   const [deleteFeatureSubSlider, { isLoading: isDeleteSubCategory }] =
-    useDeleteFeatureSubSlideMutation();
+    useDeleteFeatureSubSlideMutation()
   const [deleteFeatureProduct, { isLoading: isDeleteProduct }] =
-    useDeleteFeatureProductMutation();
-  const [deleteNewIn, { isLoading: isDeleteNewIn }] = useDeleteNewInMutation();
+    useDeleteFeatureProductMutation()
+  const [deleteNewIn, { isLoading: isDeleteNewIn }] = useDeleteNewInMutation()
 
   const renderItems = () => {
     switch (activeTab) {
-      case "feature-product":
-        return <FeatureProducts />;
-      case "feature-sub-slider":
-        return <FeatureSubSlider />;
-      case "feature-new-in":
-        return <FeatureNewIn />;
+      case 'feature-product':
+        return <FeatureProducts />
+      case 'feature-sub-slider':
+        return <FeatureSubSlider />
+      case 'feature-new-in':
+        return <FeatureNewIn />
       default:
-        return <FeatureSlider />;
+        return <FeatureSlider />
     }
-  };
+  }
 
   const handleModal = (type: string) => {
-    if (type === "cancelled") {
-      dispatch(homeAction.resetHome());
-      dispatch(coreAction.toggleModal({ type: "", open: false }));
+    if (type === 'cancelled') {
+      dispatch(homeAction.resetHome())
+      dispatch(coreAction.toggleModal({ type: '', open: false }))
     }
-  };
+  }
 
   console.log(
     `\n\n ~ HomePage ~ selectedFeatureSlider, selectedFeatureSubSlider:`,
     selectedFeatureSlider,
     selectedFeatureSubSlider,
-    selectedFeatureProduct
-  );
+    selectedFeatureProduct,
+  )
   const handleUpdateStatus = async () => {
-    if (type === "delete-feature-slider") {
+    if (type === 'delete-feature-slider') {
       await deleteFeatureSlider({
         id: selectedFeatureSlider?.id,
         query: {},
-      });
-    } else if (type === "delete-feature-sub-slider") {
+      })
+    } else if (type === 'delete-feature-sub-slider') {
       await deleteFeatureSubSlider({
         id: selectedFeatureSubSlider?.id,
         query: {},
-      });
-    } else if (type === "delete-new-in") {
+      })
+    } else if (type === 'delete-new-in') {
       await deleteNewIn({
         id: selectedFeatureProduct?.products,
         query: {},
-      });
+      })
     } else {
       await deleteFeatureProduct({
         id: selectedFeatureProduct?.products,
         query: {},
-      });
+      })
     }
-  };
+  }
 
   return (
-    <PageLayout title="Home Page CMS">
+    <PageLayout title='Home Page CMS'>
       <ManageFeatureSlider />
       <ManageFeatureSubSlider />
       <ManageFeatureProduct />
@@ -101,16 +101,16 @@ const HomePage = () => {
         classes={
           checkType(type)
             ? {
-                top: "visible",
+                top: 'visible',
                 body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
               }
             : {
-                top: "invisible",
-                body: "-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]",
+                top: 'invisible',
+                body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
               }
         }
         handleModal={handleModal}
-        wrapperClass="h-full"
+        wrapperClass='h-full'
         isModalHeader
         outSideClick
         headText={`Delete the ${getModuleName(type)}?`}
@@ -118,17 +118,17 @@ const HomePage = () => {
           type,
           selectedFeatureSlider ||
             selectedFeatureSubSlider ||
-            selectedFeatureProduct
+            selectedFeatureProduct,
         )}
-        details={`Are you certain you want to delete?`}
-        type={"delete"}
+        details='Are you certain you want to delete?'
+        type='delete'
         buttonText={
           isDeleteCategory ||
           isDeleteSubCategory ||
           isDeleteProduct ||
           isDeleteNewIn
-            ? "Deleting..."
-            : "Delete"
+            ? 'Deleting...'
+            : 'Delete'
         }
         buttonProps={{
           onClick: handleUpdateStatus,
@@ -140,12 +140,12 @@ const HomePage = () => {
         }}
       />
       <Card>
-        <div className="mb-3 pb-5">
-          <div className="flex justify-center relative mt-2">
+        <div className='mb-3 pb-5'>
+          <div className='flex justify-center relative mt-2'>
             <TabButtons
               data={tabItems}
-              containerClass={"box-border justify-safe-center"}
-              itemClasses="p-3 px-4 whitespace-nowrap"
+              containerClass='box-border justify-safe-center'
+              itemClasses='p-3 px-4 whitespace-nowrap'
               onChangeCallback={(data) => setActiveTab(data?.type)}
               isActive={(data) => data?.type === activeTab}
               renderData={(data) => <>{data?.name}</>}
@@ -155,7 +155,7 @@ const HomePage = () => {
         </div>
       </Card>
     </PageLayout>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default HomePage

@@ -4,28 +4,28 @@ import {
   FeatureSliderResponse,
   PostBulkPayload,
   StagePayload,
-} from "..";
+} from '..'
 
 export interface CommonState {
-  progress: number;
-  uploading: boolean;
-  totalPage: number;
-  reRenderBulk: boolean;
+  progress: number
+  uploading: boolean
+  totalPage: number
+  reRenderBulk: boolean
 }
 
 export interface ImageResponse {
-  image_link: string;
+  image_link: string
 }
 
 export type bulkUploadPayload =
   | EmployeePayload[]
   | StagePayload[]
   | AssetPayload[]
-  | PostBulkPayload;
+  | PostBulkPayload
 
 export interface BulkUploadQuery {
-  endpoint: string;
-  type?: string;
+  endpoint: string
+  type?: string
 }
 
-export type TabItemData = Partial<FeatureSliderResponse>;
+export type TabItemData = Partial<FeatureSliderResponse>

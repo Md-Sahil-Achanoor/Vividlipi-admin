@@ -1,9 +1,9 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren } from 'react'
 
 interface Props extends PropsWithChildren {}
 
 const NonAuth = ({ children }: Props) => {
-  return <>{children}</>;
-};
+  return <>{children}</>
+}
 
-export default NonAuth;
+export default NonAuth
