@@ -1,15 +1,14 @@
+import { cn } from '@/utils/twmerge'
 import { ErrorMessage } from 'formik'
-import React from 'react'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import { TagsInput } from 'react-tag-input-component'
 import { twMerge } from 'tailwind-merge'
-import { cn } from '@/utils/twmerge'
 import TextError from './TextError'
 
 const QuillComponent = ({
   label,
   id,
-  field: { name, onChange, onBlur, ...rest },
+  field: { name, onChange, ...rest },
   form: { setFieldTouched },
   isRequired,
   ...props

@@ -1,6 +1,3 @@
-import { Field, Form, Formik, FormikHelpers } from 'formik'
-import { useEffect, useState } from 'react'
-import { BsArrowRightShort } from 'react-icons/bs'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import CustomInput from '@/components/form/CustomInput'
 import InfiniteSelect from '@/components/form/InfiniteSelect'
@@ -17,6 +14,9 @@ import {
 } from '@/models/user-management'
 import { RolePermissionResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { Field, Form, Formik, FormikHelpers } from 'formik'
+import { useEffect, useState } from 'react'
+import { BsArrowRightShort } from 'react-icons/bs'
 
 const initialValues: IUserManagementForm = {
   name: '',
@@ -84,6 +84,7 @@ const ManageAdminUser = () => {
     if (open) {
       adminUserRefetch()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
   return (

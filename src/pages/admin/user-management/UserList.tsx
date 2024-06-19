@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import NoTableData from '@/components/atoms/NoTableData'
 import TableWrapper from '@/components/elements/common/TableWrapper'
@@ -15,6 +14,7 @@ import { userManagementAction } from '@/feature/user-management/userManagementSl
 import PageLayout from '@/layout/PageLayout'
 import { BreadCrumbItem, UserManagementResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { useEffect } from 'react'
 
 const breadcrumbItem: BreadCrumbItem[] = [
   {
@@ -39,8 +39,8 @@ const UserList = () => {
 
   useEffect(() => {
     dispatch(userManagementAction.resetAdminUser())
-
     refetch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // console.log(`\n\n selectedSubAdminUser:`, selectedSubAdminUser);

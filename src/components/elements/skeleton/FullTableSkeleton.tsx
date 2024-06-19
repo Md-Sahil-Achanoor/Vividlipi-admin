@@ -1,6 +1,4 @@
-import { PropsWithChildren } from 'react'
-
-interface SkeletonTableProps extends PropsWithChildren<{}> {
+interface SkeletonTableProps {
   total: number
   tableCount: number
 }

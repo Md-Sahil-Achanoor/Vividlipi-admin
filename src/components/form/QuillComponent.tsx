@@ -1,14 +1,13 @@
-import { ErrorMessage } from 'formik'
-import React from 'react'
-import { FaRegQuestionCircle } from 'react-icons/fa'
 import { cn } from '@/utils/twmerge'
+import { ErrorMessage } from 'formik'
+import { FaRegQuestionCircle } from 'react-icons/fa'
 import Quill from '../ui/Quill'
 import TextError from './TextError'
 
 const QuillComponent = ({
   label,
   id,
-  field: { name, onChange, onBlur, ...rest },
+  field: { name, onChange, ...rest },
   form: { setFieldTouched, ...form },
   isRequired,
   ...props

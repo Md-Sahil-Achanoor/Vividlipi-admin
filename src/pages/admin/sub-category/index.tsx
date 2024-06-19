@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
 import NoTableData from '@/components/atoms/NoTableData'
+import { useEffect } from 'react'
 
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import TableWrapper from '@/components/elements/common/TableWrapper'
@@ -64,6 +64,8 @@ const SubCategoryList = () => {
     return () => {
       dispatch(categoryAction.resetData())
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // console.log(`\n\n selectedSubCategory:`, selectedSubCategory);
@@ -124,6 +126,7 @@ const SubCategoryList = () => {
 
   useEffect(() => {
     categoryRefetch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

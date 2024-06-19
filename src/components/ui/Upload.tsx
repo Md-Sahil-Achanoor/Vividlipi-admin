@@ -1,6 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
-import { DropzoneOptions, FileRejection, useDropzone } from 'react-dropzone'
-import toast from 'react-hot-toast'
+import { FileUploadProps } from '@/types'
 import {
   acceptStyle,
   activeStyle,
@@ -8,7 +6,9 @@ import {
   formatBytes,
   rejectStyle,
 } from '@/utils/dropzone'
-import { FileUploadProps } from '@/types'
+import { useCallback, useMemo } from 'react'
+import { DropzoneOptions, FileRejection, useDropzone } from 'react-dropzone'
+import toast from 'react-hot-toast'
 
 const singleFile = 1048576
 const UploadFile = ({
@@ -48,7 +48,6 @@ const UploadFile = ({
         return
       }
       onDropCallBack && onDropCallBack(acceptedFiles, fileRejections)
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [reRender],

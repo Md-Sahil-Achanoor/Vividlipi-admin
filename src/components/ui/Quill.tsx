@@ -8,7 +8,7 @@ interface Props extends ReactQuillProps {
   disable?: boolean
 }
 
-const Quill = ({ classes = '', customClass = '', ...props }: Props) => {
+const Quill = ({ customClass = '', ...props }: Props) => {
   const modules = {
     toolbar: [
       ['bold', 'italic', 'underline'],

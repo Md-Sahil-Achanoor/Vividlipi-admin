@@ -1,7 +1,7 @@
+import config from '@/config/config'
 import React, { useEffect } from 'react'
 import { BiPlus } from 'react-icons/bi'
 import { twMerge } from 'tailwind-merge'
-import config from '@/config/config'
 import { useAppDispatch } from '../app/store'
 import BreadcrumbItem from '../components/atoms/BreadCrumbItem'
 import { coreAction } from '../feature/core/coreSlice'
@@ -30,6 +30,7 @@ const PageLayout = ({
   useEffect(() => {
     dispatch(coreAction.resetSort())
     document.title = `${title} - ${config?.projectName}`
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

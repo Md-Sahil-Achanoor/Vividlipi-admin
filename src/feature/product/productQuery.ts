@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unsafe-optional-chaining */
 import toast from 'react-hot-toast'
 import API from '../../app/services/api'
 import { endpoints } from '../../constants/endpoints'

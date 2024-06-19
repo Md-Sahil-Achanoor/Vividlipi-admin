@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import NoTableData from '@/components/atoms/NoTableData'
 import ManageModule from '@/components/elements/modal/ManageModule'
@@ -14,6 +13,7 @@ import { publisherAction } from '@/feature/publisher/publisherSlice'
 import PageLayout from '@/layout/PageLayout'
 import { BreadCrumbItem, PublisherResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { useEffect } from 'react'
 
 const breadcrumbItem: BreadCrumbItem[] = [
   {
@@ -40,6 +40,7 @@ const PublisherList = () => {
     return () => {
       dispatch(publisherAction.resetPublisher())
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // const handleModal = (type: string) => {

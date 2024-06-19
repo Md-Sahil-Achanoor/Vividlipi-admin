@@ -51,7 +51,8 @@ const useFileUploader = ({
         res.push(image?.url)
       }
       if (isMultiple) {
-        helpers.setValue([...values?.[name], ...res])
+        const data = values[name] || []
+        helpers.setValue([...data, ...res])
       } else {
         // console.log(`\n\n res:`, res);
         helpers.setValue(isSingleArray ? res : res?.[0])

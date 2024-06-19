@@ -1,7 +1,3 @@
-import { Field, Form, Formik, FormikHelpers } from 'formik'
-import { useEffect, useState } from 'react'
-import { BsArrowRightShort } from 'react-icons/bs'
-import { useNavigate, useParams } from 'react-router-dom'
 import { useAppSelector } from '@/app/store'
 import Loader from '@/components/atoms/Loader'
 import MultiSelectItem from '@/components/atoms/MultiSelectItem'
@@ -32,6 +28,10 @@ import {
   SelectItem,
 } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { Field, Form, Formik, FormikHelpers } from 'formik'
+import { useEffect, useState } from 'react'
+import { BsArrowRightShort } from 'react-icons/bs'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const initialValues: Product = {
   book_title: '',
@@ -178,17 +178,20 @@ const ManageProduct = () => {
     if (category2) {
       category2Refetch()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category2])
 
   useEffect(() => {
     categoryRefetch()
     publisherRefetch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     if (id) {
       refetch()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
   return (
@@ -620,11 +623,10 @@ const ManageProduct = () => {
                             item?.value as number,
                           )
                           if (!isUnique) {
-                            setFieldValue('book_format', [
-                              ...values?.book_format,
-                              item?.value,
-                            ])
+                            const data = values?.book_format || []
+                            setFieldValue('book_format', [...data, item?.value])
                           } else {
+                            return
                           }
                         }}
                         clearData={(item: SelectItem) => {

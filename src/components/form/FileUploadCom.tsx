@@ -1,6 +1,6 @@
-import { ErrorMessage } from 'formik'
-import React, { FC } from 'react'
 import { FormikFileUpload } from '@/types'
+import { ErrorMessage } from 'formik'
+import { FC } from 'react'
 import TextError from './TextError'
 
 const FileUploadCom: FC<FormikFileUpload> = ({

@@ -1,4 +1,4 @@
-import { ChangeEventType, TabItem } from '@/types'
+import { TabItem } from '@/types'
 import { cn } from '@/utils/twmerge'
 
 interface Props<T> {
@@ -41,7 +41,7 @@ Props<T>) => {
             name={el?.type as string}
             id={el?.type as string}
             checked={!!isActive(el, idx)}
-            onChange={(_e: ChangeEventType) => {
+            onChange={() => {
               onChangeCallback(el, idx)
             }}
             value={el?.type}

@@ -1,56 +1,3 @@
-// const Pagination = () => {
-//   return (
-//     <div>
-//       <nav className="text-center">
-//         <ul className="inline-flex  h-10">
-//           <li>
-//             <button className="flex items-center justify-center px-4 h-10 ml-0  text-content-primary bg-white border cursor-pointer border-borderClr-gray300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700   text-sm font-semibold">
-//               {" "}
-//               <LeftArrow /> Previous
-//             </button>
-//           </li>
-//           <li>
-//             <button className="flex items-center justify-center px-4 h-10  text-content-primary bg-white border cursor-pointer border-borderClr-gray300 hover:bg-gray-100 hover:text-gray-700    ">
-//               1
-//             </button>
-//           </li>
-//           <li>
-//             <button className="flex items-center justify-center px-4 h-10  text-content-primary bg-white border cursor-pointer border-borderClr-gray300 hover:bg-gray-100 hover:text-gray-700    ">
-//               2
-//             </button>
-//           </li>
-//           <li>
-//             <button
-//               aria-current="page"
-//               className="flex items-center justify-center px-4 h-10 text-pink-500 border border-borderClr-gray300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700   "
-//             >
-//               3
-//             </button>
-//           </li>
-//           <li>
-//             <button className="flex items-center justify-center px-4 h-10  text-content-primary bg-white border cursor-pointer border-borderClr-gray300 hover:bg-gray-100 hover:text-gray-700   ">
-//               4
-//             </button>
-//           </li>
-//           <li>
-//             <button className="flex items-center justify-center px-4 h-10  text-content-primary bg-white border cursor-pointer border-borderClr-gray300 hover:bg-gray-100 hover:text-gray-700   ">
-//               5
-//             </button>
-//           </li>
-//           <li>
-//             <button className="flex items-center justify-center px-4 h-10  text-content-primary bg-white border cursor-pointer border-borderClr-gray300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700   text-sm font-semibold ">
-//               Next <RightArrow />
-//             </button>
-//           </li>
-//         </ul>
-//       </nav>
-//     </div>
-//   );
-// };
-
-// export default Pagination;
-
-/* eslint-disable eqeqeq */
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 // import { BiLeftArrow, BiRightArrow } from "react-icons/bi";
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
@@ -177,7 +124,6 @@ const Pagination: FC<Page> = ({
         key={number}
         // className={`${currentButton === number ? "bg-pink-500" : ""}`}
         onClick={() => {
-          // eslint-disable-next-line no-unused-expressions
           helper(number) ? handlePagination(number) : null
         }}
         className={`flex items-center cursor-pointer justify-center px-4 h-10 ${

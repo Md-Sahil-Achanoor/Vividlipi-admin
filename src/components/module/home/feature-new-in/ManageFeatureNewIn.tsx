@@ -1,6 +1,3 @@
-import { Field, Form, Formik, FormikHelpers, FormikProps } from 'formik'
-import { useEffect, useRef, useState } from 'react'
-import { BsArrowRightShort } from 'react-icons/bs'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import CustomInput from '@/components/form/CustomInput'
 import InfiniteSelect from '@/components/form/InfiniteSelect'
@@ -13,6 +10,9 @@ import useDebounce from '@/hooks/useDebounce'
 import { IHomeFeatureNewProduct, featureNewProductSchema } from '@/models/home'
 import { ProductQuery, ProductResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { Field, Form, Formik, FormikHelpers, FormikProps } from 'formik'
+import { useEffect, useRef, useState } from 'react'
+import { BsArrowRightShort } from 'react-icons/bs'
 
 const initialValues: IHomeFeatureNewProduct = {
   productId: null,
@@ -64,6 +64,7 @@ const ManageFeatureNewIn = () => {
     if (open && type === 'manage-new-in') {
       productRefetch()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type])
 
   const dispatch = useAppDispatch()

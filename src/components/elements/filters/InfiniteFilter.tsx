@@ -1,9 +1,9 @@
+import useOnClickOutside from '@/hooks/useOnClickOutside'
+import { InputType } from '@/types'
 import { useCallback, useRef, useState } from 'react'
 import { BiChevronDown, BiSearch } from 'react-icons/bi'
 import { BsX } from 'react-icons/bs'
 import { twMerge } from 'tailwind-merge'
-import { InputType } from '@/types'
-import useOnClickOutside from '@/hooks/useOnClickOutside'
 import Loader from '../../atoms/Loader'
 
 interface InfiniteFilter<T> {

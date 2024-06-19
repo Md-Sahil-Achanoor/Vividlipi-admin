@@ -1,4 +1,3 @@
-import React from 'react'
 import config from '@/config/config'
 import { useAppSelector } from '../../app/store'
 import { cn } from '../../utils/twmerge'

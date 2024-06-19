@@ -1,6 +1,3 @@
-import { Field, Form, Formik, FormikHelpers } from 'formik'
-import { useEffect } from 'react'
-import { BsArrowRightShort } from 'react-icons/bs'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import CustomInput from '@/components/form/CustomInput'
 import InfiniteSelect from '@/components/form/InfiniteSelect'
@@ -14,6 +11,9 @@ import { coreAction } from '@/feature/core/coreSlice'
 import { IManageSubCategory, subCategorySchema } from '@/models/category'
 import { CategoryResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { Field, Form, Formik, FormikHelpers } from 'formik'
+import { useEffect } from 'react'
+import { BsArrowRightShort } from 'react-icons/bs'
 
 const initialValues: IManageSubCategory = {
   title: '',
@@ -72,6 +72,7 @@ const ManageSubCategory = () => {
     if (open) {
       categoryRefetch()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
   return (

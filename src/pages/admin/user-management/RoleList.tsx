@@ -1,5 +1,3 @@
-import { useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import NoTableData from '@/components/atoms/NoTableData'
 import TableWrapper from '@/components/elements/common/TableWrapper'
@@ -17,6 +15,8 @@ import { userManagementAction } from '@/feature/user-management/userManagementSl
 import PageLayout from '@/layout/PageLayout'
 import { BreadCrumbItem, RolePermissionResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 const breadcrumbItem: BreadCrumbItem[] = [
   {
@@ -45,6 +45,7 @@ const RoleList = () => {
   useEffect(() => {
     dispatch(userManagementAction.resetAll())
     refetch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // console.log(`\n\n selectedSubRolePermission:`, selectedSubRolePermission);

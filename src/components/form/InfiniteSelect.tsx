@@ -1,9 +1,8 @@
-import { ErrorMessage } from 'formik'
-import React from 'react'
-import { FaRegQuestionCircle } from 'react-icons/fa'
 import InfiniteFilter from '@/components/elements/filters/InfiniteFilter'
 import { InfiniteSelect as InfiniteSelectType } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { ErrorMessage } from 'formik'
+import { FaRegQuestionCircle } from 'react-icons/fa'
 import TextError from './TextError'
 
 const InfiniteSelect = <T extends object>({

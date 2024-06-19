@@ -57,7 +57,7 @@ export interface ProductResponse
   extends IProduct<CategoryResponse, PublisherResponse> {
   id: string | number
   createdAt: string
-  isDeleted: Number
+  isDeleted: number
 }
 
 export interface ProductQuery extends ReqQuery {

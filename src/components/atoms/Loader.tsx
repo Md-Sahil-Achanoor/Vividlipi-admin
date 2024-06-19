@@ -1,4 +1,3 @@
-import React from 'react'
 import { ILoader } from '../../types'
 
 const Loader = ({

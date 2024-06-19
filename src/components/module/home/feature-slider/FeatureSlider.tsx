@@ -1,4 +1,3 @@
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { useAppDispatch } from '@/app/store'
 import NoTableData from '@/components/atoms/NoTableData'
 import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
@@ -9,6 +8,7 @@ import { useGetHomeFeatureSliderQuery } from '@/feature/home/homeQuery'
 import { homeAction } from '@/feature/home/homeSlice'
 import { FeatureSliderResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 // import PlaceholderImage from "../../../../assets/Images/image.png";
 import PlaceholderImage from '@/assets/svg/placeholder'
 import ModuleHeader from '../ModuleHeader'
@@ -28,6 +28,7 @@ const FeatureSlider = () => {
           open: true,
         }),
       )
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { home_text, contentpostion_X, ...rest } = item
       dispatch(
         homeAction.setSelectedFeatureSlider({

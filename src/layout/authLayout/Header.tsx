@@ -1,4 +1,3 @@
-import React from 'react'
 import { BiFullscreen, BiMenu } from 'react-icons/bi'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../../app/store'

@@ -1,8 +1,7 @@
-import { ErrorMessage } from 'formik'
-import React from 'react'
-import { FaRegQuestionCircle } from 'react-icons/fa'
-import { cn } from '@/utils/twmerge'
 import { InputSelect as InputSelectType, OptionValue } from '@/types'
+import { cn } from '@/utils/twmerge'
+import { ErrorMessage } from 'formik'
+import { FaRegQuestionCircle } from 'react-icons/fa'
 import TextError from './TextError'
 
 const InputSelect = <T extends OptionValue>({

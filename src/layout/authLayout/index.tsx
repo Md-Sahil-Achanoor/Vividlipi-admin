@@ -1,5 +1,5 @@
-import React, { PropsWithChildren, useLayoutEffect } from 'react'
 import { cn } from '@/utils/twmerge'
+import { PropsWithChildren, useLayoutEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/store'
 import { changeSidebarType } from '../../feature/layout/layoutSlice'
 import Footer from './Footer'
@@ -74,6 +74,7 @@ const AuthLayout = ({ children }: Props) => {
     window.scrollTo(0, 0)
     // const currentPage = toCapitalize(getName(location.pathname));
     // document.title = `${currentPage} | ${projectName}`;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // console.log(`\n\n  window.innerWidth:`, window.innerWidth);
