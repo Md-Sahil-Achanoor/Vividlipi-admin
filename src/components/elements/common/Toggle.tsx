@@ -1,7 +1,7 @@
-import { PropsWithChildren } from 'react'
 import { cn } from '@/utils/twmerge'
+import { PropsWithChildren } from 'react'
 
-interface ToggleProps extends PropsWithChildren<{}> {
+interface ToggleProps extends PropsWithChildren {
   isOn: boolean
   isDisabled?: boolean
   defaultClass?: string

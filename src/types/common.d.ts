@@ -275,7 +275,7 @@ export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 /**
  * @type { Manage Update or create module Base Payload }
  */
-export interface ManagePayload<T, Q = {}> {
+export interface ManagePayload<T, Q = unknown> {
   id?: string | number
   data: T
   query?: Partial<Q>
@@ -297,7 +297,7 @@ export interface ManagePayloadQuery<Q> {
 /**
  * @type { Manage Get module Base Payload }
  */
-export interface ManageQuery<Q, U = {}> {
+export interface ManageQuery<Q, U = unknown> {
   query?: Partial<Q>
   urlParams?: U
   options?: FormikSubmitOption
@@ -334,7 +334,7 @@ export type StatusEnum = 'Active' | 'Inactive'
 /**
  * @type { Bulk Upload Return type }
  */
-export interface BulkUploadReturn<T = {}> {
+export interface BulkUploadReturn<T = unknown> {
   failed: string
   message: string
   result: T[]

@@ -1,12 +1,12 @@
-import { Field, Form, Formik } from 'formik'
-import { useEffect, useState } from 'react'
-import { BsArrowRightShort } from 'react-icons/bs'
-import { Link, useNavigate } from 'react-router-dom'
 import CheckboxGroup from '@/components/form/CheckboxGroup'
 import CustomInput from '@/components/form/CustomInput'
 import config from '@/config/config'
 import { operatorSignUpSchema } from '@/models/auth/signup-validation'
 import { FormikSubmitOption } from '@/types'
+import { Field, Form, Formik } from 'formik'
+import { useEffect, useState } from 'react'
+import { BsArrowRightShort } from 'react-icons/bs'
+import { Link, useNavigate } from 'react-router-dom'
 
 const initialValues: any = {
   CompanyName: '',
@@ -40,7 +40,7 @@ const Register = () => {
     { setSubmitting, resetForm }: FormikSubmitOption,
   ) => {
     const distinctValues = operatorSignUpSchema.cast(values)
-    const { passwordConfirm, as, Address2, CIN, ...rest } = distinctValues
+    const { Address2, CIN, ...rest } = distinctValues
     const body: any = { ...rest, Address2: Address2 || '' }
     if (CIN) {
       body.CIN = CIN

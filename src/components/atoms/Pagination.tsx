@@ -144,7 +144,7 @@ const Pagination: FC<Page> = ({
         .map((el) => String(el)) // slice(10-4)
       tempNumberOfPages = ['1', dotsLeft, ...sliced]
     } else if (currentButton === dotsInitial) {
-      // [1, 2, 3, 4, "...", 10].length = 6 - 3  = 3
+      //[1, 2, 3, 4, "...", 10].length = 6 - 3  = 3
       // arrOfCurrButtons[3] = 4 + 1 = 5
       // or
       // [1, 2, 3, 4, 5, "...", 10].length = 7 - 3 = 4

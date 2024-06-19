@@ -1,48 +1,69 @@
 {
-  "env": {
-    "browser": true,
-    "es2021": true
-  },
   "extends": [
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
-    "airbnb",
-    "plugin:prettier/recommended",
-    "plugin:import/typescript"
+    "plugin:react-hooks/recommended",
+    "prettier"
   ],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": "latest",
-    "sourceType": "module"
-  },
-  "plugins": ["react", "@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "react", "react-hooks", "import"],
   "rules": {
-    "import/extensions": [
+    "react/display-name": "off",
+    "@next/next/no-img-element": "off",
+    "react/no-unescaped-entities": "off",
+    "import/no-anonymous-default-export": "off",
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    // add new line above comment
+    "lines-around-comment": [
       "error",
-      "ignorePackages",
       {
-        "js": "never",
-        "jsx": "never",
-        "ts": "never",
-        "tsx": "never"
+        "beforeLineComment": true,
+        "beforeBlockComment": true,
+        "allowBlockStart": true,
+        "allowClassStart": true,
+        "allowObjectStart": true,
+        "allowArrayStart": true
       }
     ],
-    "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
-    "react/function-component-definition": [
-      2,
+    // add new line above return
+    "newline-before-return": "error",
+    // add new line below import
+    "import/newline-after-import": [
+      "error",
       {
-        "namedComponents": ["function-declaration", "arrow-function"],
-        "unnamedComponents": ["function-expression", "arrow-function"]
+        "count": 1
       }
     ],
-    "quotes": ["error", "single", { "allowTemplateLiterals": true }],
-    "no-undef": "off",
-    "react/jsx-no-bind": [
+    "@typescript-eslint/ban-types": [
       "error",
-      { "allowFunctions": true, "allowArrowFunctions": true }
-    ],
-    "react/require-default-props": [0]
-  }
+      {
+        "extendDefaults": true,
+        "types": {
+          "{}": false
+        }
+      }
+    ]
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true,
+        "project": ["./tsconfig.json"]
+      }
+    }
+  },
+  "overrides": [
+    {
+      "files": ["src/iconify-bundle/*"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ]
 }

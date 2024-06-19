@@ -54,7 +54,9 @@ const changeLeftSidebarType = ({
         if (!isMobile) manageBodyClass('vertical-collpsed', 'remove')
         break
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error('Error: ', error)
+  }
 }
 
 export { changeLeftSidebarType }

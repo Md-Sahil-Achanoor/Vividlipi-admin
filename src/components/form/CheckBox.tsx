@@ -1,6 +1,6 @@
+import { InputCheckbox } from '@/types'
 import { ErrorMessage } from 'formik'
 import { Link } from 'react-router-dom'
-import { InputCheckbox } from '@/types'
 import TextError from './TextError'
 
 const CheckBox = ({
