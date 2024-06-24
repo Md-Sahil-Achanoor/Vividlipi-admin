@@ -1,41 +1,41 @@
-import { useAppDispatch, useAppSelector } from "@/app/store";
-import CustomInput from "@/components/form/CustomInput";
-import Modal from "@/components/ui/Modal";
-import { coreAction } from "@/feature/core/coreSlice";
-import { useManagePublisherMutation } from "@/feature/publisher/publisherQuery";
-import { publisherAction } from "@/feature/publisher/publisherSlice";
-import { IManagePublisher, publisherSchema } from "@/models/publisher";
-import { Field, Form, Formik, FormikHelpers } from "formik";
-import { BsArrowRightShort } from "react-icons/bs";
+import { Field, Form, Formik, FormikHelpers } from 'formik'
+import { BsArrowRightShort } from 'react-icons/bs'
+import { useAppDispatch, useAppSelector } from '@/app/store'
+import CustomInput from '@/components/form/CustomInput'
+import Modal from '@/components/ui/Modal'
+import { coreAction } from '@/feature/core/coreSlice'
+import { useManagePublisherMutation } from '@/feature/publisher/publisherQuery'
+import { publisherAction } from '@/feature/publisher/publisherSlice'
+import { IManagePublisher, publisherSchema } from '@/models/publisher'
 
 const initialValues: IManagePublisher = {
-  Name: "",
-  description: "",
-};
+  Name: '',
+  description: '',
+}
 
 const ManagePublisher = () => {
-  const { type, open } = useAppSelector((state) => state.core);
+  const { type, open } = useAppSelector((state) => state.core)
   const { singlePublisher, selectedPublisher } = useAppSelector(
-    (state) => state.publisher
-  );
-  const [managePublisher, { isLoading }] = useManagePublisherMutation();
-  const dispatch = useAppDispatch();
+    (state) => state.publisher,
+  )
+  const [managePublisher, { isLoading }] = useManagePublisherMutation()
+  const dispatch = useAppDispatch()
   const handleModal = (type: string) => {
-    if (type === "cancelled") {
+    if (type === 'cancelled') {
       // do nothing
-      dispatch(coreAction.toggleModal({ open: false, type: "" }));
-      dispatch(publisherAction.setSelectedPublisher(null));
+      dispatch(coreAction.toggleModal({ open: false, type: '' }))
+      dispatch(publisherAction.setSelectedPublisher(null))
     }
-  };
+  }
   console.log(
     `\n\n ~ ManagePublisher ~ singlePublisher:`,
     singlePublisher,
-    selectedPublisher
-  );
+    selectedPublisher,
+  )
 
   const onSubmit = async (
     values: IManagePublisher,
-    { setSubmitting, resetForm }: FormikHelpers<IManagePublisher>
+    { setSubmitting, resetForm }: FormikHelpers<IManagePublisher>,
   ) => {
     // console.log("values", values);
     await managePublisher({
@@ -45,28 +45,28 @@ const ManagePublisher = () => {
         setSubmitting,
         resetForm,
       },
-    });
-  };
+    })
+  }
   return (
     <Modal
       classes={
-        type === "manage-publisher" && open
+        type === 'manage-publisher' && open
           ? {
-              top: "visible",
+              top: 'visible',
               body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px]`,
             }
           : {
-              top: "invisible",
-              body: "-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]",
+              top: 'invisible',
+              body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
             }
       }
       handleModal={handleModal}
-      wrapperClass="h-full"
-      headText={selectedPublisher?.id ? "Update Publisher" : "Create Publisher"}
+      wrapperClass='h-full'
+      headText={selectedPublisher?.id ? 'Update Publisher' : 'Create Publisher'}
       isModalHeader
       outSideClick
     >
-      <div className="w-full h-full">
+      <div className='w-full h-full'>
         <Formik
           initialValues={singlePublisher || initialValues}
           validationSchema={publisherSchema}
@@ -75,43 +75,43 @@ const ManagePublisher = () => {
         >
           {({ isSubmitting }) => (
             <Form noValidate>
-              <div className="mt-2">
+              <div className='mt-2'>
                 <Field
-                  name="Name"
-                  label={"Publisher Name"}
-                  type="text"
+                  name='Name'
+                  label='Publisher Name'
+                  type='text'
                   component={CustomInput}
-                  placeholder="Type here..."
+                  placeholder='Type here...'
                   isRequired
                 />
 
                 <Field
-                  name="description"
-                  label={"Description"}
-                  type="textarea"
-                  rows="5"
+                  name='description'
+                  label='Description'
+                  type='textarea'
+                  rows='5'
                   component={CustomInput}
-                  placeholder="Type here..."
+                  placeholder='Type here...'
                   isRequired
                 />
               </div>
               {/* <div className="flex"> */}
               <button
-                type="submit"
-                className="button_primary"
+                type='submit'
+                className='button_primary'
                 disabled={isSubmitting || isLoading}
               >
                 {isLoading || isSubmitting ? (
                   <>
-                    <span className="w-5 h-5 border-2 animate-spin rounded-full border-transparent border-t-white mr-2"></span>
-                    <span className="font-medium">Processing</span>
+                    <span className='w-5 h-5 border-2 animate-spin rounded-full border-transparent border-t-white mr-2' />
+                    <span className='font-medium'>Processing</span>
                   </>
                 ) : (
                   <>
-                    <span className="font-medium">
-                      {selectedPublisher?.id ? "Update" : "Create"}
+                    <span className='font-medium'>
+                      {selectedPublisher?.id ? 'Update' : 'Create'}
                     </span>
-                    <span className="text-2xl ml-1">
+                    <span className='text-2xl ml-1'>
                       <BsArrowRightShort />
                     </span>
                   </>
@@ -123,7 +123,7 @@ const ManagePublisher = () => {
         </Formik>
       </div>
     </Modal>
-  );
-};
+  )
+}
 
-export default ManagePublisher;
+export default ManagePublisher

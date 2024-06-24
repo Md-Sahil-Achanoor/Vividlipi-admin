@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: 16.x
 
-      - name: "Create env file"
+      - name: 'Create env file'
         run: |
           touch .env
           echo VITE_API_URL="https://vivid-dapi.edalytics.com" >> .env
@@ -37,9 +37,9 @@ jobs:
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.2.3
         with:
-          publish-dir: "./dist"
+          publish-dir: './dist'
           production-branch: staging
-          deploy-message: "${{ github.event.head_commit.message }}"
+          deploy-message: '${{ github.event.head_commit.message }}'
         env:
-          NETLIFY_SITE_ID: "${{ secrets.NETLIFY_STAGING_SITE_ID }}"
-          NETLIFY_AUTH_TOKEN: "${{ secrets.NETLIFY_AUTH_TOKEN }}"
+          NETLIFY_SITE_ID: '${{ secrets.NETLIFY_STAGING_SITE_ID }}'
+          NETLIFY_AUTH_TOKEN: '${{ secrets.NETLIFY_AUTH_TOKEN }}'

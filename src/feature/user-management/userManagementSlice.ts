@@ -1,84 +1,84 @@
-import { roleOptions } from "@/constants/role-constant";
-import { IOptions } from "@/models/user-management";
-import { filterPermission } from "@/utils/validateSchema";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { roleOptions } from '@/constants/role-constant'
+import { IOptions } from '@/models/user-management'
+import { filterPermission } from '@/utils/validateSchema'
 import {
   RolePermissionResponse,
   UserManagementResponse,
   UserManagementState,
-} from "../../types";
+} from '../../types'
 
 const initialState: UserManagementState = {
   selectedRolePermission: null,
   selectedUser: null,
   singleUser: null,
   singleRolePermission: null,
-};
+}
 
 const userManagementSlice = createSlice({
-  name: "userManagement",
+  name: 'userManagement',
   initialState,
   reducers: {
     setSelectedRolePermission: (
       state,
-      action: PayloadAction<RolePermissionResponse | null>
+      action: PayloadAction<RolePermissionResponse | null>,
     ) => {
-      state.selectedRolePermission = action.payload;
+      state.selectedRolePermission = action.payload
       if (action.payload) {
-        const { Permissions } = action.payload;
-        let permissions: Record<string, IOptions[]> = {};
+        const { Permissions } = action.payload
+        const permissions: Record<string, IOptions[]> = {}
         roleOptions?.forEach((role) => {
-          let check = Object.keys(Permissions)?.includes(role);
+          const check = Object.keys(Permissions)?.includes(role)
           if (check) {
-            permissions[role] = filterPermission(Permissions[role]);
+            permissions[role] = filterPermission(Permissions[role])
           } else {
-            permissions[role] = [];
+            permissions[role] = []
           }
-        });
+        })
         state.singleRolePermission = {
           Title: action.payload.Title,
           ...permissions,
-        };
+        }
       } else {
-        state.singleRolePermission = null;
+        state.singleRolePermission = null
       }
     },
     setSelectedUser: (
       state,
-      action: PayloadAction<UserManagementResponse | null>
+      action: PayloadAction<UserManagementResponse | null>,
     ) => {
-      state.selectedUser = action.payload;
+      state.selectedUser = action.payload
       if (action.payload) {
         state.singleUser = {
           name: action.payload.name,
           email: action.payload.email,
-          password: "",
+          password: '',
           role: action.payload.role,
-        };
+        }
       } else {
-        state.singleUser = null;
+        state.singleUser = null
       }
     },
 
     resetAdminUser: (state) => {
-      state.selectedUser = null;
-      state.singleUser = null;
+      state.selectedUser = null
+      state.singleUser = null
     },
     resetRolePermission: (state) => {
-      state.selectedRolePermission = null;
-      state.singleRolePermission = null;
+      state.selectedRolePermission = null
+      state.singleRolePermission = null
     },
 
     resetAll: (state) => {
-      state.selectedUser = null;
-      state.singleUser = null;
-      state.selectedRolePermission = null;
-      state.singleRolePermission = null;
+      state.selectedUser = null
+      state.singleUser = null
+      state.selectedRolePermission = null
+      state.singleRolePermission = null
     },
   },
-});
+})
 
 // Actions
-export const userManagementAction = userManagementSlice.actions;
+export const userManagementAction = userManagementSlice.actions
 
-export default userManagementSlice.reducer;
+export default userManagementSlice.reducer

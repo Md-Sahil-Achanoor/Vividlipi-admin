@@ -1,4 +1,4 @@
-import PageLayout from "@/layout/PageLayout";
+import PageLayout from '@/layout/PageLayout'
 
 const AdminDashboard = () => {
   // const goToAsset = () => {
@@ -9,12 +9,12 @@ const AdminDashboard = () => {
   // };
 
   return (
-    <PageLayout title="Dashboard">
-      <div className="flex flex-col">
+    <PageLayout title='Dashboard'>
+      <div className='flex flex-col'>
         <h2>Admin Dashboard</h2>
       </div>
     </PageLayout>
-  );
-};
+  )
+}
 
-export default AdminDashboard;
+export default AdminDashboard

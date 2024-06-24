@@ -3,7 +3,7 @@ const VendorDashboard = () => {
     <div>
       <h2>Hello</h2>
     </div>
-  );
-};
+  )
+}
 
-export default VendorDashboard;
+export default VendorDashboard

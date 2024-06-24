@@ -1,7 +1,7 @@
-import { Outlet } from "react-router-dom";
+import { Outlet } from 'react-router-dom'
 
 const AppWrapper = () => {
-  return <Outlet />;
-};
+  return <Outlet />
+}
 
-export default AppWrapper;
+export default AppWrapper

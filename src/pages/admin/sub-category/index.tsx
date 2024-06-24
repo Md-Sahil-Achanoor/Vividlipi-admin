@@ -1,70 +1,72 @@
-import NoTableData from "@/components/atoms/NoTableData";
+import NoTableData from '@/components/atoms/NoTableData'
+import { useEffect } from 'react'
 
-import { useAppDispatch, useAppSelector } from "@/app/store";
-import TableWrapper from "@/components/elements/common/TableWrapper";
-import InfiniteFilter from "@/components/elements/filters/InfiniteFilter";
-import ManageModule from "@/components/elements/modal/ManageModule";
-import SkeletonTable from "@/components/elements/skeleton/SkeletonTable";
-import ManageSubCategory from "@/components/module/category/ManageSubCategory";
-import Table from "@/components/ui/Table";
+import { useAppDispatch, useAppSelector } from '@/app/store'
+import TableWrapper from '@/components/elements/common/TableWrapper'
+import InfiniteFilter from '@/components/elements/filters/InfiniteFilter'
+import ManageModule from '@/components/elements/modal/ManageModule'
+import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
+import ManageSubCategory from '@/components/module/category/ManageSubCategory'
+import Table from '@/components/ui/Table'
 import {
   useDeleteSubCategoryMutation,
   useGetCategoriesQuery,
-} from "@/feature/category/categoryQuery";
-import { categoryAction } from "@/feature/category/categorySlice";
-import { coreAction } from "@/feature/core/coreSlice";
-import PageLayout from "@/layout/PageLayout";
+} from '@/feature/category/categoryQuery'
+import { categoryAction } from '@/feature/category/categorySlice'
+import { coreAction } from '@/feature/core/coreSlice'
+import PageLayout from '@/layout/PageLayout'
 import {
   BreadCrumbItem,
   CategoryQuery,
   CategoryResponse,
   SubCategoryResponse,
-} from "@/types";
-import { cn } from "@/utils/twmerge";
-import { useEffect } from "react";
+} from '@/types'
+import { cn } from '@/utils/twmerge'
 
 const breadcrumbItem: BreadCrumbItem[] = [
   {
-    name: "Sub Category List",
-    link: "#",
+    name: 'Sub Category List',
+    link: '#',
   },
-];
+]
 const tableHead = [
-  "SL",
+  'SL',
   // "ID",
-  "Name",
-  "Category",
-  "Action",
-];
+  'Name',
+  'Category',
+  'Action',
+]
 
 const SubCategoryList = () => {
-  const { type } = useAppSelector((state) => state.core);
+  const { type } = useAppSelector((state) => state.core)
   const { selectedCategory, selectedSubCategory } = useAppSelector(
-    (state) => state.category
-  );
-  const dispatch = useAppDispatch();
+    (state) => state.category,
+  )
+  const dispatch = useAppDispatch()
 
   const [deleteCategory, { isLoading: isDeleteCategory }] =
-    useDeleteSubCategoryMutation();
+    useDeleteSubCategoryMutation()
   const query = () => {
-    let q: Partial<CategoryQuery> = {};
+    let q: Partial<CategoryQuery> = {}
     if (selectedCategory) {
       q = {
         cat1: selectedCategory.id,
-      };
+      }
     }
-    return q;
-  };
+    return q
+  }
   const { data, isLoading, isFetching, refetch } = useGetCategoriesQuery({
     query: query(),
-  });
+  })
 
   useEffect(() => {
-    refetch();
+    refetch()
     return () => {
-      dispatch(categoryAction.resetData());
-    };
-  }, []);
+      dispatch(categoryAction.resetData())
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // console.log(`\n\n selectedSubCategory:`, selectedSubCategory);
 
@@ -74,41 +76,41 @@ const SubCategoryList = () => {
       query: {
         cat1: selectedCategory?.id,
       },
-    });
-  };
+    })
+  }
 
   const handleModal = (type?: string, data?: CategoryResponse) => {
-    if (type === "cancelled") {
+    if (type === 'cancelled') {
       // do nothing
-      dispatch(coreAction.toggleModal({ open: false, type: "" }));
-      dispatch(categoryAction.setSelectedSubCategory(null));
-    } else if (type === "edit") {
+      dispatch(coreAction.toggleModal({ open: false, type: '' }))
+      dispatch(categoryAction.setSelectedSubCategory(null))
+    } else if (type === 'edit') {
       dispatch(
         coreAction.toggleModal({
-          type: "manage-sub-category",
+          type: 'manage-sub-category',
           open: true,
-        })
-      );
+        }),
+      )
       dispatch(
         categoryAction.setSelectedSubCategory({
           ...data,
           category: selectedCategory,
-        } as SubCategoryResponse)
-      );
-    } else if (type === "delete") {
+        } as SubCategoryResponse),
+      )
+    } else if (type === 'delete') {
       dispatch(
         coreAction.toggleModal({
-          type: "delete-sub-category",
+          type: 'delete-sub-category',
           open: true,
-        })
-      );
-      dispatch(categoryAction.setSelectedSubCategory(data as CategoryResponse));
+        }),
+      )
+      dispatch(categoryAction.setSelectedSubCategory(data as CategoryResponse))
     } else {
       dispatch(
-        coreAction.toggleModal({ open: true, type: "manage-sub-category" })
-      );
+        coreAction.toggleModal({ open: true, type: 'manage-sub-category' }),
+      )
     }
-  };
+  }
 
   const {
     isLoading: categoryLoading,
@@ -118,37 +120,38 @@ const SubCategoryList = () => {
     error: categoryErrorMessage,
   } = useGetCategoriesQuery({
     conditions: {
-      type: "category1",
+      type: 'category1',
     },
-  });
+  })
 
   useEffect(() => {
-    categoryRefetch();
-  }, []);
+    categoryRefetch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>
       <ManageModule
         classes={
-          type === "delete-sub-category"
+          type === 'delete-sub-category'
             ? {
-                top: "visible",
+                top: 'visible',
                 body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
               }
             : {
-                top: "invisible",
-                body: "-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]",
+                top: 'invisible',
+                body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
               }
         }
         handleModal={handleModal}
-        wrapperClass="h-full"
+        wrapperClass='h-full'
         isModalHeader
         outSideClick
-        headText={`Delete the Sub Category?`}
-        heading={selectedSubCategory?.title || ""}
-        details={`Are you certain you want to delete?`}
-        type={"delete"}
-        buttonText={isDeleteCategory ? "Deleting..." : "Delete"}
+        headText='Delete the Sub Category?'
+        heading={selectedSubCategory?.title || ''}
+        details='Are you certain you want to delete?'
+        type='delete'
+        buttonText={isDeleteCategory ? 'Deleting...' : 'Delete'}
         buttonProps={{
           onClick: handleUpdateStatus,
           disabled: isDeleteCategory,
@@ -156,9 +159,9 @@ const SubCategoryList = () => {
       />
       <ManageSubCategory />
       <PageLayout
-        title="Sub Category List"
+        title='Sub Category List'
         breadcrumbItem={breadcrumbItem}
-        buttonText="Add Sub Category"
+        buttonText='Add Sub Category'
         buttonProps={{
           onClick: () => handleModal(),
         }}
@@ -168,65 +171,63 @@ const SubCategoryList = () => {
           isActiveInactive={false}
           isSort={false}
           renderCustom={() => (
-            <>
-              <div className="max-w-[250px] min-w-[200px]">
-                <InfiniteFilter<CategoryResponse>
-                  wrapperClass=""
-                  buttonClass="border p-2"
-                  items={categoryList?.data || []}
-                  renderItem={(item) => <>{item.title}</>}
-                  isActive={(item) => item.id === selectedCategory?.id}
-                  isSelected={false}
-                  isLoading={categoryLoading}
-                  isError={categoryIsError}
-                  errorMessage={
-                    (categoryErrorMessage as string) || "Something went wrong!"
-                  }
-                  name={() => (
-                    <div className="flex items-center gap-1">
-                      <span className="text-sm">
-                        {selectedCategory?.title || "Select Category"}
-                      </span>
-                    </div>
-                  )}
-                  clearData={() =>
-                    dispatch(categoryAction.setSelectedCategory(null))
-                  }
-                  handleSelectedOption={(item) =>
-                    dispatch(categoryAction.setSelectedCategory(item))
-                  }
-                />
-              </div>
-            </>
+            <div className='max-w-[250px] min-w-[200px]'>
+              <InfiniteFilter<CategoryResponse>
+                wrapperClass=''
+                buttonClass='border p-2'
+                items={categoryList?.data || []}
+                renderItem={(item) => <>{item.title}</>}
+                isActive={(item) => item.id === selectedCategory?.id}
+                isSelected={false}
+                isLoading={categoryLoading}
+                isError={categoryIsError}
+                errorMessage={
+                  (categoryErrorMessage as string) || 'Something went wrong!'
+                }
+                name={() => (
+                  <div className='flex items-center gap-1'>
+                    <span className='text-sm'>
+                      {selectedCategory?.title || 'Select Category'}
+                    </span>
+                  </div>
+                )}
+                clearData={() =>
+                  dispatch(categoryAction.setSelectedCategory(null))
+                }
+                handleSelectedOption={(item) =>
+                  dispatch(categoryAction.setSelectedCategory(item))
+                }
+              />
+            </div>
           )}
         >
           <Table headList={tableHead}>
             {isLoading || (selectedCategory && isFetching) ? (
               <SkeletonTable total={6} tableCount={4} />
             ) : data?.data &&
-              typeof data?.data === "object" &&
+              typeof data?.data === 'object' &&
               data?.data?.length > 0 ? (
               data?.data?.map((item, index) => (
-                <tr className="table_tr" key={item?.id}>
-                  <td className="table_td">{index + 1}</td>
-                  <td className="table_td">{item?.title}</td>
-                  <td className="table_td">{selectedCategory?.title}</td>
-                  <td className="table_td">
-                    <div className="flex items-center gap-3">
+                <tr className='table_tr' key={item?.id}>
+                  <td className='table_td'>{index + 1}</td>
+                  <td className='table_td'>{item?.title}</td>
+                  <td className='table_td'>{selectedCategory?.title}</td>
+                  <td className='table_td'>
+                    <div className='flex items-center gap-3'>
                       <button
-                        onClick={() => handleModal("edit", item)}
+                        onClick={() => handleModal('edit', item)}
                         className={cn(
-                          "font-medium hover:underline",
-                          "text-blue-600 dark:text-blue-500"
+                          'font-medium hover:underline',
+                          'text-blue-600 dark:text-blue-500',
                         )}
                       >
                         Edit
                       </button>
                       <button
-                        onClick={() => handleModal("delete", item)}
+                        onClick={() => handleModal('delete', item)}
                         className={cn(
-                          "font-medium hover:underline",
-                          "text-red-600 dark:text-red-500"
+                          'font-medium hover:underline',
+                          'text-red-600 dark:text-red-500',
                         )}
                       >
                         Delete
@@ -236,11 +237,11 @@ const SubCategoryList = () => {
                 </tr>
               ))
             ) : (
-              <NoTableData colSpan={7} parentClass="h-40">
-                <span className="font-medium">
+              <NoTableData colSpan={7} parentClass='h-40'>
+                <span className='font-medium'>
                   {selectedCategory
-                    ? "No data found!"
-                    : "Please select a category to display the sub category list"}
+                    ? 'No data found!'
+                    : 'Please select a category to display the sub category list'}
                 </span>
               </NoTableData>
             )}
@@ -249,7 +250,7 @@ const SubCategoryList = () => {
         {/* </Card> */}
       </PageLayout>
     </>
-  );
-};
+  )
+}
 
-export default SubCategoryList;
+export default SubCategoryList

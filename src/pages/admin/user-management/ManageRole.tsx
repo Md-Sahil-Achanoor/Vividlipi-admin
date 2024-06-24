@@ -1,30 +1,30 @@
-import { useAppDispatch, useAppSelector } from "@/app/store";
-import Loader from "@/components/atoms/Loader";
-import MultiSelectItem from "@/components/atoms/MultiSelectItem";
-import CustomInput from "@/components/form/CustomInput";
-import InfiniteSelect from "@/components/form/InfiniteSelect";
-import { Card } from "@/components/ui/Card";
-import { permissionOptions } from "@/constants/role-constant";
+import { useAppDispatch, useAppSelector } from '@/app/store'
+import Loader from '@/components/atoms/Loader'
+import MultiSelectItem from '@/components/atoms/MultiSelectItem'
+import CustomInput from '@/components/form/CustomInput'
+import InfiniteSelect from '@/components/form/InfiniteSelect'
+import { Card } from '@/components/ui/Card'
+import { permissionOptions } from '@/constants/role-constant'
 import {
   useGetRolePermissionByIdQuery,
   useManageRolePermissionMutation,
-} from "@/feature/user-management/userManagementQuery";
-import { userManagementAction } from "@/feature/user-management/userManagementSlice";
-import PageLayout from "@/layout/PageLayout";
+} from '@/feature/user-management/userManagementQuery'
+import { userManagementAction } from '@/feature/user-management/userManagementSlice'
+import PageLayout from '@/layout/PageLayout'
 import {
   IOptions,
   IRolePermissionForm,
   rolePermissionFormSchema,
-} from "@/models/user-management";
-import { BreadCrumbItem, RoleBase } from "@/types";
-import { convertPermissionIntoObject } from "@/utils/validateSchema";
-import { Field, Form, Formik, FormikHelpers } from "formik";
-import { useEffect } from "react";
-import { BsArrowRightShort } from "react-icons/bs";
-import { useNavigate, useParams } from "react-router-dom";
+} from '@/models/user-management'
+import { BreadCrumbItem, RoleBase } from '@/types'
+import { convertPermissionIntoObject } from '@/utils/validateSchema'
+import { Field, Form, Formik, FormikHelpers } from 'formik'
+import { useEffect } from 'react'
+import { BsArrowRightShort } from 'react-icons/bs'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const initialValues: IRolePermissionForm = {
-  Title: "",
+  Title: '',
   Dashboard: [],
   Product_Management: [],
   User_Management: [],
@@ -43,51 +43,51 @@ const initialValues: IRolePermissionForm = {
   Notification_Management: [],
   Tax_Management: [],
   Order_Management: [],
-};
+}
 
 const ManageRole = () => {
-  const { id } = useParams();
-  console.log(`\n\n ~ ManageRole ~ id:`, id);
-  const router = useNavigate();
-  const dispatch = useAppDispatch();
+  const { id } = useParams()
+  console.log(`\n\n ~ ManageRole ~ id:`, id)
+  const router = useNavigate()
+  const dispatch = useAppDispatch()
   // const [values] = useState<Role | null>(null);
   const { singleRolePermission } = useAppSelector(
-    (state) => state.userManagement
-  );
+    (state) => state.userManagement,
+  )
   const breadcrumbItem: BreadCrumbItem[] = [
     {
-      name: "Role List",
-      link: "/admin/user-management/role-list",
+      name: 'Role List',
+      link: '/admin/user-management/role-list',
     },
     {
-      name: id ? "Edit Role" : "Create Role",
-      link: "#",
+      name: id ? 'Edit Role' : 'Create Role',
+      link: '#',
     },
-  ];
+  ]
 
   const { isLoading: loading, refetch } = useGetRolePermissionByIdQuery(
     { query: { id } },
-    { skip: !id }
-  );
+    { skip: !id },
+  )
 
   const [manageRolePermission, { isLoading }] =
-    useManageRolePermissionMutation();
+    useManageRolePermissionMutation()
 
   const onSubmit = async (
     values: IRolePermissionForm,
-    { setSubmitting, resetForm }: FormikHelpers<IRolePermissionForm>
+    { setSubmitting, resetForm }: FormikHelpers<IRolePermissionForm>,
   ) => {
     // console.log(values);
-    const { Title, ...rest } = values;
+    const { Title, ...rest } = values
 
-    let obj: Record<string, RoleBase> = {};
+    const obj: Record<string, RoleBase> = {}
     Object.keys(rest).forEach((key: any) => {
       if ((rest as any)[key]?.length > 0) {
-        (obj as any)[key] = convertPermissionIntoObject(
-          (rest as any)[key] as IOptions[]
-        );
+        ;(obj as any)[key] = convertPermissionIntoObject(
+          (rest as any)[key] as IOptions[],
+        )
       }
-    });
+    })
 
     // const permissions = {
     //   Dashboard: convertPermissionIntoObject(values.Dashboard as IOptions[]),
@@ -141,7 +141,7 @@ const ManageRole = () => {
     await manageRolePermission({
       id,
       data: {
-        Title: Title,
+        Title,
         Permissions: obj,
       },
       options: {
@@ -149,27 +149,27 @@ const ManageRole = () => {
         resetForm,
         router,
       },
-    });
-  };
+    })
+  }
 
   useEffect(() => {
     if (id) {
-      refetch();
+      refetch()
     }
-  }, [id]);
+  }, [id])
 
   useEffect(() => {
     return () => {
-      dispatch(userManagementAction.resetAdminUser());
-    };
-  }, []);
+      dispatch(userManagementAction.resetAdminUser())
+    }
+  }, [])
 
   return (
     <PageLayout
-      title={id ? "Edit Role" : "Create Role"}
+      title={id ? 'Edit Role' : 'Create Role'}
       breadcrumbItem={breadcrumbItem}
     >
-      <Card className="border rounded-md">
+      <Card className='border rounded-md'>
         {id && loading ? (
           <Loader />
         ) : (
@@ -182,132 +182,130 @@ const ManageRole = () => {
             {({ isSubmitting, values, setFieldValue }) => (
               <Form>
                 {/* {console.log(values)} */}
-                <div className="mt-5">
-                  <div className="max-w-[50%]">
+                <div className='mt-5'>
+                  <div className='max-w-[50%]'>
                     <Field
-                      name="Title"
-                      label={"Role Name"}
+                      name='Title'
+                      label='Role Name'
                       component={CustomInput}
-                      placeholder="Type here..."
+                      placeholder='Type here...'
                       isRequired
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="col-span-1">
+                  <div className='grid grid-cols-2 gap-3'>
+                    <div className='col-span-1'>
                       <Field
-                        label={"Dashboard"}
-                        name="Dashboard"
+                        label='Dashboard'
+                        name='Dashboard'
                         isRequired={false}
                         renderData={permissionOptions.Dashboard}
                         renderItem={(item: IOptions) => <>{item?.label}</>}
                         isActive={(item: IOptions) =>
                           values?.Dashboard?.find(
-                            (Dashboard) => Dashboard?.value === item?.value
+                            (Dashboard) => Dashboard?.value === item?.value,
                           )
                         }
                         renderName={() => (
                           <MultiSelectItem<IOptions>
                             data={values?.Dashboard as IOptions[]}
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "Dashboard",
+                                'Dashboard',
                                 values?.Dashboard?.filter(
                                   (Dashboard) =>
-                                    Dashboard?.value !== item?.value
-                                )
-                              );
+                                    Dashboard?.value !== item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
                           // check unique item in array
-                          let isUnique = values?.Dashboard?.find(
-                            (Dashboard) => Dashboard?.value === item?.value
-                          );
+                          const isUnique = values?.Dashboard?.find(
+                            (Dashboard) => Dashboard?.value === item?.value,
+                          )
                           if (!isUnique) {
-                            setFieldValue("Dashboard", [
+                            setFieldValue('Dashboard', [
                               ...(values?.Dashboard as IOptions[]),
                               item,
-                            ]);
+                            ])
                           } else {
-                            return;
                           }
                         }}
                         clearData={(item: IOptions) => {
                           // find data and clear
-                          let data = values?.Dashboard?.filter(
-                            (Dashboard) => Dashboard?.value !== item?.value
-                          );
-                          setFieldValue("Dashboard", data);
+                          const data = values?.Dashboard?.filter(
+                            (Dashboard) => Dashboard?.value !== item?.value,
+                          )
+                          setFieldValue('Dashboard', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
                         isAuth
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className='col-span-1'>
                       <Field
-                        label={"Product Management"}
-                        name="Product_Management"
+                        label='Product Management'
+                        name='Product_Management'
                         isRequired={false}
                         renderData={permissionOptions.Product_Management}
                         renderItem={(item: IOptions) => <>{item?.label}</>}
                         isActive={(item: IOptions) =>
                           values?.Product_Management?.find(
                             (Product_Management) =>
-                              Product_Management?.value === item?.value
+                              Product_Management?.value === item?.value,
                           )
                         }
                         renderName={() => (
                           <MultiSelectItem<IOptions>
                             data={values?.Product_Management as IOptions[]}
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "Product_Management",
+                                'Product_Management',
                                 values?.Product_Management?.filter(
                                   (Product_Management) =>
-                                    Product_Management?.value !== item?.value
-                                )
-                              );
+                                    Product_Management?.value !== item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
                           // check unique item in array
-                          let isUnique = values?.Product_Management?.find(
+                          const isUnique = values?.Product_Management?.find(
                             (Product_Management) =>
-                              Product_Management?.value === item?.value
-                          );
+                              Product_Management?.value === item?.value,
+                          )
                           if (!isUnique) {
-                            setFieldValue("Product_Management", [
+                            setFieldValue('Product_Management', [
                               ...(values?.Product_Management as IOptions[]),
                               item,
-                            ]);
+                            ])
                           } else {
-                            return;
                           }
                         }}
                         clearData={(item: IOptions) => {
                           // find data and clear
-                          let data = values?.Product_Management?.filter(
+                          const data = values?.Product_Management?.filter(
                             (Product_Management) =>
-                              Product_Management?.value !== item?.value
-                          );
-                          setFieldValue("Product_Management", data);
+                              Product_Management?.value !== item?.value,
+                          )
+                          setFieldValue('Product_Management', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
                         isAuth
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className='col-span-1'>
                       <Field
-                        label={"Category Management"}
-                        name="Product_Category_Management"
+                        label='Category Management'
+                        name='Product_Category_Management'
                         isRequired={false}
                         renderData={
                           permissionOptions.Product_Category_Management
@@ -316,7 +314,8 @@ const ManageRole = () => {
                         isActive={(item: IOptions) =>
                           values?.Product_Category_Management?.find(
                             (Product_Category_Management) =>
-                              Product_Category_Management?.value === item?.value
+                              Product_Category_Management?.value ===
+                              item?.value,
                           )
                         }
                         renderName={() => (
@@ -324,56 +323,55 @@ const ManageRole = () => {
                             data={
                               values?.Product_Category_Management as IOptions[]
                             }
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "Product_Category_Management",
+                                'Product_Category_Management',
                                 values?.Product_Category_Management?.filter(
                                   (Product_Category_Management) =>
                                     Product_Category_Management?.value !==
-                                    item?.value
-                                )
-                              );
+                                    item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
                           // check unique item in array
-                          let isUnique =
+                          const isUnique =
                             values?.Product_Category_Management?.find(
                               (Product_Category_Management) =>
                                 Product_Category_Management?.value ===
-                                item?.value
-                            );
+                                item?.value,
+                            )
                           if (!isUnique) {
-                            setFieldValue("Product_Category_Management", [
+                            setFieldValue('Product_Category_Management', [
                               ...(values?.Product_Category_Management as IOptions[]),
                               item,
-                            ]);
+                            ])
                           } else {
-                            return;
                           }
                         }}
                         clearData={(item: IOptions) => {
                           // find data and clear
-                          let data =
+                          const data =
                             values?.Product_Category_Management?.filter(
                               (Product_Category_Management) =>
                                 Product_Category_Management?.value !==
-                                item?.value
-                            );
-                          setFieldValue("Product_Category_Management", data);
+                                item?.value,
+                            )
+                          setFieldValue('Product_Category_Management', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
                         isAuth
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className='col-span-1'>
                       <Field
-                        label={"Sub Category Management"}
-                        name="Product_Sub_Category_Management"
+                        label='Sub Category Management'
+                        name='Product_Sub_Category_Management'
                         isRequired={false}
                         renderData={
                           permissionOptions.Product_Sub_Category_Management
@@ -383,7 +381,7 @@ const ManageRole = () => {
                           values?.Product_Sub_Category_Management?.find(
                             (Product_Sub_Category_Management) =>
                               Product_Sub_Category_Management?.value ===
-                              item?.value
+                              item?.value,
                           )
                         }
                         renderName={() => (
@@ -391,121 +389,117 @@ const ManageRole = () => {
                             data={
                               values?.Product_Sub_Category_Management as IOptions[]
                             }
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "Product_Sub_Category_Management",
+                                'Product_Sub_Category_Management',
                                 values?.Product_Sub_Category_Management?.filter(
                                   (Product_Sub_Category_Management) =>
                                     Product_Sub_Category_Management?.value !==
-                                    item?.value
-                                )
-                              );
+                                    item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
                           // check unique item in array
-                          let isUnique =
+                          const isUnique =
                             values?.Product_Sub_Category_Management?.find(
                               (Product_Sub_Category_Management) =>
                                 Product_Sub_Category_Management?.value ===
-                                item?.value
-                            );
+                                item?.value,
+                            )
                           if (!isUnique) {
-                            setFieldValue("Product_Sub_Category_Management", [
+                            setFieldValue('Product_Sub_Category_Management', [
                               ...(values?.Product_Sub_Category_Management as IOptions[]),
                               item,
-                            ]);
+                            ])
                           } else {
-                            return;
                           }
                         }}
                         clearData={(item: IOptions) => {
                           // find data and clear
-                          let data =
+                          const data =
                             values?.Product_Sub_Category_Management?.filter(
                               (Product_Sub_Category_Management) =>
                                 Product_Sub_Category_Management?.value !==
-                                item?.value
-                            );
-                          setFieldValue(
-                            "Product_Sub_Category_Management",
-                            data
-                          );
+                                item?.value,
+                            )
+                          setFieldValue('Product_Sub_Category_Management', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
                         isAuth
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className='col-span-1'>
                       <Field
-                        label={"User Management"}
-                        name="User_Management"
+                        label='User Management'
+                        name='User_Management'
                         isRequired={false}
                         renderData={permissionOptions.User_Management}
                         renderItem={(item: IOptions) => <>{item?.label}</>}
                         isActive={(item: IOptions) =>
                           values?.User_Management?.find(
                             (User_Management) =>
-                              User_Management?.value === item?.value
+                              User_Management?.value === item?.value,
                           )
                         }
                         renderName={() => (
                           <MultiSelectItem<IOptions>
                             data={values?.User_Management as IOptions[]}
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "User_Management",
+                                'User_Management',
                                 values?.User_Management?.filter(
                                   (User_Management) =>
-                                    User_Management?.value !== item?.value
-                                )
-                              );
+                                    User_Management?.value !== item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
                           // check unique item in array
-                          let isUnique = values?.User_Management?.find(
+                          const isUnique = values?.User_Management?.find(
                             (User_Management) =>
-                              User_Management?.value === item?.value
-                          );
+                              User_Management?.value === item?.value,
+                          )
                           if (!isUnique) {
-                            setFieldValue("User_Management", [
+                            setFieldValue('User_Management', [
                               ...(values?.User_Management as IOptions[]),
                               item,
-                            ]);
+                            ])
                           }
                         }}
                         clearData={(item: IOptions) => {
                           // find data and clear
-                          let data = values?.User_Management?.filter(
+                          const data = values?.User_Management?.filter(
                             (User_Management) =>
-                              User_Management?.value !== item?.value
-                          );
-                          setFieldValue("User_Management", data);
+                              User_Management?.value !== item?.value,
+                          )
+                          setFieldValue('User_Management', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
                         isAuth
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className='col-span-1'>
                       <Field
-                        label={"Promotions and Discounts"}
-                        name="Promotions_and_Discounts"
+                        label='Promotions and Discounts'
+                        name='Promotions_and_Discounts'
                         isRequired={false}
                         renderData={permissionOptions.Promotions_and_Discounts}
                         renderItem={(item: IOptions) => <>{item?.label}</>}
                         isActive={(item: IOptions) =>
                           values?.Promotions_and_Discounts?.find(
                             (Promotions_and_Discounts) =>
-                              Promotions_and_Discounts?.value === item?.value
+                              Promotions_and_Discounts?.value === item?.value,
                           )
                         }
                         renderName={() => (
@@ -513,50 +507,51 @@ const ManageRole = () => {
                             data={
                               values?.Promotions_and_Discounts as IOptions[]
                             }
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "Promotions_and_Discounts",
+                                'Promotions_and_Discounts',
                                 values?.Promotions_and_Discounts?.filter(
                                   (Promotions_and_Discounts) =>
                                     Promotions_and_Discounts?.value !==
-                                    item?.value
-                                )
-                              );
+                                    item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
                           // check unique item in array
-                          let isUnique = values?.Promotions_and_Discounts?.find(
-                            (Promotions_and_Discounts) =>
-                              Promotions_and_Discounts?.value === item?.value
-                          );
+                          const isUnique =
+                            values?.Promotions_and_Discounts?.find(
+                              (Promotions_and_Discounts) =>
+                                Promotions_and_Discounts?.value === item?.value,
+                            )
                           if (!isUnique) {
-                            setFieldValue("Promotions_and_Discounts", [
+                            setFieldValue('Promotions_and_Discounts', [
                               ...(values?.Promotions_and_Discounts as IOptions[]),
                               item,
-                            ]);
+                            ])
                           }
                         }}
                         clearData={(item: IOptions) => {
                           // find data and clear
-                          let data = values?.Promotions_and_Discounts?.filter(
+                          const data = values?.Promotions_and_Discounts?.filter(
                             (Promotions_and_Discounts) =>
-                              Promotions_and_Discounts?.value !== item?.value
-                          );
-                          setFieldValue("Promotions_and_Discounts", data);
+                              Promotions_and_Discounts?.value !== item?.value,
+                          )
+                          setFieldValue('Promotions_and_Discounts', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
                         isAuth
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className='col-span-1'>
                       <Field
-                        label={"Return and Refund Management"}
-                        name="Return_and_Refund_Management"
+                        label='Return and Refund Management'
+                        name='Return_and_Refund_Management'
                         isRequired={false}
                         renderData={
                           permissionOptions.Return_and_Refund_Management
@@ -566,7 +561,7 @@ const ManageRole = () => {
                           values?.Return_and_Refund_Management?.find(
                             (Return_and_Refund_Management) =>
                               Return_and_Refund_Management?.value ===
-                              item?.value
+                              item?.value,
                           )
                         }
                         renderName={() => (
@@ -574,637 +569,641 @@ const ManageRole = () => {
                             data={
                               values?.Return_and_Refund_Management as IOptions[]
                             }
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "Return_and_Refund_Management",
+                                'Return_and_Refund_Management',
                                 values?.Return_and_Refund_Management?.filter(
                                   (Return_and_Refund_Management) =>
                                     Return_and_Refund_Management?.value !==
-                                    item?.value
-                                )
-                              );
+                                    item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
                           // check unique item in array
-                          let isUnique =
+                          const isUnique =
                             values?.Return_and_Refund_Management?.find(
                               (Return_and_Refund_Management) =>
                                 Return_and_Refund_Management?.value ===
-                                item?.value
-                            );
+                                item?.value,
+                            )
                           if (!isUnique) {
-                            setFieldValue("Return_and_Refund_Management", [
+                            setFieldValue('Return_and_Refund_Management', [
                               ...(values?.Return_and_Refund_Management as IOptions[]),
                               item,
-                            ]);
+                            ])
                           }
                         }}
                         clearData={(item: IOptions) => {
                           // find data and clear
-                          let data =
+                          const data =
                             values?.Return_and_Refund_Management?.filter(
                               (Return_and_Refund_Management) =>
                                 Return_and_Refund_Management?.value !==
-                                item?.value
-                            );
-                          setFieldValue("Return_and_Refund_Management", data);
+                                item?.value,
+                            )
+                          setFieldValue('Return_and_Refund_Management', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
                         isAuth
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className='col-span-1'>
                       <Field
-                        label={"Permissions and Roles"}
-                        name="Permissions_and_Roles"
+                        label='Permissions and Roles'
+                        name='Permissions_and_Roles'
                         isRequired={false}
                         renderData={permissionOptions.Permissions_and_Roles}
                         renderItem={(item: IOptions) => <>{item?.label}</>}
                         isActive={(item: IOptions) =>
                           values?.Permissions_and_Roles?.find(
                             (Permissions_and_Roles) =>
-                              Permissions_and_Roles?.value === item?.value
+                              Permissions_and_Roles?.value === item?.value,
                           )
                         }
                         renderName={() => (
                           <MultiSelectItem<IOptions>
                             data={values?.Permissions_and_Roles as IOptions[]}
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "Permissions_and_Roles",
+                                'Permissions_and_Roles',
                                 values?.Permissions_and_Roles?.filter(
                                   (Permissions_and_Roles) =>
-                                    Permissions_and_Roles?.value !== item?.value
-                                )
-                              );
+                                    Permissions_and_Roles?.value !==
+                                    item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
                           // check unique item in array
-                          let isUnique = values?.Permissions_and_Roles?.find(
+                          const isUnique = values?.Permissions_and_Roles?.find(
                             (Permissions_and_Roles) =>
-                              Permissions_and_Roles?.value === item?.value
-                          );
+                              Permissions_and_Roles?.value === item?.value,
+                          )
                           if (!isUnique) {
-                            setFieldValue("Permissions_and_Roles", [
+                            setFieldValue('Permissions_and_Roles', [
                               ...(values?.Permissions_and_Roles as IOptions[]),
                               item,
-                            ]);
+                            ])
                           }
                         }}
                         clearData={(item: IOptions) => {
                           // find data and clear
-                          let data = values?.Permissions_and_Roles?.filter(
+                          const data = values?.Permissions_and_Roles?.filter(
                             (Permissions_and_Roles) =>
-                              Permissions_and_Roles?.value !== item?.value
-                          );
-                          setFieldValue("Permissions_and_Roles", data);
+                              Permissions_and_Roles?.value !== item?.value,
+                          )
+                          setFieldValue('Permissions_and_Roles', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
                         isAuth
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className='col-span-1'>
                       <Field
-                        label={"Analytics and Reporting"}
-                        name="Analytics_and_Reporting"
+                        label='Analytics and Reporting'
+                        name='Analytics_and_Reporting'
                         isRequired={false}
                         renderData={permissionOptions.Analytics_and_Reporting}
                         renderItem={(item: IOptions) => <>{item?.label}</>}
                         isActive={(item: IOptions) =>
                           values?.Analytics_and_Reporting?.find(
                             (Analytics_and_Reporting) =>
-                              Analytics_and_Reporting?.value === item?.value
+                              Analytics_and_Reporting?.value === item?.value,
                           )
                         }
                         renderName={() => (
                           <MultiSelectItem<IOptions>
                             data={values?.Analytics_and_Reporting as IOptions[]}
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "Analytics_and_Reporting",
+                                'Analytics_and_Reporting',
                                 values?.Analytics_and_Reporting?.filter(
                                   (Analytics_and_Reporting) =>
                                     Analytics_and_Reporting?.value !==
-                                    item?.value
-                                )
-                              );
+                                    item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
                           // check unique item in array
-                          let isUnique = values?.Analytics_and_Reporting?.find(
-                            (Analytics_and_Reporting) =>
-                              Analytics_and_Reporting?.value === item?.value
-                          );
+                          const isUnique =
+                            values?.Analytics_and_Reporting?.find(
+                              (Analytics_and_Reporting) =>
+                                Analytics_and_Reporting?.value === item?.value,
+                            )
                           if (!isUnique) {
-                            setFieldValue("Analytics_and_Reporting", [
+                            setFieldValue('Analytics_and_Reporting', [
                               ...(values?.Analytics_and_Reporting as IOptions[]),
                               item,
-                            ]);
+                            ])
                           }
                         }}
                         clearData={(item: IOptions) => {
                           // find data and clear
-                          let data = values?.Analytics_and_Reporting?.filter(
+                          const data = values?.Analytics_and_Reporting?.filter(
                             (Analytics_and_Reporting) =>
-                              Analytics_and_Reporting?.value !== item?.value
-                          );
-                          setFieldValue("Analytics_and_Reporting", data);
+                              Analytics_and_Reporting?.value !== item?.value,
+                          )
+                          setFieldValue('Analytics_and_Reporting', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
                         isAuth
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className='col-span-1'>
                       <Field
-                        label={"Customer Support"}
-                        name="Customer_Support"
+                        label='Customer Support'
+                        name='Customer_Support'
                         isRequired={false}
                         renderData={permissionOptions.Customer_Support}
                         renderItem={(item: IOptions) => <>{item?.label}</>}
                         isActive={(item: IOptions) =>
                           values?.Customer_Support?.find(
                             (Customer_Support) =>
-                              Customer_Support?.value === item?.value
+                              Customer_Support?.value === item?.value,
                           )
                         }
                         renderName={() => (
                           <MultiSelectItem<IOptions>
                             data={values?.Customer_Support as IOptions[]}
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "Customer_Support",
+                                'Customer_Support',
                                 values?.Customer_Support?.filter(
                                   (Customer_Support) =>
-                                    Customer_Support?.value !== item?.value
-                                )
-                              );
+                                    Customer_Support?.value !== item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
                           // check unique item in array
-                          let isUnique = values?.Customer_Support?.find(
+                          const isUnique = values?.Customer_Support?.find(
                             (Customer_Support) =>
-                              Customer_Support?.value === item?.value
-                          );
+                              Customer_Support?.value === item?.value,
+                          )
                           if (!isUnique) {
-                            setFieldValue("Customer_Support", [
+                            setFieldValue('Customer_Support', [
                               ...(values?.Customer_Support as IOptions[]),
                               item,
-                            ]);
+                            ])
                           }
                         }}
                         clearData={(item: IOptions) => {
                           // find data and clear
-                          let data = values?.Customer_Support?.filter(
+                          const data = values?.Customer_Support?.filter(
                             (Customer_Support) =>
-                              Customer_Support?.value !== item?.value
-                          );
-                          setFieldValue("Customer_Support", data);
+                              Customer_Support?.value !== item?.value,
+                          )
+                          setFieldValue('Customer_Support', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
                         isAuth
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className='col-span-1'>
                       <Field
-                        label={"Shipping Management"}
-                        name="Shipping_Management"
+                        label='Shipping Management'
+                        name='Shipping_Management'
                         isRequired={false}
                         renderData={permissionOptions.Shipping_Management}
                         renderItem={(item: IOptions) => <>{item?.label}</>}
                         isActive={(item: IOptions) =>
                           values?.Shipping_Management?.find(
                             (Shipping_Management) =>
-                              Shipping_Management?.value === item?.value
+                              Shipping_Management?.value === item?.value,
                           )
                         }
                         renderName={() => (
                           <MultiSelectItem<IOptions>
                             data={values?.Shipping_Management as IOptions[]}
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "Shipping_Management",
+                                'Shipping_Management',
                                 values?.Shipping_Management?.filter(
                                   (Shipping_Management) =>
-                                    Shipping_Management?.value !== item?.value
-                                )
-                              );
+                                    Shipping_Management?.value !== item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
-                          let isUnique = values?.Shipping_Management?.find(
+                          const isUnique = values?.Shipping_Management?.find(
                             (Shipping_Management) =>
-                              Shipping_Management?.value === item?.value
-                          );
+                              Shipping_Management?.value === item?.value,
+                          )
                           if (!isUnique) {
-                            setFieldValue("Shipping_Management", [
+                            setFieldValue('Shipping_Management', [
                               ...(values?.Shipping_Management as IOptions[]),
                               item,
-                            ]);
+                            ])
                           }
                         }}
                         clearData={(item: IOptions) => {
-                          let data = values?.Shipping_Management?.filter(
+                          const data = values?.Shipping_Management?.filter(
                             (Shipping_Management) =>
-                              Shipping_Management?.value !== item?.value
-                          );
-                          setFieldValue("Shipping_Management", data);
+                              Shipping_Management?.value !== item?.value,
+                          )
+                          setFieldValue('Shipping_Management', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
                         isAuth
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className='col-span-1'>
                       <Field
-                        label={"Content Management"}
-                        name="Content_Management"
+                        label='Content Management'
+                        name='Content_Management'
                         isRequired={false}
                         renderData={permissionOptions.Content_Management}
                         renderItem={(item: IOptions) => <>{item?.label}</>}
                         isActive={(item: IOptions) =>
                           values?.Content_Management?.find(
                             (Content_Management) =>
-                              Content_Management?.value === item?.value
+                              Content_Management?.value === item?.value,
                           )
                         }
                         renderName={() => (
                           <MultiSelectItem<IOptions>
                             data={values?.Content_Management as IOptions[]}
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "Shipping_Management",
+                                'Shipping_Management',
                                 values?.Shipping_Management?.filter(
                                   (Shipping_Management) =>
-                                    Shipping_Management?.value !== item?.value
-                                )
-                              );
+                                    Shipping_Management?.value !== item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
-                          let isUnique = values?.Content_Management?.find(
+                          const isUnique = values?.Content_Management?.find(
                             (Content_Management) =>
-                              Content_Management?.value === item?.value
-                          );
+                              Content_Management?.value === item?.value,
+                          )
                           if (!isUnique) {
-                            setFieldValue("Content_Management", [
+                            setFieldValue('Content_Management', [
                               ...(values?.Content_Management as IOptions[]),
                               item,
-                            ]);
+                            ])
                           }
                         }}
                         clearData={(item: IOptions) => {
-                          let data = values?.Content_Management?.filter(
+                          const data = values?.Content_Management?.filter(
                             (Content_Management) =>
-                              Content_Management?.value !== item?.value
-                          );
-                          setFieldValue("Content_Management", data);
+                              Content_Management?.value !== item?.value,
+                          )
+                          setFieldValue('Content_Management', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
                         isAuth
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className='col-span-1'>
                       <Field
-                        label={"Dashboard Customization"}
-                        name="Dashboard_Customization"
+                        label='Dashboard Customization'
+                        name='Dashboard_Customization'
                         isRequired={false}
                         renderData={permissionOptions.Dashboard_Customization}
                         renderItem={(item: IOptions) => <>{item?.label}</>}
                         isActive={(item: IOptions) =>
                           values?.Dashboard_Customization?.find(
                             (Dashboard_Customization) =>
-                              Dashboard_Customization?.value === item?.value
+                              Dashboard_Customization?.value === item?.value,
                           )
                         }
                         renderName={() => (
                           <MultiSelectItem<IOptions>
                             data={values?.Dashboard_Customization as IOptions[]}
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "Dashboard_Customization",
+                                'Dashboard_Customization',
                                 values?.Dashboard_Customization?.filter(
                                   (Dashboard_Customization) =>
                                     Dashboard_Customization?.value !==
-                                    item?.value
-                                )
-                              );
+                                    item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
-                          let isUnique = values?.Dashboard_Customization?.find(
-                            (Dashboard_Customization) =>
-                              Dashboard_Customization?.value === item?.value
-                          );
+                          const isUnique =
+                            values?.Dashboard_Customization?.find(
+                              (Dashboard_Customization) =>
+                                Dashboard_Customization?.value === item?.value,
+                            )
                           if (!isUnique) {
-                            setFieldValue("Dashboard_Customization", [
+                            setFieldValue('Dashboard_Customization', [
                               ...(values?.Dashboard_Customization as IOptions[]),
                               item,
-                            ]);
+                            ])
                           }
                         }}
                         clearData={(item: IOptions) => {
-                          let data = values?.Dashboard_Customization?.filter(
+                          const data = values?.Dashboard_Customization?.filter(
                             (Dashboard_Customization) =>
-                              Dashboard_Customization?.value !== item?.value
-                          );
-                          setFieldValue("Dashboard_Customization", data);
+                              Dashboard_Customization?.value !== item?.value,
+                          )
+                          setFieldValue('Dashboard_Customization', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
                         isAuth
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className='col-span-1'>
                       <Field
-                        label={"Multi Language Support"}
-                        name="Multi_language_Support"
+                        label='Multi Language Support'
+                        name='Multi_language_Support'
                         isRequired={false}
                         renderData={permissionOptions.Multi_language_Support}
                         renderItem={(item: IOptions) => <>{item?.label}</>}
                         isActive={(item: IOptions) =>
                           values?.Multi_language_Support?.find(
                             (Multi_language_Support) =>
-                              Multi_language_Support?.value === item?.value
+                              Multi_language_Support?.value === item?.value,
                           )
                         }
                         renderName={() => (
                           <MultiSelectItem<IOptions>
                             data={values?.Multi_language_Support as IOptions[]}
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "Multi_language_Support",
+                                'Multi_language_Support',
                                 values?.Multi_language_Support?.filter(
                                   (Multi_language_Support) =>
                                     Multi_language_Support?.value !==
-                                    item?.value
-                                )
-                              );
+                                    item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
-                          let isUnique = values?.Multi_language_Support?.find(
+                          const isUnique = values?.Multi_language_Support?.find(
                             (Multi_language_Support) =>
-                              Multi_language_Support?.value === item?.value
-                          );
+                              Multi_language_Support?.value === item?.value,
+                          )
                           if (!isUnique) {
-                            setFieldValue("Multi_language_Support", [
+                            setFieldValue('Multi_language_Support', [
                               ...(values?.Multi_language_Support as IOptions[]),
                               item,
-                            ]);
+                            ])
                           }
                         }}
                         clearData={(item: IOptions) => {
-                          let data = values?.Multi_language_Support?.filter(
+                          const data = values?.Multi_language_Support?.filter(
                             (Multi_language_Support) =>
-                              Multi_language_Support?.value !== item?.value
-                          );
-                          setFieldValue("Multi_language_Support", data);
+                              Multi_language_Support?.value !== item?.value,
+                          )
+                          setFieldValue('Multi_language_Support', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
                         isAuth
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className='col-span-1'>
                       <Field
-                        label={"Backup and Recovery"}
-                        name="Backup_and_Recovery"
+                        label='Backup and Recovery'
+                        name='Backup_and_Recovery'
                         isRequired={false}
                         renderData={permissionOptions.Backup_and_Recovery}
                         renderItem={(item: IOptions) => <>{item?.label}</>}
                         isActive={(item: IOptions) =>
                           values?.Backup_and_Recovery?.find(
                             (Backup_and_Recovery) =>
-                              Backup_and_Recovery?.value === item?.value
+                              Backup_and_Recovery?.value === item?.value,
                           )
                         }
                         renderName={() => (
                           <MultiSelectItem<IOptions>
                             data={values?.Backup_and_Recovery as IOptions[]}
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "Backup_and_Recovery",
+                                'Backup_and_Recovery',
                                 values?.Backup_and_Recovery?.filter(
                                   (Backup_and_Recovery) =>
-                                    Backup_and_Recovery?.value !== item?.value
-                                )
-                              );
+                                    Backup_and_Recovery?.value !== item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
-                          let isUnique = values?.Backup_and_Recovery?.find(
+                          const isUnique = values?.Backup_and_Recovery?.find(
                             (Backup_and_Recovery) =>
-                              Backup_and_Recovery?.value === item?.value
-                          );
+                              Backup_and_Recovery?.value === item?.value,
+                          )
                           if (!isUnique) {
-                            setFieldValue("Backup_and_Recovery", [
+                            setFieldValue('Backup_and_Recovery', [
                               ...(values?.Backup_and_Recovery as IOptions[]),
                               item,
-                            ]);
+                            ])
                           }
                         }}
                         clearData={(item: IOptions) => {
-                          let data = values?.Backup_and_Recovery?.filter(
+                          const data = values?.Backup_and_Recovery?.filter(
                             (Backup_and_Recovery) =>
-                              Backup_and_Recovery?.value !== item?.value
-                          );
-                          setFieldValue("Backup_and_Recovery", data);
+                              Backup_and_Recovery?.value !== item?.value,
+                          )
+                          setFieldValue('Backup_and_Recovery', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
                         isAuth
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className='col-span-1'>
                       <Field
-                        label={"Notification Management"}
-                        name="Notification_Management"
+                        label='Notification Management'
+                        name='Notification_Management'
                         isRequired={false}
                         renderData={permissionOptions.Notification_Management}
                         renderItem={(item: IOptions) => <>{item?.label}</>}
                         isActive={(item: IOptions) =>
                           values?.Notification_Management?.find(
                             (Notification_Management) =>
-                              Notification_Management?.value === item?.value
+                              Notification_Management?.value === item?.value,
                           )
                         }
                         renderName={() => (
                           <MultiSelectItem<IOptions>
                             data={values?.Notification_Management as IOptions[]}
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "Notification_Management",
+                                'Notification_Management',
                                 values?.Notification_Management?.filter(
                                   (Notification_Management) =>
                                     Notification_Management?.value !==
-                                    item?.value
-                                )
-                              );
+                                    item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
-                          let isUnique = values?.Notification_Management?.find(
-                            (Notification_Management) =>
-                              Notification_Management?.value === item?.value
-                          );
+                          const isUnique =
+                            values?.Notification_Management?.find(
+                              (Notification_Management) =>
+                                Notification_Management?.value === item?.value,
+                            )
                           if (!isUnique) {
-                            setFieldValue("Notification_Management", [
+                            setFieldValue('Notification_Management', [
                               ...(values?.Notification_Management as IOptions[]),
                               item,
-                            ]);
+                            ])
                           }
                         }}
                         clearData={(item: IOptions) => {
-                          let data = values?.Notification_Management?.filter(
+                          const data = values?.Notification_Management?.filter(
                             (Notification_Management) =>
-                              Notification_Management?.value !== item?.value
-                          );
-                          setFieldValue("Notification_Management", data);
+                              Notification_Management?.value !== item?.value,
+                          )
+                          setFieldValue('Notification_Management', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
                         isAuth
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className='col-span-1'>
                       <Field
-                        label={"Tax Management"}
-                        name="Tax_Management"
+                        label='Tax Management'
+                        name='Tax_Management'
                         isRequired={false}
                         renderData={permissionOptions.Tax_Management}
                         renderItem={(item: IOptions) => <>{item?.label}</>}
                         isActive={(item: IOptions) =>
                           values?.Tax_Management?.find(
                             (Tax_Management) =>
-                              Tax_Management?.value === item?.value
+                              Tax_Management?.value === item?.value,
                           )
                         }
                         renderName={() => (
                           <MultiSelectItem<IOptions>
                             data={values?.Tax_Management as IOptions[]}
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "Tax_Management",
+                                'Tax_Management',
                                 values?.Tax_Management?.filter(
                                   (Tax_Management) =>
-                                    Tax_Management?.value !== item?.value
-                                )
-                              );
+                                    Tax_Management?.value !== item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
-                          let isUnique = values?.Tax_Management?.find(
+                          const isUnique = values?.Tax_Management?.find(
                             (Tax_Management) =>
-                              Tax_Management?.value === item?.value
-                          );
+                              Tax_Management?.value === item?.value,
+                          )
                           if (!isUnique) {
-                            setFieldValue("Tax_Management", [
+                            setFieldValue('Tax_Management', [
                               ...(values?.Tax_Management as IOptions[]),
                               item,
-                            ]);
+                            ])
                           }
                         }}
                         clearData={(item: IOptions) => {
-                          let data = values?.Tax_Management?.filter(
+                          const data = values?.Tax_Management?.filter(
                             (Tax_Management) =>
-                              Tax_Management?.value !== item?.value
-                          );
-                          setFieldValue("Tax_Management", data);
+                              Tax_Management?.value !== item?.value,
+                          )
+                          setFieldValue('Tax_Management', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
                         isAuth
                       />
                     </div>
-                    <div className="col-span-1">
+                    <div className='col-span-1'>
                       <Field
-                        label={"Order Management"}
-                        name="Order_Management"
+                        label='Order Management'
+                        name='Order_Management'
                         isRequired={false}
                         renderData={permissionOptions.Order_Management}
                         renderItem={(item: IOptions) => <>{item?.label}</>}
                         isActive={(item: IOptions) =>
                           values?.Order_Management?.find(
                             (Order_Management) =>
-                              Order_Management?.value === item?.value
+                              Order_Management?.value === item?.value,
                           )
                         }
                         renderName={() => (
                           <MultiSelectItem<IOptions>
                             data={values?.Order_Management as IOptions[]}
-                            defaultName="Select..."
-                            displayName="label"
+                            defaultName='Select...'
+                            displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                "Order_Management",
+                                'Order_Management',
                                 values?.Order_Management?.filter(
                                   (Order_Management) =>
-                                    Order_Management?.value !== item?.value
-                                )
-                              );
+                                    Order_Management?.value !== item?.value,
+                                ),
+                              )
                             }}
                           />
                         )}
                         onChangeCallback={(item: IOptions) => {
-                          let isUnique = values?.Order_Management?.find(
+                          const isUnique = values?.Order_Management?.find(
                             (Order_Management) =>
-                              Order_Management?.value === item?.value
-                          );
+                              Order_Management?.value === item?.value,
+                          )
                           if (!isUnique) {
-                            setFieldValue("Order_Management", [
+                            setFieldValue('Order_Management', [
                               ...(values?.Order_Management as IOptions[]),
                               item,
-                            ]);
+                            ])
                           }
                         }}
                         clearData={(item: IOptions) => {
-                          let data = values?.Order_Management?.filter(
+                          const data = values?.Order_Management?.filter(
                             (Order_Management) =>
-                              Order_Management?.value !== item?.value
-                          );
-                          setFieldValue("Order_Management", data);
+                              Order_Management?.value !== item?.value,
+                          )
+                          setFieldValue('Order_Management', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
@@ -1213,23 +1212,23 @@ const ManageRole = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex justify-end">
+                <div className='flex justify-end'>
                   <button
-                    type="submit"
-                    className="button_primary"
+                    type='submit'
+                    className='button_primary'
                     disabled={isSubmitting || isLoading}
                   >
                     {isSubmitting || isLoading ? (
                       <>
-                        <span className="w-5 h-5 border-2 animate-spin rounded-full border-transparent border-t-white mr-2"></span>
-                        <span className="font-medium">Processing</span>
+                        <span className='w-5 h-5 border-2 animate-spin rounded-full border-transparent border-t-white mr-2' />
+                        <span className='font-medium'>Processing</span>
                       </>
                     ) : (
                       <>
-                        <span className="font-medium">
-                          {id ? "Update" : "Create"}
+                        <span className='font-medium'>
+                          {id ? 'Update' : 'Create'}
                         </span>
-                        <span className="text-2xl ml-1">
+                        <span className='text-2xl ml-1'>
                           <BsArrowRightShort />
                         </span>
                       </>
@@ -1242,7 +1241,7 @@ const ManageRole = () => {
         )}
       </Card>
     </PageLayout>
-  );
-};
+  )
+}
 
-export default ManageRole;
+export default ManageRole

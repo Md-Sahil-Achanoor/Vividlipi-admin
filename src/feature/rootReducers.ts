@@ -1,14 +1,14 @@
-import { combineReducers } from "@reduxjs/toolkit";
-import API from "../app/services/api";
-import authSlice from "./auth/authSlice";
-import categorySlice from "./category/categorySlice";
-import commonSlice from "./common/commonSlice";
-import coreSlice from "./core/coreSlice";
-import homeSlice from "./home/homeSlice";
-import layoutSlice from "./layout/layoutSlice";
-import productSlice from "./product/productSlice";
-import publisherSlice from "./publisher/publisherSlice";
-import userManagementSlice from "./user-management/userManagementSlice";
+import { combineReducers } from '@reduxjs/toolkit'
+import API from '../app/services/api'
+import authSlice from './auth/authSlice'
+import categorySlice from './category/categorySlice'
+import commonSlice from './common/commonSlice'
+import coreSlice from './core/coreSlice'
+import homeSlice from './home/homeSlice'
+import layoutSlice from './layout/layoutSlice'
+import productSlice from './product/productSlice'
+import publisherSlice from './publisher/publisherSlice'
+import userManagementSlice from './user-management/userManagementSlice'
 
 const rootReducer = combineReducers({
   auth: authSlice,
@@ -21,6 +21,6 @@ const rootReducer = combineReducers({
   publisher: publisherSlice,
   home: homeSlice,
   [API.reducerPath]: API.reducer,
-});
+})
 
-export default rootReducer;
+export default rootReducer

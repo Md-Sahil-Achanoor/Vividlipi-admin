@@ -3,7 +3,7 @@ const ForgotPassword = () => {
     // <LoginLayout>
     <h3>Hello</h3>
     // </LoginLayout>
-  );
-};
+  )
+}
 
-export default ForgotPassword;
+export default ForgotPassword

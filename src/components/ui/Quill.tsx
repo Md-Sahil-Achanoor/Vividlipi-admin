@@ -1,33 +1,33 @@
-import ReactQuill, { ReactQuillProps } from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import { twMerge } from "tailwind-merge";
+import ReactQuill, { ReactQuillProps } from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
+import { twMerge } from 'tailwind-merge'
 
 interface Props extends ReactQuillProps {
-  customClass?: string;
-  classes?: string;
-  disable?: boolean;
+  customClass?: string
+  classes?: string
+  disable?: boolean
 }
 
-const Quill = ({ classes = "", customClass = "", ...props }: Props) => {
+const Quill = ({ customClass = '', ...props }: Props) => {
   const modules = {
     toolbar: [
-      ["bold", "italic", "underline"],
-      [{ list: "ordered" }, { list: "bullet" }],
+      ['bold', 'italic', 'underline'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
     ],
-  };
+  }
   const formats = [
-    "header",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "blockquote",
-    "list",
-    "bullet",
-    "indent",
-    "link",
-    "image",
-  ];
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+  ]
   // const ref = useRef<any>(null);
 
   // useEffect(() => {
@@ -46,17 +46,15 @@ const Quill = ({ classes = "", customClass = "", ...props }: Props) => {
   // );
 
   return (
-    <>
-      <ReactQuill
-        // ref={ref}
-        modules={modules}
-        formats={formats}
-        className={twMerge("text-xs font-light min-h-[150px]", customClass)}
-        readOnly={props.disable}
-        {...props}
-      />
-    </>
-  );
-};
+    <ReactQuill
+      // ref={ref}
+      modules={modules}
+      formats={formats}
+      className={twMerge('text-xs font-light min-h-[150px]', customClass)}
+      readOnly={props.disable}
+      {...props}
+    />
+  )
+}
 
-export default Quill;
+export default Quill

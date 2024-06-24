@@ -1,18 +1,18 @@
-import * as Yup from "yup";
+import * as Yup from 'yup'
 
 export const optionsSchema = Yup.object({
   label: Yup.string().required(),
   value: Yup.string().required(),
-});
+})
 
-export type IOptions = Yup.InferType<typeof optionsSchema>;
+export type IOptions = Yup.InferType<typeof optionsSchema>
 
 export const rolePermissionFormSchema = Yup.object({
   Title: Yup.string()
     .required("Role name can't be empty")
     .test({
       test: (value) => {
-        return !/^\s*$/g.test(value);
+        return !/^\s*$/g.test(value)
       },
       message: "Role name can't be empty",
     }),
@@ -34,23 +34,21 @@ export const rolePermissionFormSchema = Yup.object({
   Notification_Management: Yup.array(optionsSchema),
   Tax_Management: Yup.array(optionsSchema),
   Order_Management: Yup.array(optionsSchema),
-});
+})
 
-export type IRolePermissionForm = Yup.InferType<
-  typeof rolePermissionFormSchema
->;
+export type IRolePermissionForm = Yup.InferType<typeof rolePermissionFormSchema>
 
 export const userManagementFormSchema = Yup.object({
   name: Yup.string()
-    .required("Name is required")
+    .required('Name is required')
     .test({
       test: (value) => {
-        return !/^\s*$/g.test(value);
+        return !/^\s*$/g.test(value)
       },
-      message: "Name is required",
+      message: 'Name is required',
     }),
-  email: Yup.string().required("Email is required").email("Invalid email"),
-  password: Yup.string().required("Password is required").min(6, "Too short"),
+  email: Yup.string().required('Email is required').email('Invalid email'),
+  password: Yup.string().required('Password is required').min(6, 'Too short'),
   // confirmPassword: Yup.string()
   //   .required("Confirm password is required")
   //   .oneOf([Yup.ref("password")], "Passwords must match"),
@@ -61,14 +59,12 @@ export const userManagementFormSchema = Yup.object({
     .nullable()
     .test({
       test: (value) => {
-        return value !== null;
+        return value !== null
       },
-      message: "Role is required",
+      message: 'Role is required',
     }),
-});
+})
 
-export type IUserManagementForm = Yup.InferType<
-  typeof userManagementFormSchema
->;
+export type IUserManagementForm = Yup.InferType<typeof userManagementFormSchema>
 
-export type IUserManagement = Omit<IUserManagementForm, "role">;
+export type IUserManagement = Omit<IUserManagementForm, 'role'>

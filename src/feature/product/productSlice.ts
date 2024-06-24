@@ -1,12 +1,12 @@
-import { ProductResponse, ProductState } from "@/types";
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { ProductResponse, ProductState } from '@/types'
 
 const initialState: ProductState = {
   selectedProduct: null,
-};
+}
 
 const productSlice = createSlice({
-  name: "product",
+  name: 'product',
   initialState,
   reducers: {
     // rerenderVendor: (state) => {
@@ -17,14 +17,14 @@ const productSlice = createSlice({
     // },
     setSelectedProduct: (
       state,
-      action: PayloadAction<ProductResponse | null>
+      action: PayloadAction<ProductResponse | null>,
     ) => {
-      state.selectedProduct = action.payload;
+      state.selectedProduct = action.payload
     },
   },
-});
+})
 
 // Actions
-export const productAction = productSlice.actions;
+export const productAction = productSlice.actions
 
-export default productSlice.reducer;
+export default productSlice.reducer
