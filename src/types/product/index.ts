@@ -44,7 +44,7 @@ export interface IProduct<T, P> {
 export type Product = IProduct<CategoryResponse, PublisherResponse>
 
 export interface ProductPayload
-  extends IProduct<number | string, number | string, number> {}
+  extends IProduct<number | string, number | string> {}
 
 export type BulkProduct = Omit<IBulkProduct, 'translator_name'> & {
   translator_name?: string

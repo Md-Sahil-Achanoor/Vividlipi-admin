@@ -36,6 +36,6 @@ export interface UserManagementResponse
 export interface UserManagementState {
   selectedRolePermission: RolePermissionResponse | null
   selectedUser: UserManagementResponse | null
-  singleUser: IUserManagementForm | null
+  singleUser: IUserManagement | null
   singleRolePermission: IRolePermissionForm | null
 }

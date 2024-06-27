@@ -1,5 +1,6 @@
 import { MouseEventHandler } from 'react'
 import { NavigateFunction } from 'react-router-dom'
+import { InputType } from './inputComponents'
 
 export type SampleObject = {
   [key: string]: never
@@ -89,15 +90,6 @@ export interface RouterPush {
   query: SampleObject
 }
 
-export interface ErrorData {
-  message?: string
-  code?: number
-}
-
-export interface ErrorResponse {
-  data?: ErrorData
-}
-
 export interface AxiosError {
   response?: string
   status?: number
@@ -149,7 +141,7 @@ export interface FormDataPayload<T> {
 export interface ReqQuery {
   page: number
   limit: number
-  status: string
+  status: string | number
   id: string | number
   isActive: string
   order: string
@@ -211,25 +203,6 @@ export interface CardHeaderProps {
   isEdit?: boolean
   buttonText?: string
   isDelete?: boolean
-}
-
-interface DropdownItem {
-  name: string
-  value: string
-}
-
-interface DropdownProps {
-  items: DropdownItem[]
-  isIcon: boolean
-  name: string
-  handleSelectedOption: (i: Item) => void
-  isSelected: boolean | string
-  isOpen: boolean
-  extraClass?: string
-  buttonClass?: string
-  listClass?: string
-  isDisabled?: (i: Item) => boolean
-  isAdded?: (i: Item) => boolean
 }
 
 const route = {
