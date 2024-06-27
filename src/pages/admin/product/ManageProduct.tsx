@@ -17,6 +17,7 @@ import {
   useManageProductMutation,
 } from '@/feature/product/productQuery'
 import { useGetPublishersQuery } from '@/feature/publisher/publisherQuery'
+import useDebounce from '@/hooks/useDebounce'
 import PageLayout from '@/layout/PageLayout'
 import { manageProductSchema } from '@/models/product'
 import {
@@ -27,6 +28,7 @@ import {
   PartialBy,
   Product,
   ProductPayload,
+  PublisherQuery,
   PublisherResponse,
   SelectItem,
 } from '@/types'
@@ -80,6 +82,12 @@ const ManageProduct = () => {
   const { id } = useParams()
   const router = useNavigate()
   // const [values] = useState<Product | null>(null);
+  const [search, setSearch] = useState<string>('')
+  const { value, onChange } = useDebounce(() => setSearch(value), 1000)
+  const { value: value1, onChange: onChange1 } = useDebounce(
+    () => setSearch(value1),
+    1000,
+  )
   const { selectedProduct } = useAppSelector((state) => state.product)
   const [category2, setCategory2] = useState<CategoryResponse | null>(null)
   const breadcrumbItem: BreadCrumbItem[] = [
@@ -145,6 +153,14 @@ const ManageProduct = () => {
     },
   })
 
+  const getUserQuery = () => {
+    const query: Partial<PublisherQuery> = {}
+    if (search) {
+      query.search = search
+    }
+    return query
+  }
+
   const {
     isLoading: publisherLoading,
     refetch: publisherRefetch,
@@ -152,7 +168,7 @@ const ManageProduct = () => {
     isError: publisherIsError,
     // error: publisherErrorMessage,
   } = useGetPublishersQuery({
-    query: {},
+    query: getUserQuery(),
   })
 
   const {
@@ -162,7 +178,7 @@ const ManageProduct = () => {
     isError: authorIsError,
     // error: publisherErrorMessage,
   } = useGetAuthorsQuery({
-    query: {},
+    query: getUserQuery(),
   })
 
   const getQuery = () => {
@@ -432,6 +448,15 @@ const ManageProduct = () => {
                           }}
                           isSelected={values?.author !== null}
                           component={InfiniteSelect}
+                          isInsideSearch
+                          searchProps={{
+                            value: value1,
+                            onChange: onChange1,
+                            placeholder: 'Search Author',
+                          }}
+                          onCloseCallback={() => {
+                            setSearch('')
+                          }}
                           isAuth
                         />
                       </div>
@@ -484,6 +509,9 @@ const ManageProduct = () => {
                               </span>
                             )
                           }}
+                          onCloseCallback={() => {
+                            setSearch('')
+                          }}
                           onChangeCallback={(item: PublisherResponse) => {
                             setFieldValue(`publisher`, item)
                           }}
@@ -491,6 +519,12 @@ const ManageProduct = () => {
                             setFieldValue(`publisher`, null)
                           }}
                           isSelected={values?.publisher !== null}
+                          isInsideSearch
+                          searchProps={{
+                            value,
+                            onChange,
+                            placeholder: 'Search Publisher',
+                          }}
                           component={InfiniteSelect}
                           isAuth
                         />

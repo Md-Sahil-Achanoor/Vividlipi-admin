@@ -145,6 +145,7 @@ export interface ReqQuery {
   id: string | number
   isActive: string
   order: string
+  search: string
 }
 
 export interface IStore {
