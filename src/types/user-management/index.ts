@@ -1,4 +1,8 @@
-import { IRolePermissionForm, IUserManagement } from '@/models/user-management'
+import {
+  IRolePermissionForm,
+  IUserManagement,
+  IUserManagementForm,
+} from '@/models/user-management'
 import { ReqQuery } from '../common'
 
 export type RoleBase = {
@@ -36,6 +40,6 @@ export interface UserManagementResponse
 export interface UserManagementState {
   selectedRolePermission: RolePermissionResponse | null
   selectedUser: UserManagementResponse | null
-  singleUser: IUserManagement | null
+  singleUser: IUserManagementForm | null
   singleRolePermission: IRolePermissionForm | null
 }

@@ -3,6 +3,7 @@ import API from '../../app/services/api'
 import { endpoints } from '../../constants/endpoints'
 import {
   ApiResponse,
+  FeatureNewInPayload,
   FeatureProductPayload,
   FeatureProductQuery,
   FeatureProductResponse,
@@ -453,11 +454,11 @@ const homeQuery = API.injectEndpoints({
 
     /**
      * @module ManageNewIn
-     * @param { FormData }
+     * @param { FeatureNewInPayload }
      * @returns { any }
      * @description Manage Home New In
      */
-    manageNewIn: builder.mutation<any, ManagePayload<FeatureProductPayload>>({
+    manageNewIn: builder.mutation<any, ManagePayload<FeatureNewInPayload>>({
       query: ({ data }) => {
         return {
           url: endpoints.add_new_in,

@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { roleOptions } from '@/constants/role-constant'
-import { IOptions } from '@/models/user-management'
+import { IOptions, IUserManagementForm } from '@/models/user-management'
 import { filterPermission } from '@/utils/validateSchema'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import {
   RolePermissionResponse,
   UserManagementResponse,
@@ -53,7 +53,7 @@ const userManagementSlice = createSlice({
           name: action.payload.name,
           email: action.payload.email,
           password: '',
-          role: action.payload.role,
+          role: action?.payload?.role as IUserManagementForm['role'],
         }
       } else {
         state.singleUser = null

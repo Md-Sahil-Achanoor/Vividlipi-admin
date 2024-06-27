@@ -43,6 +43,7 @@ export interface FeatureProductPayload
   extends Omit<FeatureSliderResponse, 'productId'> {
   productId: string | number
   position?: number
+  main?: number | string
 }
 
 export interface FeatureProductResponse extends IHomeFeatureProduct {
@@ -54,6 +55,11 @@ export interface FeatureProductResponse extends IHomeFeatureProduct {
 
 export interface FeatureProductQuery extends ReqQuery {
   id: string
+}
+
+export interface FeatureNewInPayload {
+  productId: string | number
+  position: number
 }
 
 /**
