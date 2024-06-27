@@ -59,6 +59,12 @@ const productQuery = API.injectEndpoints({
           const { isDeleted, id, ...rest }: ProductResponse = result?.data?.data
           const data: Partial<ProductResponse> = {
             ...rest,
+            author: {
+              id: rest?.AuthorId || '',
+              Name: rest?.author_name || '',
+              description: '',
+              Pic: '',
+            },
             tags:
               rest?.tags?.length > 0
                 ? rest?.tags?.filter((el) => el !== '')

@@ -10,6 +10,7 @@ import InputTagComponent from '@/components/form/InputTagComponent'
 import QuillComponent from '@/components/form/QuillComponent'
 import { Card } from '@/components/ui/Card'
 import { book_format, language_select } from '@/constants/filter-list'
+import { useGetAuthorsQuery } from '@/feature/author/authorQuery'
 import { useGetCategoriesQuery } from '@/feature/category/categoryQuery'
 import {
   useGetProductByIdQuery,
@@ -19,9 +20,11 @@ import { useGetPublishersQuery } from '@/feature/publisher/publisherQuery'
 import PageLayout from '@/layout/PageLayout'
 import { manageProductSchema } from '@/models/product'
 import {
+  AuthorResponse,
   BreadCrumbItem,
   CategoryQuery,
   CategoryResponse,
+  PartialBy,
   Product,
   ProductPayload,
   PublisherResponse,
@@ -41,6 +44,8 @@ const initialValues: Product = {
   thumbnail: '',
   description: '',
   author_name: '',
+  author: null,
+  AuthorId: '',
   publisher: null,
   release_date: '',
   digital_product_url: '',
@@ -101,8 +106,12 @@ const ManageProduct = () => {
   ) => {
     // console.log(values);
     // setSubmitting(false);
+    const data: PartialBy<Product, 'author'> = { ...values }
+    if (data?.author) {
+      delete data['author']
+    }
     const body: ProductPayload = {
-      ...values,
+      ...data,
       cat1: values.cat1?.id as number,
       cat2: values.cat2?.id as number,
       publisher: values?.publisher?.id as number,
@@ -146,6 +155,16 @@ const ManageProduct = () => {
     query: {},
   })
 
+  const {
+    isLoading: authorLoading,
+    refetch: authorRefetch,
+    data: authorList,
+    isError: authorIsError,
+    // error: publisherErrorMessage,
+  } = useGetAuthorsQuery({
+    query: {},
+  })
+
   const getQuery = () => {
     let query: Partial<CategoryQuery> = {}
     if (category2) {
@@ -184,6 +203,7 @@ const ManageProduct = () => {
   useEffect(() => {
     categoryRefetch()
     publisherRefetch()
+    authorRefetch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -370,7 +390,52 @@ const ManageProduct = () => {
                         classes='border rounded-xl border-black min-h-[150px]'
                         isRequired
                       />
-                      <Field
+
+                      <div>
+                        <Field
+                          label='Author'
+                          name='author'
+                          isRequired
+                          renderData={authorList?.data}
+                          isLoading={authorLoading}
+                          isError={authorIsError}
+                          // errorMessage={authorErrorMessage}
+                          errorMessage='Failed to fetch authors'
+                          // reload={()}
+                          // listRef={batchListRef}
+                          horizontal
+                          tooltip='Author'
+                          renderItem={(item: AuthorResponse) => (
+                            <span className=''>{item?.Name}</span>
+                          )}
+                          isActive={(item: AuthorResponse) =>
+                            values?.author?.id === item?.id
+                          }
+                          renderName={() => {
+                            return (
+                              <span
+                                className={cn('text-sm text-gray-700 truncate')}
+                              >
+                                {values?.author?.Name || 'Select Author'}
+                              </span>
+                            )
+                          }}
+                          onChangeCallback={(item: AuthorResponse) => {
+                            setFieldValue(`author`, item)
+                            setFieldValue(`AuthorId`, item?.id)
+                            setFieldValue(`author_name`, item?.Name)
+                          }}
+                          clearData={() => {
+                            setFieldValue(`author`, null)
+                            setFieldValue(`AuthorId`, '')
+                            setFieldValue(`author_name`, '')
+                          }}
+                          isSelected={values?.author !== null}
+                          component={InfiniteSelect}
+                          isAuth
+                        />
+                      </div>
+                      {/* <Field
                         name='author_name'
                         label='Author Name'
                         horizontal
@@ -379,7 +444,7 @@ const ManageProduct = () => {
                         tooltip='Author Name'
                         placeholder='Type your products author name'
                         isRequired
-                      />
+                      /> */}
                       {/* <Field
                         name="publisher"
                         label={"Publisher"}
@@ -413,10 +478,7 @@ const ManageProduct = () => {
                           renderName={() => {
                             return (
                               <span
-                                className={cn(
-                                  'text-sm text-gray-700 truncate',
-                                  values?.publisher?.Name && 'uppercase',
-                                )}
+                                className={cn('text-sm text-gray-700 truncate')}
                               >
                                 {values?.publisher?.Name || 'Select Publisher'}
                               </span>

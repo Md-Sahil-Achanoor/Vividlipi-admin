@@ -9,7 +9,7 @@ export const productBaseSchema = Yup.object({
   url_slug: Yup.string().required('URL slug is required'),
   thumbnail: Yup.string().required('Thumbnail is required'),
   description: Yup.string().required('Description is required'),
-  author_name: Yup.string().required('Author name is required'),
+  // author_name: Yup.string().required('Author name is required'),
   // publisher: Yup.string().required("Publisher is required"),
   release_date: Yup.string().required('Release date is required'),
   digital_product_url: Yup.string().required('Digital product URL is required'),
@@ -90,6 +90,15 @@ export const manageProductSchema = productBaseSchema.concat(
       .test({
         name: 'publisher',
         message: 'Publisher is Required.',
+        test(value) {
+          return value !== null
+        },
+      }),
+    author: Yup.mixed()
+      .nullable()
+      .test({
+        name: 'author',
+        message: 'Author is Required.',
         test(value) {
           return value !== null
         },
