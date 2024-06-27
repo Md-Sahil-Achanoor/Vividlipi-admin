@@ -1,44 +1,46 @@
 import { useAppDispatch, useAppSelector } from '@/app/store'
+import PlaceholderImage from '@/assets/svg/placeholder'
 import NoTableData from '@/components/atoms/NoTableData'
 import ManageModule from '@/components/elements/modal/ManageModule'
 import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
-import ManagePublisher from '@/components/module/publisher/ManagePublisher'
+import ManageAuthor from '@/components/module/author/ManageAuthor'
 import Table from '@/components/ui/Table'
-import { publisherTableHead } from '@/constants/tableHeader'
-import { coreAction } from '@/feature/core/coreSlice'
+import { authorTableHead } from '@/constants/tableHeader'
 import {
-  useDeletePublisherMutation,
-  useGetPublishersQuery,
-} from '@/feature/publisher/publisherQuery'
-import { publisherAction } from '@/feature/publisher/publisherSlice'
+  useDeleteAuthorMutation,
+  useGetAuthorsQuery,
+} from '@/feature/author/authorQuery'
+import { authorAction } from '@/feature/author/authorSlice'
+import { coreAction } from '@/feature/core/coreSlice'
 import PageLayout from '@/layout/PageLayout'
-import { BreadCrumbItem, PublisherResponse } from '@/types'
+import { AuthorResponse, BreadCrumbItem } from '@/types'
 import { cn } from '@/utils/twmerge'
 import { useEffect } from 'react'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 const breadcrumbItem: BreadCrumbItem[] = [
   {
-    name: 'Publisher List',
+    name: 'Author List',
     link: '#',
   },
 ]
 
-const PublisherList = () => {
+const AuthorList = () => {
   // const navigate = useNavigate();
   const { type } = useAppSelector((state) => state.core)
-  const { selectedPublisher } = useAppSelector((state) => state.publisher)
+  const { selectedAuthor } = useAppSelector((state) => state.author)
   const dispatch = useAppDispatch()
-  const { data, isLoading, refetch } = useGetPublishersQuery({
+  const { data, isLoading, refetch } = useGetAuthorsQuery({
     query: {},
   })
 
-  const [deletePublisher, { isLoading: isDeletePublisher }] =
-    useDeletePublisherMutation()
+  const [deleteAuthor, { isLoading: isDeleteAuthor }] =
+    useDeleteAuthorMutation()
 
   useEffect(() => {
     refetch()
     return () => {
-      dispatch(publisherAction.resetPublisher())
+      dispatch(authorAction.resetAuthor())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -51,39 +53,39 @@ const PublisherList = () => {
   //   }
   // };
 
-  const handleDeletePublisher = async () => {
-    await deletePublisher({
-      id: selectedPublisher?.id,
+  const handleDeleteAuthor = async () => {
+    await deleteAuthor({
+      id: selectedAuthor?.id,
       query: {},
     })
   }
 
-  // const status = selectedPublisher?.isActive === 1 ? "Deactivate" : "Activate";
+  // const status = selectedAuthor?.isActive === 1 ? "Deactivate" : "Activate";
 
-  const handleModal = (type?: string, data?: PublisherResponse) => {
+  const handleModal = (type?: string, data?: AuthorResponse) => {
     if (type === 'cancelled') {
       // do nothing
       dispatch(coreAction.toggleModal({ open: false, type: '' }))
-      dispatch(publisherAction.setSelectedPublisher(null))
+      dispatch(authorAction.setSelectedAuthor(null))
     } else if (type === 'edit') {
       dispatch(
         coreAction.toggleModal({
-          type: 'manage-publisher',
+          type: 'manage-author',
           open: true,
         }),
       )
-      dispatch(publisherAction.setSelectedPublisher(data as PublisherResponse))
-      // setSinglePublisher;
+      dispatch(authorAction.setSelectedAuthor(data as AuthorResponse))
+      // setSingleAuthor;
     } else if (type === 'delete') {
       dispatch(
         coreAction.toggleModal({
-          type: 'delete-publisher',
+          type: 'delete-author',
           open: true,
         }),
       )
-      dispatch(publisherAction.setSelectedPublisher(data as PublisherResponse))
+      dispatch(authorAction.setSelectedAuthor(data as AuthorResponse))
     } else {
-      dispatch(coreAction.toggleModal({ open: true, type: 'manage-publisher' }))
+      dispatch(coreAction.toggleModal({ open: true, type: 'manage-author' }))
     }
   }
 
@@ -91,7 +93,7 @@ const PublisherList = () => {
     <>
       <ManageModule
         classes={
-          type === 'delete-publisher'
+          type === 'delete-author'
             ? {
                 top: 'visible',
                 body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
@@ -105,28 +107,28 @@ const PublisherList = () => {
         wrapperClass='h-full'
         isModalHeader
         outSideClick
-        headText='Delete the Publisher?'
-        heading={selectedPublisher?.Name || ''}
+        headText='Delete the Author?'
+        heading={selectedAuthor?.Name || ''}
         details='Are you certain you want to delete?'
         type='delete'
-        buttonText={isDeletePublisher ? 'Deleting...' : 'Delete'}
+        buttonText={isDeleteAuthor ? 'Deleting...' : 'Delete'}
         buttonProps={{
-          onClick: handleDeletePublisher,
-          disabled: isDeletePublisher,
+          onClick: handleDeleteAuthor,
+          disabled: isDeleteAuthor,
         }}
       />
-      <ManagePublisher />
+      <ManageAuthor />
       <PageLayout
-        title='Publisher List'
+        title='Author List'
         breadcrumbItem={breadcrumbItem}
-        buttonText='Add Publisher'
+        buttonText='Add Author'
         buttonProps={{
           onClick: () => handleModal(),
         }}
       >
-        <Table headList={publisherTableHead}>
+        <Table headList={authorTableHead}>
           {isLoading ? (
-            <SkeletonTable total={6} tableCount={4} />
+            <SkeletonTable total={6} tableCount={5} />
           ) : data?.data &&
             typeof data?.data === 'object' &&
             data?.data?.length > 0 ? (
@@ -135,6 +137,17 @@ const PublisherList = () => {
                 <td className='table_td'>{index + 1}</td>
                 <td className='table_td'>{item?.Name}</td>
                 <td className='table_td'>{item?.description}</td>
+                <td className='table_td'>
+                  <LazyLoadImage
+                    src={item?.Pic as string}
+                    alt={item?.Name}
+                    placeholder={<PlaceholderImage />}
+                    effect='blur'
+                    width={40}
+                    height={40}
+                    className='w-10 h-10 object-cover rounded-full'
+                  />
+                </td>
                 <td className='table_td'>
                   <div className='flex items-center gap-3'>
                     <button
@@ -170,4 +183,4 @@ const PublisherList = () => {
   )
 }
 
-export default PublisherList
+export default AuthorList

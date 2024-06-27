@@ -38,6 +38,12 @@ const NavbarAllLink: MenuType[] = [
         icon: null,
       },
       {
+        title: 'Author',
+        link: '/admin/author/author-list',
+        role: ['admin'],
+        icon: null,
+      },
+      {
         title: 'Publisher',
         link: '/admin/publisher/publisher-list',
         role: ['admin'],

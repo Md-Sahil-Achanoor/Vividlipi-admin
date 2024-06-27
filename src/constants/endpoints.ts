@@ -58,6 +58,11 @@ export const endpoints = {
   publisher: '/api/Publisher',
 
   /**
+   * @module Author
+   * */
+  author: '/api/Author',
+
+  /**
    * @module CMS
    * @description Content Management System Main Home Module
    * */

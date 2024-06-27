@@ -1,6 +1,7 @@
 import { combineReducers } from '@reduxjs/toolkit'
 import API from '../app/services/api'
 import authSlice from './auth/authSlice'
+import authorSlice from './author/authorSlice'
 import categorySlice from './category/categorySlice'
 import commonSlice from './common/commonSlice'
 import coreSlice from './core/coreSlice'
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   product: productSlice,
   userManagement: userManagementSlice,
   publisher: publisherSlice,
+  author: authorSlice,
   home: homeSlice,
   [API.reducerPath]: API.reducer,
 })

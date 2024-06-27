@@ -1,7 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy } from 'react'
 import { Navigate, createBrowserRouter } from 'react-router-dom'
-import HomePage from '@/pages/admin/home'
 
 const PublisherList = lazy(() => import('@/pages/admin/publisher'))
 const ManageRole = lazy(
@@ -20,6 +19,8 @@ const Home = lazy(() => import('../pages/Home'))
 const Login = lazy(() => import('../pages/auth/Login'))
 const AppWrapper = lazy(() => import('./middleware/AppWrapper'))
 const PrivateOutlet = lazy(() => import('./middleware/PrivateOutlet'))
+const AuthorList = lazy(() => import('@/pages/admin/author'))
+const HomePage = lazy(() => import('@/pages/admin/home'))
 
 /**
  * @module { Router } @URLs
@@ -56,7 +57,7 @@ const router = createBrowserRouter([
       { path: '', element: <Navigate to='/admin/dashboard' /> },
 
       /**
-       * @Sub Module { Dashboard }
+       * @SubModule { Dashboard }
        * @Role Admin
        * */
       {
@@ -64,7 +65,7 @@ const router = createBrowserRouter([
         element: <AdminDashboard />,
       },
       /**
-       * @Sub Module { CMS }
+       * @SubModule { CMS }
        * @Role Admin
        * */
       {
@@ -76,7 +77,7 @@ const router = createBrowserRouter([
         ],
       },
       /**
-       * @Sub Module { Products }
+       * @SubModule { Products }
        * @Role Admin
        * */
       {
@@ -93,7 +94,7 @@ const router = createBrowserRouter([
         ],
       },
       /**
-       * @Sub Module { Categories }
+       * @SubModule { Categories }
        * @Role Admin
        * */
       {
@@ -106,7 +107,7 @@ const router = createBrowserRouter([
         ],
       },
       /**
-       * @Sub Module { Publisher }
+       * @SubModule { Publisher }
        * @Role Admin
        * */
       {
@@ -117,8 +118,21 @@ const router = createBrowserRouter([
           // { path: "edit/:id", element: <EditProduct /> },
         ],
       },
+
       /**
-       * @Sub Module { User Management }
+       * @SubModule { Author }
+       * @Role Admin
+       * */
+      {
+        path: 'author',
+        element: <AppWrapper />,
+        children: [
+          { path: 'author-list', element: <AuthorList /> },
+          // { path: "edit/:id", element: <EditProduct /> },
+        ],
+      },
+      /**
+       * @SubModule { User Management }
        * @Role Admin
        * */
       {
