@@ -31,8 +31,8 @@ const productQuery = API.injectEndpoints({
       }),
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
-          const result = await queryFulfilled
-          console.log(`\n\n result:`, result?.data)
+          await queryFulfilled
+          // console.log(`\n\n result:`, result?.data)
           // dispatch(productAction.setProductList(result?.data?.data));
         } catch (err: unknown) {
           // do nothing
@@ -59,6 +59,8 @@ const productQuery = API.injectEndpoints({
           const { isDeleted, id, ...rest }: ProductResponse = result?.data?.data
           const data: Partial<ProductResponse> = {
             ...rest,
+            author_name: rest?.author?.Name,
+            AuthorId: rest?.author?.id,
             tags:
               rest?.tags?.length > 0
                 ? rest?.tags?.filter((el) => el !== '')
@@ -75,7 +77,7 @@ const productQuery = API.injectEndpoints({
               ? rest?.book_format?.map((el) => Number(el))
               : [],
           }
-          console.log(`\n\n data:`, data)
+          // console.log(`\n\n data:`, data)
           dispatch(productAction.setSelectedProduct(data as ProductResponse))
         } catch (err: unknown) {
           // do nothing

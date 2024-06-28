@@ -1,5 +1,6 @@
 export * from './atoms'
 export * from './auth'
+export * from './author'
 export * from './category'
 export * from './common'
 export * from './common/common'

@@ -1,4 +1,8 @@
-import { IRolePermissionForm, IUserManagement } from '@/models/user-management'
+import {
+  IRolePermissionForm,
+  IUserManagement,
+  IUserManagementForm,
+} from '@/models/user-management'
 import { ReqQuery } from '../common'
 
 export type RoleBase = {

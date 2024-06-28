@@ -10,20 +10,25 @@ import InputTagComponent from '@/components/form/InputTagComponent'
 import QuillComponent from '@/components/form/QuillComponent'
 import { Card } from '@/components/ui/Card'
 import { book_format, language_select } from '@/constants/filter-list'
+import { useGetAuthorsQuery } from '@/feature/author/authorQuery'
 import { useGetCategoriesQuery } from '@/feature/category/categoryQuery'
 import {
   useGetProductByIdQuery,
   useManageProductMutation,
 } from '@/feature/product/productQuery'
 import { useGetPublishersQuery } from '@/feature/publisher/publisherQuery'
+import useDebounce from '@/hooks/useDebounce'
 import PageLayout from '@/layout/PageLayout'
 import { manageProductSchema } from '@/models/product'
 import {
+  AuthorResponse,
   BreadCrumbItem,
   CategoryQuery,
   CategoryResponse,
+  PartialBy,
   Product,
   ProductPayload,
+  PublisherQuery,
   PublisherResponse,
   SelectItem,
 } from '@/types'
@@ -41,6 +46,8 @@ const initialValues: Product = {
   thumbnail: '',
   description: '',
   author_name: '',
+  author: null,
+  AuthorId: '',
   publisher: null,
   release_date: '',
   digital_product_url: '',
@@ -75,6 +82,12 @@ const ManageProduct = () => {
   const { id } = useParams()
   const router = useNavigate()
   // const [values] = useState<Product | null>(null);
+  const [search, setSearch] = useState<string>('')
+  const { value, onChange } = useDebounce(() => setSearch(value), 1000)
+  const { value: value1, onChange: onChange1 } = useDebounce(
+    () => setSearch(value1),
+    1000,
+  )
   const { selectedProduct } = useAppSelector((state) => state.product)
   const [category2, setCategory2] = useState<CategoryResponse | null>(null)
   const breadcrumbItem: BreadCrumbItem[] = [
@@ -101,8 +114,12 @@ const ManageProduct = () => {
   ) => {
     // console.log(values);
     // setSubmitting(false);
+    const data: PartialBy<Product, 'author'> = { ...values }
+    if (data?.author) {
+      delete data['author']
+    }
     const body: ProductPayload = {
-      ...values,
+      ...data,
       cat1: values.cat1?.id as number,
       cat2: values.cat2?.id as number,
       publisher: values?.publisher?.id as number,
@@ -136,6 +153,14 @@ const ManageProduct = () => {
     },
   })
 
+  const getUserQuery = () => {
+    const query: Partial<PublisherQuery> = {}
+    if (search) {
+      query.search = search
+    }
+    return query
+  }
+
   const {
     isLoading: publisherLoading,
     refetch: publisherRefetch,
@@ -143,7 +168,17 @@ const ManageProduct = () => {
     isError: publisherIsError,
     // error: publisherErrorMessage,
   } = useGetPublishersQuery({
-    query: {},
+    query: getUserQuery(),
+  })
+
+  const {
+    isLoading: authorLoading,
+    refetch: authorRefetch,
+    data: authorList,
+    isError: authorIsError,
+    // error: publisherErrorMessage,
+  } = useGetAuthorsQuery({
+    query: getUserQuery(),
   })
 
   const getQuery = () => {
@@ -184,6 +219,7 @@ const ManageProduct = () => {
   useEffect(() => {
     categoryRefetch()
     publisherRefetch()
+    authorRefetch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -370,7 +406,61 @@ const ManageProduct = () => {
                         classes='border rounded-xl border-black min-h-[150px]'
                         isRequired
                       />
-                      <Field
+
+                      <div>
+                        <Field
+                          label='Author'
+                          name='author'
+                          isRequired
+                          renderData={authorList?.data}
+                          isLoading={authorLoading}
+                          isError={authorIsError}
+                          // errorMessage={authorErrorMessage}
+                          errorMessage='Failed to fetch authors'
+                          // reload={()}
+                          // listRef={batchListRef}
+                          horizontal
+                          tooltip='Author'
+                          renderItem={(item: AuthorResponse) => (
+                            <span className=''>{item?.Name}</span>
+                          )}
+                          isActive={(item: AuthorResponse) =>
+                            values?.author?.id === item?.id
+                          }
+                          renderName={() => {
+                            return (
+                              <span
+                                className={cn('text-sm text-gray-700 truncate')}
+                              >
+                                {values?.author?.Name || 'Select Author'}
+                              </span>
+                            )
+                          }}
+                          onChangeCallback={(item: AuthorResponse) => {
+                            setFieldValue(`author`, item)
+                            setFieldValue(`AuthorId`, item?.id)
+                            setFieldValue(`author_name`, item?.Name)
+                          }}
+                          clearData={() => {
+                            setFieldValue(`author`, null)
+                            setFieldValue(`AuthorId`, '')
+                            setFieldValue(`author_name`, '')
+                          }}
+                          isSelected={values?.author !== null}
+                          component={InfiniteSelect}
+                          isInsideSearch
+                          searchProps={{
+                            value: value1,
+                            onChange: onChange1,
+                            placeholder: 'Search Author',
+                          }}
+                          onCloseCallback={() => {
+                            setSearch('')
+                          }}
+                          isAuth
+                        />
+                      </div>
+                      {/* <Field
                         name='author_name'
                         label='Author Name'
                         horizontal
@@ -379,7 +469,7 @@ const ManageProduct = () => {
                         tooltip='Author Name'
                         placeholder='Type your products author name'
                         isRequired
-                      />
+                      /> */}
                       {/* <Field
                         name="publisher"
                         label={"Publisher"}
@@ -413,14 +503,14 @@ const ManageProduct = () => {
                           renderName={() => {
                             return (
                               <span
-                                className={cn(
-                                  'text-sm text-gray-700 truncate',
-                                  values?.publisher?.Name && 'uppercase',
-                                )}
+                                className={cn('text-sm text-gray-700 truncate')}
                               >
                                 {values?.publisher?.Name || 'Select Publisher'}
                               </span>
                             )
+                          }}
+                          onCloseCallback={() => {
+                            setSearch('')
                           }}
                           onChangeCallback={(item: PublisherResponse) => {
                             setFieldValue(`publisher`, item)
@@ -429,6 +519,12 @@ const ManageProduct = () => {
                             setFieldValue(`publisher`, null)
                           }}
                           isSelected={values?.publisher !== null}
+                          isInsideSearch
+                          searchProps={{
+                            value,
+                            onChange,
+                            placeholder: 'Search Publisher',
+                          }}
                           component={InfiniteSelect}
                           isAuth
                         />

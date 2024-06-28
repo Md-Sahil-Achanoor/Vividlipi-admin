@@ -1,7 +1,3 @@
-import { useEffect } from 'react'
-import { BiUpload } from 'react-icons/bi'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
-import { Link, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import PlaceholderImage from '@/assets/svg/placeholder'
 import NoTableData from '@/components/atoms/NoTableData'
@@ -18,6 +14,10 @@ import {
 import { productAction } from '@/feature/product/productSlice'
 import PageLayout from '@/layout/PageLayout'
 import { BreadCrumbItem } from '@/types'
+import { useEffect } from 'react'
+import { BiUpload } from 'react-icons/bi'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
+import { Link, useNavigate } from 'react-router-dom'
 
 const breadcrumbItem: BreadCrumbItem[] = [
   {
@@ -48,6 +48,7 @@ const ProductList = () => {
   // console.log(`\n\n ~ ProductList ~ data:`, data?.data?.data);
   useEffect(() => {
     refetch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reRenderBulk])
 
   const handleModal = (type: string) => {
@@ -157,7 +158,7 @@ const ProductList = () => {
                     />
                   </div>
                 </td>
-                <td className='table_td'>{item?.author_name}</td>
+                <td className='table_td'>{item?.author?.Name || 'N/A'}</td>
                 <td className='table_td'>{item?.HardCopyPrice}</td>
                 <td className='table_td'>{item?.publisher?.Name || 'N/A'}</td>
                 <td className='table_td'>{item?.release_date}</td>

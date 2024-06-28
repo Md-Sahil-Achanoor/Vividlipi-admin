@@ -1,6 +1,3 @@
-import { Field, Form, Formik, FormikHelpers, FormikProps } from 'formik'
-import { useEffect, useRef, useState } from 'react'
-import { BsArrowRightShort } from 'react-icons/bs'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import CustomInput from '@/components/form/CustomInput'
 import InfiniteSelect from '@/components/form/InfiniteSelect'
@@ -13,6 +10,9 @@ import useDebounce from '@/hooks/useDebounce'
 import { IHomeFeatureProduct, featureProductsSchema } from '@/models/home'
 import { ProductQuery, ProductResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { Field, Form, Formik, FormikHelpers, FormikProps } from 'formik'
+import { useEffect, useRef, useState } from 'react'
+import { BsArrowRightShort } from 'react-icons/bs'
 
 const initialValues: IHomeFeatureProduct = {
   productId: null,
@@ -87,7 +87,14 @@ const ManageFeatureProduct = () => {
       id: selectedFeatureProduct?.id || '',
       data: {
         productId: values.productId?.id as number,
-        main: values.main,
+        main: values.main as number,
+        contentpositionY: 0,
+        contentpostion_X: 0,
+        contentpostionX: 0,
+        text: '',
+        id: '',
+        redirectUrl: '',
+        imageurl: '',
       },
       options: {
         setSubmitting,

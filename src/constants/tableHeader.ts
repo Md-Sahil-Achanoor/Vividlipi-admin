@@ -27,6 +27,16 @@ export const productLIstTableHead = [
   'Action',
 ]
 
+export const publisherTableHead = ['SL', 'Name', 'Description', 'Action']
+
+export const authorTableHead = [
+  'SL',
+  'Name',
+  'Description',
+  'Picture',
+  'Action',
+]
+
 export const tabItems: TabItem[] = [
   {
     name: 'Feature Slider',

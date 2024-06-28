@@ -87,7 +87,7 @@ export interface InputSelect<T extends OptionValue> extends IFormik {
   onBlurCallback: (e: React.FormEvent) => void
   horizontal?: boolean
   tooltip?: string
-  [key: string]: never
+  [key: string]: unknown
 }
 
 /**
@@ -113,7 +113,7 @@ export interface FormikFileUpload extends IFormik {
 export interface PhoneInputType extends IFormik {
   disabled?: boolean
   onChangeCallback: (e: string) => void
-  [key: string]: never
+  [key: string]: unknown
 }
 
 /**

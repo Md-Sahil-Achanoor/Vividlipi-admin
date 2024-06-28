@@ -1,10 +1,4 @@
-import {
-  AssetPayload,
-  EmployeePayload,
-  FeatureSliderResponse,
-  PostBulkPayload,
-  StagePayload,
-} from '..'
+import { FeatureSliderResponse } from '..'
 
 export interface CommonState {
   progress: number
@@ -17,11 +11,7 @@ export interface ImageResponse {
   image_link: string
 }
 
-export type bulkUploadPayload =
-  | EmployeePayload[]
-  | StagePayload[]
-  | AssetPayload[]
-  | PostBulkPayload
+export type bulkUploadPayload = []
 
 export interface BulkUploadQuery {
   endpoint: string

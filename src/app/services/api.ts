@@ -1,8 +1,8 @@
+import config from '@/config/config'
 import type { Middleware } from '@reduxjs/toolkit'
 import { isRejectedWithValue } from '@reduxjs/toolkit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import toast from 'react-hot-toast'
-import config from '@/config/config'
 import { RootState } from '../store'
 
 /**
@@ -74,6 +74,7 @@ const API = createApi({
     'HomeFeatureProducts',
     'NewInProduct',
     'NewInProductToggle',
+    'Author',
   ],
   /**
    * This api has endpoints injected in adjacent files,
