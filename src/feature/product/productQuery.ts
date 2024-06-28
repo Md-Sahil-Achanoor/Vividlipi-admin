@@ -31,8 +31,8 @@ const productQuery = API.injectEndpoints({
       }),
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
-          const result = await queryFulfilled
-          console.log(`\n\n result:`, result?.data)
+          await queryFulfilled
+          // console.log(`\n\n result:`, result?.data)
           // dispatch(productAction.setProductList(result?.data?.data));
         } catch (err: unknown) {
           // do nothing
@@ -77,7 +77,7 @@ const productQuery = API.injectEndpoints({
               ? rest?.book_format?.map((el) => Number(el))
               : [],
           }
-          console.log(`\n\n data:`, data)
+          // console.log(`\n\n data:`, data)
           dispatch(productAction.setSelectedProduct(data as ProductResponse))
         } catch (err: unknown) {
           // do nothing
