@@ -11,7 +11,7 @@ export const sampleProduct: Omit<BulkProduct, 'url_slug'>[] = [
     category2: '',
     thumbnail: 'https://example.com/book_cover.jpg',
     description: '',
-    author_name: '',
+    // author_name: '',
     publisher: '',
     release_date: '',
     digital_product_url: '',
@@ -100,7 +100,7 @@ const checkProduct = async <T extends BulkProduct>(
     }
 
     if (validate?.errors?.length) {
-      errors = [`Error in row ${i + 2}`, ...validate?.errors]
+      errors = [`Error in row ${i + 2}`, ...(validate?.errors as string[])]
       // if (message) errors = [...errors, message];
       break
     }
