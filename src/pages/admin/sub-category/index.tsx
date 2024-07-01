@@ -8,6 +8,7 @@ import ManageModule from '@/components/elements/modal/ManageModule'
 import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
 import ManageSubCategory from '@/components/module/category/ManageSubCategory'
 import Table from '@/components/ui/Table'
+import { subCategoryTableHeader } from '@/constants/tableHeader'
 import {
   useDeleteSubCategoryMutation,
   useGetCategoriesQuery,
@@ -28,13 +29,6 @@ const breadcrumbItem: BreadCrumbItem[] = [
     name: 'Sub Category List',
     link: '#',
   },
-]
-const tableHead = [
-  'SL',
-  // "ID",
-  'Name',
-  'Category',
-  'Action',
 ]
 
 const SubCategoryList = () => {
@@ -64,7 +58,6 @@ const SubCategoryList = () => {
     return () => {
       dispatch(categoryAction.resetData())
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -201,7 +194,7 @@ const SubCategoryList = () => {
             </div>
           )}
         >
-          <Table headList={tableHead}>
+          <Table headList={subCategoryTableHeader}>
             {isLoading || (selectedCategory && isFetching) ? (
               <SkeletonTable total={6} tableCount={4} />
             ) : data?.data &&
@@ -211,7 +204,8 @@ const SubCategoryList = () => {
                 <tr className='table_tr' key={item?.id}>
                   <td className='table_td'>{index + 1}</td>
                   <td className='table_td'>{item?.title}</td>
-                  <td className='table_td'>{selectedCategory?.title}</td>
+                  <td className='table_td'>{item?.Slug}</td>
+                  {/* <td className='table_td'>{selectedCategory?.title}</td> */}
                   <td className='table_td'>
                     <div className='flex items-center gap-3'>
                       <button

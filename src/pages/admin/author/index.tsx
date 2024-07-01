@@ -128,7 +128,7 @@ const AuthorList = () => {
       >
         <Table headList={authorTableHead}>
           {isLoading ? (
-            <SkeletonTable total={6} tableCount={5} />
+            <SkeletonTable total={6} tableCount={6} />
           ) : data?.data &&
             typeof data?.data === 'object' &&
             data?.data?.length > 0 ? (
@@ -136,6 +136,7 @@ const AuthorList = () => {
               <tr className='table_tr' key={item?.id}>
                 <td className='table_td'>{index + 1}</td>
                 <td className='table_td'>{item?.Name}</td>
+                <td className='table_td'>{item?.Slug}</td>
                 <td className='table_td'>{item?.description}</td>
                 <td className='table_td'>
                   <LazyLoadImage

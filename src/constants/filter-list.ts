@@ -10,3 +10,8 @@ export const language_select: SelectItem[] = [
   { value: 'English', name: 'English' },
   { value: 'Kannada', name: 'Kannada' },
 ]
+
+export const commission_goes_to: SelectItem[] = [
+  { value: 1, name: 'Author' },
+  { value: 2, name: 'Publisher' },
+]

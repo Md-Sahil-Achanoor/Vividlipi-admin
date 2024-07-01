@@ -145,16 +145,16 @@ const ProductList = () => {
                 </th>
                 <td className='table_td'>{item?.book_title}</td>
                 <td className='table_td'>
-                  <div className='w-full h-16 flex justify-center'>
+                  <div className='w-16 h-16 flex justify-center'>
                     <LazyLoadImage
                       src={item?.thumbnail as string}
                       alt={item?.book_title}
                       placeholder={<PlaceholderImage />}
-                      wrapperClassName='w-15 h-full object-contain bg-gray-100 p-[1px] rounded-sm'
+                      wrapperClassName='w-16 h-full object-contain bg-gray-100 p-[1px] rounded-sm'
                       effect='blur'
                       width='100%'
                       height={64}
-                      className='w-full h-full object-contain'
+                      className='w-16 h-full object-contain'
                     />
                   </div>
                 </td>

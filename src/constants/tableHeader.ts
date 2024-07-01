@@ -27,13 +27,30 @@ export const productLIstTableHead = [
   'Action',
 ]
 
-export const publisherTableHead = ['SL', 'Name', 'Description', 'Action']
+export const publisherTableHead = [
+  'SL',
+  'Name',
+  'Slug',
+  'Description',
+  'Action',
+]
 
 export const authorTableHead = [
   'SL',
   'Name',
+  'Slug',
   'Description',
   'Picture',
+  'Action',
+]
+
+export const categoryTableHeader = ['SL', 'Name', 'Slug', 'Action']
+
+export const subCategoryTableHeader = [
+  'SL',
+  'Name',
+  'Slug',
+  // 'Category',
   'Action',
 ]
 

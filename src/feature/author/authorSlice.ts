@@ -23,6 +23,7 @@ const authorSlice = createSlice({
       if (action?.payload) {
         state.singleAuthor = {
           Name: action.payload.Name,
+          Slug: action.payload.Slug,
           description: action.payload.description,
           Pic: action.payload.Pic,
         }

@@ -126,7 +126,7 @@ const PublisherList = () => {
       >
         <Table headList={publisherTableHead}>
           {isLoading ? (
-            <SkeletonTable total={6} tableCount={4} />
+            <SkeletonTable total={6} tableCount={5} />
           ) : data?.data &&
             typeof data?.data === 'object' &&
             data?.data?.length > 0 ? (
@@ -134,6 +134,7 @@ const PublisherList = () => {
               <tr className='table_tr' key={item?.id}>
                 <td className='table_td'>{index + 1}</td>
                 <td className='table_td'>{item?.Name}</td>
+                <td className='table_td'>{item?.Slug}</td>
                 <td className='table_td'>{item?.description}</td>
                 <td className='table_td'>
                   <div className='flex items-center gap-3'>

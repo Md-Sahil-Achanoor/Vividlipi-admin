@@ -15,7 +15,7 @@ const ProductList = lazy(() => import('../pages/admin/product'))
 const ManageProduct = lazy(() => import('../pages/admin/product/ManageProduct'))
 const SubCategoryList = lazy(() => import('../pages/admin/sub-category'))
 const NonAuth = lazy(() => import('../layout/NonAuth'))
-const Home = lazy(() => import('../pages/Home'))
+// const Home = lazy(() => import('../pages/Home'))
 const Login = lazy(() => import('../pages/auth/Login'))
 const AppWrapper = lazy(() => import('./middleware/AppWrapper'))
 const PrivateOutlet = lazy(() => import('./middleware/PrivateOutlet'))
@@ -30,13 +30,13 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <PrivateOutlet>
+      <PrivateOutlet roles={['admin']}>
         <AppWrapper />
       </PrivateOutlet>
     ),
     errorElement: <ErrorPage />,
     children: [
-      { path: '', element: <Home /> },
+      { path: '', element: <Navigate to='/admin/dashboard' /> },
       // { path: "privacy-policy", element: <PrivacyPolicy /> },
       // { path: "terms-and-conditions", element: <TermsAndConditions /> },
       // { path: "refund-and-cancellations", element: <RefundsAndCancels /> },
