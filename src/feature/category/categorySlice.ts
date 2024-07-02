@@ -38,6 +38,7 @@ const categorySlice = createSlice({
       if (action?.payload) {
         state.singleCategory = {
           title: action.payload.title,
+          Slug: action.payload.Slug,
         }
       } else {
         state.singleCategory = null
@@ -52,6 +53,7 @@ const categorySlice = createSlice({
         const data = action.payload as SubCategoryResponse
         state.singleSubCategory = {
           title: data.title,
+          Slug: action.payload.Slug,
           category: data.category,
         }
       } else {
@@ -60,7 +62,7 @@ const categorySlice = createSlice({
     },
     setSingleCategory: (
       state,
-      action: PayloadAction<Pick<CategoryResponse, 'title'> | null>,
+      action: PayloadAction<Pick<CategoryResponse, 'title' | 'Slug'> | null>,
     ) => {
       state.singleCategory = action.payload
     },

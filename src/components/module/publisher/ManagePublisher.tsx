@@ -1,5 +1,3 @@
-import { Field, Form, Formik, FormikHelpers } from 'formik'
-import { BsArrowRightShort } from 'react-icons/bs'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import CustomInput from '@/components/form/CustomInput'
 import Modal from '@/components/ui/Modal'
@@ -7,9 +5,12 @@ import { coreAction } from '@/feature/core/coreSlice'
 import { useManagePublisherMutation } from '@/feature/publisher/publisherQuery'
 import { publisherAction } from '@/feature/publisher/publisherSlice'
 import { IManagePublisher, publisherSchema } from '@/models/publisher'
+import { Field, Form, Formik, FormikHelpers } from 'formik'
+import { BsArrowRightShort } from 'react-icons/bs'
 
 const initialValues: IManagePublisher = {
   Name: '',
+  Slug: '',
   description: '',
 }
 
@@ -27,11 +28,11 @@ const ManagePublisher = () => {
       dispatch(publisherAction.setSelectedPublisher(null))
     }
   }
-  console.log(
-    `\n\n ~ ManagePublisher ~ singlePublisher:`,
-    singlePublisher,
-    selectedPublisher,
-  )
+  // console.log(
+  //   `\n\n ~ ManagePublisher ~ singlePublisher:`,
+  //   singlePublisher,
+  //   selectedPublisher,
+  // )
 
   const onSubmit = async (
     values: IManagePublisher,
@@ -79,6 +80,15 @@ const ManagePublisher = () => {
                 <Field
                   name='Name'
                   label='Publisher Name'
+                  type='text'
+                  component={CustomInput}
+                  placeholder='Type here...'
+                  isRequired
+                />
+
+                <Field
+                  name='Slug'
+                  label='Slug'
                   type='text'
                   component={CustomInput}
                   placeholder='Type here...'

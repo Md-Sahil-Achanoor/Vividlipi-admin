@@ -17,6 +17,7 @@ import { BsArrowRightShort } from 'react-icons/bs'
 
 const initialValues: IManageSubCategory = {
   title: '',
+  Slug: '',
   category: null,
 }
 
@@ -149,6 +150,15 @@ const ManageSubCategory = () => {
                 <Field
                   name='title'
                   label='Category Name'
+                  type='text'
+                  component={CustomInput}
+                  placeholder='Type here...'
+                  isRequired
+                />
+
+                <Field
+                  name='Slug'
+                  label='Slug'
                   type='text'
                   component={CustomInput}
                   placeholder='Type here...'

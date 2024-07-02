@@ -7,6 +7,7 @@ import { coreAction } from '@/feature/core/coreSlice'
 import { useGetHomeFeatureProductsQuery } from '@/feature/home/homeQuery'
 import { homeAction } from '@/feature/home/homeSlice'
 import { cn } from '@/utils/twmerge'
+import { useEffect } from 'react'
 import ModuleHeader from '../ModuleHeader'
 
 // type FeatureProductsProps = {
@@ -15,7 +16,14 @@ import ModuleHeader from '../ModuleHeader'
 // };
 
 const FeatureProducts = () => {
-  const { data, isLoading, isFetching } = useGetHomeFeatureProductsQuery({})
+  const { data, isLoading, isFetching, refetch } =
+    useGetHomeFeatureProductsQuery({})
+
+  useEffect(() => {
+    refetch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const dispatch = useAppDispatch()
   const handleModal = (type: string, item?: any) => {
     if (type === 'cancelled') {

@@ -14,6 +14,7 @@ import {
 import { homeAction } from '@/feature/home/homeSlice'
 import { FeatureProductResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { useEffect } from 'react'
 import ModuleHeader from '../ModuleHeader'
 
 const FeatureNewIn = () => {
@@ -23,12 +24,17 @@ const FeatureNewIn = () => {
   const [toggleStatus, { isLoading: statusUpdateLoading }] =
     useToggleHomeNewInStatusMutation()
 
-  const { data, isLoading, isFetching } = useGetHomeNewInQuery(
+  const { data, isLoading, isFetching, refetch } = useGetHomeNewInQuery(
     {},
-    {
-      skip: !newInStatus?.status,
-    },
+    // {
+    //   skip: !newInStatus?.status,
+    // },
   )
+
+  useEffect(() => {
+    refetch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   // console.log(`\n\n ~ FeatureNewIn ~ newInStatus:`, newInStatus, data);
 
   const dispatch = useAppDispatch()
@@ -81,53 +87,72 @@ const FeatureNewIn = () => {
           }}
         />
       )}
-      {newInStatusLoading ? null : newInStatus?.toggle === '1' ? (
-        <Table headList={featureProductHeader}>
-          {isLoading || (data?.data && data?.data?.length > 0 && isFetching) ? (
-            <SkeletonTable total={6} tableCount={7} />
-          ) : data?.data && data?.data?.length > 0 ? (
-            data?.data?.map((item, index) => (
-              <tr className='table_tr' key={item?.id}>
-                <td className='table_td'>{index + 1}</td>
-                <td className='table_td'>{item?.productDetails?.book_title}</td>
-                <td className='table_td'>
-                  {item?.productDetails?.author_name}
-                </td>
-                <td className='table_td'>
-                  {item?.productDetails?.publisher?.Name || 'N/A'}
-                </td>
-                <td className='table_td'>
-                  {item?.productDetails?.language || 'N/A'}
-                </td>
-                <td className='table_td'>{item?.position}</td>
-                <td className='table_td'>
-                  <div className='flex items-center gap-3'>
-                    <button
-                      onClick={() => handleModal('delete-new-in', item)}
-                      className={cn(
-                        'font-medium hover:underline',
-                        'text-red-600 dark:text-red-500',
-                      )}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <NoTableData colSpan={7} parentClass='h-40'>
-              <span className='font-medium'>No data found!</span>
-            </NoTableData>
+      {newInStatusLoading ? null : (
+        <>
+          {newInStatus?.toggle === '0' && (
+            <div className='flex justify-center text-center mb-2'>
+              <div>
+                <p className='font-medium'>New In is disabled!</p>
+                <span>
+                  Latest 15 product will be displayed in "New In" section
+                </span>
+              </div>
+            </div>
           )}
-        </Table>
-      ) : (
-        <div className='h-60 flex items-center justify-center text-center'>
-          <div>
-            <p className='font-medium'>New In is disabled!</p>
-            <span>Latest 15 product will be displayed in "New In" section</span>
-          </div>
-        </div>
+          <Table
+            headList={
+              newInStatus?.toggle === '0'
+                ? featureProductHeader?.slice(
+                    0,
+                    featureProductHeader?.length - 1,
+                  )
+                : featureProductHeader
+            }
+          >
+            {isLoading ||
+            (data?.data && data?.data?.length > 0 && isFetching) ? (
+              <SkeletonTable total={6} tableCount={7} />
+            ) : data?.data && data?.data?.length > 0 ? (
+              data?.data?.map((item, index) => (
+                <tr className='table_tr' key={item?.id}>
+                  <td className='table_td'>{index + 1}</td>
+                  <td className='table_td'>
+                    {item?.productDetails?.book_title}
+                  </td>
+                  <td className='table_td'>
+                    {item?.productDetails?.author_name}
+                  </td>
+                  <td className='table_td'>
+                    {item?.productDetails?.publisher?.Name || 'N/A'}
+                  </td>
+                  <td className='table_td'>
+                    {item?.productDetails?.language || 'N/A'}
+                  </td>
+                  <td className='table_td'>{item?.position}</td>
+                  {newInStatus?.toggle === '1' && (
+                    <td className='table_td'>
+                      <div className='flex items-center gap-3'>
+                        <button
+                          onClick={() => handleModal('delete-new-in', item)}
+                          className={cn(
+                            'font-medium hover:underline',
+                            'text-red-600 dark:text-red-500',
+                          )}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  )}
+                </tr>
+              ))
+            ) : (
+              <NoTableData colSpan={7} parentClass='h-40'>
+                <span className='font-medium'>No data found!</span>
+              </NoTableData>
+            )}
+          </Table>
+        </>
       )}
     </div>
   )

@@ -9,7 +9,11 @@ import InputSelect from '@/components/form/InputSelect'
 import InputTagComponent from '@/components/form/InputTagComponent'
 import QuillComponent from '@/components/form/QuillComponent'
 import { Card } from '@/components/ui/Card'
-import { book_format, language_select } from '@/constants/filter-list'
+import {
+  book_format,
+  commission_goes_to,
+  language_select,
+} from '@/constants/filter-list'
 import { useGetAuthorsQuery } from '@/feature/author/authorQuery'
 import { useGetCategoriesQuery } from '@/feature/category/categoryQuery'
 import {
@@ -635,10 +639,7 @@ const ManageProduct = () => {
                         label='Commission Goes To'
                         horizontal
                         component={InputSelect}
-                        items={[
-                          { value: 1, name: 'Author' },
-                          { value: 2, name: 'Publisher' },
-                        ]}
+                        items={commission_goes_to}
                         tooltip='Commission Goes To'
                         isRequired
                       />

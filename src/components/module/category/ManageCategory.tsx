@@ -1,5 +1,3 @@
-import { Field, Form, Formik, FormikHelpers } from 'formik'
-import { BsArrowRightShort } from 'react-icons/bs'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import CustomInput from '@/components/form/CustomInput'
 import Modal from '@/components/ui/Modal'
@@ -7,9 +5,12 @@ import { useManageCategoryMutation } from '@/feature/category/categoryQuery'
 import { categoryAction } from '@/feature/category/categorySlice'
 import { coreAction } from '@/feature/core/coreSlice'
 import { IManageCategory, categorySchema } from '@/models/category'
+import { Field, Form, Formik, FormikHelpers } from 'formik'
+import { BsArrowRightShort } from 'react-icons/bs'
 
 const initialValues: IManageCategory = {
   title: '',
+  Slug: '',
 }
 
 const ManageCategory = () => {
@@ -26,11 +27,11 @@ const ManageCategory = () => {
       dispatch(categoryAction.setSelectedCategory(null))
     }
   }
-  console.log(
-    `\n\n ~ ManageCategory ~ singleCategory:`,
-    singleCategory,
-    selectedCategory,
-  )
+  // console.log(
+  //   `\n\n ~ ManageCategory ~ singleCategory:`,
+  //   singleCategory,
+  //   selectedCategory,
+  // )
 
   const onSubmit = async (
     values: IManageCategory,
@@ -78,6 +79,15 @@ const ManageCategory = () => {
                 <Field
                   name='title'
                   label='Category Name'
+                  type='text'
+                  component={CustomInput}
+                  placeholder='Type here...'
+                  isRequired
+                />
+
+                <Field
+                  name='Slug'
+                  label='Slug'
                   type='text'
                   component={CustomInput}
                   placeholder='Type here...'

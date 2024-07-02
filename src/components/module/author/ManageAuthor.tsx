@@ -12,6 +12,7 @@ import { BsArrowRightShort } from 'react-icons/bs'
 const initialValues: IManageAuthor = {
   Name: '',
   description: '',
+  Slug: '',
   Pic: '',
 }
 
@@ -29,11 +30,11 @@ const ManageAuthor = () => {
       dispatch(authorAction.setSelectedAuthor(null))
     }
   }
-  console.log(
-    `\n\n ~ ManageAuthor ~ singleAuthor:`,
-    singleAuthor,
-    selectedAuthor,
-  )
+  // console.log(
+  //   `\n\n ~ ManageAuthor ~ singleAuthor:`,
+  //   singleAuthor,
+  //   selectedAuthor,
+  // )
 
   const onSubmit = async (
     values: IManageAuthor,
@@ -81,6 +82,15 @@ const ManageAuthor = () => {
                 <Field
                   name='Name'
                   label='Author Name'
+                  type='text'
+                  component={CustomInput}
+                  placeholder='Type here...'
+                  isRequired
+                />
+
+                <Field
+                  name='Slug'
+                  label='Author Slug'
                   type='text'
                   component={CustomInput}
                   placeholder='Type here...'

@@ -1,4 +1,3 @@
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { useAppDispatch } from '@/app/store'
 import PlaceholderImage from '@/assets/svg/placeholder'
 import NoTableData from '@/components/atoms/NoTableData'
@@ -10,10 +9,17 @@ import { useGetHomeFeatureSubSliderQuery } from '@/feature/home/homeQuery'
 import { homeAction } from '@/feature/home/homeSlice'
 import { FeatureSubSliderResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { useEffect } from 'react'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 import ModuleHeader from '../ModuleHeader'
 
 const FeatureSubSlider = () => {
-  const { data, isLoading } = useGetHomeFeatureSubSliderQuery({})
+  const { data, isLoading, refetch } = useGetHomeFeatureSubSliderQuery({})
+  useEffect(() => {
+    refetch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const dispatch = useAppDispatch()
   const handleModal = (type: string, item?: FeatureSubSliderResponse) => {
     if (type === 'cancelled') {

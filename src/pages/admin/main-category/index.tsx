@@ -1,10 +1,10 @@
-import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import NoTableData from '@/components/atoms/NoTableData'
 import ManageModule from '@/components/elements/modal/ManageModule'
 import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
 import ManageCategory from '@/components/module/category/ManageCategory'
 import Table from '@/components/ui/Table'
+import { categoryTableHeader } from '@/constants/tableHeader'
 import {
   useDeleteCategoryMutation,
   useGetCategoriesQuery,
@@ -14,6 +14,7 @@ import { coreAction } from '@/feature/core/coreSlice'
 import PageLayout from '@/layout/PageLayout'
 import { BreadCrumbItem, CategoryResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { useEffect } from 'react'
 
 const breadcrumbItem: BreadCrumbItem[] = [
   {
@@ -21,7 +22,6 @@ const breadcrumbItem: BreadCrumbItem[] = [
     link: '#',
   },
 ]
-const tableHead = ['SL', 'Name', 'Action']
 
 const MainCategoryList = () => {
   // const navigate = useNavigate();
@@ -43,6 +43,7 @@ const MainCategoryList = () => {
     return () => {
       dispatch(categoryAction.resetData())
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // const handleModal = (type: string) => {
@@ -128,9 +129,9 @@ const MainCategoryList = () => {
       >
         {/* <Card className=""> */}
         {/* <TableWrapper isActiveInactive isSort={false}> */}
-        <Table headList={tableHead}>
+        <Table headList={categoryTableHeader}>
           {isLoading ? (
-            <SkeletonTable total={6} tableCount={3} />
+            <SkeletonTable total={6} tableCount={4} />
           ) : data?.data &&
             typeof data?.data === 'object' &&
             data?.data?.length > 0 ? (
@@ -138,6 +139,7 @@ const MainCategoryList = () => {
               <tr className='table_tr' key={item?.id}>
                 <td className='table_td'>{index + 1}</td>
                 <td className='table_td'>{item?.title}</td>
+                <td className='table_td'>{item?.Slug}</td>
                 <td className='table_td'>
                   <div className='flex items-center gap-3'>
                     <button

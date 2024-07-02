@@ -24,6 +24,7 @@ const publisherSlice = createSlice({
         state.singlePublisher = {
           Name: action.payload.Name,
           description: action.payload.description,
+          Slug: action.payload.Slug,
         }
       } else {
         state.singlePublisher = null

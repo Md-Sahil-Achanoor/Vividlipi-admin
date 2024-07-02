@@ -29,6 +29,9 @@ export interface SubCategoryResponse extends ISubCategory<number> {
 export interface CategoryState extends IStore {
   selectedCategory: CategoryResponse | null
   selectedSubCategory: CategoryResponse | null
-  singleCategory: Pick<CategoryResponse, 'title'> | null
-  singleSubCategory: Pick<SubCategoryResponse, 'title' | 'category'> | null
+  singleCategory: Pick<CategoryResponse, 'title' | 'Slug'> | null
+  singleSubCategory: Pick<
+    SubCategoryResponse,
+    'title' | 'category' | 'Slug'
+  > | null
 }
