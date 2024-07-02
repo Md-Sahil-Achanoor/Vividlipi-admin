@@ -11,10 +11,15 @@ import { cn } from '@/utils/twmerge'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 // import PlaceholderImage from "../../../../assets/Images/image.png";
 import PlaceholderImage from '@/assets/svg/placeholder'
+import { useEffect } from 'react'
 import ModuleHeader from '../ModuleHeader'
 
 const FeatureSlider = () => {
-  const { data, isLoading } = useGetHomeFeatureSliderQuery({})
+  const { data, isLoading, refetch } = useGetHomeFeatureSliderQuery({})
+  useEffect(() => {
+    refetch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   // console.log(`\n\n ~ FeatureSlider ~ data:`, data);
   const dispatch = useAppDispatch()
   const handleModal = (type: string, item?: FeatureSliderResponse) => {
