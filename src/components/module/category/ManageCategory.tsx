@@ -85,14 +85,18 @@ const ManageCategory = () => {
                   isRequired
                 />
 
-                <Field
-                  name='Slug'
-                  label='Slug'
-                  type='text'
-                  component={CustomInput}
-                  placeholder='Type here...'
-                  isRequired
-                />
+                {!selectedCategory?.id &&
+                  (selectedCategory?.Slug === 'ebooks' ||
+                    selectedCategory?.Slug === 'printed-books') && (
+                    <Field
+                      name='Slug'
+                      label='Slug'
+                      type='text'
+                      component={CustomInput}
+                      placeholder='Type here...'
+                      isRequired
+                    />
+                  )}
               </div>
               {/* <div className="flex"> */}
               <button
