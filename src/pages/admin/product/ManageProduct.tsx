@@ -39,6 +39,7 @@ import {
 import { cn } from '@/utils/twmerge'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { BsArrowRightShort } from 'react-icons/bs'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -321,6 +322,15 @@ const ManageProduct = () => {
                           onChangeCallback={(item: CategoryResponse) => {
                             setFieldValue(`cat1`, item)
                             setCategory2(item)
+                            if (item?.Slug === 'ebooks') {
+                              setFieldValue('book_format', [2])
+                            }
+                            if (item?.Slug === 'audio-books') {
+                              setFieldValue('book_format', [3])
+                            }
+                            if (item?.Slug === 'print-books') {
+                              setFieldValue('book_format', [1])
+                            }
                           }}
                           clearData={() => {
                             setFieldValue(`cat1`, null)
@@ -705,6 +715,30 @@ const ManageProduct = () => {
                               )?.name || ''
                             }
                             onClick={(item: number) => {
+                              if (
+                                item === 1 &&
+                                values?.cat1?.Slug === 'print-books'
+                              ) {
+                                return toast.error(
+                                  'You can not remove print book format',
+                                )
+                              }
+                              if (
+                                item === 2 &&
+                                values?.cat1?.Slug === 'ebooks'
+                              ) {
+                                return toast.error(
+                                  'You can not remove ebook book format',
+                                )
+                              }
+                              if (
+                                item === 3 &&
+                                values?.cat1?.Slug === 'audio-books'
+                              ) {
+                                return toast.error(
+                                  'You can not remove audio book format',
+                                )
+                              }
                               setFieldValue(
                                 'book_format',
                                 values?.book_format?.filter(
