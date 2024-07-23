@@ -3,6 +3,7 @@ import { ErrorMessage } from 'formik'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import { TagsInput } from 'react-tag-input-component'
 import { twMerge } from 'tailwind-merge'
+import TooltipButton from '../atoms/TooltipButton'
 import TextError from './TextError'
 
 const QuillComponent = ({
@@ -48,7 +49,13 @@ const QuillComponent = ({
           </label>
         ) : null}
         {props.horizontal && props.tooltip && (
-          <FaRegQuestionCircle className='text-2xl ml-2' />
+          <TooltipButton
+            className='w-max'
+            isInnerRelative
+            text={props?.tooltip}
+          >
+            <FaRegQuestionCircle className='text-2xl ml-2' />
+          </TooltipButton>
         )}
       </div>
       <div className={cn(props?.horizontal ? 'w-full lg:w-8/12' : 'w-full')}>

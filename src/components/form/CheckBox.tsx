@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { InputCheckbox } from '@/types'
 import { ErrorMessage } from 'formik'
 import { Link } from 'react-router-dom'

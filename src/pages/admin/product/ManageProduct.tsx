@@ -1,7 +1,6 @@
 import { useAppSelector } from '@/app/store'
 import Loader from '@/components/atoms/Loader'
 import MultiSelectItem from '@/components/atoms/MultiSelectItem'
-import CheckboxGroup from '@/components/form/CheckboxGroup'
 import CustomInput from '@/components/form/CustomInput'
 import FileUpload from '@/components/form/FileUpload'
 import InfiniteSelect from '@/components/form/InfiniteSelect'
@@ -72,8 +71,8 @@ const initialValues: Product = {
   there_after_commission: '',
   commission_goes_to: '',
   tax: '',
-  shipping: '',
-  genre: '',
+  shipping: 0,
+  genre: '0',
   tags: [],
   book_format: [],
   translated: 'No', // Yes/No
@@ -554,7 +553,7 @@ const ManageProduct = () => {
                         placeholder='Type your products release date'
                         isRequired
                       />
-                      <Field
+                      {/* <Field
                         name='digital_product_url'
                         label='Digital Product URL'
                         horizontal
@@ -563,7 +562,7 @@ const ManageProduct = () => {
                         tooltip='Digital Product URL'
                         placeholder='Type your products digital product URL'
                         isRequired
-                      />
+                      /> */}
                       {/* <Field
                         name="sale_price"
                         label={"Sale Price"}
@@ -663,7 +662,7 @@ const ManageProduct = () => {
                         placeholder='Type your products tax'
                         isRequired
                       />
-                      <Field
+                      {/* <Field
                         name='shipping'
                         label='Shipping'
                         horizontal
@@ -672,8 +671,8 @@ const ManageProduct = () => {
                         tooltip='Shipping'
                         placeholder='Type your products shipping'
                         isRequired
-                      />
-                      <Field
+                      /> */}
+                      {/* <Field
                         name='genre'
                         label='Genre'
                         horizontal
@@ -682,7 +681,7 @@ const ManageProduct = () => {
                         tooltip='Genre'
                         placeholder='Type your products genre'
                         isRequired
-                      />
+                      /> */}
                       <Field
                         name='tags'
                         label='Tags'
@@ -697,8 +696,8 @@ const ManageProduct = () => {
                         label='Book Format'
                         name='book_format'
                         horizontal
-                        tooltip='Tags'
-                        isRequired={false}
+                        tooltip='Book Formats'
+                        isRequired
                         renderData={book_format}
                         renderItem={(item: SelectItem) => <>{item?.name}</>}
                         isActive={(item: SelectItem) =>
@@ -795,7 +794,6 @@ const ManageProduct = () => {
                           />
                         </>
                       ) : null}
-
                       {values?.book_format?.includes(2) ? (
                         <>
                           <Field
@@ -889,7 +887,7 @@ const ManageProduct = () => {
                         isRequired
                       />
 
-                      <CheckboxGroup
+                      {/* <CheckboxGroup
                         name='allow_comments'
                         label='Allow Comments'
                         isMulti={false}
@@ -899,7 +897,7 @@ const ManageProduct = () => {
                           { key: 'Yes', value: 'Yes' },
                           { key: 'No', value: 'No' },
                         ]}
-                      />
+                      /> */}
                     </div>
                     <div className='flex justify-end'>
                       <button

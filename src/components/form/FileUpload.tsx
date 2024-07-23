@@ -11,6 +11,7 @@ import toast from 'react-hot-toast'
 import { BiLoaderCircle, BiTrash } from 'react-icons/bi'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import { LuImagePlus } from 'react-icons/lu'
+import TooltipButton from '../atoms/TooltipButton'
 import UploadFile from '../ui/Upload'
 import TextError from './TextError'
 
@@ -82,7 +83,9 @@ const FileUpload = ({
           </label>
         ) : null}
         {horizontal && tooltip && (
-          <FaRegQuestionCircle className='text-2xl ml-2' />
+          <TooltipButton className='w-max' isInnerRelative text={tooltip}>
+            <FaRegQuestionCircle className='text-2xl ml-2' />
+          </TooltipButton>
         )}
       </div>
       <div className={cn(horizontal ? 'w-full lg:w-8/12' : 'w-full')}>

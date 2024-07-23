@@ -3,6 +3,7 @@ import { InfiniteSelect as InfiniteSelectType } from '@/types'
 import { cn } from '@/utils/twmerge'
 import { ErrorMessage } from 'formik'
 import { FaRegQuestionCircle } from 'react-icons/fa'
+import TooltipButton from '../atoms/TooltipButton'
 import TextError from './TextError'
 
 const InfiniteSelect = <T extends object>({
@@ -67,7 +68,9 @@ const InfiniteSelect = <T extends object>({
           </label>
         ) : null}
         {horizontal && tooltip && (
-          <FaRegQuestionCircle className='text-2xl ml-2' />
+          <TooltipButton className='w-max' isInnerRelative text={tooltip}>
+            <FaRegQuestionCircle className='text-2xl ml-2' />
+          </TooltipButton>
         )}
       </div>
       <div className={cn(horizontal ? 'w-full lg:w-8/12' : 'w-full')}>

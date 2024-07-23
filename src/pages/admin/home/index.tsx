@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import ManageModule from '@/components/elements/modal/ManageModule'
 import FeatureNewIn from '@/components/module/home/feature-new-in/FeatureNewIn'
@@ -22,6 +21,7 @@ import {
 import { homeAction } from '@/feature/home/homeSlice'
 import PageLayout from '@/layout/PageLayout'
 import { checkType, getModuleName, getTitle } from '@/utils/modules/home'
+import { useState } from 'react'
 
 const HomePage = () => {
   const dispatch = useAppDispatch()
@@ -61,12 +61,13 @@ const HomePage = () => {
     }
   }
 
-  console.log(
-    `\n\n ~ HomePage ~ selectedFeatureSlider, selectedFeatureSubSlider:`,
-    selectedFeatureSlider,
-    selectedFeatureSubSlider,
-    selectedFeatureProduct,
-  )
+  // console.log(
+  //   `\n\n ~ HomePage ~ selectedFeatureSlider, selectedFeatureSubSlider:`,
+  //   selectedFeatureSlider,
+  //   selectedFeatureSubSlider,
+  //   selectedFeatureProduct,
+  //   type,
+  // )
   const handleUpdateStatus = async () => {
     if (type === 'delete-feature-slider') {
       await deleteFeatureSlider({
@@ -85,7 +86,7 @@ const HomePage = () => {
       })
     } else {
       await deleteFeatureProduct({
-        id: selectedFeatureProduct?.products,
+        id: selectedFeatureProduct?.productId?.id,
         query: {},
       })
     }
