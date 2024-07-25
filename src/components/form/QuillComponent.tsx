@@ -1,6 +1,7 @@
 import { cn } from '@/utils/twmerge'
 import { ErrorMessage } from 'formik'
 import { FaRegQuestionCircle } from 'react-icons/fa'
+import TooltipButton from '../atoms/TooltipButton'
 import Quill from '../ui/Quill'
 import TextError from './TextError'
 
@@ -52,7 +53,9 @@ const QuillComponent = ({
           </label>
         ) : null}
         {props.horizontal && props.tooltip && (
-          <FaRegQuestionCircle className='text-2xl ml-2' />
+          <TooltipButton className='w-max' isInnerRelative text={props.tooltip}>
+            <FaRegQuestionCircle className='text-2xl ml-2' />
+          </TooltipButton>
         )}
       </div>
       <div className={cn(props?.horizontal ? 'w-full lg:w-8/12' : 'w-full')}>

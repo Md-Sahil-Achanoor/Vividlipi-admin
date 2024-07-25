@@ -107,7 +107,7 @@ export const manageProductSchema = productBaseSchema.concat(
       .of(
         Yup.number()
           .oneOf([1, 2, 3], 'Invalid book format')
-          .required('Required'),
+          .required('Book format is required'),
       )
       .test({
         name: 'book_format',
@@ -185,6 +185,87 @@ export const manageProductSchema = productBaseSchema.concat(
         return true
       },
     }),
+    ebookPrice: Yup.array().of(
+      Yup.string().oneOf(['1', '2'], 'Invalid book format'),
+    ),
+    hardCopyPrice: Yup.array().of(
+      Yup.string().oneOf(['1', '2'], 'Invalid book format'),
+    ),
+    audioBookPrice: Yup.array().of(
+      Yup.string().oneOf(['1', '2'], 'Invalid book format'),
+    ),
+    ebook_SalePrice: Yup.number()
+      .min(0, "Price can't be negative")
+      .test({
+        name: 'ebook_SalePrice',
+        message: 'Ebook sale price is required',
+        test(value) {
+          if (this.parent.ebookPrice?.includes('1')) {
+            return !!value
+          }
+          return true
+        },
+      }),
+    ebook_ForeignCPrice: Yup.number()
+      .min(0, "Price can't be negative")
+      .test({
+        name: 'ebook_ForeignCPrice',
+        message: 'Ebook foreign currency price is required',
+        test(value) {
+          if (this.parent.ebookPrice?.includes('1')) {
+            return !!value
+          }
+          return true
+        },
+      }),
+    Hardcopy_SalePrice: Yup.number()
+      .min(0, "Price can't be negative")
+      .test({
+        name: 'Hardcopy_SalePrice',
+        message: 'Hardcopy sale price is required',
+        test(value) {
+          if (this.parent.hardCopyPrice?.includes('1')) {
+            return !!value
+          }
+          return true
+        },
+      }),
+    Hardcopy_Sale_ForeignCPrice: Yup.number()
+      .min(0, "Price can't be negative")
+      .test({
+        name: 'Hardcopy_Sale_ForeignCPrice',
+        message: 'Hardcopy foreign currency price is required',
+        test(value) {
+          if (this.parent.hardCopyPrice?.includes('1')) {
+            return !!value
+          }
+          return true
+        },
+      }),
+    Audibook_SalePrice: Yup.number()
+      .min(0, "Price can't be negative")
+      .test({
+        name: 'Audibook_SalePrice',
+        message: 'Audibook sale price is required',
+        test(value) {
+          if (this.parent.audioBookPrice?.includes('1')) {
+            return !!value
+          }
+          return true
+        },
+      }),
+    Audibook_ForeignCPrice: Yup.number()
+      .min(0, "Price can't be negative")
+      .test({
+        name: 'Audibook_ForeignCPrice',
+        message: 'Audibook foreign currency price is required',
+        test(value) {
+          if (this.parent.audioBookPrice?.includes('1')) {
+            return !!value
+          }
+          return true
+        },
+      }),
   }),
 )
 

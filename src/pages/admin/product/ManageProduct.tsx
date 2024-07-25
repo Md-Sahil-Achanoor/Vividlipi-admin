@@ -55,7 +55,7 @@ const initialValues: Product = {
   AuthorId: '',
   publisher: null,
   release_date: '',
-  digital_product_url: '',
+  digital_product_url: '0',
   // sale_price: "",
   // sale_quantity: "",
   // price: "",
@@ -72,8 +72,8 @@ const initialValues: Product = {
   there_after_commission: '',
   commission_goes_to: '',
   tax: '',
-  shipping: '',
-  genre: '',
+  shipping: 0,
+  genre: '0',
   tags: [],
   book_format: [],
   translated: 'No', // Yes/No
@@ -81,6 +81,15 @@ const initialValues: Product = {
   language: '',
   category: [],
   allow_comments: 'No', // Yes/No
+  ebookPrice: [],
+  hardCopyPrice: [],
+  audioBookPrice: [],
+  ebook_SalePrice: '0',
+  ebook_ForeignCPrice: '0',
+  Hardcopy_SalePrice: '0',
+  Hardcopy_Sale_ForeignCPrice: '0',
+  Audibook_SalePrice: '0',
+  Audibook_ForeignCPrice: '0',
 }
 
 const ManageProduct = () => {
@@ -119,10 +128,16 @@ const ManageProduct = () => {
   ) => {
     // console.log(values);
     // setSubmitting(false);
-    const data: PartialBy<Product, 'author'> = { ...values }
+    const data: PartialBy<
+      Product,
+      'author' | 'audioBookPrice' | 'hardCopyPrice' | 'ebookPrice'
+    > = { ...values }
     if (data?.author) {
       delete data['author']
     }
+    delete data['ebookPrice']
+    delete data['hardCopyPrice']
+    delete data['audioBookPrice']
     const body: ProductPayload = {
       ...data,
       cat1: values.cat1?.id as number,
@@ -257,7 +272,7 @@ const ManageProduct = () => {
               >
                 {({ isSubmitting, values, setFieldValue }) => (
                   <Form>
-                    {/* {console.log(values, errors)} */}
+                    {/* {console.log(JSON.stringify(values, errors))} */}
                     <div className='mt-5'>
                       <Field
                         name='book_title'
@@ -554,7 +569,7 @@ const ManageProduct = () => {
                         placeholder='Type your products release date'
                         isRequired
                       />
-                      <Field
+                      {/* <Field
                         name='digital_product_url'
                         label='Digital Product URL'
                         horizontal
@@ -563,7 +578,7 @@ const ManageProduct = () => {
                         tooltip='Digital Product URL'
                         placeholder='Type your products digital product URL'
                         isRequired
-                      />
+                      /> */}
                       {/* <Field
                         name="sale_price"
                         label={"Sale Price"}
@@ -663,7 +678,7 @@ const ManageProduct = () => {
                         placeholder='Type your products tax'
                         isRequired
                       />
-                      <Field
+                      {/* <Field
                         name='shipping'
                         label='Shipping'
                         horizontal
@@ -672,8 +687,8 @@ const ManageProduct = () => {
                         tooltip='Shipping'
                         placeholder='Type your products shipping'
                         isRequired
-                      />
-                      <Field
+                      /> */}
+                      {/* <Field
                         name='genre'
                         label='Genre'
                         horizontal
@@ -682,7 +697,7 @@ const ManageProduct = () => {
                         tooltip='Genre'
                         placeholder='Type your products genre'
                         isRequired
-                      />
+                      /> */}
                       <Field
                         name='tags'
                         label='Tags'
@@ -697,8 +712,8 @@ const ManageProduct = () => {
                         label='Book Format'
                         name='book_format'
                         horizontal
-                        tooltip='Tags'
-                        isRequired={false}
+                        tooltip='Book Formats'
+                        isRequired
                         renderData={book_format}
                         renderItem={(item: SelectItem) => <>{item?.name}</>}
                         isActive={(item: SelectItem) =>
@@ -793,9 +808,48 @@ const ManageProduct = () => {
                             placeholder='Type your products stock'
                             isRequired
                           />
+
+                          <CheckboxGroup
+                            name='hardCopyPrice'
+                            label='Hard Copy Price'
+                            isMulti
+                            horizontal
+                            tooltip='Hard Copy Price'
+                            options={[
+                              { key: 'Sales Price', value: '1' },
+                              { key: 'Foreign Price', value: '2' },
+                            ]}
+                          />
+
+                          {values?.hardCopyPrice?.includes('1') ? (
+                            <Field
+                              name='Hardcopy_SalePrice'
+                              label='Hard Copy Sale Price'
+                              horizontal
+                              type='number'
+                              component={CustomInput}
+                              min={0}
+                              tooltip='Hard Copy Sale Price'
+                              placeholder='Type your products hard copy sale price'
+                              isRequired
+                            />
+                          ) : null}
+
+                          {values?.hardCopyPrice?.includes('2') ? (
+                            <Field
+                              name='Hardcopy_Sale_ForeignCPrice'
+                              label='Hard Copy Foreign Price'
+                              horizontal
+                              type='number'
+                              component={CustomInput}
+                              min={0}
+                              tooltip='Hard Copy Foreign Price'
+                              placeholder='Type your products hard copy foreign price'
+                              isRequired
+                            />
+                          ) : null}
                         </>
                       ) : null}
-
                       {values?.book_format?.includes(2) ? (
                         <>
                           <Field
@@ -825,6 +879,45 @@ const ManageProduct = () => {
                             placeholder='Type your products ebook price'
                             isRequired
                           />
+
+                          <CheckboxGroup
+                            name='ebookPrice'
+                            label='E-book Price'
+                            isMulti
+                            horizontal
+                            tooltip='E-book Price'
+                            options={[
+                              { key: 'Sales Price', value: '1' },
+                              { key: 'Foreign Price', value: '2' },
+                            ]}
+                          />
+                          {values?.ebookPrice?.includes('1') ? (
+                            <Field
+                              name='ebook_SalePrice'
+                              label='E-book Sale Price'
+                              horizontal
+                              type='number'
+                              component={CustomInput}
+                              tooltip='E-book Sale Price'
+                              min={0}
+                              placeholder='Type your products ebook sale price'
+                              isRequired
+                            />
+                          ) : null}
+
+                          {values?.ebookPrice?.includes('2') ? (
+                            <Field
+                              name='ebook_ForeignCPrice'
+                              label='E-book Foreign Price'
+                              horizontal
+                              type='number'
+                              component={CustomInput}
+                              min={0}
+                              tooltip='E-book Foreign Price'
+                              placeholder='Type your products ebook foreign price'
+                              isRequired
+                            />
+                          ) : null}
                         </>
                       ) : null}
                       {values?.book_format?.includes(3) ? (
@@ -852,6 +945,46 @@ const ManageProduct = () => {
                             placeholder='Type your products audio price'
                             isRequired
                           />
+
+                          <CheckboxGroup
+                            name='audioBookPrice'
+                            label='Audio Book Price'
+                            isMulti
+                            horizontal
+                            tooltip='Audio Book Price'
+                            options={[
+                              { key: 'Sales Price', value: '1' },
+                              { key: 'Foreign Price', value: '2' },
+                            ]}
+                          />
+
+                          {values?.audioBookPrice?.includes('1') ? (
+                            <Field
+                              name='Audibook_SalePrice'
+                              label='Audio Sale Price'
+                              horizontal
+                              type='number'
+                              component={CustomInput}
+                              tooltip='Audio Sale Price'
+                              min={0}
+                              placeholder='Type your products audio sale price'
+                              isRequired
+                            />
+                          ) : null}
+
+                          {values?.audioBookPrice?.includes('2') ? (
+                            <Field
+                              name='Audibook_ForeignCPrice'
+                              label='Audio Foreign Price'
+                              horizontal
+                              type='number'
+                              min={0}
+                              component={CustomInput}
+                              tooltip='Audio Foreign Price'
+                              placeholder='Type your products audio foreign price'
+                              isRequired
+                            />
+                          ) : null}
                         </>
                       ) : null}
                       <Field
@@ -889,7 +1022,7 @@ const ManageProduct = () => {
                         isRequired
                       />
 
-                      <CheckboxGroup
+                      {/* <CheckboxGroup
                         name='allow_comments'
                         label='Allow Comments'
                         isMulti={false}
@@ -899,7 +1032,7 @@ const ManageProduct = () => {
                           { key: 'Yes', value: 'Yes' },
                           { key: 'No', value: 'No' },
                         ]}
-                      />
+                      /> */}
                     </div>
                     <div className='flex justify-end'>
                       <button

@@ -1,7 +1,8 @@
-import { ErrorMessage, Field, FieldProps } from 'formik'
-import { FaRegQuestionCircle } from 'react-icons/fa'
 import { CheckboxGroupProps } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { ErrorMessage, Field, FieldProps } from 'formik'
+import { FaRegQuestionCircle } from 'react-icons/fa'
+import TooltipButton from '../atoms/TooltipButton'
 import TextError from './TextError'
 
 function CheckboxGroup(props: CheckboxGroupProps) {
@@ -37,7 +38,7 @@ function CheckboxGroup(props: CheckboxGroupProps) {
           <label
             className={cn(
               'text-black text-[14px]',
-              isRequired && horizontal && 'flex items-center gap-1 font-medium',
+              horizontal && 'flex items-center gap-1 font-medium',
             )}
             htmlFor={rest?.id}
           >
@@ -51,7 +52,9 @@ function CheckboxGroup(props: CheckboxGroupProps) {
           </label>
         ) : null}
         {horizontal && tooltip && (
-          <FaRegQuestionCircle className='text-2xl ml-2' />
+          <TooltipButton className='w-max' isInnerRelative text={tooltip}>
+            <FaRegQuestionCircle className='text-2xl ml-2' />
+          </TooltipButton>
         )}
       </div>
       <div className={cn(horizontal ? 'w-full lg:w-8/12' : 'w-full')}>

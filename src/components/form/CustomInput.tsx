@@ -4,6 +4,7 @@ import { ErrorMessage } from 'formik'
 import { FC } from 'react'
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
 import { FaRegQuestionCircle } from 'react-icons/fa'
+import TooltipButton from '../atoms/TooltipButton'
 import TextError from './TextError'
 
 const CustomInput: FC<CustomInputCom> = ({
@@ -109,7 +110,9 @@ const CustomInput: FC<CustomInputCom> = ({
           </label>
         ) : null}
         {horizontal && tooltip && (
-          <FaRegQuestionCircle className='text-2xl ml-2' />
+          <TooltipButton className='w-max' isInnerRelative text={tooltip}>
+            <FaRegQuestionCircle className='text-2xl ml-2' />
+          </TooltipButton>
         )}
       </div>
       <div className={cn(horizontal ? 'w-full lg:w-8/12' : 'w-full')}>

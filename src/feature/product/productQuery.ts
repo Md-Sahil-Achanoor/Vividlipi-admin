@@ -57,8 +57,34 @@ const productQuery = API.injectEndpoints({
         try {
           const result = await queryFulfilled
           const { isDeleted, id, ...rest }: ProductResponse = result?.data?.data
+          const ebookPrice: string[] = []
+          const hardCopyPrice: string[] = []
+          const audioPrice: string[] = []
+          if (Number(rest?.ebook_SalePrice) > 0) {
+            ebookPrice.push('1')
+          }
+          if (Number(rest?.ebook_ForeignCPrice) > 0) {
+            ebookPrice.push('2')
+          }
+          // Hard copy Price
+          if (Number(rest?.Hardcopy_SalePrice) > 0) {
+            hardCopyPrice.push('1')
+          }
+          if (Number(rest?.Hardcopy_Sale_ForeignCPrice) > 0) {
+            hardCopyPrice.push('2')
+          }
+          // Audio Price
+          if (Number(rest?.Audibook_SalePrice) > 0) {
+            audioPrice.push('1')
+          }
+          if (Number(rest?.Audibook_ForeignCPrice) > 0) {
+            audioPrice.push('2')
+          }
           const data: Partial<ProductResponse> = {
             ...rest,
+            hardCopyPrice,
+            ebookPrice,
+            audioBookPrice: audioPrice,
             author_name: rest?.author?.Name,
             AuthorId: rest?.author?.id,
             tags:
