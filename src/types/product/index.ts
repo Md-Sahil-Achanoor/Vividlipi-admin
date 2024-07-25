@@ -42,6 +42,15 @@ export interface IProduct<T, P, A> {
   language: string
   category: T[]
   allow_comments: string // Yes / No
+  ebookPrice: string[]
+  hardCopyPrice: string[]
+  audioBookPrice: string[]
+  ebook_SalePrice: string | number
+  ebook_ForeignCPrice: string | number
+  Hardcopy_SalePrice: string | number
+  Hardcopy_Sale_ForeignCPrice: string | number
+  Audibook_SalePrice: string | number
+  Audibook_ForeignCPrice: string | number
 }
 
 export type Product = IProduct<
@@ -53,7 +62,7 @@ export type Product = IProduct<
 export interface ProductPayload
   extends Omit<
     IProduct<number | string, number | string, string | number>,
-    'author'
+    'author' | 'audioBookPrice' | 'hardCopyPrice' | 'ebookPrice'
   > {}
 
 export type BulkProduct = Omit<IBulkProduct, 'translator_name'> & {

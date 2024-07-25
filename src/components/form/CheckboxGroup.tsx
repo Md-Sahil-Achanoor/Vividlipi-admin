@@ -38,7 +38,7 @@ function CheckboxGroup(props: CheckboxGroupProps) {
           <label
             className={cn(
               'text-black text-[14px]',
-              isRequired && horizontal && 'flex items-center gap-1 font-medium',
+              horizontal && 'flex items-center gap-1 font-medium',
             )}
             htmlFor={rest?.id}
           >

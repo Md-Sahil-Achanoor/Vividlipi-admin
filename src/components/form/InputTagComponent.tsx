@@ -65,6 +65,8 @@ const QuillComponent = ({
             onChange={(e) => onChange({ target: { value: e, name } })}
             onBlur={() => setFieldTouched(name, true)}
             {...rest}
+            // {...props}
+            placeHolder={props?.placeHolder}
             classNames={{
               tag: 'tag',
               input: 'border-none',
