@@ -6,6 +6,7 @@ import { PublisherResponse } from '../publisher'
 
 export interface IProduct<T, P, A> {
   book_title: string
+  ISBN: string
   thumbnail: string
   IndexImage: string
   WriterNoteImage: string
@@ -25,7 +26,7 @@ export interface IProduct<T, P, A> {
   // sale_quantity: number | string;
   // price: string | number;
   // inventory: string | number;
-  commission: string
+  // commission: string
   HardCopyPrice: string | number
   AudioPrice: string | number
   EbookPrice: string | number

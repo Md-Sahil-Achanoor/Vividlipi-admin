@@ -1,3 +1,4 @@
+import { alphanumericOnly } from '@/utils/valid-image'
 import * as Yup from 'yup'
 
 // title only
@@ -29,10 +30,10 @@ export const productBaseSchema = Yup.object({
   // inventory: Yup.number()
   //   .min(0, "Negative value is not allowed")
   //   .required("Inventory is required"),
-  commission: Yup.number()
-    .min(0, 'Negative value is not allowed')
-    .max(100, 'Commission should be less than 100')
-    .required('Commission is required'),
+  // commission: Yup.number()
+  //   .min(0, 'Negative value is not allowed')
+  //   .max(100, 'Commission should be less than 100')
+  //   .required('Commission is required'),
   first_year_commission: Yup.number()
     .min(0, 'Negative value is not allowed')
     .max(100, 'Commission should be less than 100')
@@ -86,6 +87,9 @@ export const productBaseSchema = Yup.object({
     .required('Shipping is required'),
   genre: Yup.string().required('Genre is required'),
   translated: Yup.string().required('Translate is required'), // Yes/No
+  ISBN: Yup.string()
+    .matches(alphanumericOnly, 'Alphanumeric character allowed')
+    .required('ISBN is required'),
   translator_name: Yup.string().test({
     name: 'translator_name',
     message: 'Translator name is required',

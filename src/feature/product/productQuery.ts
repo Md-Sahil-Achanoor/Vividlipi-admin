@@ -95,7 +95,6 @@ const productQuery = API.injectEndpoints({
             ebook_SalePrice: rest?.ebook_SalePrice || '',
             Authorcommission: rest?.Authorcommission || '',
             Publishercommission: rest?.Publishercommission || '',
-
             hardCopyPrice,
             ebookPrice,
             audioBookPrice: audioPrice,

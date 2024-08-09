@@ -48,6 +48,7 @@ const initialValues: Product = {
   url_slug: '',
   cat1: null,
   cat2: null,
+  ISBN: '',
   thumbnail: '',
   IndexImage: '',
   WriterNoteImage: '',
@@ -70,7 +71,7 @@ const initialValues: Product = {
   Stock: '',
   Audio_URL: '',
   File_URL: '',
-  commission: '',
+  // commission: '',
   first_year_commission: '',
   second_year_commission: '',
   there_after_commission: '',
@@ -306,6 +307,16 @@ const ManageProduct = () => {
                         // disabled
                         tooltip='URL Slug'
                         placeholder='Type your products name'
+                        isRequired
+                      />
+                      <Field
+                        name='ISBN'
+                        label='ISBN'
+                        horizontal
+                        type='text'
+                        component={CustomInput}
+                        tooltip='ISBN'
+                        placeholder='Type your products ISBN'
                         isRequired
                       />
                       <div>
@@ -670,7 +681,7 @@ const ManageProduct = () => {
                         placeholder="Type your products inventory"
                         isRequired
                       /> */}
-                      <Field
+                      {/* <Field
                         name='commission'
                         label='Commission'
                         horizontal
@@ -679,7 +690,7 @@ const ManageProduct = () => {
                         tooltip='Commission'
                         placeholder='Type your products commission'
                         isRequired
-                      />
+                      /> */}
                       <Field
                         name='first_year_commission'
                         label='First Year Commission'
