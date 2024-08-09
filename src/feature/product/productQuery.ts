@@ -21,12 +21,12 @@ const productQuery = API.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query<
       ApiResponse<ListResponse<ProductResponse>>,
-      ManagePayload<Partial<ProductQuery>>
+      ManagePayloadQuery<Partial<ProductQuery>>
     >({
-      query: ({ query, data }) => ({
+      query: ({ query }) => ({
         url: endpoints.product_list,
         method: 'POST',
-        body: data,
+        // body: data,
         params: query,
       }),
       async onQueryStarted(_arg, { queryFulfilled }) {
@@ -82,6 +82,20 @@ const productQuery = API.injectEndpoints({
           }
           const data: Partial<ProductResponse> = {
             ...rest,
+            IndexImage: rest?.IndexImage || '',
+            AboutBookImage: rest?.AboutBookImage || '',
+            WriterNoteImage: rest?.WriterNoteImage || '',
+            ForewordImage: rest?.ForewordImage || '',
+            Audibook_ForeignCPrice: rest?.Audibook_ForeignCPrice || '',
+            Audibook_SalePrice: rest?.Audibook_SalePrice || '',
+            Hardcopy_SalePrice: rest?.Hardcopy_SalePrice || '',
+            Hardcopy_Sale_ForeignCPrice:
+              rest?.Hardcopy_Sale_ForeignCPrice || '',
+            ebook_ForeignCPrice: rest?.ebook_ForeignCPrice || '',
+            ebook_SalePrice: rest?.ebook_SalePrice || '',
+            Authorcommission: rest?.Authorcommission || '',
+            Publishercommission: rest?.Publishercommission || '',
+
             hardCopyPrice,
             ebookPrice,
             audioBookPrice: audioPrice,
@@ -176,9 +190,9 @@ const productQuery = API.injectEndpoints({
                 'getProducts',
                 {
                   query: _arg.query,
-                  data: {
-                    page: 1,
-                  },
+                  // query: {
+                  //   page: 1,
+                  // },
                 },
                 (draft) => {
                   draft.data.data = draft.data.data?.filter(

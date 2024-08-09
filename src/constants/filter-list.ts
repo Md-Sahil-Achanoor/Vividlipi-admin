@@ -14,4 +14,5 @@ export const language_select: SelectItem[] = [
 export const commission_goes_to: SelectItem[] = [
   { value: 1, name: 'Author' },
   { value: 2, name: 'Publisher' },
+  { value: 3, name: 'Both' },
 ]

@@ -49,6 +49,10 @@ const initialValues: Product = {
   cat1: null,
   cat2: null,
   thumbnail: '',
+  IndexImage: '',
+  WriterNoteImage: '',
+  ForewordImage: '',
+  AboutBookImage: '',
   description: '',
   author_name: '',
   author: null,
@@ -71,6 +75,8 @@ const initialValues: Product = {
   second_year_commission: '',
   there_after_commission: '',
   commission_goes_to: '',
+  Authorcommission: '',
+  Publishercommission: '',
   tax: '',
   shipping: 0,
   genre: '0',
@@ -272,7 +278,7 @@ const ManageProduct = () => {
               >
                 {({ isSubmitting, values, setFieldValue }) => (
                   <Form>
-                    {/* {console.log(JSON.stringify(values, errors))} */}
+                    {/* {console.log(values, errors)} */}
                     <div className='mt-5'>
                       <Field
                         name='book_title'
@@ -423,6 +429,51 @@ const ManageProduct = () => {
                         tooltip='File URL'
                         isRequired
                       />
+
+                      <Field
+                        name='IndexImage'
+                        label='Index Image'
+                        horizontal
+                        component={FileUpload}
+                        maxFileSize={10}
+                        supportedString='jpg, jpeg, png'
+                        tooltip='Index Image'
+                        isRequired={false}
+                      />
+
+                      <Field
+                        name='WriterNoteImage'
+                        label='Writer Note Image'
+                        horizontal
+                        component={FileUpload}
+                        maxFileSize={10}
+                        supportedString='jpg, jpeg, png'
+                        tooltip='Writer Note Image'
+                        isRequired={false}
+                      />
+
+                      <Field
+                        name='ForewordImage'
+                        label='Foreword Image'
+                        horizontal
+                        component={FileUpload}
+                        maxFileSize={10}
+                        supportedString='jpg, jpeg, png'
+                        tooltip='Foreword Image'
+                        isRequired={false}
+                      />
+
+                      <Field
+                        name='AboutBookImage'
+                        label='About Book Image'
+                        horizontal
+                        component={FileUpload}
+                        maxFileSize={10}
+                        supportedString='jpg, jpeg, png'
+                        tooltip='About Book Image'
+                        isRequired={false}
+                      />
+
                       <Field
                         name='description'
                         label='Description'
@@ -668,6 +719,35 @@ const ManageProduct = () => {
                         tooltip='Commission Goes To'
                         isRequired
                       />
+
+                      {values?.commission_goes_to === '1' ||
+                      values?.commission_goes_to === '3' ? (
+                        <Field
+                          name='Authorcommission'
+                          label='Author Commission'
+                          horizontal
+                          type='number'
+                          component={CustomInput}
+                          tooltip='Author Commission'
+                          placeholder='Type your products author commission'
+                          isRequired
+                        />
+                      ) : null}
+
+                      {values?.commission_goes_to === '2' ||
+                      values?.commission_goes_to === '3' ? (
+                        <Field
+                          name='Publishercommission'
+                          label='Publisher Commission'
+                          horizontal
+                          type='number'
+                          component={CustomInput}
+                          tooltip='Publisher Commission'
+                          placeholder='Type your products publisher commission'
+                          isRequired
+                        />
+                      ) : null}
+
                       <Field
                         name='tax'
                         label='Tax'

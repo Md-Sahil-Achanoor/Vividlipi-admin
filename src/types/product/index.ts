@@ -7,6 +7,10 @@ import { PublisherResponse } from '../publisher'
 export interface IProduct<T, P, A> {
   book_title: string
   thumbnail: string
+  IndexImage: string
+  WriterNoteImage: string
+  ForewordImage: string
+  AboutBookImage: string
   url_slug: string
   cat1: T | null
   cat2: T | null
@@ -32,6 +36,8 @@ export interface IProduct<T, P, A> {
   second_year_commission: string | number
   there_after_commission: string | number
   commission_goes_to: string
+  Authorcommission: number | string //in % can be null
+  Publishercommission: number | string //in % can be null
   tax: string | number
   shipping: string | number
   genre: string

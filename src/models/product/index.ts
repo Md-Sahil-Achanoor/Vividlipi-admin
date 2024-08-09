@@ -8,6 +8,10 @@ export const productBaseSchema = Yup.object({
     .required('Book title is required'),
   url_slug: Yup.string().required('URL slug is required'),
   thumbnail: Yup.string().required('Thumbnail is required'),
+  IndexImage: Yup.string(),
+  WriterNoteImage: Yup.string(),
+  ForewordImage: Yup.string(),
+  AboutBookImage: Yup.string(),
   description: Yup.string().required('Description is required'),
   // author_name: Yup.string().required('Author name is required'),
   // publisher: Yup.string().required("Publisher is required"),
@@ -42,6 +46,38 @@ export const productBaseSchema = Yup.object({
     .max(100, 'Commission should be less than 100')
     .required('There after commission is required'),
   commission_goes_to: Yup.string().required('Commission goes to is required'),
+  Authorcommission: Yup.number()
+    .min(0, 'Negative value is not allowed')
+    .max(100, 'Commission should be less than 100')
+    .test({
+      name: 'Authorcommission',
+      message: 'Author commission is required',
+      test(value) {
+        if (
+          this.parent.commission_goes_to === '1' ||
+          this.parent.commission_goes_to === '3'
+        ) {
+          return !!value
+        }
+        return true
+      },
+    }),
+  Publishercommission: Yup.number()
+    .min(0, 'Negative value is not allowed')
+    .max(100, 'Commission should be less than 100')
+    .test({
+      name: 'Publishercommission',
+      message: 'Publisher commission is required',
+      test(value) {
+        if (
+          this.parent.commission_goes_to === '2' ||
+          this.parent.commission_goes_to === '3'
+        ) {
+          return !!value
+        }
+        return true
+      },
+    }),
   tax: Yup.number()
     .min(0, 'Negative value is not allowed')
     .required('Tax is required'),
