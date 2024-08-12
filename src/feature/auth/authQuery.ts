@@ -1,9 +1,9 @@
-import toast from 'react-hot-toast'
 import API from '@/app/services/api'
 import { endpoints } from '@/constants/endpoints'
-import { ISignIn } from '@/models/auth/signup-validation'
+import { ISignIn } from '@/models'
 import { ManagePayload } from '@/types'
 import type { AuthResponse } from '@/types/auth'
+import toast from 'react-hot-toast'
 import { authAction } from './authSlice'
 
 const authQuery = API.injectEndpoints({

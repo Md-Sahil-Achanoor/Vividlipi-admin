@@ -1,4 +1,4 @@
-import { IManagePublisher } from '@/models/publisher'
+import { IManagePublisher } from '@/models'
 import { IStore, ReqQuery } from '../common'
 
 export interface PublisherPayload extends IManagePublisher {}

@@ -11,7 +11,7 @@ import { userManagementAction } from '@/feature/user-management/userManagementSl
 import {
   IUserManagementForm,
   userManagementFormSchema,
-} from '@/models/user-management'
+} from '@/modelsuser-management'
 import { RolePermissionResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
 import { Field, Form, Formik, FormikHelpers } from 'formik'

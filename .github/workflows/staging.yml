@@ -3,12 +3,16 @@ name: Netlify Deploy (Staging)
 on:
   push:
     branches:
-      - staging # Change this to your staging branch
+      - staging
+
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   build:
     name: Run Application Job
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/staging'
 
     steps:
       - name: Checkout code
@@ -17,7 +21,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 16.x
+          node-version: 18.x
 
       - name: 'Create env file'
         run: |

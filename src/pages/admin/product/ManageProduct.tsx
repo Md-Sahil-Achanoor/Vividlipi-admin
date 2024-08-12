@@ -23,7 +23,7 @@ import {
 import { useGetPublishersQuery } from '@/feature/publisher/publisherQuery'
 import useDebounce from '@/hooks/useDebounce'
 import PageLayout from '@/layout/PageLayout'
-import { manageProductSchema } from '@/models/product'
+import { manageProductSchema } from '@/models'
 import {
   AuthorResponse,
   BreadCrumbItem,

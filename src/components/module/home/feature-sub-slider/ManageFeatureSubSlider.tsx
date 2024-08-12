@@ -1,14 +1,14 @@
-import { File } from 'buffer'
-import { Field, Form, Formik, FormikHelpers, FormikProps } from 'formik'
-import { useRef } from 'react'
-import { BsArrowRightShort } from 'react-icons/bs'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import FileUpload from '@/components/form/FileUpload'
 import Modal from '@/components/ui/Modal'
 import { coreAction } from '@/feature/core/coreSlice'
 import { useManageFeatureSubSlideMutation } from '@/feature/home/homeQuery'
 import { homeAction } from '@/feature/home/homeSlice'
-import { IHomeFeatureSubSlider, featureSubSliderSchema } from '@/models/home'
+import { IHomeFeatureSubSlider, featureSubSliderSchema } from '@/models'
+import { File } from 'buffer'
+import { Field, Form, Formik, FormikHelpers, FormikProps } from 'formik'
+import { useRef } from 'react'
+import { BsArrowRightShort } from 'react-icons/bs'
 
 const initialValues: IHomeFeatureSubSlider = {
   file: null,

@@ -30,7 +30,7 @@ const LIMIT = 10
 
 const ProductList = () => {
   const [page, setPage] = useState(1)
-  console.log(`\n\n ~ ProductList ~ page:`, page)
+  // console.log(`\n\n ~ ProductList ~ page:`, page)
   const navigate = useNavigate()
   // const { page } = useAppSelector((state) => state.core)
   const { reRenderBulk } = useAppSelector((state) => state.common)
@@ -47,14 +47,13 @@ const ProductList = () => {
     },
   })
 
-  // console.log(`\n\n ~ ProductList ~ data:`, data?.data?.data);
+  // console.log(`\n\n ~ ProductList ~ data:`, data?.data?.data)
   useEffect(() => {
     refetch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reRenderBulk])
 
   const handleModal = (type: string) => {
-    // console.log(`\n\n handleModal ~ type:`, type);
     if (type === 'cancelled') {
       dispatch(coreAction.toggleModal({ type: '', open: false }))
       dispatch(productAction.setSelectedProduct(null))
@@ -105,11 +104,6 @@ const ProductList = () => {
         details='Are you certain you want to delete?'
         type='delete'
         buttonText={isDeleteProduct ? 'Deleting...' : 'Delete'}
-        // headText={`${status} the Product?`}
-        // heading={selectedProduct?.ShortName || ""}
-        // details={`Are you certain you want to ${status}?`}
-        // type={selectedProduct?.isActive === 1 ? "delete" : ""}
-        // buttonText={isDeleteProduct ? "Updating..." : status}
         buttonProps={{
           onClick: handleDeleteProduct,
           disabled: isDeleteProduct,

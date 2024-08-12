@@ -1,7 +1,5 @@
-import NoTableData from '@/components/atoms/NoTableData'
-import { useEffect } from 'react'
-
 import { useAppDispatch, useAppSelector } from '@/app/store'
+import NoTableData from '@/components/atoms/NoTableData'
 import TableWrapper from '@/components/elements/common/TableWrapper'
 import InfiniteFilter from '@/components/elements/filters/InfiniteFilter'
 import ManageModule from '@/components/elements/modal/ManageModule'
@@ -23,6 +21,7 @@ import {
   SubCategoryResponse,
 } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { useEffect } from 'react'
 
 const breadcrumbItem: BreadCrumbItem[] = [
   {

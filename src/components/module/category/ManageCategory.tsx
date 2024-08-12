@@ -4,7 +4,7 @@ import Modal from '@/components/ui/Modal'
 import { useManageCategoryMutation } from '@/feature/category/categoryQuery'
 import { categoryAction } from '@/feature/category/categorySlice'
 import { coreAction } from '@/feature/core/coreSlice'
-import { IManageCategory, categorySchema } from '@/models/category'
+import { IManageCategory, categorySchema } from '@/models'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 import { BsArrowRightShort } from 'react-icons/bs'
 

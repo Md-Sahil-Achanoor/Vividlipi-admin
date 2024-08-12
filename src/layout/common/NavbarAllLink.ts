@@ -61,6 +61,12 @@ const NavbarAllLink: MenuType[] = [
         role: ['admin'],
         icon: null,
       },
+      {
+        title: 'Coupon',
+        link: '/admin/coupon/coupon-list',
+        role: ['admin'],
+        icon: null,
+      },
     ],
   },
   {

@@ -15,7 +15,7 @@ import {
   IOptions,
   IRolePermissionForm,
   rolePermissionFormSchema,
-} from '@/models/user-management'
+} from '@/models'
 import { BreadCrumbItem, RoleBase } from '@/types'
 import { convertPermissionIntoObject } from '@/utils/validateSchema'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
@@ -47,7 +47,7 @@ const initialValues: IRolePermissionForm = {
 
 const ManageRole = () => {
   const { id } = useParams()
-  console.log(`\n\n ~ ManageRole ~ id:`, id)
+  // console.log(`\n\n ~ ManageRole ~ id:`, id)
   const router = useNavigate()
   const dispatch = useAppDispatch()
   // const [values] = useState<Role | null>(null);
@@ -83,9 +83,8 @@ const ManageRole = () => {
     const obj: Record<string, RoleBase> = {}
     Object.keys(rest).forEach((key: any) => {
       if ((rest as any)[key]?.length > 0) {
-        ;(obj as any)[key] = convertPermissionIntoObject(
-          (rest as any)[key] as IOptions[],
-        )
+        const obj2: any = obj
+        obj2[key] = convertPermissionIntoObject(obj2[key] as IOptions[])
       }
     })
 
@@ -156,12 +155,14 @@ const ManageRole = () => {
     if (id) {
       refetch()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
   useEffect(() => {
     return () => {
       dispatch(userManagementAction.resetAdminUser())
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -231,7 +232,6 @@ const ManageRole = () => {
                               ...(values?.Dashboard as IOptions[]),
                               item,
                             ])
-                          } else {
                           }
                         }}
                         clearData={(item: IOptions) => {
@@ -286,7 +286,6 @@ const ManageRole = () => {
                               ...(values?.Product_Management as IOptions[]),
                               item,
                             ])
-                          } else {
                           }
                         }}
                         clearData={(item: IOptions) => {
@@ -350,7 +349,6 @@ const ManageRole = () => {
                               ...(values?.Product_Category_Management as IOptions[]),
                               item,
                             ])
-                          } else {
                           }
                         }}
                         clearData={(item: IOptions) => {
@@ -416,7 +414,6 @@ const ManageRole = () => {
                               ...(values?.Product_Sub_Category_Management as IOptions[]),
                               item,
                             ])
-                          } else {
                           }
                         }}
                         clearData={(item: IOptions) => {

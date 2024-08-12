@@ -5,7 +5,7 @@ import Modal from '@/components/ui/Modal'
 import { useManageAuthorMutation } from '@/feature/author/authorQuery'
 import { authorAction } from '@/feature/author/authorSlice'
 import { coreAction } from '@/feature/core/coreSlice'
-import { IManageAuthor, authorSchema } from '@/models/author'
+import { IManageAuthor, authorSchema } from '@/models'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 import { BsArrowRightShort } from 'react-icons/bs'
 

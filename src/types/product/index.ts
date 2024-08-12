@@ -1,4 +1,4 @@
-import { IBulkProduct } from '@/models/product'
+import { IBulkProduct } from '@/models'
 import { AuthorResponse } from '../author'
 import { CategoryResponse } from '../category'
 import { IStore, ReqQuery } from '../common'

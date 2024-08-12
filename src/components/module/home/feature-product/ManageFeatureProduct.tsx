@@ -7,7 +7,7 @@ import { useManageFeatureProductMutation } from '@/feature/home/homeQuery'
 import { homeAction } from '@/feature/home/homeSlice'
 import { useGetProductsQuery } from '@/feature/product/productQuery'
 import useDebounce from '@/hooks/useDebounce'
-import { IHomeFeatureProduct, featureProductsSchema } from '@/models/home'
+import { IHomeFeatureProduct, featureProductsSchema } from '@/models'
 import { ProductQuery, ProductResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
 import { Field, Form, Formik, FormikHelpers, FormikProps } from 'formik'
@@ -31,7 +31,7 @@ const ManageFeatureProduct = () => {
 
   const query = () => {
     const query: Partial<ProductQuery> = {
-      // page: 1,
+      page: 1,
     }
     if (searchValue) {
       query.search = searchValue
@@ -47,9 +47,9 @@ const ManageFeatureProduct = () => {
     // error: productErrorMessage,
   } = useGetProductsQuery(
     {
-      data: {
-        page: 1,
-      },
+      // data: {
+      //   page: 1,
+      // },
       query: query(),
     },
     {
@@ -66,6 +66,7 @@ const ManageFeatureProduct = () => {
     if (open && type === 'manage-feature-product') {
       productRefetch()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type])
 
   const dispatch = useAppDispatch()

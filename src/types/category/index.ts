@@ -1,4 +1,4 @@
-import { IManageCategory } from '@/models/category'
+import { IManageCategory } from '@/models'
 import { IStore, ReqQuery } from '../common'
 
 export interface CategoryPayload extends IManageCategory {}

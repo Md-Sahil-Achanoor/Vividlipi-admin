@@ -1,4 +1,4 @@
-import { IManageAuthor } from '@/models/author'
+import { IManageAuthor } from '@/models'
 import { IStore, ReqQuery } from '../common'
 
 export interface AuthorPayload extends IManageAuthor {}

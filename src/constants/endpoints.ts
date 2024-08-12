@@ -99,4 +99,9 @@ export const endpoints = {
   list_new_in: '/api/list-newin-products',
   delete_new_in: '/api/remove-newin-products',
   toggle_new_in: '/api/newin-toggle',
+
+  /**
+   * @module Coupon
+   * */
+  coupon: '/api/coupon',
 }

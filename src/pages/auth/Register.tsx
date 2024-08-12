@@ -1,7 +1,7 @@
 import CheckboxGroup from '@/components/form/CheckboxGroup'
 import CustomInput from '@/components/form/CustomInput'
 import config from '@/config/config'
-import { operatorSignUpSchema } from '@/models/auth/signup-validation'
+import { operatorSignUpSchema } from '@/modelsauth/signup-validation'
 import { FormikSubmitOption } from '@/types'
 import { Field, Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
