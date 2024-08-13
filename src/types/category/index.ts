@@ -9,6 +9,7 @@ export interface CategoryResponse extends IManageCategory {
 
 export interface CategoryQuery extends ReqQuery {
   cat1: number
+  cid: string
 }
 
 /**

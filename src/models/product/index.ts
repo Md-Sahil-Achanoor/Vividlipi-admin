@@ -309,6 +309,14 @@ export const manageProductSchema = productBaseSchema.concat(
   }),
 )
 
+export const productResponseSchema = productBaseSchema.concat(
+  Yup.object({
+    id: Yup.number().required('Product ID is required'),
+  }),
+)
+
+export type IProductResponse = Yup.InferType<typeof productResponseSchema>
+
 export const productBulkUploadSchema = productBaseSchema.concat(
   Yup.object({
     book_format: Yup.number().required('Book format is required'),

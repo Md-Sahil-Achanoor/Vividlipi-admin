@@ -1,3 +1,4 @@
+import { authorCategoryTag, authorTag } from '@/constants/query-tags.constant'
 import toast from 'react-hot-toast'
 import API from '../../app/services/api'
 import { endpoints } from '../../constants/endpoints'
@@ -27,7 +28,7 @@ const authorQuery = API.injectEndpoints({
           params: query,
         }
       },
-      providesTags: ['Author'],
+      providesTags: authorTag,
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           await queryFulfilled
@@ -74,7 +75,7 @@ const authorQuery = API.injectEndpoints({
           id,
         },
       }),
-      invalidatesTags: ['Author'],
+      invalidatesTags: authorTag,
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled
@@ -159,6 +160,32 @@ const authorQuery = API.injectEndpoints({
         }
       },
     }),
+
+    // GET AUTHOR BY CATEGORY 1 IDS
+    getAuthorsByCategory1: builder.query<
+      ApiResponse<AuthorResponse[]>,
+      ManageQuery<Partial<AuthorQuery>>
+    >({
+      query: ({ query }) => {
+        return {
+          url: endpoints.author_by_cat1,
+          method: 'GET',
+          params: query,
+        }
+      },
+      providesTags: authorCategoryTag,
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any
+          const message =
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
+        }
+      },
+    }),
   }),
 })
 
@@ -167,6 +194,8 @@ export const {
   useGetAuthorByIdQuery,
   useManageAuthorMutation,
   useDeleteAuthorMutation,
+
+  useGetAuthorsByCategory1Query,
 } = authorQuery
 
 export default authorQuery

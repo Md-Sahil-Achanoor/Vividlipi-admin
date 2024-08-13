@@ -242,6 +242,31 @@ const productQuery = API.injectEndpoints({
         }
       },
     }),
+
+    // product by category1
+    getProductByCategory1: builder.query<
+      ApiResponse<ListResponse<ProductResponse>>,
+      ManagePayloadQuery<Partial<ProductQuery>>
+    >({
+      query: ({ query }) => ({
+        url: endpoints.product_by_cat1,
+        method: 'GET',
+        params: query,
+      }),
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled
+          // console.log(`\n\n result:`, result?.data)
+          // dispatch(productAction.setProductList(result?.data?.data))
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any
+          const message =
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
+        }
+      },
+    }),
   }),
 })
 
@@ -251,6 +276,8 @@ export const {
   useManageProductMutation,
   useDeleteProductMutation,
   useUpdateProductMutation,
+
+  useGetProductByCategory1Query,
 } = productQuery
 
 export default productQuery

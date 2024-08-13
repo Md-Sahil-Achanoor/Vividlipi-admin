@@ -90,6 +90,7 @@ export interface ProductQuery extends ReqQuery {
   productid: string
   search: string
   page: number
+  cid: string
 }
 
 export interface ProductState extends IStore {

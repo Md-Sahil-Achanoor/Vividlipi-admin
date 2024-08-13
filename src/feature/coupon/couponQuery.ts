@@ -83,25 +83,8 @@ const couponQuery = API.injectEndpoints({
             options?.resetForm()
             options?.setSubmitting(false)
             dispatch(couponAction.resetCoupon())
-            toast.success(result?.data?.message || 'Success')
-            // dispatch(
-            //   couponQuery.util.updateQueryData(
-            //     "getCoupons",
-            //     {
-            //       query: {},
-            //     },
-            //     (draft) => {
-            //       if (id) {
-            //         draft.data = draft?.data?.map((item) =>
-            //           item?.id === id ? { ...data, id } : item
-            //         );
-            //       } else {
-            //         draft?.data?.push(data as CouponResponse);
-            //       }
-            //     }
-            //   )
-            // );
-            dispatch(coreAction.toggleModal({ open: false, type: '' }))
+            toast.success(result?.data?.data)
+            options?.router?.('/admin/coupons/coupon-list')
           } else {
             toast.error(result?.data?.message || 'Something went wrong!')
           }

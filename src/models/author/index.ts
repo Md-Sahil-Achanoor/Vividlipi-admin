@@ -8,3 +8,11 @@ export const authorSchema = Yup.object().shape({
 })
 
 export type IManageAuthor = Yup.InferType<typeof authorSchema>
+
+export const authorResponseSchema = authorSchema.concat(
+  Yup.object({
+    id: Yup.number().required('Author ID is Required'),
+  }),
+)
+
+export type IAuthorResponse = Yup.InferType<typeof authorResponseSchema>

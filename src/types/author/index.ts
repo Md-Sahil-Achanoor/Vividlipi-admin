@@ -9,6 +9,7 @@ export interface AuthorResponse extends IManageAuthor {
 
 export interface AuthorQuery extends ReqQuery {
   id: string
+  cid: string
 }
 
 export interface AuthorState extends IStore {

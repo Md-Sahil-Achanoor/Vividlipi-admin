@@ -1,3 +1,4 @@
+import { categoryTag, couponCategoryTag } from '@/constants/query-tags.constant'
 import toast from 'react-hot-toast'
 import API from '../../app/services/api'
 import { endpoints } from '../../constants/endpoints'
@@ -32,7 +33,7 @@ const categoryQuery = API.injectEndpoints({
           params: query,
         }
       },
-      providesTags: ['Category'],
+      providesTags: categoryTag,
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           await queryFulfilled
@@ -86,7 +87,7 @@ const categoryQuery = API.injectEndpoints({
           cat1: String(id),
         },
       }),
-      invalidatesTags: ['Category'],
+      invalidatesTags: categoryTag,
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled
@@ -211,7 +212,7 @@ const categoryQuery = API.injectEndpoints({
           },
         }
       },
-      invalidatesTags: ['Category'],
+      invalidatesTags: categoryTag,
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled
@@ -281,6 +282,31 @@ const categoryQuery = API.injectEndpoints({
         }
       },
     }),
+    // get Category by cat1 ids
+    getSubCategoryByCategoryIds: builder.query<
+      ApiResponse<CategoryResponse[]>,
+      ManageQuery<Partial<CategoryQuery>>
+    >({
+      query: ({ query }) => {
+        return {
+          url: endpoints.cat2_by_cat1,
+          method: 'GET',
+          params: query,
+        }
+      },
+      providesTags: couponCategoryTag,
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any
+          const message =
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
+        }
+      },
+    }),
   }),
 })
 
@@ -293,6 +319,8 @@ export const {
   useGetSubCategoryByIdQuery,
   useManageSubCategoryMutation,
   useDeleteSubCategoryMutation,
+
+  useGetSubCategoryByCategoryIdsQuery,
 } = categoryQuery
 
 export default categoryQuery

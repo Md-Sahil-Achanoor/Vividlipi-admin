@@ -57,16 +57,11 @@ export const subCategoryTableHeader = [
 export const couponTableHead = [
   'SL',
   'Name',
-  'Product',
-  'Category 1',
-  'Category 2',
-  'Publishers',
-  'Authors',
+  'Discount Type',
+  'Discount Value',
+  'Minimum Cart Value',
   'Start Date',
   'End Date',
-  'Percentage Off',
-  'Value Off',
-  'Cart Conditions',
   'Action',
 ]
 

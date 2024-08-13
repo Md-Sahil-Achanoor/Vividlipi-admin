@@ -1,3 +1,4 @@
+import { publisherTag } from '@/constants/query-tags.constant'
 import toast from 'react-hot-toast'
 import API from '../../app/services/api'
 import { endpoints } from '../../constants/endpoints'
@@ -27,7 +28,7 @@ const publisherQuery = API.injectEndpoints({
           params: query,
         }
       },
-      providesTags: ['Publisher'],
+      providesTags: publisherTag,
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           await queryFulfilled
@@ -74,7 +75,7 @@ const publisherQuery = API.injectEndpoints({
           id,
         },
       }),
-      invalidatesTags: ['Publisher'],
+      invalidatesTags: publisherTag,
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled
@@ -159,6 +160,30 @@ const publisherQuery = API.injectEndpoints({
         }
       },
     }),
+
+    // Publisher by Category 1
+    publisherByCat1: builder.query<
+      ApiResponse<PublisherResponse[]>,
+      ManageQuery<Partial<PublisherQuery>>
+    >({
+      query: ({ query }) => ({
+        url: endpoints.publisher_by_cat1,
+        method: 'GET',
+        params: query,
+      }),
+      providesTags: publisherTag,
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any
+          const message =
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
+        }
+      },
+    }),
   }),
 })
 
@@ -167,6 +192,8 @@ export const {
   useGetPublisherByIdQuery,
   useManagePublisherMutation,
   useDeletePublisherMutation,
+
+  usePublisherByCat1Query,
 } = publisherQuery
 
 export default publisherQuery

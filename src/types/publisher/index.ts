@@ -9,6 +9,7 @@ export interface PublisherResponse extends IManagePublisher {
 
 export interface PublisherQuery extends ReqQuery {
   id: string
+  cid: string
 }
 
 export interface PublisherState extends IStore {

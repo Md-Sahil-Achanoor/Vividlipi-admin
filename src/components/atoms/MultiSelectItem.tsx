@@ -1,16 +1,15 @@
 import { BsX } from 'react-icons/bs'
-import { AccessObject, AccessObjectKey } from '../../types'
 
 interface Props<T> {
   defaultName: string
   data: T[]
   onClick: (data: T) => void
-  displayName: AccessObjectKey
+  displayName: keyof T
   isRemoveAble?: boolean
   name?: (data: T) => string
 }
 
-const MultiSelectItem = <T extends Partial<AccessObject>>({
+const MultiSelectItem = <T extends object>({
   data,
   defaultName,
   displayName,
@@ -22,12 +21,12 @@ const MultiSelectItem = <T extends Partial<AccessObject>>({
   if (data?.length !== 0) {
     return (
       <div className='flex items-center gap-1 flex-wrap'>
-        {data?.map((item) => (
+        {data?.map((item, index) => (
           <div
             className='flex justify-between items-center gap-1 bg-gray-200 rounded-md px-1'
-            key={item?.id || (item as any)}
+            key={index}
           >
-            <span>{name ? name(item) : item[displayName]}</span>
+            <span>{name ? name(item) : String(item?.[displayName] || '')}</span>
             {!isRemoveAble && (
               <span
                 className='cursor-pointer rounded-md'
