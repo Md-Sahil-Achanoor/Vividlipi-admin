@@ -8,10 +8,7 @@ import {
   useManageAdminUserMutation,
 } from '@/feature/user-management/userManagementQuery'
 import { userManagementAction } from '@/feature/user-management/userManagementSlice'
-import {
-  IUserManagementForm,
-  userManagementFormSchema,
-} from '@/models/user-management'
+import { IUserManagementForm, userManagementFormSchema } from '@/models'
 import { RolePermissionResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
 import { Field, Form, Formik, FormikHelpers } from 'formik'

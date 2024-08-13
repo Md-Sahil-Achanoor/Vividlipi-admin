@@ -4,7 +4,7 @@ import Modal from '@/components/ui/Modal'
 import { coreAction } from '@/feature/core/coreSlice'
 import { useManagePublisherMutation } from '@/feature/publisher/publisherQuery'
 import { publisherAction } from '@/feature/publisher/publisherSlice'
-import { IManagePublisher, publisherSchema } from '@/models/publisher'
+import { IManagePublisher, publisherSchema } from '@/models'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 import { BsArrowRightShort } from 'react-icons/bs'
 
@@ -28,11 +28,6 @@ const ManagePublisher = () => {
       dispatch(publisherAction.setSelectedPublisher(null))
     }
   }
-  // console.log(
-  //   `\n\n ~ ManagePublisher ~ singlePublisher:`,
-  //   singlePublisher,
-  //   selectedPublisher,
-  // )
 
   const onSubmit = async (
     values: IManagePublisher,

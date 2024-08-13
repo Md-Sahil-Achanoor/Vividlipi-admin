@@ -122,13 +122,13 @@ const Pagination: FC<Page> = ({
     return (
       <li
         key={number}
-        // className={`${currentButton === number ? "bg-pink-500" : ""}`}
+        // className={`${currentButton === number ? "bg-primary-main" : ""}`}
         onClick={() => {
           helper(number) ? handlePagination(number) : null
         }}
         className={`flex items-center cursor-pointer justify-center px-4 h-10 ${
           currentButton === number
-            ? 'text-white bg-pink-500'
+            ? 'text-white bg-primary-main'
             : ' text-content-primary bg-white border border-borderClr-gray300 hover:bg-gray-100 hover:text-gray-700'
         }`}
       >

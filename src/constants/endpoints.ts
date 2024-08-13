@@ -29,6 +29,7 @@ export const endpoints = {
   add_category2: '/api/add-cat2',
   edit_category2: '/api/edit-cat2',
   delete_category2: '/api/delete-cat2',
+  cat2_by_cat1: '/api/Cat2ByCat1',
 
   /**
    * @module Product
@@ -41,6 +42,7 @@ export const endpoints = {
   product_list: '/api/list-product',
   edit_product: '/api/edit-product',
   delete_product: '/api/delete-product',
+  product_by_cat1: '/api/ProductByCat1',
 
   /**
    * @module Role Management
@@ -56,11 +58,13 @@ export const endpoints = {
    * @module Publisher
    * */
   publisher: '/api/Publisher',
+  publisher_by_cat1: '/api/PublisherByCat1',
 
   /**
    * @module Author
    * */
   author: '/api/Author',
+  author_by_cat1: '/api/AuthorByCat1',
 
   /**
    * @module CMS
@@ -99,4 +103,9 @@ export const endpoints = {
   list_new_in: '/api/list-newin-products',
   delete_new_in: '/api/remove-newin-products',
   toggle_new_in: '/api/newin-toggle',
+
+  /**
+   * @module Coupon
+   * */
+  coupon: '/api/Coupons',
 }

@@ -1,34 +1,34 @@
-import { publisherTag } from '@/constants/query-tags.constant'
+import { couponTag } from '@/constants/query-tags.constant'
 import toast from 'react-hot-toast'
 import API from '../../app/services/api'
 import { endpoints } from '../../constants/endpoints'
 import {
   ApiResponse,
+  CouponPayload,
+  CouponQuery,
+  CouponResponse,
   ManagePayload,
   ManagePayloadQuery,
   ManageQuery,
-  PublisherPayload,
-  PublisherQuery,
-  PublisherResponse,
 } from '../../types'
 import { coreAction } from '../core/coreSlice'
-import { publisherAction } from './publisherSlice'
+import { couponAction } from './couponSlice'
 
-const publisherQuery = API.injectEndpoints({
+const couponQuery = API.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
-    getPublishers: builder.query<
-      ApiResponse<PublisherResponse[]>,
-      ManageQuery<Partial<PublisherQuery>>
+    getCoupons: builder.query<
+      ApiResponse<CouponResponse[]>,
+      ManageQuery<Partial<CouponQuery>>
     >({
       query: ({ query }) => {
         return {
-          url: endpoints.publisher,
+          url: endpoints.coupon,
           method: 'GET',
           params: query,
         }
       },
-      providesTags: publisherTag,
+      providesTags: couponTag,
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           await queryFulfilled
@@ -42,19 +42,19 @@ const publisherQuery = API.injectEndpoints({
       },
     }),
 
-    getPublisherById: builder.query<
-      ApiResponse<PublisherResponse>,
-      ManageQuery<PublisherQuery>
+    getCouponById: builder.query<
+      ApiResponse<CouponResponse>,
+      ManageQuery<CouponQuery>
     >({
       query: ({ query }) => ({
-        url: endpoints.publisher,
+        url: endpoints.coupon,
         method: 'GET',
         params: query,
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled
-          dispatch(publisherAction.setSelectedPublisher(result?.data?.data))
+          dispatch(couponAction.setSelectedCoupon(result?.data?.data))
         } catch (err: unknown) {
           // do nothing
           const error = err as any
@@ -66,42 +66,25 @@ const publisherQuery = API.injectEndpoints({
     }),
 
     // POST
-    managePublisher: builder.mutation<any, ManagePayload<PublisherPayload>>({
+    manageCoupon: builder.mutation<any, ManagePayload<CouponPayload>>({
       query: ({ data, id }) => ({
-        url: endpoints.publisher,
+        url: endpoints.coupon,
         method: id ? 'PUT' : 'POST',
         body: data,
         params: {
           id,
         },
       }),
-      invalidatesTags: publisherTag,
+      invalidatesTags: couponTag,
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled
           if (result?.data?.status === 1) {
             options?.resetForm()
             options?.setSubmitting(false)
-            dispatch(publisherAction.resetPublisher())
-            toast.success(result?.data?.message || 'Success')
-            // dispatch(
-            //   publisherQuery.util.updateQueryData(
-            //     "getPublishers",
-            //     {
-            //       query: {},
-            //     },
-            //     (draft) => {
-            //       if (id) {
-            //         draft.data = draft?.data?.map((item) =>
-            //           item?.id === id ? { ...data, id } : item
-            //         );
-            //       } else {
-            //         draft?.data?.push(data as PublisherResponse);
-            //       }
-            //     }
-            //   )
-            // );
-            dispatch(coreAction.toggleModal({ open: false, type: '' }))
+            dispatch(couponAction.resetCoupon())
+            toast.success(result?.data?.data)
+            options?.router?.('/admin/coupons/coupon-list')
           } else {
             toast.error(result?.data?.message || 'Something went wrong!')
           }
@@ -117,12 +100,12 @@ const publisherQuery = API.injectEndpoints({
       },
     }),
 
-    deletePublisher: builder.mutation<
+    deleteCoupon: builder.mutation<
       any,
-      ManagePayloadQuery<Partial<PublisherQuery>>
+      ManagePayloadQuery<Partial<CouponQuery>>
     >({
       query: ({ id }) => ({
-        url: endpoints.publisher,
+        url: endpoints.coupon,
         method: 'DELETE',
         params: {
           id,
@@ -133,11 +116,11 @@ const publisherQuery = API.injectEndpoints({
           const result = await queryFulfilled
           if (result?.data?.status === 1) {
             dispatch(coreAction.toggleModal({ open: false, type: '' }))
-            // dispatch(publisherAction.resetWithReload());
-            dispatch(publisherAction.resetPublisher())
+            // dispatch(couponAction.resetWithReload());
+            dispatch(couponAction.resetCoupon())
             dispatch(
-              publisherQuery.util.updateQueryData(
-                'getPublishers',
+              couponQuery.util.updateQueryData(
+                'getCoupons',
                 {
                   query: _arg.query,
                 },
@@ -160,40 +143,14 @@ const publisherQuery = API.injectEndpoints({
         }
       },
     }),
-
-    // Publisher by Category 1
-    publisherByCat1: builder.query<
-      ApiResponse<PublisherResponse[]>,
-      ManageQuery<Partial<PublisherQuery>>
-    >({
-      query: ({ query }) => ({
-        url: endpoints.publisher_by_cat1,
-        method: 'GET',
-        params: query,
-      }),
-      providesTags: publisherTag,
-      async onQueryStarted(_arg, { queryFulfilled }) {
-        try {
-          await queryFulfilled
-        } catch (err: unknown) {
-          // do nothing
-          const error = err as any
-          const message =
-            error?.response?.data?.message || 'Something went wrong!'
-          toast.error(message)
-        }
-      },
-    }),
   }),
 })
 
 export const {
-  useGetPublishersQuery,
-  useGetPublisherByIdQuery,
-  useManagePublisherMutation,
-  useDeletePublisherMutation,
+  useGetCouponsQuery,
+  useGetCouponByIdQuery,
+  useManageCouponMutation,
+  useDeleteCouponMutation,
+} = couponQuery
 
-  usePublisherByCat1Query,
-} = publisherQuery
-
-export default publisherQuery
+export default couponQuery

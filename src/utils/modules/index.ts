@@ -1,4 +1,4 @@
-import { productBulkUploadSchema } from '@/models/product'
+import { productBulkUploadSchema } from '@/models'
 import moment from 'moment'
 import { BulkProduct, BulkUploadReturn } from '../../types'
 import { ExcelDateToJSDate, formatDate } from '../time'
@@ -9,8 +9,13 @@ export const sampleProduct: Omit<BulkProduct, 'url_slug'>[] = [
     book_title: '',
     category1: '',
     category2: '',
-    thumbnail: 'https://example.com/book_cover.jpg',
+    thumbnail: '',
+    IndexImage: '',
+    WriterNoteImage: '',
+    ForewordImage: '',
+    AboutBookImage: '',
     description: '',
+    ISBN: '',
     // author_name: '',
     publisher: '',
     release_date: '',
@@ -19,11 +24,13 @@ export const sampleProduct: Omit<BulkProduct, 'url_slug'>[] = [
     // sale_quantity: 0,
     // price: 0,
     // inventory: 0,
-    commission: 0,
+    // commission: 0,
     first_year_commission: 0,
     second_year_commission: 0,
     there_after_commission: 0,
     commission_goes_to: '1',
+    Authorcommission: 0,
+    Publishercommission: 0,
     tax: 0,
     shipping: 0,
     genre: '',
@@ -33,6 +40,12 @@ export const sampleProduct: Omit<BulkProduct, 'url_slug'>[] = [
     translator_name: '',
     language: '',
     allow_comments: 'No', // Yes/No
+    // ebook_SalePrice: '',
+    // ebook_ForeignCPrice: '',
+    // Hardcopy_SalePrice: '',
+    // Hardcopy_Sale_ForeignCPrice: '',
+    // Audibook_SalePrice: '',
+    // Audibook_ForeignCPrice: '',
   },
 ]
 

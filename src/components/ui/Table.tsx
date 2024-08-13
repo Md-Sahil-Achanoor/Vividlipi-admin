@@ -1,7 +1,7 @@
-import { Dispatch, FC, SetStateAction } from 'react'
 import Pagination from '@/components/atoms/Pagination'
 import { InputType } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { Dispatch, FC, SetStateAction } from 'react'
 
 interface TableT {
   children: React.ReactNode
@@ -25,7 +25,6 @@ const Table: FC<TableT> = ({
   isCheckbox = false,
   checkboxProps,
 }) => {
-  // const { totalPage } = useAppSelector((state) => state.common);
   return (
     <div className=''>
       <div

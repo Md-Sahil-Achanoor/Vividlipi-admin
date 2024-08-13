@@ -5,6 +5,7 @@ import authorSlice from './author/authorSlice'
 import categorySlice from './category/categorySlice'
 import commonSlice from './common/commonSlice'
 import coreSlice from './core/coreSlice'
+import couponSlice from './coupon/couponSlice'
 import homeSlice from './home/homeSlice'
 import layoutSlice from './layout/layoutSlice'
 import productSlice from './product/productSlice'
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   publisher: publisherSlice,
   author: authorSlice,
   home: homeSlice,
+  coupon: couponSlice,
   [API.reducerPath]: API.reducer,
 })
 

@@ -14,7 +14,7 @@ import {
 import { productAction } from '@/feature/product/productSlice'
 import PageLayout from '@/layout/PageLayout'
 import { BreadCrumbItem } from '@/types'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { BiUpload } from 'react-icons/bi'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Link, useNavigate } from 'react-router-dom'
@@ -29,8 +29,10 @@ const breadcrumbItem: BreadCrumbItem[] = [
 const LIMIT = 10
 
 const ProductList = () => {
+  const [page, setPage] = useState(1)
+  // console.log(`\n\n ~ ProductList ~ page:`, page)
   const navigate = useNavigate()
-  const { page } = useAppSelector((state) => state.core)
+  // const { page } = useAppSelector((state) => state.core)
   const { reRenderBulk } = useAppSelector((state) => state.common)
   const { selectedProduct } = useAppSelector((state) => state.product)
   const { type } = useAppSelector((state) => state.core)
@@ -40,19 +42,18 @@ const ProductList = () => {
 
   const dispatch = useAppDispatch()
   const { data, isLoading, refetch } = useGetProductsQuery({
-    data: {
-      page: 1,
+    query: {
+      page,
     },
   })
 
-  // console.log(`\n\n ~ ProductList ~ data:`, data?.data?.data);
+  // console.log(`\n\n ~ ProductList ~ data:`, data?.data?.data)
   useEffect(() => {
     refetch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reRenderBulk])
 
   const handleModal = (type: string) => {
-    // console.log(`\n\n handleModal ~ type:`, type);
     if (type === 'cancelled') {
       dispatch(coreAction.toggleModal({ type: '', open: false }))
       dispatch(productAction.setSelectedProduct(null))
@@ -76,7 +77,7 @@ const ProductList = () => {
       }),
     )
   }
-  // const totalPage = data?.data?.last_page || 1;
+  const totalPage = Math.ceil((data?.data?.total || 0) / 10) || 1
   const productList = data?.data?.data || []
 
   return (
@@ -103,11 +104,6 @@ const ProductList = () => {
         details='Are you certain you want to delete?'
         type='delete'
         buttonText={isDeleteProduct ? 'Deleting...' : 'Delete'}
-        // headText={`${status} the Product?`}
-        // heading={selectedProduct?.ShortName || ""}
-        // details={`Are you certain you want to ${status}?`}
-        // type={selectedProduct?.isActive === 1 ? "delete" : ""}
-        // buttonText={isDeleteProduct ? "Updating..." : status}
         buttonProps={{
           onClick: handleDeleteProduct,
           disabled: isDeleteProduct,
@@ -127,7 +123,11 @@ const ProductList = () => {
           onClick: () => navigate('/admin/products/product-list/add-product'),
         }}
       >
-        <Table headList={productLIstTableHead}>
+        <Table
+          headList={productLIstTableHead}
+          totalPage={totalPage}
+          setPage={setPage}
+        >
           {isLoading ? (
             <SkeletonTable total={6} tableCount={10} />
           ) : productList && productList?.length > 0 ? (

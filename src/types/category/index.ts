@@ -1,4 +1,4 @@
-import { IManageCategory } from '@/models/category'
+import { IManageCategory } from '@/models'
 import { IStore, ReqQuery } from '../common'
 
 export interface CategoryPayload extends IManageCategory {}
@@ -9,6 +9,7 @@ export interface CategoryResponse extends IManageCategory {
 
 export interface CategoryQuery extends ReqQuery {
   cat1: number
+  cid: string
 }
 
 /**

@@ -8,7 +8,7 @@ import {
 } from '@/feature/category/categoryQuery'
 import { categoryAction } from '@/feature/category/categorySlice'
 import { coreAction } from '@/feature/core/coreSlice'
-import { IManageSubCategory, subCategorySchema } from '@/models/category'
+import { IManageSubCategory, subCategorySchema } from '@/models'
 import { CategoryResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
 import { Field, Form, Formik, FormikHelpers } from 'formik'

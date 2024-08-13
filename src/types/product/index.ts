@@ -1,4 +1,4 @@
-import { IBulkProduct } from '@/models/product'
+import { IBulkProduct } from '@/models'
 import { AuthorResponse } from '../author'
 import { CategoryResponse } from '../category'
 import { IStore, ReqQuery } from '../common'
@@ -6,7 +6,12 @@ import { PublisherResponse } from '../publisher'
 
 export interface IProduct<T, P, A> {
   book_title: string
+  ISBN: string
   thumbnail: string
+  IndexImage: string
+  WriterNoteImage: string
+  ForewordImage: string
+  AboutBookImage: string
   url_slug: string
   cat1: T | null
   cat2: T | null
@@ -21,7 +26,7 @@ export interface IProduct<T, P, A> {
   // sale_quantity: number | string;
   // price: string | number;
   // inventory: string | number;
-  commission: string
+  // commission: string
   HardCopyPrice: string | number
   AudioPrice: string | number
   EbookPrice: string | number
@@ -32,6 +37,8 @@ export interface IProduct<T, P, A> {
   second_year_commission: string | number
   there_after_commission: string | number
   commission_goes_to: string
+  Authorcommission: number | string //in % can be null
+  Publishercommission: number | string //in % can be null
   tax: string | number
   shipping: string | number
   genre: string
@@ -83,6 +90,7 @@ export interface ProductQuery extends ReqQuery {
   productid: string
   search: string
   page: number
+  cid: string
 }
 
 export interface ProductState extends IStore {

@@ -1,4 +1,5 @@
 import config from '@/config/config'
+import { RTKQueryTags } from '@/constants/query-tags.constant'
 import type { Middleware } from '@reduxjs/toolkit'
 import { isRejectedWithValue } from '@reduxjs/toolkit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
@@ -9,7 +10,6 @@ import { RootState } from '../store'
  * Log a warning and show a toast!
  */
 export const rtkQueryErrorLogger: Middleware = () => (next) => (action) => {
-  // RTK Query uses `createAsyncThunk` from redux-toolkit under the hood, so we're able to utilize these matchers!
   if (isRejectedWithValue(action)) {
     console.warn('We got a rejected action!')
     const { data } = action.payload
@@ -29,7 +29,7 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, { getState }) => {
     // By default, if we have a token in the store, let's use that for authenticated requests
     const store = getState() as RootState
-    const token = store.auth?.token
+    const token = store?.auth?.token || ''
     if (token) {
       headers.set('Authorization', `Bearer ${token}`)
     }
@@ -62,20 +62,7 @@ const API = createApi({
    * Tag types must be defined in the original API definition
    * for any tags that would be provided by injected endpoints
    */
-  tagTypes: [
-    'Profile',
-    'Category',
-    'Product',
-    'AdminUsers',
-    'RoleList',
-    'Publisher',
-    'HomeFeatureSlider',
-    'HomeFeatureSubSlider',
-    'HomeFeatureProducts',
-    'NewInProduct',
-    'NewInProductToggle',
-    'Author',
-  ],
+  tagTypes: RTKQueryTags,
   /**
    * This api has endpoints injected in adjacent files,
    * which is why no endpoints are shown below.

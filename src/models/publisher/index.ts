@@ -7,3 +7,11 @@ export const publisherSchema = Yup.object({
 })
 
 export type IManagePublisher = Yup.InferType<typeof publisherSchema>
+
+export const publisherResponseSchema = publisherSchema.concat(
+  Yup.object({
+    id: Yup.number().required('Publisher ID is Required'),
+  }),
+)
+
+export type IPublisherResponse = Yup.InferType<typeof publisherResponseSchema>

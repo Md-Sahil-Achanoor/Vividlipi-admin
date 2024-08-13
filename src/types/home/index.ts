@@ -2,7 +2,7 @@ import {
   IHomeFeatureProduct,
   IHomeFeatureSlider,
   IHomeFeatureSubSlider,
-} from '@/models/home'
+} from '@/models'
 import { IStore, ReqQuery } from '../common'
 import { ProductResponse } from '../product'
 

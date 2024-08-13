@@ -1,5 +1,5 @@
 import { roleOptions } from '@/constants/role-constant'
-import { IOptions, IUserManagementForm } from '@/models/user-management'
+import { IOptions, IUserManagementForm } from '@/models'
 import { filterPermission } from '@/utils/validateSchema'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import {

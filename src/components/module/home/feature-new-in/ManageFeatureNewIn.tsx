@@ -7,7 +7,7 @@ import { useManageNewInMutation } from '@/feature/home/homeQuery'
 import { homeAction } from '@/feature/home/homeSlice'
 import { useGetProductsQuery } from '@/feature/product/productQuery'
 import useDebounce from '@/hooks/useDebounce'
-import { IHomeFeatureNewProduct, featureNewProductSchema } from '@/models/home'
+import { IHomeFeatureNewProduct, featureNewProductSchema } from '@/models'
 import { ProductQuery, ProductResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
 import { Field, Form, Formik, FormikHelpers, FormikProps } from 'formik'
@@ -25,12 +25,11 @@ const ManageFeatureNewIn = () => {
   const { selectedFeatureProduct } = useAppSelector((state) => state.home)
   const [manageNewIn, { isLoading }] = useManageNewInMutation()
   const [searchValue, setSearchValue] = useState<string>('')
-  // console.log(`\n\n ~ ManageFeatureNewIn ~ searchValue:`, searchValue);
   const { value, onChange } = useDebounce(() => setSearchValue(value), 1000)
 
   const query = () => {
     const query: Partial<ProductQuery> = {
-      // page: 1,
+      page: 1,
     }
     if (searchValue) {
       query.search = searchValue
@@ -45,9 +44,9 @@ const ManageFeatureNewIn = () => {
     isError: productIsError,
   } = useGetProductsQuery(
     {
-      data: {
-        page: 1,
-      },
+      // data: {
+      //   page: 1,
+      // },
       query: query(),
     },
     {

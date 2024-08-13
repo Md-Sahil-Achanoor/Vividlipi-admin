@@ -2,6 +2,9 @@
 import { lazy } from 'react'
 import { Navigate, createBrowserRouter } from 'react-router-dom'
 
+const CouponList = lazy(() => import('@/pages/admin/coupon'))
+const ManageCoupon = lazy(() => import('@/pages/admin/coupon/manage-coupon'))
+const ViewCoupon = lazy(() => import('@/pages/admin/coupon/view-coupon'))
 const PublisherList = lazy(() => import('@/pages/admin/publisher'))
 const ManageRole = lazy(
   () => import('@/pages/admin/user-management/ManageRole'),
@@ -35,14 +38,7 @@ const router = createBrowserRouter([
       </PrivateOutlet>
     ),
     errorElement: <ErrorPage />,
-    children: [
-      { path: '', element: <Navigate to='/admin/dashboard' /> },
-      // { path: "privacy-policy", element: <PrivacyPolicy /> },
-      // { path: "terms-and-conditions", element: <TermsAndConditions /> },
-      // { path: "refund-and-cancellations", element: <RefundsAndCancels /> },
-      // { path: "about-us", element: <About /> },
-      // { path: "contact-us", element: <Contact /> },
-    ],
+    children: [{ path: '', element: <Navigate to='/admin/dashboard' /> }],
   },
 
   /**
@@ -114,6 +110,10 @@ const router = createBrowserRouter([
         path: 'publisher',
         element: <AppWrapper />,
         children: [
+          {
+            path: '',
+            element: <Navigate to='/admin/publisher/publisher-list' />,
+          },
           { path: 'publisher-list', element: <PublisherList /> },
           // { path: "edit/:id", element: <EditProduct /> },
         ],
@@ -153,6 +153,27 @@ const router = createBrowserRouter([
             ],
           },
           { path: 'user-list', element: <UserList /> },
+        ],
+      },
+      /**
+       * @SubModule { Coupon }
+       * @Role Admin
+       * */
+      {
+        path: 'coupon',
+        element: <AppWrapper />,
+        children: [
+          {
+            path: '',
+            element: <Navigate to='/admin/coupon/coupon-list' />,
+          },
+          {
+            path: 'coupon-list',
+            element: <CouponList />,
+          },
+          { path: 'coupon-list/add-coupon', element: <ManageCoupon /> },
+          { path: 'coupon-list/edit-coupon/:id', element: <ManageCoupon /> },
+          { path: 'coupon-list/view-coupon/:id', element: <ViewCoupon /> },
         ],
       },
     ],

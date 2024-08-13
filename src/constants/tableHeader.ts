@@ -54,6 +54,17 @@ export const subCategoryTableHeader = [
   'Action',
 ]
 
+export const couponTableHead = [
+  'SL',
+  'Name',
+  'Discount Type',
+  'Discount Value',
+  'Minimum Cart Value',
+  'Start Date',
+  'End Date',
+  'Action',
+]
+
 export const tabItems: TabItem[] = [
   {
     name: 'Feature Slider',
