@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import PlaceholderImage from '@/assets/svg/placeholder'
+import PlaceholderImageLink from '@/assets/svg/placeholder.svg'
 import NoTableData from '@/components/atoms/NoTableData'
 import ManageModule from '@/components/elements/modal/ManageModule'
 import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
@@ -147,7 +148,7 @@ const ProductList = () => {
                 <td className='table_td'>
                   <div className='w-16 h-16 flex justify-center'>
                     <LazyLoadImage
-                      src={item?.thumbnail as string}
+                      src={(item?.thumbnail as string) || PlaceholderImageLink}
                       alt={item?.book_title}
                       placeholder={<PlaceholderImage />}
                       wrapperClassName='w-16 h-full object-contain bg-gray-100 p-[1px] rounded-sm'
