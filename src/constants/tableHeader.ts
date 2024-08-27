@@ -19,7 +19,7 @@ export const productLIstTableHead = [
   'Name',
   'Thumbnail',
   'Author',
-  'Price',
+  // 'Price',
   'Publisher',
   'Release Date',
   'Language',

@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import PlaceholderImage from '@/assets/svg/placeholder'
+import PlaceholderImageLink from '@/assets/svg/placeholder.svg'
 import NoTableData from '@/components/atoms/NoTableData'
 import ManageModule from '@/components/elements/modal/ManageModule'
 import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
@@ -14,6 +15,7 @@ import { authorAction } from '@/feature/author/authorSlice'
 import { coreAction } from '@/feature/core/coreSlice'
 import PageLayout from '@/layout/PageLayout'
 import { AuthorResponse, BreadCrumbItem } from '@/types'
+import { truncate } from '@/utils/file'
 import { cn } from '@/utils/twmerge'
 import { useEffect } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
@@ -137,17 +139,19 @@ const AuthorList = () => {
                 <td className='table_td'>{index + 1}</td>
                 <td className='table_td'>{item?.Name}</td>
                 <td className='table_td'>{item?.Slug}</td>
-                <td className='table_td'>{item?.description}</td>
+                <td className='table_td'>{truncate(item?.description, 50)}</td>
                 <td className='table_td'>
-                  <LazyLoadImage
-                    src={item?.Pic as string}
-                    alt={item?.Name}
-                    placeholder={<PlaceholderImage />}
-                    effect='blur'
-                    width={40}
-                    height={40}
-                    className='w-10 h-10 object-cover rounded-full'
-                  />
+                  <div className='w-16 h-20 relative'>
+                    <LazyLoadImage
+                      src={(item?.Pic as string) || PlaceholderImageLink}
+                      alt={item?.Name}
+                      placeholder={<PlaceholderImage />}
+                      effect='blur'
+                      width={'100%'}
+                      height={'100%'}
+                      className='w-full h-full object-cover '
+                    />
+                  </div>
                 </td>
                 <td className='table_td'>
                   <div className='flex items-center gap-3'>

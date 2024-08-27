@@ -26,4 +26,8 @@ const checkImage = (url: string): boolean => {
   return false
 }
 
-export { checkImage, displayFileName, findLinkFromUrl }
+function truncate(str: string, length: number) {
+  return str.length > length ? `${str.substring(0, length)}...` : str
+}
+
+export { checkImage, displayFileName, findLinkFromUrl, truncate }
