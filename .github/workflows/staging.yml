@@ -3,12 +3,16 @@ name: Netlify Deploy (Staging)
 on:
   push:
     branches:
-      - staging # Change this to your staging branch
+      - staging
+
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   build:
     name: Run Application Job
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/staging'
 
     steps:
       - name: Checkout code
@@ -17,13 +21,15 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 16.x
+          node-version: 18.x
 
-      - name: "Create env file"
+      - name: 'Create env file'
         run: |
           touch .env
-          echo VITE_API_URL="https://powaha-api.edalytics.com/api" >> .env
+          echo VITE_API_URL="https://vivid-dapi.edalytics.com" >> .env
           echo GENERATE_SOURCEMAP=false >> .env
+          echo VITE_APP_IMAGE_URL="https://vivid-dapi.edalytics.com" >> .env
+          echo VITE_APP_NAME="Vividlipi"
           cat .env
 
       - name: Install dependencies
@@ -35,9 +41,9 @@ jobs:
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.2.3
         with:
-          publish-dir: "./dist"
-          production-branch: main
-          deploy-message: "${{ github.event.head_commit.message }}"
+          publish-dir: './dist'
+          production-branch: staging
+          deploy-message: '${{ github.event.head_commit.message }}'
         env:
-          NETLIFY_SITE_ID: "${{ secrets.NETLIFY_STAGING_SITE_ID }}"
-          NETLIFY_AUTH_TOKEN: "${{ secrets.NETLIFY_AUTH_TOKEN }}"
+          NETLIFY_SITE_ID: '${{ secrets.NETLIFY_STAGING_SITE_ID }}'
+          NETLIFY_AUTH_TOKEN: '${{ secrets.NETLIFY_AUTH_TOKEN }}'

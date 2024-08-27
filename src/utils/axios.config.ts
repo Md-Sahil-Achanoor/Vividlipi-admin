@@ -1,33 +1,33 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-import { baseURL } from "../constants/service";
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import config from '@/config/config'
 
 export const instance = axios.create({
-  baseURL: baseURL,
-});
+  baseURL: config.baseURL,
+})
 
 instance.interceptors.request.use(
   (res) => res,
-  (err) => Promise.reject(err)
-);
+  (err) => Promise.reject(err),
+)
 
 instance.interceptors.response.use(
   (response: AxiosResponse) => response.data,
-  (error) => Promise.reject(error)
-);
+  (error) => Promise.reject(error),
+)
 
 export const GET = async <T extends object = object>(
   url: string,
-  config: AxiosRequestConfig = {}
+  config: AxiosRequestConfig = {},
 ): Promise<T> => {
-  return instance.get(url, { ...config });
-};
+  return instance.get(url, { ...config })
+}
 
 export const POST = async <T extends object = object>(
   url: string,
   data: object = {},
-  config: AxiosRequestConfig = {}
+  config: AxiosRequestConfig = {},
 ) => {
-  return instance.post<T>(url, data, { ...config });
-};
+  return instance.post<T>(url, data, { ...config })
+}
 
-export default instance;
+export default instance

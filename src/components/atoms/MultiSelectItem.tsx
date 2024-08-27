@@ -1,48 +1,49 @@
-import { BsX } from "react-icons/bs";
-import { AccessObject, AccessObjectKey } from "../../types";
+import { BsX } from 'react-icons/bs'
 
 interface Props<T> {
-  defaultName: string;
-  data: T[];
-  onClick: (data: T) => void;
-  displayName: AccessObjectKey;
-  isRemoveAble?: boolean;
+  defaultName: string
+  data: T[]
+  onClick: (data: T) => void
+  displayName: keyof T
+  isRemoveAble?: boolean
+  name?: (data: T) => string
 }
 
-const MultiSelectItem = <T extends Partial<AccessObject>>({
+const MultiSelectItem = <T extends object>({
   data,
   defaultName,
   displayName,
   onClick,
   isRemoveAble = false,
+  name,
 }: Props<T>) => {
   // console.log(`\n\n  data: ====>`, data);
   if (data?.length !== 0) {
     return (
-      <div className="flex items-center gap-1 flex-wrap">
-        {data?.map((item) => (
+      <div className='flex items-center gap-1 flex-wrap'>
+        {data?.map((item, index) => (
           <div
-            className="flex justify-between items-center gap-1 bg-gray-200 rounded-md p-1"
-            key={item?.id}
+            className='flex justify-between items-center gap-1 bg-gray-200 rounded-md px-1'
+            key={index}
           >
-            <span>{item[displayName]}</span>
+            <span>{name ? name(item) : String(item?.[displayName] || '')}</span>
             {!isRemoveAble && (
               <span
-                className="cursor-pointer bg-white rounded-md p-1"
+                className='cursor-pointer rounded-md'
                 onClick={(e) => {
-                  e.stopPropagation();
-                  onClick(item);
+                  e.stopPropagation()
+                  onClick(item)
                 }}
               >
-                <BsX className="text-red-600 text-lg" />
+                <BsX className='text-red-600' />
               </span>
             )}
           </div>
         ))}
       </div>
-    );
+    )
   }
-  return <span className="text-sm truncate">{defaultName}</span>;
-};
+  return <span className='text-sm truncate'>{defaultName}</span>
+}
 
-export default MultiSelectItem;
+export default MultiSelectItem

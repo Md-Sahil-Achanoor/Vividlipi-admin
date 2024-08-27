@@ -4,10 +4,27 @@
 
 :root {
   --black: #000;
+  --body: #f8f8fb;
   --primary: #059ed4;
+  --primary-light: #495057;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --background-start-rgb: 172, 57, 253;
+  --background-end-rgb: 138, 58, 254;
+  --background-search-gray: 237, 238, 241;
+  --text-placeholder-gray: 61, 66, 79;
+  --table-background-gray: 237, 238, 241;
 }
+
+body {
+  background-color: var(--body);
+}
+// ::-webkit-scrollbar {
+//   width: 5px;
+//   height: 8px;
+//   color: var(--primary-light);
+//   background-color: var(--body) !important;
+// }
 
 @layer utilities {
   .menu-item {
@@ -43,11 +60,24 @@
   .svg_active_white path {
     @apply stroke-white;
   }
+
+  .skeleton {
+    @apply bg-gray-300 rounded-xl animate-pulse duration-100;
+  }
+
+  // Skeleton loading
+  .skeleton_table {
+    @apply bg-gray-300 h-3 rounded-xl animate-pulse duration-100;
+  }
+
+  .skeleton_table_tr {
+    @apply border-0 border-table-background-gray border-b;
+  }
 }
 
 @layer components {
   .primary-scrollbar {
-    @apply overflow-y-scroll scrollbar scrollbar-thumb-gray-400 scrollbar-track-gray-100 scrollbar-w-1;
+    @apply overflow-y-scroll scrollbar scrollbar-thumb-gray-400 scrollbar-track-white scrollbar-w-1;
   }
   .primary-scrollbar-horizontal {
     @apply overflow-x-scroll scrollbar scrollbar-thumb-borderClr-gray scrollbar-track-gray-100 scrollbar-h-1;
@@ -85,7 +115,7 @@
   }
 
   .table_tr {
-    @apply h-max bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 even:bg-gray-100;
+    @apply h-max bg-white border-b;
   }
 
   .table_td {
@@ -135,7 +165,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
   /* color: #0e9dd181; */
 }

@@ -1,13 +1,13 @@
-import { ButtonType, ModalProps } from "../../../types";
-import CustomModal from "../common/CustomModal";
+import { ButtonType, ModalProps } from '@/types'
+import Modal from '../../ui/Modal'
 
 interface Props extends ModalProps {
-  heading: string;
-  details: string;
-  buttonProps: ButtonType;
-  type?: string;
-  buttonText: string;
-  cancelText?: string;
+  heading: string
+  details: string
+  buttonProps: ButtonType
+  type?: string
+  buttonText: string
+  cancelText?: string
 }
 
 const ManageModule = ({
@@ -20,29 +20,29 @@ const ManageModule = ({
   ...props
 }: Props) => {
   return (
-    <CustomModal {...props}>
-      <div className="">
-        <h3 className="text-lg sm:text-xl font-bold">{heading}</h3>
-        <p className="font-normal text-sm mt-2">{details}</p>
-        <div className="mt-3 flex gap-1 justify-between items-center">
+    <Modal {...props}>
+      <div className=''>
+        <h3 className='text-lg sm:text-xl font-bold'>{heading}</h3>
+        <p className='font-normal text-sm mt-2'>{details}</p>
+        <div className='mt-3 flex gap-1 justify-between items-center'>
           <button
-            className="button_primary_outline flex-1"
-            onClick={() => props.handleModal("cancelled")}
+            className='button_primary_outline flex-1'
+            onClick={() => props.handleModal('cancelled')}
           >
-            {cancelText || "Cancel"}
+            {cancelText || 'Cancel'}
           </button>
           <button
             {...buttonProps}
             className={`${
-              type === "delete" ? "button_danger " : "button_success"
+              type === 'delete' ? 'button_danger ' : 'button_success'
             } flex-1`}
           >
             {buttonText}
           </button>
         </div>
       </div>
-    </CustomModal>
-  );
-};
+    </Modal>
+  )
+}
 
-export default ManageModule;
+export default ManageModule

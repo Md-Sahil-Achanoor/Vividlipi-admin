@@ -1,42 +1,47 @@
-import { Field, Form, Formik, FormikHelpers } from "formik";
-import { useEffect } from "react";
-import { BsArrowRightShort } from "react-icons/bs";
-import { useAppDispatch, useAppSelector } from "../../../app/store";
+import { useAppDispatch, useAppSelector } from '@/app/store'
+import CustomInput from '@/components/form/CustomInput'
+import InfiniteSelect from '@/components/form/InfiniteSelect'
+import Modal from '@/components/ui/Modal'
 import {
   useGetCategoriesQuery,
   useManageSubCategoryMutation,
-} from "../../../feature/category/categoryQuery";
-import { coreAction } from "../../../feature/core/coreSlice";
-import { CategoryResponse, SubCategory } from "../../../types";
-import { cn } from "../../../utils/twmerge";
-import CustomInput from "../../elements/InputComponents/CustomInput";
-import InfiniteSelect from "../../elements/InputComponents/InfiniteSelect";
-import CustomModal from "../../elements/common/CustomModal";
+} from '@/feature/category/categoryQuery'
+import { categoryAction } from '@/feature/category/categorySlice'
+import { coreAction } from '@/feature/core/coreSlice'
+import { IManageSubCategory, subCategorySchema } from '@/models'
+import { CategoryResponse } from '@/types'
+import { cn } from '@/utils/twmerge'
+import { Field, Form, Formik, FormikHelpers } from 'formik'
+import { useEffect } from 'react'
+import { BsArrowRightShort } from 'react-icons/bs'
 
-const initialValues: SubCategory = {
-  title: "",
+const initialValues: IManageSubCategory = {
+  title: '',
+  Slug: '',
   category: null,
-};
+}
 
 const ManageSubCategory = () => {
-  const { type, open } = useAppSelector((state) => state.core);
-  const { selectedCategory } = useAppSelector((state) => state.category);
-  const [manageSubCategory, { isLoading }] = useManageSubCategoryMutation();
-  const dispatch = useAppDispatch();
+  const { type, open } = useAppSelector((state) => state.core)
+  const { selectedSubCategory, singleSubCategory } = useAppSelector(
+    (state) => state.category,
+  )
+  const [manageSubCategory, { isLoading }] = useManageSubCategoryMutation()
+  const dispatch = useAppDispatch()
   const handleModal = (type: string) => {
-    if (type === "cancelled") {
-      // do nothing
-      dispatch(coreAction.toggleModal({ open: false, type: "" }));
+    if (type === 'cancelled') {
+      dispatch(coreAction.toggleModal({ open: false, type: '' }))
+      dispatch(categoryAction.setSelectedSubCategory(null))
     }
-  };
+  }
 
   const onSubmit = async (
-    values: SubCategory,
-    { setSubmitting, resetForm }: FormikHelpers<SubCategory>
+    values: IManageSubCategory,
+    { setSubmitting, resetForm }: FormikHelpers<IManageSubCategory>,
   ) => {
-    console.log("values", values);
+    // console.log("values", values, selectedSubCategory);
     await manageSubCategory({
-      id: selectedCategory?.id as number,
+      id: selectedSubCategory?.id as number,
       data: {
         ...values,
         category: values?.category?.id as number,
@@ -45,73 +50,75 @@ const ManageSubCategory = () => {
         setSubmitting,
         resetForm,
       },
-    });
-  };
+    })
+  }
   const {
     isLoading: categoryLoading,
     refetch: categoryRefetch,
     data: categoryList,
     isError: categoryIsError,
-    error: categoryErrorMessage,
+    // error: categoryErrorMessage,
   } = useGetCategoriesQuery(
     {
       conditions: {
-        type: "category1",
+        type: 'category1',
       },
     },
     {
-      skip: !open && type !== "manage-sub-category",
-    }
-  );
+      skip: !open && type !== 'manage-sub-category',
+    },
+  )
 
   useEffect(() => {
     if (open) {
-      categoryRefetch();
+      categoryRefetch()
     }
-  }, [open]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open])
 
   return (
-    <CustomModal
+    <Modal
       classes={
-        type === "manage-sub-category" && open
+        type === 'manage-sub-category' && open
           ? {
-              top: "visible",
-              body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
+              top: 'visible',
+              body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px]`,
             }
           : {
-              top: "invisible",
-              body: "-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]",
+              top: 'invisible',
+              body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
             }
       }
       handleModal={handleModal}
-      wrapperClass="h-full"
+      wrapperClass='h-full'
       headText={
-        selectedCategory?.id ? "Update Sub Category" : "Create Sub Category"
+        selectedSubCategory?.id ? 'Update Sub Category' : 'Create Sub Category'
       }
       isModalHeader
       outSideClick
     >
-      <div className="w-full h-full">
+      <div className='w-full h-full'>
         <Formik
-          initialValues={initialValues}
-          // validationSchema={manageStageSchema}
+          initialValues={singleSubCategory || initialValues}
+          validationSchema={subCategorySchema}
           onSubmit={onSubmit}
           enableReinitialize
         >
           {({ isSubmitting, values, setFieldValue }) => (
             <Form noValidate>
-              <div className="mt-2">
+              {/* {console.log(JSON.stringify(errors))} */}
+              <div className='mt-2'>
                 <div>
                   <Field
-                    label={"Category"}
-                    name="cat1"
+                    label='Category'
+                    name='category'
                     isRequired
                     renderData={categoryList?.data}
                     isLoading={categoryLoading}
                     isError={categoryIsError}
-                    errorMessage={categoryErrorMessage}
+                    errorMessage='Failed to fetch categories'
                     renderItem={(item: CategoryResponse) => (
-                      <span className="uppercase">{item?.title}</span>
+                      <span className='uppercase'>{item?.title}</span>
                     )}
                     isActive={(item: CategoryResponse) =>
                       values?.category?.id === item?.id
@@ -120,19 +127,19 @@ const ManageSubCategory = () => {
                       return (
                         <span
                           className={cn(
-                            "text-sm text-gray-700 truncate",
-                            values?.category?.title && "uppercase"
+                            'text-sm text-gray-700 truncate',
+                            values?.category?.title && 'uppercase',
                           )}
                         >
-                          {values?.category?.title || "Select Category"}
+                          {values?.category?.title || 'Select Category'}
                         </span>
-                      );
+                      )
                     }}
                     onChangeCallback={(item: CategoryResponse) => {
-                      setFieldValue(`category`, item);
+                      setFieldValue(`category`, item)
                     }}
                     clearData={() => {
-                      setFieldValue(`category`, null);
+                      setFieldValue(`category`, null)
                     }}
                     isSelected={values?.category !== null}
                     component={InfiniteSelect}
@@ -141,31 +148,40 @@ const ManageSubCategory = () => {
                 </div>
 
                 <Field
-                  name="title"
-                  label={"Category Name"}
-                  type="text"
+                  name='title'
+                  label='Category Name'
+                  type='text'
                   component={CustomInput}
-                  placeholder="Type here..."
+                  placeholder='Type here...'
+                  isRequired
+                />
+
+                <Field
+                  name='Slug'
+                  label='Slug'
+                  type='text'
+                  component={CustomInput}
+                  placeholder='Type here...'
                   isRequired
                 />
               </div>
               {/* <div className="flex"> */}
               <button
-                type="submit"
-                className="button_primary"
+                type='submit'
+                className='button_primary'
                 disabled={isSubmitting || isLoading}
               >
                 {isLoading || isSubmitting ? (
                   <>
-                    <span className="w-5 h-5 border-2 animate-spin rounded-full border-transparent border-t-white mr-2"></span>
-                    <span className="font-medium">Processing</span>
+                    <span className='w-5 h-5 border-2 animate-spin rounded-full border-transparent border-t-white mr-2' />
+                    <span className='font-medium'>Processing</span>
                   </>
                 ) : (
                   <>
-                    <span className="font-medium">
-                      {selectedCategory?.id ? "Update" : "Create"}
+                    <span className='font-medium'>
+                      {selectedSubCategory?.id ? 'Update' : 'Create'}
                     </span>
-                    <span className="text-2xl ml-1">
+                    <span className='text-2xl ml-1'>
                       <BsArrowRightShort />
                     </span>
                   </>
@@ -176,8 +192,8 @@ const ManageSubCategory = () => {
           )}
         </Formik>
       </div>
-    </CustomModal>
-  );
-};
+    </Modal>
+  )
+}
 
-export default ManageSubCategory;
+export default ManageSubCategory
