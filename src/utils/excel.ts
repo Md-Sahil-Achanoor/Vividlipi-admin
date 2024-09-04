@@ -31,10 +31,10 @@ export const downloadXlsx = <T extends object>(
   const ws = XLSX.utils.json_to_sheet(data)
   const wb = XLSX.utils.book_new()
   const rows = ws['!rows'] || []
-  console.log(`\n\n ~ rows:`, ws, wb, rows)
+  // console.log(`\n\n ~ rows:`, ws, wb, rows)
   for (let i = 0; i < rows.length; i++) {
-    const row = rows[i]
-    console.log(`\n\n row:`, row)
+    // const row = rows[i]
+    // console.log(`\n\n row:`, row)
   }
   XLSX.utils.book_append_sheet(wb, ws, 'SheetJS')
   XLSX.writeFile(wb, name)

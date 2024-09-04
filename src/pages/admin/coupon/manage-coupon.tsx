@@ -178,11 +178,11 @@ const ManageCoupon = () => {
       skip: !category1?.length,
     },
   )
-  console.log(
-    `\n\n ~ ManageCoupon ~ publisherIsError:`,
-    publisherIsError,
-    publisherList,
-  )
+  // console.log(
+  //   `\n\n ~ ManageCoupon ~ publisherIsError:`,
+  //   publisherIsError,
+  //   publisherList,
+  // )
 
   const getProductQuery = () => {
     const query: Partial<ProductQuery> = {

@@ -34,7 +34,7 @@ const BulkUpload = ({ uploadType }: Props) => {
   const { items, readExcel, setItems } = useExcelReader()
   // const [file, setFile] = useState<File | null>(null);
   const [bulkUpload, { isLoading }] = useBulkUploadMutation()
-  console.log(`\n\n items:`, items)
+  // console.log(`\n\n items:`, items)
   const formRef = useRef<FormikProps<FileUploadType>>(null)
   // const [values, setValues] = useState<FileUploadType | null>(null);
   const { type } = useAppSelector((state) => state.core)

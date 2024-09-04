@@ -253,7 +253,7 @@ const categoryQuery = API.injectEndpoints({
         try {
           const result = await queryFulfilled
           if (result?.data?.status === 1) {
-            console.log(`\n\n _arg:`, _arg.query)
+            // console.log(`\n\n _arg:`, _arg.query)
             dispatch(
               categoryQuery.util.updateQueryData(
                 'getCategories',
