@@ -15,7 +15,16 @@ export const couponSchema = Yup.object().shape({
     .matches(alphanumericOnly, 'Alphanumeric characters only allowed')
     .required('Coupon name is required'), // Alphanumeric, all caps, no spaces
   start_date: Yup.string().required('Start Date is Required'), // Starts at 12 AM on this date
-  end_date: Yup.string().required('End Date is Required'), // Ends at 12 PM on this date
+  end_date: Yup.string()
+    .required('End Date is Required')
+    .test({
+      name: 'end_date',
+      message: 'End Date must be greater than start date',
+      test: function (value) {
+        const { start_date } = this.parent
+        return new Date(value) > new Date(start_date)
+      },
+    }), // Ends at 12 PM on this date
   discount_type: Yup.string()
     .oneOf(['PERCENTAGE', 'VALUE'], 'Invalid discount type')
     .required('Discount type is required'), // Can be 'PERCENTAGE' or 'VALUE'
