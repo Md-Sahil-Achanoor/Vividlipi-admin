@@ -84,7 +84,7 @@ const couponQuery = API.injectEndpoints({
             options?.setSubmitting(false)
             dispatch(couponAction.resetCoupon())
             toast.success(result?.data?.data)
-            options?.router?.('/admin/coupons/coupon-list')
+            options?.router?.('/admin/coupon/coupon-list')
           } else {
             toast.error(result?.data?.message || 'Something went wrong!')
           }
