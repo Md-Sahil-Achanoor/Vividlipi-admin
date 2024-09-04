@@ -1,6 +1,6 @@
+import Logo from '@/components/atoms/Logo'
 import { useCallback, useState } from 'react'
 import { RxCross2 } from 'react-icons/rx'
-import Logo from '@/components/atoms/Logo'
 import { useAppSelector } from '../../app/store'
 import { SidebarProps } from '../../types'
 import { cn } from '../../utils/twmerge'
@@ -50,7 +50,7 @@ const Sidebar = ({
               className='absolute right-4 cursor-pointer top-1/2 -translate-y-1/2'
               onClick={(e) => {
                 e.stopPropagation()
-                console.log('close')
+                // console.log('close')
                 toggleMobileMenu(false)
               }}
             >

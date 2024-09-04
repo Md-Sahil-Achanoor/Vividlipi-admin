@@ -178,6 +178,11 @@ const ManageCoupon = () => {
       skip: !category1?.length,
     },
   )
+  // console.log(
+  //   `\n\n ~ ManageCoupon ~ publisherIsError:`,
+  //   publisherIsError,
+  //   publisherList,
+  // )
 
   const getProductQuery = () => {
     const query: Partial<ProductQuery> = {
@@ -306,7 +311,16 @@ const ManageCoupon = () => {
                           isRequired
                           renderData={categoryList?.data}
                           isLoading={categoryLoading}
-                          isError={categoryIsError}
+                          isError={
+                            typeof categoryIsError === 'string'
+                              ? categoryIsError
+                              : false
+                          }
+                          errorMessage={
+                            typeof categoryIsError === 'string'
+                              ? categoryIsError
+                              : 'Failed to load category'
+                          }
                           renderItem={(item: CategoryResponse) => (
                             <>{item?.title}</>
                           )}
@@ -368,10 +382,13 @@ const ManageCoupon = () => {
                               isError={
                                 typeof category2IsError === 'string'
                                   ? category2IsError
-                                  : 'Failed to load sub categories'
+                                  : false
                               }
-                              // errorMessage={category2ErrorMessage}
-                              errorMessage='Failed to fetch sub categories'
+                              errorMessage={
+                                typeof category2IsError === 'string'
+                                  ? category2IsError
+                                  : 'Failed to load sub category'
+                              }
                               // reload={()}
                               // listRef={batchListRef}
                               renderItem={(item: CategoryResponse) => (
@@ -430,6 +447,11 @@ const ManageCoupon = () => {
                               isError={
                                 typeof productIsError === 'string'
                                   ? productIsError
+                                  : false
+                              }
+                              errorMessage={
+                                typeof authorIsError === 'string'
+                                  ? authorIsError
                                   : 'Failed to load product'
                               }
                               renderItem={(item: ProductResponse) => (
@@ -497,6 +519,11 @@ const ManageCoupon = () => {
                               isError={
                                 typeof publisherIsError === 'string'
                                   ? publisherIsError
+                                  : false
+                              }
+                              errorMessage={
+                                typeof authorIsError === 'string'
+                                  ? authorIsError
                                   : 'Failed to load publisher'
                               }
                               renderItem={(item: PublisherResponse) => (
@@ -558,7 +585,12 @@ const ManageCoupon = () => {
                               isError={
                                 typeof authorIsError === 'string'
                                   ? authorIsError
-                                  : 'Failed to load author'
+                                  : false
+                              }
+                              errorMessage={
+                                typeof authorIsError === 'string'
+                                  ? authorIsError
+                                  : "Failed to load author's"
                               }
                               renderItem={(item: AuthorResponse) => (
                                 <>{item?.Name}</>

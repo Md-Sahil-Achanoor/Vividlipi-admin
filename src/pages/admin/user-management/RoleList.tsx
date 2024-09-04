@@ -84,7 +84,7 @@ const RoleList = () => {
     const data = Object?.keys(items)?.map?.(
       (key) => (getActualRole as any)?.[key],
     )
-    console.log(`\n\n data:`, data)
+    // console.log(`\n\n data:`, data)
     return data
     // return data?.filter?.((item) => item !== "");
   }
