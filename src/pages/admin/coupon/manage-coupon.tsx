@@ -254,6 +254,7 @@ const ManageCoupon = () => {
                         label='Coupon Name'
                         component={CustomInput}
                         placeholder='Enter Name'
+                        isRequired
                       />
 
                       <Field
@@ -264,6 +265,7 @@ const ManageCoupon = () => {
                           { name: 'Percentage', value: 'PERCENTAGE' },
                           { name: 'Amount', value: 'VALUE' },
                         ]}
+                        isRequired
                       />
 
                       <Field
@@ -280,6 +282,7 @@ const ManageCoupon = () => {
                             : 'Enter Discount Value'
                         }
                         type='number'
+                        isRequired
                       />
 
                       <Field
@@ -288,6 +291,7 @@ const ManageCoupon = () => {
                         component={CustomInput}
                         placeholder='Enter Minimum Cart Value'
                         type='number'
+                        isRequired
                       />
 
                       <Field
@@ -295,20 +299,22 @@ const ManageCoupon = () => {
                         label='Start Date'
                         component={CustomInput}
                         type='date'
+                        isRequired
                       />
 
                       <Field
                         name='end_date'
                         label='End Date'
                         component={CustomInput}
+                        min={values?.start_date}
                         type='date'
+                        isRequired
                       />
 
                       <div className='col-span-2'>
                         <Field
                           label='Category 1'
                           name='category_1'
-                          isRequired
                           renderData={categoryList?.data}
                           isLoading={categoryLoading}
                           isError={
@@ -376,7 +382,6 @@ const ManageCoupon = () => {
                             <Field
                               label='Sub Category'
                               name='category_2'
-                              isRequired
                               renderData={category2List?.data}
                               isLoading={category2Loading}
                               isError={
@@ -441,7 +446,6 @@ const ManageCoupon = () => {
                             <Field
                               label='Product'
                               name='product_ids'
-                              isRequired
                               renderData={productList?.data}
                               isLoading={productLoading}
                               isError={
@@ -513,7 +517,6 @@ const ManageCoupon = () => {
                             <Field
                               label='Publisher'
                               name='publisher_ids'
-                              isRequired
                               renderData={publisherList?.data}
                               isLoading={publisherLoading}
                               isError={
@@ -579,7 +582,6 @@ const ManageCoupon = () => {
                             <Field
                               label='Author'
                               name='author_ids'
-                              isRequired
                               renderData={authorList?.data}
                               isLoading={authorLoading}
                               isError={
