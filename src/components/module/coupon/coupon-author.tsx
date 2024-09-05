@@ -1,6 +1,7 @@
 import NoTableData from '@/components/atoms/NoTableData'
 import Table from '@/components/ui/Table'
 import { AuthorResponse } from '@/types'
+import { truncate } from '@/utils/file'
 
 const authorListTableHead = ['S.N.', 'Name', 'Description']
 
@@ -30,7 +31,9 @@ const CouponAuthor = (props: CouponAuthorProps) => {
                     {index + 1}
                   </th>
                   <td className='table_td'>{item?.Name}</td>
-                  <td className='table_td'>{item?.description}</td>
+                  <td className='table_td'>
+                    {truncate(item?.description, 50)}
+                  </td>
                 </tr>
               ))
             ) : (

@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { CouponResponse, CouponState } from '../../types'
+import { CategoryResponse, CouponResponse, CouponState } from '../../types'
 
 const initialState: CouponState = {
   selectedCoupon: null,
   singleCoupon: null,
+  selectedCategories: [],
 }
 
 const couponSlice = createSlice({
@@ -13,6 +14,7 @@ const couponSlice = createSlice({
     resetCoupon: (state) => {
       state.selectedCoupon = null
       state.singleCoupon = null
+      state.selectedCategories = []
     },
     setSelectedCoupon: (
       state,
@@ -33,9 +35,18 @@ const couponSlice = createSlice({
           publisher_ids: action?.payload?.publisher_ids,
           author_ids: action?.payload?.author_ids,
         }
+        state.selectedCategories = action?.payload
+          ?.category_1 as CategoryResponse[]
       } else {
         state.singleCoupon = null
+        state.selectedCategories = []
       }
+    },
+    setSelectedCategories: (
+      state,
+      action: PayloadAction<CategoryResponse[]>,
+    ) => {
+      state.selectedCategories = action.payload
     },
   },
 })

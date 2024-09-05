@@ -1,4 +1,5 @@
 import { IManageCoupon } from '@/models'
+import { CategoryResponse } from '../category'
 import { IStore, ReqQuery } from '../common'
 
 export type Coupon = IManageCoupon
@@ -26,4 +27,5 @@ export interface CouponQuery extends ReqQuery {
 export interface CouponState extends IStore {
   selectedCoupon: CouponResponse | null
   singleCoupon: IManageCoupon | null
+  selectedCategories: CategoryResponse[]
 }
