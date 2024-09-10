@@ -31,6 +31,7 @@ import {
   ProductResponse,
   PublisherResponse,
 } from '@/types'
+import { toCapitalize } from '@/utils/capitalize'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { BsArrowRightShort } from 'react-icons/bs'
@@ -125,7 +126,7 @@ const ManageCoupon = () => {
   }
 
   const {
-    isLoading: categoryLoading,
+    isFetching: categoryLoading,
     refetch: categoryRefetch,
     data: categoryList,
     isError: categoryIsError,
@@ -137,7 +138,7 @@ const ManageCoupon = () => {
   })
 
   const {
-    isLoading: category2Loading,
+    isFetching: category2Loading,
     // refetch: category2Refetch,
     data: category2List,
     isError: category2IsError,
@@ -154,7 +155,7 @@ const ManageCoupon = () => {
   )
 
   const {
-    isLoading: authorLoading,
+    isFetching: authorLoading,
     // refetch: authorRefetch,
     data: authorList,
     isError: authorIsError,
@@ -171,7 +172,7 @@ const ManageCoupon = () => {
   )
 
   const {
-    isLoading: publisherLoading,
+    isFetching: publisherLoading,
     // refetch: publisherRefetch,
     data: publisherList,
     isError: publisherIsError,
@@ -198,7 +199,7 @@ const ManageCoupon = () => {
   }
 
   const {
-    isLoading: productLoading,
+    isFetching: productLoading,
     // refetch: productRefetch,
     data: productList,
     isError: productIsError,
@@ -262,9 +263,6 @@ const ManageCoupon = () => {
     >
       <Card className='border rounded-md'>
         <div className='max-w-screen-lg mx-auto'>
-          {/* <h3 className="text-center text-2xl font-semibold text-pink-500">
-            Create Coupon
-          </h3> */}
           {id && loading ? (
             <Loader />
           ) : (
@@ -277,7 +275,7 @@ const ManageCoupon = () => {
               >
                 {({ isSubmitting, values, setFieldValue }) => (
                   <Form>
-                    {/* {console.log(values)} */}
+                    {/* {console.log(values, errors)} */}
                     <div className='mt-5 grid grid-cols-2 gap-x-3'>
                       <Field
                         name='coupon_name'
@@ -358,7 +356,7 @@ const ManageCoupon = () => {
                               : 'Failed to load category'
                           }
                           renderItem={(item: CategoryResponse) => (
-                            <>{item?.title}</>
+                            <>{toCapitalize(item?.title)}</>
                           )}
                           isActive={(item: CategoryResponse) =>
                             values?.category_1?.find(
@@ -370,7 +368,7 @@ const ManageCoupon = () => {
                               data={values?.category_1 as CategoryResponse[]}
                               defaultName='Select...'
                               displayName='title'
-                              name={(data) => data?.title}
+                              name={(data) => toCapitalize(data?.title)}
                               onClick={(item) => {
                                 setFieldValue(
                                   'category_1',
@@ -392,7 +390,7 @@ const ManageCoupon = () => {
                                 couponAction.setSelectedCategories([
                                   ...data,
                                   item,
-                                ]),
+                                ] as CategoryResponse[]),
                               )
                               // category2Refetch()
                             }
@@ -436,7 +434,7 @@ const ManageCoupon = () => {
                               // reload={()}
                               // listRef={batchListRef}
                               renderItem={(item: CategoryResponse) => (
-                                <>{item?.title}</>
+                                <>{toCapitalize(item?.title)}</>
                               )}
                               isActive={(item: CategoryResponse) =>
                                 values?.category_2?.find(
@@ -450,7 +448,7 @@ const ManageCoupon = () => {
                                   }
                                   defaultName='Select...'
                                   displayName='title'
-                                  name={(data) => data?.title}
+                                  name={(data) => toCapitalize(data?.title)}
                                   onClick={(item) => {
                                     setFieldValue(
                                       'category_2',
