@@ -36,7 +36,7 @@ const ErrorPage = () => {
             Enter or visit the correct URL.
           </p>
           <div className='w-max mx-auto my-5'>
-            <Link to='/' className='button_primary'>
+            <Link to='/' className='button_sm_primary text-sm'>
               Return Home
             </Link>
           </div>
