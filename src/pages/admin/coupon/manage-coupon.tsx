@@ -1,4 +1,4 @@
-import { useAppSelector } from '@/app/store'
+import { useAppDispatch, useAppSelector } from '@/app/store'
 import Loader from '@/components/atoms/Loader'
 import MultiSelectItem from '@/components/atoms/MultiSelectItem'
 import CustomInput from '@/components/form/CustomInput'
@@ -14,6 +14,7 @@ import {
   useGetCouponByIdQuery,
   useManageCouponMutation,
 } from '@/feature/coupon/couponQuery'
+import { couponAction } from '@/feature/coupon/couponSlice'
 import { useGetProductByCategory1Query } from '@/feature/product/productQuery'
 import { usePublisherByCat1Query } from '@/feature/publisher/publisherQuery'
 import useDebounce from '@/hooks/useDebounce'
@@ -30,8 +31,9 @@ import {
   ProductResponse,
   PublisherResponse,
 } from '@/types'
+import { toCapitalize } from '@/utils/capitalize'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { BsArrowRightShort } from 'react-icons/bs'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -52,15 +54,22 @@ const initialValues: Coupon = {
 const ManageCoupon = () => {
   const { id } = useParams()
   const router = useNavigate()
+  const dispatch = useAppDispatch()
   // const [values] = useState<Coupon | null>(null)
-  const [category1, setCategory1] = useState<CategoryResponse[]>([])
+  // const [category1, setCategory1] = useState<CategoryResponse[]>([])
   const [search, setSearch] = useState<string>('')
+  const [subCategorySearch, setSubCategorySearch] = useState<string>('')
+  const [publisherSearch, setPublisherSearch] = useState<string>('')
+  const [authorSearch, setAuthorSearch] = useState<string>('')
   const { value, onChange } = useDebounce(() => setSearch(value), 1000)
   // const { value: value1, onChange: onChange1 } = useDebounce(
   //   () => setSearch(value1),
   //   1000,
   // )
-  const { selectedCoupon } = useAppSelector((state) => state.coupon)
+  const { selectedCoupon, selectedCategories } = useAppSelector(
+    (state) => state.coupon,
+  )
+  // console.log(`\n\n ~ ManageCoupon ~ selectedCoupon:`, selectedCoupon)
   // const [category2, setCategory2] = useState<CategoryResponse | null>(null)
   const breadcrumbItem: BreadCrumbItem[] = [
     {
@@ -117,7 +126,7 @@ const ManageCoupon = () => {
   }
 
   const {
-    isLoading: categoryLoading,
+    isFetching: categoryLoading,
     refetch: categoryRefetch,
     data: categoryList,
     isError: categoryIsError,
@@ -129,7 +138,7 @@ const ManageCoupon = () => {
   })
 
   const {
-    isLoading: category2Loading,
+    isFetching: category2Loading,
     // refetch: category2Refetch,
     data: category2List,
     isError: category2IsError,
@@ -137,16 +146,16 @@ const ManageCoupon = () => {
   } = useGetSubCategoryByCategoryIdsQuery(
     {
       query: {
-        cid: JSON.stringify(category1?.map((cat) => String(cat?.id))),
+        cid: JSON.stringify(selectedCategories?.map((cat) => String(cat?.id))),
       },
     },
     {
-      skip: !category1?.length,
+      skip: !selectedCategories?.length,
     },
   )
 
   const {
-    isLoading: authorLoading,
+    isFetching: authorLoading,
     // refetch: authorRefetch,
     data: authorList,
     isError: authorIsError,
@@ -154,16 +163,16 @@ const ManageCoupon = () => {
   } = useGetAuthorsByCategory1Query(
     {
       query: {
-        cid: JSON.stringify(category1?.map((cat) => String(cat?.id))),
+        cid: JSON.stringify(selectedCategories?.map((cat) => String(cat?.id))),
       },
     },
     {
-      skip: !category1?.length,
+      skip: !selectedCategories?.length,
     },
   )
 
   const {
-    isLoading: publisherLoading,
+    isFetching: publisherLoading,
     // refetch: publisherRefetch,
     data: publisherList,
     isError: publisherIsError,
@@ -171,22 +180,17 @@ const ManageCoupon = () => {
   } = usePublisherByCat1Query(
     {
       query: {
-        cid: JSON.stringify(category1?.map((cat) => String(cat?.id))),
+        cid: JSON.stringify(selectedCategories?.map((cat) => String(cat?.id))),
       },
     },
     {
-      skip: !category1?.length,
+      skip: !selectedCategories?.length,
     },
   )
-  // console.log(
-  //   `\n\n ~ ManageCoupon ~ publisherIsError:`,
-  //   publisherIsError,
-  //   publisherList,
-  // )
 
   const getProductQuery = () => {
     const query: Partial<ProductQuery> = {
-      cid: JSON.stringify(category1?.map((cat) => String(cat?.id))),
+      cid: JSON.stringify(selectedCategories?.map((cat) => String(cat?.id))),
     }
     if (search) {
       query.search = search
@@ -195,7 +199,7 @@ const ManageCoupon = () => {
   }
 
   const {
-    isLoading: productLoading,
+    isFetching: productLoading,
     // refetch: productRefetch,
     data: productList,
     isError: productIsError,
@@ -205,7 +209,7 @@ const ManageCoupon = () => {
       query: getProductQuery(),
     },
     {
-      skip: !category1?.length,
+      skip: !selectedCategories?.length,
     },
   )
 
@@ -225,6 +229,33 @@ const ManageCoupon = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
+  const filterSubCategoryData = useMemo(() => {
+    if (subCategorySearch) {
+      return category2List?.data?.filter((item) =>
+        item?.title?.toLowerCase().includes(subCategorySearch.toLowerCase()),
+      )
+    }
+    return category2List?.data
+  }, [subCategorySearch, category2List?.data])
+
+  const filterAuthorData = useMemo(() => {
+    if (authorSearch) {
+      return authorList?.data?.filter((item) =>
+        item?.Name?.toLowerCase().includes(authorSearch.toLowerCase()),
+      )
+    }
+    return authorList?.data
+  }, [authorSearch, authorList?.data])
+
+  const filterPublisherData = useMemo(() => {
+    if (publisherSearch) {
+      return publisherList?.data?.filter((item) =>
+        item?.Name?.toLowerCase().includes(publisherSearch.toLowerCase()),
+      )
+    }
+    return publisherList?.data
+  }, [publisherSearch, publisherList?.data])
+
   return (
     <PageLayout
       title={id ? 'Edit Coupon' : 'Create Coupon'}
@@ -232,9 +263,6 @@ const ManageCoupon = () => {
     >
       <Card className='border rounded-md'>
         <div className='max-w-screen-lg mx-auto'>
-          {/* <h3 className="text-center text-2xl font-semibold text-pink-500">
-            Create Coupon
-          </h3> */}
           {id && loading ? (
             <Loader />
           ) : (
@@ -247,7 +275,7 @@ const ManageCoupon = () => {
               >
                 {({ isSubmitting, values, setFieldValue }) => (
                   <Form>
-                    {/* {console.log(values)} */}
+                    {/* {console.log(values, errors)} */}
                     <div className='mt-5 grid grid-cols-2 gap-x-3'>
                       <Field
                         name='coupon_name'
@@ -328,7 +356,7 @@ const ManageCoupon = () => {
                               : 'Failed to load category'
                           }
                           renderItem={(item: CategoryResponse) => (
-                            <>{item?.title}</>
+                            <>{toCapitalize(item?.title)}</>
                           )}
                           isActive={(item: CategoryResponse) =>
                             values?.category_1?.find(
@@ -340,7 +368,7 @@ const ManageCoupon = () => {
                               data={values?.category_1 as CategoryResponse[]}
                               defaultName='Select...'
                               displayName='title'
-                              name={(data) => data?.title}
+                              name={(data) => toCapitalize(data?.title)}
                               onClick={(item) => {
                                 setFieldValue(
                                   'category_1',
@@ -358,7 +386,12 @@ const ManageCoupon = () => {
                             if (!isUnique) {
                               const data = values?.category_1 || []
                               setFieldValue('category_1', [...data, item])
-                              setCategory1([...data, item])
+                              dispatch(
+                                couponAction.setSelectedCategories([
+                                  ...data,
+                                  item,
+                                ] as CategoryResponse[]),
+                              )
                               // category2Refetch()
                             }
                           }}
@@ -367,7 +400,11 @@ const ManageCoupon = () => {
                               (cat) => cat?.id === item?.id,
                             )
                             setFieldValue('category_1', data)
-                            setCategory1(data as CategoryResponse[])
+                            dispatch(
+                              couponAction.setSelectedCategories(
+                                data as CategoryResponse[],
+                              ),
+                            )
                             // category2Refetch()
                           }}
                           isSelected={false}
@@ -382,7 +419,7 @@ const ManageCoupon = () => {
                             <Field
                               label='Sub Category'
                               name='category_2'
-                              renderData={category2List?.data}
+                              renderData={filterSubCategoryData}
                               isLoading={category2Loading}
                               isError={
                                 typeof category2IsError === 'string'
@@ -397,7 +434,7 @@ const ManageCoupon = () => {
                               // reload={()}
                               // listRef={batchListRef}
                               renderItem={(item: CategoryResponse) => (
-                                <>{item?.title}</>
+                                <>{toCapitalize(item?.title)}</>
                               )}
                               isActive={(item: CategoryResponse) =>
                                 values?.category_2?.find(
@@ -411,7 +448,7 @@ const ManageCoupon = () => {
                                   }
                                   defaultName='Select...'
                                   displayName='title'
-                                  name={(data) => data?.title}
+                                  name={(data) => toCapitalize(data?.title)}
                                   onClick={(item) => {
                                     setFieldValue(
                                       'category_2',
@@ -438,6 +475,16 @@ const ManageCoupon = () => {
                                 setFieldValue('category_2', data)
                               }}
                               component={InfiniteSelect}
+                              isInsideSearch
+                              searchProps={{
+                                value: subCategorySearch,
+                                onChange: (e: ChangeEvent<HTMLInputElement>) =>
+                                  setSubCategorySearch(e.target.value),
+                                placeholder: 'Search Product',
+                              }}
+                              onCloseCallback={() => {
+                                setSubCategorySearch('')
+                              }}
                               isAuth
                             />
                           </div>
@@ -515,9 +562,79 @@ const ManageCoupon = () => {
 
                           <div>
                             <Field
+                              label='Author'
+                              name='author_ids'
+                              renderData={filterAuthorData}
+                              isLoading={authorLoading}
+                              isError={
+                                typeof authorIsError === 'string'
+                                  ? authorIsError
+                                  : false
+                              }
+                              errorMessage={
+                                typeof authorIsError === 'string'
+                                  ? authorIsError
+                                  : "Failed to load author's"
+                              }
+                              renderItem={(item: AuthorResponse) => (
+                                <>{item?.Name}</>
+                              )}
+                              isActive={(item: AuthorResponse) =>
+                                values?.author_ids?.find(
+                                  (el) => el?.id === item?.id,
+                                )
+                              }
+                              renderName={() => (
+                                <MultiSelectItem<AuthorResponse>
+                                  data={values?.author_ids as AuthorResponse[]}
+                                  defaultName='Select...'
+                                  displayName='Name'
+                                  name={(data) => data?.Name}
+                                  onClick={(item) => {
+                                    setFieldValue(
+                                      'author_ids',
+                                      values?.author_ids?.filter(
+                                        (author) => author !== item,
+                                      ),
+                                    )
+                                  }}
+                                />
+                              )}
+                              onChangeCallback={(item: AuthorResponse) => {
+                                const isUnique = values?.author_ids?.find(
+                                  (author) => author?.id === item?.id,
+                                )
+                                if (!isUnique) {
+                                  const data = values?.author_ids || []
+                                  setFieldValue('author_ids', [...data, item])
+                                }
+                              }}
+                              clearData={(item: AuthorResponse) => {
+                                const data = values?.author_ids?.filter(
+                                  (author) => author?.id === item?.id,
+                                )
+                                setFieldValue('author_ids', data)
+                              }}
+                              component={InfiniteSelect}
+                              isInsideSearch
+                              searchProps={{
+                                value: authorSearch,
+                                onChange: (e: ChangeEvent<HTMLInputElement>) =>
+                                  setAuthorSearch(e.target.value),
+                                placeholder: 'Search Author',
+                              }}
+                              onCloseCallback={() => {
+                                setAuthorSearch('')
+                              }}
+                              isAuth
+                            />
+                          </div>
+
+                          <div>
+                            <Field
                               label='Publisher'
                               name='publisher_ids'
-                              renderData={publisherList?.data}
+                              renderData={filterPublisherData}
                               isLoading={publisherLoading}
                               isError={
                                 typeof publisherIsError === 'string'
@@ -574,66 +691,16 @@ const ManageCoupon = () => {
                                 setFieldValue('publisher_ids', data)
                               }}
                               component={InfiniteSelect}
-                              isAuth
-                            />
-                          </div>
-
-                          <div>
-                            <Field
-                              label='Author'
-                              name='author_ids'
-                              renderData={authorList?.data}
-                              isLoading={authorLoading}
-                              isError={
-                                typeof authorIsError === 'string'
-                                  ? authorIsError
-                                  : false
-                              }
-                              errorMessage={
-                                typeof authorIsError === 'string'
-                                  ? authorIsError
-                                  : "Failed to load author's"
-                              }
-                              renderItem={(item: AuthorResponse) => (
-                                <>{item?.Name}</>
-                              )}
-                              isActive={(item: AuthorResponse) =>
-                                values?.author_ids?.find(
-                                  (el) => el?.id === item?.id,
-                                )
-                              }
-                              renderName={() => (
-                                <MultiSelectItem<AuthorResponse>
-                                  data={values?.author_ids as AuthorResponse[]}
-                                  defaultName='Select...'
-                                  displayName='Name'
-                                  name={(data) => data?.Name}
-                                  onClick={(item) => {
-                                    setFieldValue(
-                                      'author_ids',
-                                      values?.author_ids?.filter(
-                                        (author) => author !== item,
-                                      ),
-                                    )
-                                  }}
-                                />
-                              )}
-                              onChangeCallback={(item: AuthorResponse) => {
-                                const isUnique = values?.author_ids?.find(
-                                  (author) => author?.id === item?.id,
-                                )
-                                if (!isUnique) {
-                                  const data = values?.author_ids || []
-                                  setFieldValue('author_ids', [...data, item])
-                                }
+                              isInsideSearch
+                              searchProps={{
+                                value: publisherSearch,
+                                onChange: (e: ChangeEvent<HTMLInputElement>) =>
+                                  setPublisherSearch(e.target.value),
+                                placeholder: 'Search Publisher',
                               }}
-                              clearData={(item: AuthorResponse) => {
-                                const data = values?.author_ids?.filter(
-                                  (author) => author?.id === item?.id,
-                                )
-                                setFieldValue('author_ids', data)
+                              onCloseCallback={() => {
+                                setPublisherSearch('')
                               }}
-                              component={InfiniteSelect}
                               isAuth
                             />
                           </div>

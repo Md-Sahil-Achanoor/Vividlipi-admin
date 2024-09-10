@@ -1,13 +1,27 @@
 import { alphanumericOnly } from '@/utils/valid-image'
 import * as Yup from 'yup'
-import { authorResponseSchema } from '../author'
-import { productResponseSchema } from '../product'
-import { publisherResponseSchema } from '../publisher'
 
 export const categoryResponseSchema = Yup.object().shape({
   id: Yup.number().required('Category ID is required'),
   title: Yup.string().required('Category name is required'),
   Slug: Yup.string().required('Category slug is required'),
+})
+
+export const couponCategory = Yup.object().shape({
+  id: Yup.number(),
+  title: Yup.string(),
+  Slug: Yup.string(),
+})
+
+export const couponProduct = Yup.object().shape({
+  id: Yup.number(),
+  book_title: Yup.string(),
+  url_slug: Yup.string(),
+})
+
+export const couponAuthor = Yup.object().shape({
+  id: Yup.number(),
+  Name: Yup.string(),
 })
 
 export const couponSchema = Yup.object().shape({
@@ -46,11 +60,11 @@ export const couponSchema = Yup.object().shape({
   minimum_cart_value: Yup.number()
     .min(0, 'Negative value is not allowed')
     .required('Minimum cart value is required'), // Minimum cart value required
-  category_1: Yup.array().of(categoryResponseSchema),
-  category_2: Yup.array().of(categoryResponseSchema),
-  product_ids: Yup.array().of(productResponseSchema),
-  publisher_ids: Yup.array().of(publisherResponseSchema),
-  author_ids: Yup.array().of(authorResponseSchema),
+  category_1: Yup.array().of(couponCategory),
+  category_2: Yup.array().of(couponCategory),
+  product_ids: Yup.array().of(couponProduct),
+  publisher_ids: Yup.array().of(couponAuthor),
+  author_ids: Yup.array().of(couponAuthor),
 })
 
 export type IManageCoupon = Yup.InferType<typeof couponSchema>

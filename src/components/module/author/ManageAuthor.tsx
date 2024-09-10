@@ -30,11 +30,6 @@ const ManageAuthor = () => {
       dispatch(authorAction.setSelectedAuthor(null))
     }
   }
-  // console.log(
-  //   `\n\n ~ ManageAuthor ~ singleAuthor:`,
-  //   singleAuthor,
-  //   selectedAuthor,
-  // )
 
   const onSubmit = async (
     values: IManageAuthor,
