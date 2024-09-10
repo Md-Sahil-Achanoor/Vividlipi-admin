@@ -7,7 +7,12 @@ import CouponSubCategory from '@/components/module/coupon/coupon-sub-category'
 import { Card } from '@/components/ui/Card'
 import { useGetCouponByIdQuery } from '@/feature/coupon/couponQuery'
 import PageLayout from '@/layout/PageLayout'
-import { BreadCrumbItem, ProductResponse } from '@/types'
+import {
+  AuthorResponse,
+  BreadCrumbItem,
+  CategoryResponse,
+  ProductResponse,
+} from '@/types'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 const breadcrumbItem: BreadCrumbItem[] = [
@@ -89,10 +94,18 @@ const ViewCoupon = () => {
               <CouponProduct
                 data={(data?.data?.product_ids as ProductResponse[]) || []}
               />
-              <CouponCategory data={data?.data?.category_1 || []} />
-              <CouponSubCategory data={data?.data?.category_2 || []} />
-              <CouponAuthor data={data?.data?.author_ids || []} />
-              <CouponPublisher data={data?.data?.publisher_ids || []} />
+              <CouponCategory
+                data={(data?.data?.category_1 as CategoryResponse[]) || []}
+              />
+              <CouponSubCategory
+                data={(data?.data?.category_2 as CategoryResponse[]) || []}
+              />
+              <CouponAuthor
+                data={(data?.data?.author_ids as AuthorResponse[]) || []}
+              />
+              <CouponPublisher
+                data={(data?.data?.publisher_ids as AuthorResponse[]) || []}
+              />
             </div>
           )}
         </div>

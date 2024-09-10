@@ -11,7 +11,8 @@ const ManageRole = lazy(
 )
 const RoleList = lazy(() => import('@/pages/admin/user-management/RoleList'))
 const UserList = lazy(() => import('@/pages/admin/user-management/UserList'))
-const ErrorPage = lazy(() => import('../pages/NotFound'))
+const ErrorPage = lazy(() => import('../pages/error'))
+const NotFound = lazy(() => import('../pages/NotFound'))
 const AdminDashboard = lazy(() => import('../pages/admin/dashboard'))
 const MainCategoryList = lazy(() => import('../pages/admin/main-category'))
 const ProductList = lazy(() => import('../pages/admin/product'))
@@ -200,7 +201,7 @@ const router = createBrowserRouter([
   },
   {
     path: '*',
-    element: <ErrorPage />,
+    element: <NotFound />,
   },
 ])
 
