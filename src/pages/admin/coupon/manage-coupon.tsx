@@ -480,7 +480,7 @@ const ManageCoupon = () => {
                                 value: subCategorySearch,
                                 onChange: (e: ChangeEvent<HTMLInputElement>) =>
                                   setSubCategorySearch(e.target.value),
-                                placeholder: 'Search Product',
+                                placeholder: 'Search Sub Category',
                               }}
                               onCloseCallback={() => {
                                 setSubCategorySearch('')
