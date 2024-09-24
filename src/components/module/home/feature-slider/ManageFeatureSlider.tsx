@@ -28,9 +28,9 @@ const ManageFeatureSlider = () => {
   const [manageFeatureSlide, { isLoading }] = useManageFeatureSlideMutation()
   const { selectedFeatureSlider } = useAppSelector((state) => state.home)
   const dispatch = useAppDispatch()
+
   const handleModal = (type: string) => {
     if (type === 'cancelled') {
-      // do nothing
       dispatch(coreAction.toggleModal({ open: false, type: '' }))
       dispatch(homeAction.resetHome())
       formRef.current?.resetForm()
@@ -64,6 +64,7 @@ const ManageFeatureSlider = () => {
       },
     })
   }
+
   return (
     <Modal
       classes={
