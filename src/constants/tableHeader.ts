@@ -1,6 +1,13 @@
 import { TabItem } from '@/types'
 
-export const featureSliderHeader = ['SL', 'Text', 'Image', 'Position', 'Action']
+export const featureSliderHeader = [
+  'SL',
+  'Text',
+  'Image',
+  'Mobile Image',
+  'Position',
+  'Action',
+]
 
 export const featureSubSliderHeader = ['SL', 'Image', 'Action']
 

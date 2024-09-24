@@ -14,6 +14,7 @@ export const featureSliderSchema = Yup.object({
   redirectUrl: Yup.string().required('Redirect URL is Required'),
   contentpostionX: Yup.number().required('Position X is Required'),
   contentpositionY: Yup.number().required('Position Y is Required'),
+  MobileBannnerURL: Yup.string(),
   type: Yup.number(),
   typeid: Yup.number(),
 })

@@ -79,6 +79,17 @@ const FeatureSlider = () => {
                 />
               </td>
               <td className='table_td'>
+                <LazyLoadImage
+                  src={item?.MobileBannnerURL as string}
+                  alt={item?.home_text}
+                  placeholder={<PlaceholderImage />}
+                  effect='blur'
+                  width={40}
+                  height={40}
+                  className='w-10 h-10 object-cover rounded-full'
+                />
+              </td>
+              <td className='table_td'>
                 <div className='flex items-center gap-1'>
                   <span>X: {item?.contentpostion_X},</span>
                   <span>Y: {item?.contentpositionY}</span>
