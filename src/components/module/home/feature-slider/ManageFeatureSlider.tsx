@@ -119,7 +119,7 @@ const ManageFeatureSlider = () => {
                   <div className='col-span-2'>
                     <Field
                       name='file'
-                      label='Image'
+                      label='Website Banner'
                       maxFileSize={2}
                       isUpload={false}
                       component={FileUpload}
@@ -136,7 +136,7 @@ const ManageFeatureSlider = () => {
                   <div className='col-span-2'>
                     <Field
                       name='MobileBannnerURL'
-                      label='Mobile Banner URL'
+                      label='Mobile Banner'
                       component={FileUpload}
                       maxFileSize={10}
                       supportedString='jpg, jpeg, png'
