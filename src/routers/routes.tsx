@@ -26,6 +26,8 @@ const PrivateOutlet = lazy(() => import('./middleware/PrivateOutlet'))
 const AuthorList = lazy(() => import('@/pages/admin/author'))
 const HomePage = lazy(() => import('@/pages/admin/home'))
 
+const OrderUserList = lazy(() => import('@/pages/admin/order-management/user'))
+
 /**
  * @module { Router } @URLs
  * @description
@@ -175,6 +177,31 @@ const router = createBrowserRouter([
           { path: 'coupon-list/add-coupon', element: <ManageCoupon /> },
           { path: 'coupon-list/edit-coupon/:id', element: <ManageCoupon /> },
           { path: 'coupon-list/view-coupon/:id', element: <ViewCoupon /> },
+        ],
+      },
+
+      /**
+       * @SubModule { Order Management }
+       * @Role Admin
+       * */
+      {
+        path: 'order-management',
+        element: <AppWrapper />,
+        children: [
+          {
+            path: '',
+            element: <Navigate to='/admin/order-management/order-role-list' />,
+          },
+          {
+            path: 'order-role-list',
+            element: <AppWrapper />,
+            children: [
+              { path: '', element: <RoleList /> },
+              { path: 'order-add-role', element: <ManageRole /> },
+              { path: 'order-edit-role/:id', element: <ManageRole /> },
+            ],
+          },
+          { path: 'order-user-list', element: <OrderUserList /> },
         ],
       },
     ],

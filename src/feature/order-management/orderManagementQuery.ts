@@ -3,24 +3,24 @@ import { endpoints } from '@/constants/endpoints'
 import { coreAction } from '@/feature/core/coreSlice'
 import {
   ApiResponse,
+  AssignOrderQuery,
+  AssignOrderResponse,
+  IAssignOrderPayload,
   ManagePayload,
   ManagePayloadQuery,
   ManageQuery,
-  RolePermissionPayLoad,
-  RolePermissionQuery,
-  RolePermissionResponse,
-  UserManagementPayLoad,
-  UserManagementResponse,
+  OrderUserPayload,
+  OrderUserResponse,
 } from '@/types'
 import toast from 'react-hot-toast'
-import { userManagementAction } from './userManagementSlice'
+import { orderManagementAction } from './orderManagementSlice'
 
-const userManagementQuery = API.injectEndpoints({
+const orderManagementQuery = API.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
-    getRolePermissions: builder.query<
-      ApiResponse<RolePermissionResponse[]>,
-      ManageQuery<RolePermissionQuery>
+    getAssignOrders: builder.query<
+      ApiResponse<AssignOrderResponse[]>,
+      ManageQuery<AssignOrderQuery>
     >({
       query: ({ query }) => {
         return {
@@ -29,7 +29,7 @@ const userManagementQuery = API.injectEndpoints({
           params: query,
         }
       },
-      providesTags: ['RoleList'],
+      providesTags: ['AssignOrderList'],
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           await queryFulfilled
@@ -43,9 +43,9 @@ const userManagementQuery = API.injectEndpoints({
       },
     }),
 
-    getRolePermissionById: builder.query<
-      ApiResponse<RolePermissionResponse>,
-      ManageQuery<RolePermissionQuery>
+    getAssignOrderById: builder.query<
+      ApiResponse<AssignOrderResponse>,
+      ManageQuery<AssignOrderQuery>
     >({
       query: ({ query }) => ({
         url: endpoints.role_list,
@@ -56,7 +56,7 @@ const userManagementQuery = API.injectEndpoints({
         try {
           const result = await queryFulfilled
           dispatch(
-            userManagementAction.setSelectedRolePermission(result?.data?.data),
+            orderManagementAction.setSelectedAssignUser(result?.data?.data),
           )
         } catch (err: unknown) {
           // do nothing
@@ -69,9 +69,9 @@ const userManagementQuery = API.injectEndpoints({
     }),
 
     // POST
-    manageRolePermission: builder.mutation<
+    manageAssignOrder: builder.mutation<
       any,
-      ManagePayload<RolePermissionPayLoad, RolePermissionQuery>
+      ManagePayload<IAssignOrderPayload, AssignOrderQuery>
     >({
       query: ({ data, id }) => ({
         url: endpoints.role_list,
@@ -81,14 +81,14 @@ const userManagementQuery = API.injectEndpoints({
           id,
         },
       }),
-      invalidatesTags: ['RoleList'],
+      invalidatesTags: ['AssignOrderList'],
       async onQueryStarted({ options }, { queryFulfilled }) {
         try {
           const result = await queryFulfilled
           if (result?.data?.status === 1) {
             options?.resetForm()
             toast.success(result?.data?.message || 'Success')
-            options?.router?.('/admin/user-management/role-list')
+            options?.router?.('/admin/order-management/role-list')
           } else {
             toast.error(result?.data?.message || 'Something went wrong!')
           }
@@ -105,9 +105,9 @@ const userManagementQuery = API.injectEndpoints({
       },
     }),
 
-    deleteRolePermission: builder.mutation<
+    deleteAssignOrder: builder.mutation<
       any,
-      ManagePayloadQuery<RolePermissionQuery>
+      ManagePayloadQuery<AssignOrderQuery>
     >({
       query: ({ id }) => ({
         url: endpoints.role_list,
@@ -122,8 +122,8 @@ const userManagementQuery = API.injectEndpoints({
           if (result?.data?.status === 1) {
             dispatch(coreAction.toggleModal({ open: false, type: '' }))
             dispatch(
-              userManagementQuery.util.updateQueryData(
-                'getRolePermissions',
+              orderManagementQuery.util.updateQueryData(
+                'getAssignOrders',
                 {
                   query: {},
                 },
@@ -148,18 +148,18 @@ const userManagementQuery = API.injectEndpoints({
       },
     }),
 
-    getAdminUsers: builder.query<
-      ApiResponse<UserManagementResponse[]>,
-      ManageQuery<RolePermissionQuery>
+    getOrderUser: builder.query<
+      ApiResponse<OrderUserResponse[]>,
+      ManageQuery<AssignOrderQuery>
     >({
       query: ({ query }) => {
         return {
-          url: endpoints.subAdmin_list,
+          url: endpoints.order_user,
           method: 'GET',
           params: query,
         }
       },
-      providesTags: ['AdminUsers'],
+      providesTags: ['OrderUser'],
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           await queryFulfilled
@@ -173,19 +173,21 @@ const userManagementQuery = API.injectEndpoints({
       },
     }),
 
-    getAdminUserById: builder.query<
-      ApiResponse<UserManagementResponse>,
-      ManageQuery<RolePermissionQuery>
+    getOrderUserById: builder.query<
+      ApiResponse<OrderUserResponse>,
+      ManageQuery<AssignOrderQuery>
     >({
       query: ({ query }) => ({
-        url: endpoints.category,
+        url: endpoints.order_user,
         method: 'GET',
         params: query,
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled
-          dispatch(userManagementAction.setSelectedUser(result?.data?.data))
+          dispatch(
+            orderManagementAction.setSelectedOrderUser(result?.data?.data),
+          )
         } catch (err: unknown) {
           // do nothing
           const error = err as any
@@ -197,13 +199,13 @@ const userManagementQuery = API.injectEndpoints({
     }),
 
     // POST
-    manageAdminUser: builder.mutation<
+    manageOrderUser: builder.mutation<
       any,
-      ManagePayload<UserManagementPayLoad, RolePermissionQuery>
+      ManagePayload<OrderUserPayload, AssignOrderQuery>
     >({
       query: ({ data, id }) => {
         return {
-          url: endpoints.subAdmin_list,
+          url: endpoints.order_user,
           method: id ? 'PUT' : 'POST',
           body: data,
           params: {
@@ -211,7 +213,7 @@ const userManagementQuery = API.injectEndpoints({
           },
         }
       },
-      invalidatesTags: ['AdminUsers'],
+      invalidatesTags: ['OrderUser'],
       async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled
@@ -219,6 +221,7 @@ const userManagementQuery = API.injectEndpoints({
             options?.resetForm()
             options?.setSubmitting(false)
             toast.success(result?.data?.message || 'Success')
+            dispatch(orderManagementAction.resetAll())
             dispatch(coreAction.toggleModal({ open: false, type: '' }))
           } else {
             toast.error(result?.data?.message || 'Something went wrong!')
@@ -235,12 +238,12 @@ const userManagementQuery = API.injectEndpoints({
       },
     }),
 
-    deleteAdminUser: builder.mutation<
+    deleteOrderUser: builder.mutation<
       any,
-      ManagePayloadQuery<RolePermissionQuery>
+      ManagePayloadQuery<AssignOrderQuery>
     >({
       query: ({ id }) => ({
-        url: endpoints.subAdmin_list,
+        url: endpoints.order_user,
         method: 'DELETE',
         params: {
           id,
@@ -252,8 +255,8 @@ const userManagementQuery = API.injectEndpoints({
           if (result?.data?.status === 1) {
             // console.log(`\n\n _arg:`, _arg.query);
             dispatch(
-              userManagementQuery.util.updateQueryData(
-                'getAdminUsers',
+              orderManagementQuery.util.updateQueryData(
+                'getOrderUser',
                 {
                   query: {},
                 },
@@ -283,15 +286,15 @@ const userManagementQuery = API.injectEndpoints({
 })
 
 export const {
-  useGetRolePermissionsQuery,
-  useGetRolePermissionByIdQuery,
-  useManageRolePermissionMutation,
-  useDeleteRolePermissionMutation,
+  useGetAssignOrdersQuery,
+  useGetAssignOrderByIdQuery,
+  useManageAssignOrderMutation,
+  useDeleteAssignOrderMutation,
 
-  useGetAdminUsersQuery,
-  useGetAdminUserByIdQuery,
-  useManageAdminUserMutation,
-  useDeleteAdminUserMutation,
-} = userManagementQuery
+  useGetOrderUserQuery,
+  useGetOrderUserByIdQuery,
+  useManageOrderUserMutation,
+  useDeleteOrderUserMutation,
+} = orderManagementQuery
 
-export default userManagementQuery
+export default orderManagementQuery

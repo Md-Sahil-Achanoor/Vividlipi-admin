@@ -1,3 +1,4 @@
+import { AiOutlineOrderedList } from 'react-icons/ai'
 import { BiBookContent } from 'react-icons/bi'
 import { FaUsersCog } from 'react-icons/fa'
 import { LuLayoutDashboard } from 'react-icons/lu'
@@ -84,6 +85,26 @@ const NavbarAllLink: MenuType[] = [
       {
         title: 'User List',
         link: '/admin/user-management/user-list',
+        role: ['admin'],
+        icon: null,
+      },
+    ],
+  },
+  {
+    title: 'Order Management',
+    link: '/#',
+    role: ['admin'],
+    icon: AiOutlineOrderedList,
+    list: [
+      {
+        title: 'User List',
+        link: '/admin/order-management/order-user-list',
+        role: ['admin'],
+        icon: null,
+      },
+      {
+        title: 'Order List',
+        link: '/admin/order-management/order-list',
         role: ['admin'],
         icon: null,
       },
