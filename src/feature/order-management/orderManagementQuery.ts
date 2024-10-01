@@ -24,7 +24,7 @@ const orderManagementQuery = API.injectEndpoints({
     >({
       query: ({ query }) => {
         return {
-          url: endpoints.role_list,
+          url: endpoints.get_assign_book,
           method: 'GET',
           params: query,
         }
@@ -74,7 +74,7 @@ const orderManagementQuery = API.injectEndpoints({
       ManagePayload<IAssignOrderPayload, AssignOrderQuery>
     >({
       query: ({ data, id }) => ({
-        url: endpoints.role_list,
+        url: endpoints.assign_book,
         method: id ? 'PUT' : 'POST',
         body: data,
         params: {
@@ -88,7 +88,7 @@ const orderManagementQuery = API.injectEndpoints({
           if (result?.data?.status === 1) {
             options?.resetForm()
             toast.success(result?.data?.message || 'Success')
-            options?.router?.('/admin/order-management/role-list')
+            options?.router?.('/admin/order-management/assign-order-list')
           } else {
             toast.error(result?.data?.message || 'Something went wrong!')
           }
@@ -110,10 +110,10 @@ const orderManagementQuery = API.injectEndpoints({
       ManagePayloadQuery<AssignOrderQuery>
     >({
       query: ({ id }) => ({
-        url: endpoints.role_list,
+        url: endpoints.delete_assign_book,
         method: 'DELETE',
         params: {
-          id,
+          Orderid: id,
         },
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {

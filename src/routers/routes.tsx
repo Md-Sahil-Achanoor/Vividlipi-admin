@@ -1,4 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
+import AssignOrderList from '@/pages/admin/order-management/assign-orders'
+import ManageAssignOrder from '@/pages/admin/order-management/assign-orders/manage-assign-order'
 import { lazy } from 'react'
 import { Navigate, createBrowserRouter } from 'react-router-dom'
 
@@ -25,8 +27,6 @@ const AppWrapper = lazy(() => import('./middleware/AppWrapper'))
 const PrivateOutlet = lazy(() => import('./middleware/PrivateOutlet'))
 const AuthorList = lazy(() => import('@/pages/admin/author'))
 const HomePage = lazy(() => import('@/pages/admin/home'))
-
-const OrderUserList = lazy(() => import('@/pages/admin/order-management/user'))
 
 /**
  * @module { Router } @URLs
@@ -190,18 +190,19 @@ const router = createBrowserRouter([
         children: [
           {
             path: '',
-            element: <Navigate to='/admin/order-management/order-role-list' />,
+            element: (
+              <Navigate to='/admin/order-management/assign-order-list' />
+            ),
           },
           {
-            path: 'order-role-list',
+            path: 'assign-order-list',
             element: <AppWrapper />,
             children: [
-              { path: '', element: <RoleList /> },
-              { path: 'order-add-role', element: <ManageRole /> },
-              { path: 'order-edit-role/:id', element: <ManageRole /> },
+              { path: '', element: <AssignOrderList /> },
+              { path: 'assign-order', element: <ManageAssignOrder /> },
+              { path: 'edit-assign-order/:id', element: <ManageAssignOrder /> },
             ],
           },
-          { path: 'order-user-list', element: <OrderUserList /> },
         ],
       },
     ],

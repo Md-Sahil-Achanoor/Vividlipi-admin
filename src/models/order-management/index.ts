@@ -24,12 +24,17 @@ export const manageOrderUserSchema = Yup.object().shape({
       name: Yup.string(),
     })
     .optional(),
+  uid: Yup.number().optional(),
 })
 
 export type ManageOrderUserType = Yup.InferType<typeof manageOrderUserSchema>
 
 export const assignOrderSchema = Yup.object().shape({
-  userid: Yup.mixed()
+  userid: Yup.object({
+    uid: Yup.string().required('User is required'),
+    first_name: Yup.string().required('First Name is required'),
+    last_name: Yup.string().required('Last Name is required'),
+  })
     .nullable()
     .test({
       name: 'userid',
@@ -40,7 +45,10 @@ export const assignOrderSchema = Yup.object().shape({
     }),
   Productdatas: Yup.array().of(
     Yup.object().shape({
-      id: Yup.mixed()
+      id: Yup.object({
+        id: Yup.number().required('Product is required'),
+        book_title: Yup.string().required('Product is required'),
+      })
         .nullable()
         .test({
           name: 'id',
