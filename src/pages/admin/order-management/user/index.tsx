@@ -25,7 +25,7 @@ const breadcrumbItem: BreadCrumbItem[] = [
 
 const tableHead = ['SL', 'Name', 'Email', 'Role', 'Action']
 
-const UserList = () => {
+const OrderUserList = () => {
   const { type } = useAppSelector((state) => state.core)
   const { selectedOrderUser } = useAppSelector((state) => state.orderManagement)
   const dispatch = useAppDispatch()
@@ -184,4 +184,4 @@ const UserList = () => {
   )
 }
 
-export default UserList
+export default OrderUserList

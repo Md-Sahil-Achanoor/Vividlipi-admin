@@ -83,7 +83,7 @@ const NavbarAllLink: MenuType[] = [
         icon: null,
       },
       {
-        title: 'User List',
+        title: 'Admin Users',
         link: '/admin/user-management/user-list',
         role: ['admin'],
         icon: null,
