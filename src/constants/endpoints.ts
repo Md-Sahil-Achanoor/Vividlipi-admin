@@ -108,4 +108,13 @@ export const endpoints = {
    * @module Coupon
    * */
   coupon: '/api/Coupons',
+
+  /**
+   * @module Order Management
+   * */
+  order_user: '/api/Users',
+
+  assign_book: '/api/AssignBooks',
+  get_assign_book: '/api/GetAssignBooks',
+  delete_assign_book: '/api/RemoveAssignedBooks',
 }

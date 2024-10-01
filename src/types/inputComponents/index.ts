@@ -113,7 +113,7 @@ export interface FormikFileUpload extends IFormik {
 export interface PhoneInputType extends IFormik {
   disabled?: boolean
   onChangeCallback: (e: string) => void
-  [key: string]: unknown
+  [key: string]: any
 }
 
 /**

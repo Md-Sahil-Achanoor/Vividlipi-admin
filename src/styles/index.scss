@@ -106,6 +106,9 @@ body {
     @apply rounded-md md:px-4 px-3 md:py-3 py-2 bg-red-500 hover:bg-red-600 text-white flex items-center gap-1 justify-center;
   }
 
+  .button_sm_danger {
+    @apply rounded-md md:px-2 px-1 md:py-[6px] bg-red-500 hover:bg-red-600 text-white flex items-center gap-1 justify-center;
+  }
   .button_success {
     @apply rounded-md md:px-4 px-3 md:py-3 py-2 bg-green-500 hover:bg-green-600 text-white flex items-center gap-1 justify-center;
   }

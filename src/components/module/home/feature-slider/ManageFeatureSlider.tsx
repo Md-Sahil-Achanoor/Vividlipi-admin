@@ -28,9 +28,9 @@ const ManageFeatureSlider = () => {
   const [manageFeatureSlide, { isLoading }] = useManageFeatureSlideMutation()
   const { selectedFeatureSlider } = useAppSelector((state) => state.home)
   const dispatch = useAppDispatch()
+
   const handleModal = (type: string) => {
     if (type === 'cancelled') {
-      // do nothing
       dispatch(coreAction.toggleModal({ open: false, type: '' }))
       dispatch(homeAction.resetHome())
       formRef.current?.resetForm()
@@ -64,6 +64,7 @@ const ManageFeatureSlider = () => {
       },
     })
   }
+
   return (
     <Modal
       classes={
@@ -119,7 +120,7 @@ const ManageFeatureSlider = () => {
                   <div className='col-span-2'>
                     <Field
                       name='file'
-                      label='Image'
+                      label='Website Banner'
                       maxFileSize={2}
                       isUpload={false}
                       component={FileUpload}
@@ -136,7 +137,7 @@ const ManageFeatureSlider = () => {
                   <div className='col-span-2'>
                     <Field
                       name='MobileBannnerURL'
-                      label='Mobile Banner URL'
+                      label='Mobile Banner'
                       component={FileUpload}
                       maxFileSize={10}
                       supportedString='jpg, jpeg, png'

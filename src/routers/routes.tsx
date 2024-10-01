@@ -1,4 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
+import AssignOrderList from '@/pages/admin/order-management/assign-orders'
+import ManageAssignOrder from '@/pages/admin/order-management/assign-orders/manage-assign-order'
 import { lazy } from 'react'
 import { Navigate, createBrowserRouter } from 'react-router-dom'
 
@@ -175,6 +177,32 @@ const router = createBrowserRouter([
           { path: 'coupon-list/add-coupon', element: <ManageCoupon /> },
           { path: 'coupon-list/edit-coupon/:id', element: <ManageCoupon /> },
           { path: 'coupon-list/view-coupon/:id', element: <ViewCoupon /> },
+        ],
+      },
+
+      /**
+       * @SubModule { Order Management }
+       * @Role Admin
+       * */
+      {
+        path: 'order-management',
+        element: <AppWrapper />,
+        children: [
+          {
+            path: '',
+            element: (
+              <Navigate to='/admin/order-management/assign-order-list' />
+            ),
+          },
+          {
+            path: 'assign-order-list',
+            element: <AppWrapper />,
+            children: [
+              { path: '', element: <AssignOrderList /> },
+              { path: 'assign-order', element: <ManageAssignOrder /> },
+              { path: 'edit-assign-order/:id', element: <ManageAssignOrder /> },
+            ],
+          },
         ],
       },
     ],
