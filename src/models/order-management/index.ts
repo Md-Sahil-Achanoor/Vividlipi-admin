@@ -1,4 +1,3 @@
-import { strongPasswordRegex } from '@/utils/regx.constants'
 import * as Yup from 'yup'
 
 export const manageOrderUserSchema = Yup.object().shape({
@@ -8,10 +7,10 @@ export const manageOrderUserSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Email is required'),
   country: Yup.string().required('Country is required'),
   password: Yup.string()
-    .matches(
-      strongPasswordRegex,
-      'Password must contain at least 8 characters, including at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character',
-    )
+    // .matches(
+    //   strongPasswordRegex,
+    //   'Password must contain at least 8 characters, including at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character',
+    // )
     .required('Password is required'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'Passwords must match')

@@ -18,8 +18,8 @@ const initialValues: IOrderUserPayload = {
   email: '',
   MobileNumber: '',
   country: '',
-  password: '',
-  confirmPassword: '',
+  password: '0',
+  confirmPassword: '0',
   countryInfo: {},
 }
 
@@ -139,7 +139,7 @@ const ManageOrderUser = () => {
                   isRequired
                 />
 
-                <Field
+                {/* <Field
                   name='password'
                   label='Password'
                   placeholder='Password'
@@ -155,7 +155,7 @@ const ManageOrderUser = () => {
                   type={'text'}
                   isPassword
                   component={CustomInput}
-                />
+                /> */}
               </div>
               {/* <div className="flex"> */}
               <button

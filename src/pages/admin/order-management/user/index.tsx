@@ -14,7 +14,7 @@ import { orderManagementAction } from '@/feature/order-management/orderManagemen
 import PageLayout from '@/layout/PageLayout'
 import { BreadCrumbItem, OrderUserResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const breadcrumbItem: BreadCrumbItem[] = [
   {
@@ -25,7 +25,10 @@ const breadcrumbItem: BreadCrumbItem[] = [
 
 const tableHead = ['SL', 'Name', 'Email', 'Role', 'Action']
 
+const LIMIT = 10
+
 const OrderUserList = () => {
+  const [page, setPage] = useState(1)
   const { type } = useAppSelector((state) => state.core)
   const { selectedOrderUser } = useAppSelector((state) => state.orderManagement)
   const dispatch = useAppDispatch()
@@ -34,7 +37,9 @@ const OrderUserList = () => {
     useDeleteOrderUserMutation()
 
   const { data, isLoading, refetch } = useGetOrderUserQuery({
-    query: {},
+    query: {
+      page,
+    },
   })
 
   useEffect(() => {
@@ -49,14 +54,10 @@ const OrderUserList = () => {
     await deleteOrderUser({
       id: selectedOrderUser?.uid,
       query: {
-        id: selectedOrderUser?.uid,
+        page,
       },
     })
   }
-  // console.log(
-  //   `\n\n ~ handleUpdateStatus ~ selectedOrderUser:`,
-  //   selectedOrderUser,
-  // )
 
   const handleModal = (type?: string, data?: OrderUserResponse) => {
     if (type === 'cancelled') {
@@ -91,6 +92,9 @@ const OrderUserList = () => {
       )
     }
   }
+
+  const totalPage = Math.ceil((data?.data?.total || 0) / 10) || 1
+  const userList = data?.data?.data || []
 
   return (
     <>
@@ -131,15 +135,13 @@ const OrderUserList = () => {
       >
         {/* <Card className="p-3 border-0 shadow-md"> */}
         <TableWrapper isActiveInactive={false} isSort={false}>
-          <Table headList={tableHead}>
+          <Table headList={tableHead} totalPage={totalPage} setPage={setPage}>
             {isLoading ? (
               <SkeletonTable total={6} tableCount={5} />
-            ) : data?.data &&
-              typeof data?.data === 'object' &&
-              data?.data?.length > 0 ? (
-              data?.data?.map((item, index) => (
+            ) : userList && userList?.length > 0 ? (
+              userList?.map((item, index) => (
                 <tr className='table_tr' key={item?.uid}>
-                  <td className='table_td'>{index + 1}</td>
+                  <td className='table_td'>{index + 1 + (page - 1) * LIMIT}</td>
                   <td className='table_td'>
                     {item?.first_name + ' ' + item?.last_name}
                   </td>
