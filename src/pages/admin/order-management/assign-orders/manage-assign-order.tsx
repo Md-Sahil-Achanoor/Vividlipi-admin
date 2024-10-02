@@ -150,7 +150,6 @@ const ManageAssignOrder = () => {
 
   useEffect(() => {
     productRefetch()
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -162,14 +161,14 @@ const ManageAssignOrder = () => {
   const [userSearch, setUserSearch] = useState<string>('')
   const filterOrderUserData = useMemo(() => {
     if (userSearch) {
-      return orderUserList?.data?.filter(
+      return orderUserList?.data?.data?.filter(
         (item) =>
           item?.first_name?.toLowerCase().includes(userSearch.toLowerCase()) ||
           item?.last_name?.toLowerCase().includes(userSearch.toLowerCase()),
       )
     }
-    return orderUserList?.data
-  }, [userSearch, orderUserList?.data])
+    return orderUserList?.data?.data
+  }, [userSearch, orderUserList?.data?.data])
 
   return (
     <PageLayout

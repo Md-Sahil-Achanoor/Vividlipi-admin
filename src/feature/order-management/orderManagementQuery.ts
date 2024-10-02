@@ -6,6 +6,7 @@ import {
   AssignOrderQuery,
   AssignOrderResponse,
   IAssignOrderPayload,
+  ListResponse,
   ManagePayload,
   ManagePayloadQuery,
   ManageQuery,
@@ -149,7 +150,7 @@ const orderManagementQuery = API.injectEndpoints({
     }),
 
     getOrderUser: builder.query<
-      ApiResponse<OrderUserResponse[]>,
+      ApiResponse<ListResponse<OrderUserResponse>>,
       ManageQuery<AssignOrderQuery>
     >({
       query: ({ query }) => {
@@ -258,10 +259,10 @@ const orderManagementQuery = API.injectEndpoints({
               orderManagementQuery.util.updateQueryData(
                 'getOrderUser',
                 {
-                  query: {},
+                  query: _arg.query,
                 },
                 (draft) => {
-                  draft.data = draft?.data?.filter(
+                  draft.data.data = draft?.data?.data?.filter(
                     (item) => item?.id !== Number(_arg.id),
                   )
                 },

@@ -1,9 +1,15 @@
 /* eslint-disable react-refresh/only-export-components */
-import AssignOrderList from '@/pages/admin/order-management/assign-orders'
-import ManageAssignOrder from '@/pages/admin/order-management/assign-orders/manage-assign-order'
 import { lazy } from 'react'
 import { Navigate, createBrowserRouter } from 'react-router-dom'
 
+const AssignOrderList = lazy(
+  () => import('@/pages/admin/order-management/assign-orders'),
+)
+const ManageAssignOrder = lazy(
+  () =>
+    import('@/pages/admin/order-management/assign-orders/manage-assign-order'),
+)
+const OrderUserList = lazy(() => import('@/pages/admin/order-management/user'))
 const CouponList = lazy(() => import('@/pages/admin/coupon'))
 const ManageCoupon = lazy(() => import('@/pages/admin/coupon/manage-coupon'))
 const ViewCoupon = lazy(() => import('@/pages/admin/coupon/view-coupon'))
@@ -203,6 +209,7 @@ const router = createBrowserRouter([
               { path: 'edit-assign-order/:id', element: <ManageAssignOrder /> },
             ],
           },
+          { path: 'order-user-list', element: <OrderUserList /> },
         ],
       },
     ],
