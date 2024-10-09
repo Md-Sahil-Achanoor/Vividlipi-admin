@@ -96,3 +96,8 @@ export interface ProductQuery extends ReqQuery {
 export interface ProductState extends IStore {
   selectedProduct: ProductResponse | null
 }
+
+export interface OrderQuery extends ReqQuery {
+  Type: string
+  userId: number
+}

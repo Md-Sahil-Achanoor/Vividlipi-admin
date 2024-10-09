@@ -174,6 +174,62 @@ const orderManagementQuery = API.injectEndpoints({
       },
     }),
 
+    getOrderUserInfinite: builder.query<
+      ApiResponse<ListResponse<OrderUserResponse>>,
+      ManageQuery<AssignOrderQuery>
+    >({
+      query: ({ query }) => {
+        return {
+          url: endpoints.order_user,
+          method: 'GET',
+          params: query,
+        }
+      },
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName
+      },
+      // Always merge incoming data to the cache entry
+      merge: (currentCache, newItems, { arg: { query } }) => {
+        // const currentData = currentCache?.search
+        const newSearchQuery = query?.search
+        const newProducts = newItems.data.data
+        // console.log(`\n\n ~ newProducts:`, currentCache?.search, query?.search)
+        currentCache.search = newSearchQuery
+        if (newItems?.data?.data?.length !== 10) {
+          newItems.data.hasMore = false
+        }
+        if (
+          (query?.search && currentCache?.search !== query?.search) ||
+          (!currentCache?.search && query?.search)
+        ) {
+          // If 'search' is applied or changes, replace the cache
+          currentCache.data.data = newProducts
+        } else {
+          // If 'page' changes but 'search' stays the same, merge the new data
+          currentCache.data.data.push(...newProducts)
+        }
+      },
+      // Refetch when the page arg changes
+      forceRefetch({ currentArg, previousArg }) {
+        return (
+          currentArg?.query?.page !== previousArg?.query?.page || // Refetch on page change
+          currentArg?.query?.search !== previousArg?.query?.search // Refetch on search change
+        )
+      },
+      providesTags: ['OrderUserInfinite'],
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any
+          const message =
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
+        }
+      },
+    }),
+
     getOrderUserById: builder.query<
       ApiResponse<OrderUserResponse>,
       ManageQuery<AssignOrderQuery>
@@ -283,6 +339,31 @@ const orderManagementQuery = API.injectEndpoints({
         }
       },
     }),
+
+    getOrders: builder.query<
+      ApiResponse<ListResponse<AssignOrderResponse>>,
+      ManageQuery<AssignOrderQuery>
+    >({
+      query: ({ query }) => {
+        return {
+          url: endpoints.order_list,
+          method: 'GET',
+          params: query,
+        }
+      },
+      providesTags: ['OrderList'],
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any
+          const message =
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
+        }
+      },
+    }),
   }),
 })
 
@@ -293,9 +374,12 @@ export const {
   useDeleteAssignOrderMutation,
 
   useGetOrderUserQuery,
+  useGetOrderUserInfiniteQuery,
   useGetOrderUserByIdQuery,
   useManageOrderUserMutation,
   useDeleteOrderUserMutation,
+
+  useGetOrdersQuery,
 } = orderManagementQuery
 
 export default orderManagementQuery

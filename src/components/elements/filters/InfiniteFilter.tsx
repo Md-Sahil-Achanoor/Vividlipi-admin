@@ -87,7 +87,8 @@ const InfiniteFilter = <T extends object>({
       })
       if (node) observer.current.observe(node)
     },
-    [isLoading, loadMore],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [isLoading, loadMore, items],
   )
 
   // tailwind text overflow ellipsis

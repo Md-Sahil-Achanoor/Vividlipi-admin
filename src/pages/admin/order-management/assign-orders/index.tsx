@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom'
 
 const breadcrumbItem: BreadCrumbItem[] = [
   {
-    name: 'Assign Order List',
+    name: 'Order List',
     link: '#',
   },
 ]
@@ -134,7 +134,7 @@ const AssignOrderList = () => {
       />
       <ViewOrderDetails />
       <PageLayout
-        title='Assign Order List'
+        title='Order List'
         breadcrumbItem={breadcrumbItem}
         buttonText='Assign Order'
         buttonProps={{

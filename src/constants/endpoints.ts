@@ -113,6 +113,7 @@ export const endpoints = {
    * @module Order Management
    * */
   order_user: '/api/Users',
+  order_list: '/api/Orders',
 
   assign_book: '/api/AssignBooks',
   get_assign_book: '/api/GetAssignBooks',
