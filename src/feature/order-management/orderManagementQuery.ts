@@ -193,7 +193,7 @@ const orderManagementQuery = API.injectEndpoints({
         // const currentData = currentCache?.search
         const newSearchQuery = query?.search
         const newProducts = newItems.data.data
-        console.log(`\n\n ~ newProducts:`, currentCache?.search, query?.search)
+        // console.log(`\n\n ~ newProducts:`, currentCache?.search, query?.search)
         currentCache.search = newSearchQuery
         if (newItems?.data?.data?.length !== 10) {
           newItems.data.hasMore = false
@@ -339,6 +339,31 @@ const orderManagementQuery = API.injectEndpoints({
         }
       },
     }),
+
+    getOrders: builder.query<
+      ApiResponse<ListResponse<AssignOrderResponse>>,
+      ManageQuery<AssignOrderQuery>
+    >({
+      query: ({ query }) => {
+        return {
+          url: endpoints.order_list,
+          method: 'GET',
+          params: query,
+        }
+      },
+      providesTags: ['OrderList'],
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any
+          const message =
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
+        }
+      },
+    }),
   }),
 })
 
@@ -353,6 +378,8 @@ export const {
   useGetOrderUserByIdQuery,
   useManageOrderUserMutation,
   useDeleteOrderUserMutation,
+
+  useGetOrdersQuery,
 } = orderManagementQuery
 
 export default orderManagementQuery

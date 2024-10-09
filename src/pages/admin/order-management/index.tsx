@@ -9,7 +9,7 @@ import Table from '@/components/ui/Table'
 import { coreAction } from '@/feature/core/coreSlice'
 import {
   useDeleteAssignOrderMutation,
-  useGetAssignOrdersQuery,
+  useGetOrdersQuery,
   useGetOrderUserQuery,
 } from '@/feature/order-management/orderManagementQuery'
 import { orderManagementAction } from '@/feature/order-management/orderManagementSlice'
@@ -24,7 +24,6 @@ import {
 } from '@/types'
 import { cn } from '@/utils/twmerge'
 import { useEffect, useState } from 'react'
-import { BiSort } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 
 const breadcrumbItem: BreadCrumbItem[] = [
@@ -38,14 +37,16 @@ const tableHead = [
   'SL',
   'User Name',
   'User Email',
+  'User Type',
   'Total Purchase',
   'Total Amount',
   'Order Details',
   'Order Status',
-  'Action',
+  // 'Action',
 ]
 
 const OrderList = () => {
+  const [page, setPage] = useState(1)
   const [selectedUser, setSelectedUser] = useState<OrderUserResponse | null>(
     null,
   )
@@ -57,7 +58,7 @@ const OrderList = () => {
   } = useDebounce(() => {
     setUserSearch(userSearch)
   }, 1000)
-  const [selectedStatus, setSelectedStatus] = useState<string>('')
+  const [selectedStatus, setSelectedStatus] = useState<string>('All')
   const [userType, setUserType] = useState<string>('All')
   const navigator = useNavigate()
   const { type } = useAppSelector((state) => state.core)
@@ -70,8 +71,10 @@ const OrderList = () => {
     useDeleteAssignOrderMutation()
 
   const query = () => {
-    const query: Partial<OrderQuery> = {}
-    if (selectedStatus) {
+    const query: Partial<OrderQuery> = {
+      page,
+    }
+    if (selectedStatus && selectedStatus !== 'All') {
       query.status = selectedStatus
     }
     if (selectedUser) {
@@ -83,9 +86,10 @@ const OrderList = () => {
     return query
   }
 
-  const { data, isLoading, refetch } = useGetAssignOrdersQuery({
+  const { data, isLoading, refetch } = useGetOrdersQuery({
     query: query(),
   })
+  // console.log(`\n\n ~ OrderList ~ data:`, data)
 
   useEffect(() => {
     dispatch(orderManagementAction.resetAll())
@@ -157,7 +161,19 @@ const OrderList = () => {
     query: userQuery(),
   })
 
-  console.log(`\n\n orderUserList:`, orderUserList)
+  const totalPage = Math.ceil((data?.data?.total || 0) / 10) || 1
+  const orderList = data?.data?.data || []
+
+  const getName = (details?: OrderUserResponse) => {
+    if (!details) return 'N/A'
+    if (details?.first_name || details?.last_name) {
+      return details?.first_name + ' ' + details?.last_name
+    }
+    if (details?.email) {
+      return details?.email
+    }
+    return 'N/A'
+  }
 
   return (
     <>
@@ -196,7 +212,7 @@ const OrderList = () => {
       <PageLayout
         title='Order List'
         breadcrumbItem={breadcrumbItem}
-        buttonText='Assign Order'
+        // buttonText='Assign Order'
         buttonProps={{
           onClick: () =>
             navigator('/admin/order-management/assign-order-list/assign-order'),
@@ -213,6 +229,7 @@ const OrderList = () => {
                   wrapperClass=''
                   buttonClass='border p-2'
                   items={[
+                    { label: 'All', value: 'All' },
                     { label: 'Paid', value: 'Paid' },
                     { label: 'Failed', value: 'Failed' },
                   ]}
@@ -221,7 +238,6 @@ const OrderList = () => {
                   isSelected={false}
                   name={() => (
                     <div className='flex items-center gap-1'>
-                      <BiSort />
                       <span className='text-sm uppercase'>
                         {selectedStatus || 'Status'}
                       </span>
@@ -245,7 +261,6 @@ const OrderList = () => {
                   isSelected={false}
                   name={() => (
                     <div className='flex items-center gap-1'>
-                      <BiSort />
                       <span className='text-sm uppercase'>
                         {userType || 'All'}
                       </span>
@@ -281,15 +296,17 @@ const OrderList = () => {
                   isSelected={selectedUser !== null}
                   name={() => (
                     <div className='flex items-center gap-1'>
-                      <BiSort />
                       <span className='text-sm uppercase'>
-                        {userType ?? 'Select User'}
+                        {selectedUser?.first_name || selectedUser?.last_name
+                          ? `${selectedUser?.first_name || ''} ${selectedUser?.last_name || ''}`
+                          : 'Select User'}
                       </span>
                     </div>
                   )}
                   handleSelectedOption={(item) =>
                     setSelectedUser(item as OrderUserResponse)
                   }
+                  clearData={() => setSelectedUser(null)}
                   isInsideSearch
                   searchProps={{
                     value: userSearch,
@@ -304,20 +321,28 @@ const OrderList = () => {
             </>
           )}
         >
-          <Table headList={tableHead}>
+          <Table headList={tableHead} totalPage={totalPage} setPage={setPage}>
             {isLoading ? (
               <SkeletonTable total={8} tableCount={8} />
-            ) : data?.data &&
-              typeof data?.data === 'object' &&
-              data?.data?.length > 0 ? (
-              data?.data?.map((item, index) => (
+            ) : orderList &&
+              typeof orderList === 'object' &&
+              orderList?.length > 0 ? (
+              orderList?.map((item, index) => (
                 <tr className='table_tr' key={item?.id}>
                   <td className='table_td'>{index + 1}</td>
                   <td className='table_td'>
-                    {item?.UserDetails?.first_name}{' '}
-                    {item?.UserDetails?.last_name}
+                    {item?.UserType === 1
+                      ? getName(item?.['GuestDetails'] as OrderUserResponse)
+                      : getName(item?.['UserDetails'] as OrderUserResponse)}
                   </td>
-                  <td className='table_td'>{item?.UserDetails?.email}</td>
+                  <td className='table_td'>
+                    {item?.UserType === 1
+                      ? item?.['GuestDetails']?.email || 'N/A'
+                      : item?.['UserDetails']?.email || 'N/A'}
+                  </td>
+                  <td className='table_td'>
+                    {item?.UserType === 1 ? 'Guest' : 'Normal'}
+                  </td>
                   <td className='table_td'>{item?.Productdatas?.length}</td>
                   <td className='table_td'>₹{item?.Total}</td>
                   <td className='table_td'>
@@ -329,8 +354,18 @@ const OrderList = () => {
                       View
                     </button>
                   </td>
-                  <td className='table_td'>{item?.status}</td>
-                  <td className='table_td'>
+                  <td
+                    className={cn(
+                      'table_td',
+                      // item?.status === '0' && 'text-yellow-600',
+                      item?.status === 'Paid' && 'text-green-600',
+                      (item?.status === 'Failed' || item?.status === '0') &&
+                        'text-red-600',
+                    )}
+                  >
+                    {item?.status === '0' ? 'Failed' : item?.status}
+                  </td>
+                  {/* <td className='table_td'>
                     <div className='flex items-center gap-3'>
                       <button
                         onClick={() => handleModal('delete', item)}
@@ -342,7 +377,7 @@ const OrderList = () => {
                         Delete
                       </button>
                     </div>
-                  </td>
+                  </td> */}
                 </tr>
               ))
             ) : (

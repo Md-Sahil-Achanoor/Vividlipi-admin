@@ -2,6 +2,29 @@ import { ManageOrderUserType } from '@/models'
 import { ReqQuery } from '../common'
 import { ProductResponse } from '../product'
 
+export type GuestUserResponse = {
+  Shipping_FirstName: string
+  Shipping_LastName: string
+  Shipping_Email: string
+  Shipping_Mobile: string
+  Shipping_Address1: string
+  Shipping_Country: string
+  Shipping_State: string
+  Shipping_City: string
+  Shipping_PostCode: string
+  Shipping_Address2: string
+  Billing_FirstName: string
+  Billing_LastName: string
+  Billing_Email: string
+  Billing_Mobile: string
+  Billing_Address1: string
+  Billing_Country: string
+  Billing_State: string
+  Billing_City: string
+  Billing_PostCode: string
+  Billing_Address2: string
+}
+
 export type IOrderUser = Omit<ManageOrderUserType, 'countryInfo'>
 
 export interface IOrderUserPayload extends ManageOrderUserType {}
@@ -29,7 +52,8 @@ export interface ProductData<T> {
 export interface IAssignOrder<U, P> {
   Productdatas: ProductData<P>[]
   userid: U | null
-  UserDetails?: U
+  UserDetails?: U | null
+  GuestDetails?: U | null
 }
 
 export type AssignOrder = IAssignOrder<OrderUserResponse, ProductResponse>
@@ -42,6 +66,7 @@ export interface AssignOrderResponse extends AssignOrder {
   id: number
   Total: number
   status: string
+  UserType: number
 }
 
 export interface AssignOrderQuery extends ReqQuery {}
