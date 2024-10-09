@@ -44,6 +44,38 @@ const productQuery = API.injectEndpoints({
       },
     }),
 
+    getProductInfinite: builder.query<
+      ApiResponse<ListResponse<ProductResponse>>,
+      ManagePayloadQuery<Partial<ProductQuery>>
+    >({
+      query: ({ query }) => ({
+        url: endpoints.product_list,
+        method: 'POST',
+        params: query,
+      }),
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName
+      },
+      merge: (currentCache, newItems, { arg: { query } }) => {
+        const newProducts = newItems.data.data
+        if (query?.search && query?.page === 1) {
+          // If 'search' is applied or changes, replace the cache
+          currentCache.data.data = newProducts
+        } else {
+          // If 'page' changes but 'search' stays the same, merge the new data
+          currentCache.data.data.push(...newProducts)
+        }
+      },
+      // Refetch when the page arg changes
+      forceRefetch({ currentArg, previousArg }) {
+        return (
+          currentArg?.query?.page !== previousArg?.query?.page || // Refetch on page change
+          currentArg?.query?.search !== previousArg?.query?.search
+        )
+      },
+      providesTags: ['ProductListInfinite'],
+    }),
+
     getProductById: builder.query<
       ApiResponse<ProductResponse>,
       ManageQuery<Partial<ProductQuery>, null>
@@ -276,6 +308,7 @@ export const {
   useManageProductMutation,
   useDeleteProductMutation,
   useUpdateProductMutation,
+  useGetProductInfiniteQuery,
 
   useGetProductByCategory1Query,
 } = productQuery

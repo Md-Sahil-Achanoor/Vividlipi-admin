@@ -26,7 +26,7 @@ import {
 } from '@/types'
 import { cn } from '@/utils/twmerge'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
-import { ChangeEvent, useEffect, useMemo, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { BiTrash } from 'react-icons/bi'
 import { BsArrowRightShort } from 'react-icons/bs'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -48,10 +48,25 @@ const initialValues: AssignOrder = {
 const ManageAssignOrder = () => {
   const { id } = useParams()
   // console.log(`\n\n ~ ManageAssignOrder ~ id:`, id)
+
   const router = useNavigate()
+
   const [searchValue, setSearchValue] = useState<string>('')
+  const [userSearchValue, setUserSearch] = useState<string>('')
   // console.log(`\n\n ~ ManageFeatureProduct ~ searchValue:`, searchValue)
-  const { value, onChange } = useDebounce(() => setSearchValue(value), 1000)
+  const {
+    value,
+    onChange,
+    setValue: setSearch,
+  } = useDebounce(() => setSearchValue(value), 1000)
+
+  const {
+    value: userSearch,
+    onChange: onUserSearch,
+    setValue: setUserValue,
+  } = useDebounce(() => {
+    setUserSearch(userSearch)
+  }, 1000)
 
   const query = () => {
     const query: Partial<ProductQuery> = {
@@ -62,6 +77,17 @@ const ManageAssignOrder = () => {
     }
     return query
   }
+
+  const userQuery = () => {
+    const query: Partial<ProductQuery> = {
+      page: 1,
+    }
+    if (userSearchValue) {
+      query.search = userSearchValue
+    }
+    return query
+  }
+
   const dispatch = useAppDispatch()
   // const [values] = useState<Role | null>(null);
   const { singleAssignOrder } = useAppSelector((state) => state.orderManagement)
@@ -135,7 +161,7 @@ const ManageAssignOrder = () => {
     isError: orderUserIsError,
     error: orderUserErrorMessage,
   } = useGetOrderUserQuery({
-    query: {},
+    query: userQuery(),
   })
 
   const {
@@ -157,18 +183,6 @@ const ManageAssignOrder = () => {
     orderUserRefetch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const [userSearch, setUserSearch] = useState<string>('')
-  const filterOrderUserData = useMemo(() => {
-    if (userSearch) {
-      return orderUserList?.data?.data?.filter(
-        (item) =>
-          item?.first_name?.toLowerCase().includes(userSearch.toLowerCase()) ||
-          item?.last_name?.toLowerCase().includes(userSearch.toLowerCase()),
-      )
-    }
-    return orderUserList?.data?.data
-  }, [userSearch, orderUserList?.data?.data])
 
   return (
     <PageLayout
@@ -194,7 +208,7 @@ const ManageAssignOrder = () => {
                       label='User'
                       name='userid'
                       isRequired
-                      renderData={filterOrderUserData}
+                      renderData={orderUserList?.data?.data || []}
                       isLoading={orderUserLoading}
                       isError={
                         typeof orderUserIsError === 'string'
@@ -246,12 +260,11 @@ const ManageAssignOrder = () => {
                       isInsideSearch
                       searchProps={{
                         value: userSearch,
-                        onChange: (e: ChangeEvent<HTMLInputElement>) =>
-                          setUserSearch(e.target.value),
-                        placeholder: 'Search Author',
+                        onChange: onUserSearch,
+                        placeholder: 'Search User',
                       }}
                       onCloseCallback={() => {
-                        setUserSearch('')
+                        setUserValue('')
                       }}
                     />
                   </div>
@@ -329,7 +342,7 @@ const ManageAssignOrder = () => {
                           isSelected={data?.id !== null}
                           component={InfiniteSelect}
                           onCloseCallback={() => {
-                            setSearchValue('')
+                            setSearch('')
                           }}
                           isAuth
                         />

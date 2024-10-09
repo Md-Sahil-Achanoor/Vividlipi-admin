@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import NoTableData from '@/components/atoms/NoTableData'
-import TableWrapper from '@/components/elements/common/TableWrapper'
+import TableWrapper, { Filter } from '@/components/elements/common/TableWrapper'
+import InfiniteFilter from '@/components/elements/filters/InfiniteFilter'
 import ManageModule from '@/components/elements/modal/ManageModule'
 import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
 import ViewOrderDetails from '@/components/module/user-management/ViewOrderDetails'
@@ -9,12 +10,21 @@ import { coreAction } from '@/feature/core/coreSlice'
 import {
   useDeleteAssignOrderMutation,
   useGetAssignOrdersQuery,
+  useGetOrderUserQuery,
 } from '@/feature/order-management/orderManagementQuery'
 import { orderManagementAction } from '@/feature/order-management/orderManagementSlice'
+import useDebounce from '@/hooks/useDebounce'
 import PageLayout from '@/layout/PageLayout'
-import { AssignOrderResponse, BreadCrumbItem } from '@/types'
+import {
+  AssignOrderResponse,
+  BreadCrumbItem,
+  OrderQuery,
+  OrderUserResponse,
+  ProductQuery,
+} from '@/types'
 import { cn } from '@/utils/twmerge'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { BiSort } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 
 const breadcrumbItem: BreadCrumbItem[] = [
@@ -35,7 +45,20 @@ const tableHead = [
   'Action',
 ]
 
-const AssignOrderList = () => {
+const OrderList = () => {
+  const [selectedUser, setSelectedUser] = useState<OrderUserResponse | null>(
+    null,
+  )
+  const [userSearchValue, setUserSearch] = useState<string>('')
+  const {
+    value: userSearch,
+    onChange: onUserSearch,
+    setValue: setUserValue,
+  } = useDebounce(() => {
+    setUserSearch(userSearch)
+  }, 1000)
+  const [selectedStatus, setSelectedStatus] = useState<string>('')
+  const [userType, setUserType] = useState<string>('All')
   const navigator = useNavigate()
   const { type } = useAppSelector((state) => state.core)
   const { selectedAssignOrder } = useAppSelector(
@@ -46,8 +69,22 @@ const AssignOrderList = () => {
   const [deleteAssignOrder, { isLoading: isDeleteAssignOrder }] =
     useDeleteAssignOrderMutation()
 
+  const query = () => {
+    const query: Partial<OrderQuery> = {}
+    if (selectedStatus) {
+      query.status = selectedStatus
+    }
+    if (selectedUser) {
+      query.userId = selectedUser.uid
+    }
+    if (userType === 'Guest') {
+      query.Type = 'Guest'
+    }
+    return query
+  }
+
   const { data, isLoading, refetch } = useGetAssignOrdersQuery({
-    query: {},
+    query: query(),
   })
 
   useEffect(() => {
@@ -99,6 +136,29 @@ const AssignOrderList = () => {
     }
   }
 
+  const userQuery = () => {
+    const query: Partial<ProductQuery> = {
+      page: 1,
+    }
+    if (userSearchValue) {
+      query.search = userSearchValue
+    }
+    return query
+  }
+
+  const {
+    isLoading: orderUserLoading,
+    isFetching,
+    // refetch: orderUserRefetch,
+    data: orderUserList,
+    isError: orderUserIsError,
+    error: orderUserErrorMessage,
+  } = useGetOrderUserQuery({
+    query: userQuery(),
+  })
+
+  console.log(`\n\n orderUserList:`, orderUserList)
+
   return (
     <>
       <ManageModule
@@ -143,7 +203,107 @@ const AssignOrderList = () => {
         }}
       >
         {/* <Card className="p-3 border-0 shadow-md"> */}
-        <TableWrapper isActiveInactive={false} isSort={false}>
+        <TableWrapper
+          isActiveInactive={false}
+          isSort={false}
+          renderCustom={() => (
+            <>
+              <div className='max-w-[150px] min-w-[150px]'>
+                <InfiniteFilter<Filter>
+                  wrapperClass=''
+                  buttonClass='border p-2'
+                  items={[
+                    { label: 'Paid', value: 'Paid' },
+                    { label: 'Failed', value: 'Failed' },
+                  ]}
+                  renderItem={(item) => <>{item.label}</>}
+                  isActive={(item) => item.value === selectedStatus}
+                  isSelected={false}
+                  name={() => (
+                    <div className='flex items-center gap-1'>
+                      <BiSort />
+                      <span className='text-sm uppercase'>
+                        {selectedStatus || 'Status'}
+                      </span>
+                    </div>
+                  )}
+                  handleSelectedOption={(item) =>
+                    setSelectedStatus(item?.value)
+                  }
+                />
+              </div>
+              <div className='max-w-[150px] min-w-[150px]'>
+                <InfiniteFilter<Filter>
+                  wrapperClass=''
+                  buttonClass='border p-2'
+                  items={[
+                    { label: 'All', value: 'All' },
+                    { label: 'Guest', value: 'Guest' },
+                  ]}
+                  renderItem={(item) => <>{item.label}</>}
+                  isActive={(item) => item.value === userType}
+                  isSelected={false}
+                  name={() => (
+                    <div className='flex items-center gap-1'>
+                      <BiSort />
+                      <span className='text-sm uppercase'>
+                        {userType || 'All'}
+                      </span>
+                    </div>
+                  )}
+                  handleSelectedOption={(item) => setUserType(item?.value)}
+                />
+              </div>
+              <div className='max-w-[250px] min-w-[250px]'>
+                <InfiniteFilter<OrderUserResponse>
+                  wrapperClass=''
+                  buttonClass='border p-2'
+                  items={orderUserList?.data?.data as OrderUserResponse[]}
+                  isLoading={isFetching || orderUserLoading}
+                  isError={
+                    typeof orderUserIsError === 'string'
+                      ? orderUserIsError
+                      : false
+                  }
+                  errorMessage={
+                    typeof orderUserErrorMessage === 'string'
+                      ? orderUserErrorMessage
+                      : 'Failed to load product'
+                  }
+                  renderItem={(item) => (
+                    <>
+                      {item?.first_name || item?.last_name
+                        ? `${item?.first_name} ${item?.last_name}`
+                        : item?.email}
+                    </>
+                  )}
+                  isActive={(item) => item?.uid === selectedUser?.uid}
+                  isSelected={selectedUser !== null}
+                  name={() => (
+                    <div className='flex items-center gap-1'>
+                      <BiSort />
+                      <span className='text-sm uppercase'>
+                        {userType ?? 'Select User'}
+                      </span>
+                    </div>
+                  )}
+                  handleSelectedOption={(item) =>
+                    setSelectedUser(item as OrderUserResponse)
+                  }
+                  isInsideSearch
+                  searchProps={{
+                    value: userSearch,
+                    onChange: onUserSearch,
+                    placeholder: 'Search User',
+                  }}
+                  onCloseCallback={() => {
+                    setUserValue('')
+                  }}
+                />
+              </div>
+            </>
+          )}
+        >
           <Table headList={tableHead}>
             {isLoading ? (
               <SkeletonTable total={8} tableCount={8} />
@@ -198,4 +358,4 @@ const AssignOrderList = () => {
   )
 }
 
-export default AssignOrderList
+export default OrderList

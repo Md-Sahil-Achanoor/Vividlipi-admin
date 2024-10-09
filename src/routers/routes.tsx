@@ -1,4 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
+import OrderList from '@/pages/admin/order-management'
 import { lazy } from 'react'
 import { Navigate, createBrowserRouter } from 'react-router-dom'
 
@@ -208,6 +209,10 @@ const router = createBrowserRouter([
               { path: 'assign-order', element: <ManageAssignOrder /> },
               { path: 'edit-assign-order/:id', element: <ManageAssignOrder /> },
             ],
+          },
+          {
+            path: 'order-list',
+            element: <OrderList />,
           },
           { path: 'order-user-list', element: <OrderUserList /> },
         ],

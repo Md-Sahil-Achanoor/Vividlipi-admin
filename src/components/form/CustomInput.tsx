@@ -125,7 +125,6 @@ const CustomInput: FC<CustomInputCom> = ({
           )}
         >
           {leftIcon && leftIcon()}
-          {leftIcon && leftIcon()}
           {Input()}
           {rightIcon && rightIcon()}
           {isPassword ? (

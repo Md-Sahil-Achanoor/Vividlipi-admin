@@ -103,8 +103,14 @@ const NavbarAllLink: MenuType[] = [
         icon: null,
       },
       {
-        title: 'Order List',
+        title: 'Assign Order List',
         link: '/admin/order-management/assign-order-list',
+        role: ['admin'],
+        icon: null,
+      },
+      {
+        title: 'Order List',
+        link: '/admin/order-management/order-list',
         role: ['admin'],
         icon: null,
       },
