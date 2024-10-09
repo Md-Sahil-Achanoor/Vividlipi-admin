@@ -19,12 +19,13 @@
 body {
   background-color: var(--body);
 }
-// ::-webkit-scrollbar {
+
+/* // ::-webkit-scrollbar {
 //   width: 5px;
 //   height: 8px;
 //   color: var(--primary-light);
 //   background-color: var(--body) !important;
-// }
+// } */
 
 @layer utilities {
   .menu-item {
@@ -65,7 +66,7 @@ body {
     @apply bg-gray-300 rounded-xl animate-pulse duration-100;
   }
 
-  // Skeleton loading
+  /* // Skeleton loading */
   .skeleton_table {
     @apply bg-gray-300 h-3 rounded-xl animate-pulse duration-100;
   }
@@ -197,25 +198,25 @@ input[type='number'] {
   color: #7d7d7d !important;
 }
 
-.quillText {
-  ul,
-  ol {
-    margin-left: 20px;
-  }
-  ul {
-    li {
-      list-style: disc !important;
-    }
-  }
-  ol {
-    margin-left: 30px;
-    li {
-      list-style: decimal !important;
-    }
-  }
-  p {
-    word-break: break-all;
-  }
+.quill ul,
+.quill ol {
+  margin-left: 20px;
+}
+
+.quill ul li {
+  list-style: disc !important;
+}
+
+.quill ol {
+  margin-left: 30px;
+}
+
+.quill ol li {
+  list-style: decimal !important;
+}
+
+.quill p {
+  word-break: break-all;
 }
 
 .rti--container {
