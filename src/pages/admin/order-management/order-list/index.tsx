@@ -175,6 +175,19 @@ const OrderList = () => {
     return 'N/A'
   }
 
+  useEffect(() => {
+    fetch(`http://localhost:3000/en/v1/auth/login`, {
+      method: 'POST',
+      body: JSON.stringify({
+        email: 'kiran@kalpas.in',
+        password: 'U2FsdGVkX19HQgDluYpD04JtywdpsySFvXrLfGvpydQ=',
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err))
+  }, [])
+
   return (
     <>
       <ManageModule
@@ -243,9 +256,10 @@ const OrderList = () => {
                       </span>
                     </div>
                   )}
-                  handleSelectedOption={(item) =>
+                  handleSelectedOption={(item) => {
+                    setPage(1)
                     setSelectedStatus(item?.value)
-                  }
+                  }}
                 />
               </div>
               <div className='max-w-[150px] min-w-[150px]'>
@@ -266,7 +280,10 @@ const OrderList = () => {
                       </span>
                     </div>
                   )}
-                  handleSelectedOption={(item) => setUserType(item?.value)}
+                  handleSelectedOption={(item) => {
+                    setPage(1)
+                    setUserType(item?.value)
+                  }}
                 />
               </div>
               <div className='max-w-[250px] min-w-[250px]'>
@@ -303,9 +320,10 @@ const OrderList = () => {
                       </span>
                     </div>
                   )}
-                  handleSelectedOption={(item) =>
+                  handleSelectedOption={(item) => {
+                    setPage(1)
                     setSelectedUser(item as OrderUserResponse)
-                  }
+                  }}
                   clearData={() => setSelectedUser(null)}
                   isInsideSearch
                   searchProps={{
@@ -381,7 +399,7 @@ const OrderList = () => {
                 </tr>
               ))
             ) : (
-              <NoTableData colSpan={7} parentClass='h-40'>
+              <NoTableData colSpan={8} parentClass='h-40'>
                 <span className='font-medium'>No data found!</span>
               </NoTableData>
             )}

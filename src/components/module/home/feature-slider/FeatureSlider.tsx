@@ -61,7 +61,7 @@ const FeatureSlider = () => {
       />
       <Table headList={featureSliderHeader}>
         {isLoading ? (
-          <SkeletonTable total={6} tableCount={5} />
+          <SkeletonTable total={6} tableCount={6} />
         ) : data?.data && data?.data?.length > 0 ? (
           data?.data?.map((item, index) => (
             <tr className='table_tr' key={item?.id}>
@@ -120,7 +120,7 @@ const FeatureSlider = () => {
             </tr>
           ))
         ) : (
-          <NoTableData colSpan={7} parentClass='h-40'>
+          <NoTableData colSpan={6} parentClass='h-40'>
             <span className='font-medium'>No data found!</span>
           </NoTableData>
         )}

@@ -186,7 +186,7 @@ const AssignOrderList = () => {
                 </tr>
               ))
             ) : (
-              <NoTableData colSpan={7} parentClass='h-40'>
+              <NoTableData colSpan={8} parentClass='h-40'>
                 <span className='font-medium'>No data found!</span>
               </NoTableData>
             )}
