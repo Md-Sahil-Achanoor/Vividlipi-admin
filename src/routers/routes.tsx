@@ -1,10 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
-import OrderList from '@/pages/admin/order-management'
 import { lazy } from 'react'
 import { Navigate, createBrowserRouter } from 'react-router-dom'
 
 const AssignOrderList = lazy(
   () => import('@/pages/admin/order-management/assign-orders'),
+)
+const OrderList = lazy(
+  () => import('@/pages/admin/order-management/order-list'),
 )
 const ManageAssignOrder = lazy(
   () =>
