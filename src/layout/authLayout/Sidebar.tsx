@@ -1,8 +1,8 @@
 import Logo from '@/components/atoms/Logo'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { RxCross2 } from 'react-icons/rx'
 import { useAppSelector } from '../../app/store'
-import { SidebarProps } from '../../types'
+import { MenuType, SidebarProps } from '../../types'
 import { cn } from '../../utils/twmerge'
 import NavbarAllLink from '../common/NavbarAllLink'
 import MultiMenu from './Sidebar/MultiMenu'
@@ -18,9 +18,51 @@ const Sidebar = ({
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null)
   // console.log(`\n\nexpandedMenu:`, expandedMenu);
 
-  const { role } = useAppSelector((state) => state.auth)
+  const { role, roleDetails, user } = useAppSelector((state) => state.auth)
+  // console.log(`\n\n role:`, role, user, roleDetails)
 
-  const navItem = NavbarAllLink?.filter((item) => item?.role?.includes(role))
+  const navItems = useMemo(() => {
+    if (role === 'admin') {
+      return NavbarAllLink
+    }
+    if (user?.role === 'sub-admin') {
+      const newNav: Record<string, MenuType> = {}
+      const permission = roleDetails as any
+      const items: Record<string, string[]> = {}
+      Object.keys(permission)?.forEach((key) => {
+        // console.log(`\n\n key:`, key)
+        if (Object.keys(permission[key])?.length > 0) {
+          const prefix = key.split('_')?.[0] as typeof key
+          if (!items[`${prefix}_Management`]) {
+            items[`${prefix}_Management`] = []
+          } else {
+            items[`${prefix}_Management`].push(key)
+          }
+        }
+      })
+      // console.log(`\n\n items:`, items)
+      NavbarAllLink?.forEach((item) => {
+        // console.log(`\n\n item:`, items[item?.id])
+        if (items[item?.id]?.length === 0) {
+          newNav[item?.id] = item
+        } else {
+          const filtered = item?.list?.filter((list) =>
+            items[item?.id]?.includes(list?.id),
+          ) as MenuType[] | []
+          if (filtered?.length > 0) {
+            newNav[item?.id] = item
+            newNav[item?.id].list = filtered
+          }
+        }
+      })
+      return Object.values(newNav)
+    }
+    return []
+  }, [role, roleDetails, user])
+
+  // console.log(`\n\nnavItems:`, navItems)
+
+  // const navItem = NavbarAllLink?.filter((item) => item?.role?.includes(role))
 
   const handleMultiMenuClick = useCallback((name: string) => {
     setExpandedMenu((prev) => (prev === name ? null : name))
@@ -59,7 +101,7 @@ const Sidebar = ({
           ) : null}
         </div>
 
-        {navItem.map((menu, index) =>
+        {navItems.map((menu, index) =>
           'list' in menu ? (
             <MultiMenu
               key={index}

@@ -14,21 +14,7 @@ export const permissionOptions = {
     { label: 'View', value: 'view' },
     // { label: "enable", value: "enable" },
   ],
-  User_Management: [
-    { label: 'Add', value: 'add' },
-    { label: 'Update', value: 'update' },
-    { label: 'Delete', value: 'delete' },
-    { label: 'View', value: 'view' },
-    // { label: "enable", value: "enable" },
-  ],
-  Promotions_and_Discounts: [
-    { label: 'Add', value: 'add' },
-    { label: 'Update', value: 'update' },
-    { label: 'Delete', value: 'delete' },
-    { label: 'View', value: 'view' },
-    // { label: "enable", value: "enable" },
-  ],
-  Return_and_Refund_Management: [
+  Product_Author_Management: [
     { label: 'Add', value: 'add' },
     { label: 'Update', value: 'update' },
     { label: 'Delete', value: 'delete' },
@@ -42,6 +28,34 @@ export const permissionOptions = {
     { label: 'View', value: 'view' },
     // { label: "enable", value: "enable" },
   ],
+  Product_Coupon_Management: [
+    { label: 'Add', value: 'add' },
+    { label: 'Update', value: 'update' },
+    { label: 'Delete', value: 'delete' },
+    { label: 'View', value: 'view' },
+  ],
+  User_Management: [
+    { label: 'Add', value: 'add' },
+    { label: 'Update', value: 'update' },
+    { label: 'Delete', value: 'delete' },
+    { label: 'View', value: 'view' },
+    // { label: "enable", value: "enable" },
+  ],
+  Order_User_Management: [
+    { label: 'Add', value: 'add' },
+    { label: 'Update', value: 'update' },
+    { label: 'Delete', value: 'delete' },
+    { label: 'View', value: 'view' },
+    // { label: "enable", value: "enable" },
+  ],
+
+  Assign_Order_Management: [
+    { label: 'Add', value: 'add' },
+    { label: 'Update', value: 'update' },
+    { label: 'Delete', value: 'delete' },
+    { label: 'View', value: 'view' },
+    // { label: "enable", value: "enable" },
+  ],
   Permissions_and_Roles: [
     { label: 'Add', value: 'add' },
     { label: 'Update', value: 'update' },
@@ -49,7 +63,7 @@ export const permissionOptions = {
     { label: 'View', value: 'view' },
     // { label: "enable", value: "enable" },
   ],
-  Analytics_and_Reporting: [
+  Home_Management: [
     { label: 'Add', value: 'add' },
     { label: 'Update', value: 'update' },
     { label: 'Delete', value: 'delete' },

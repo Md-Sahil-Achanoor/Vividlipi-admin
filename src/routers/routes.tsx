@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy } from 'react'
 import { Navigate, createBrowserRouter } from 'react-router-dom'
+import AccessLayout from './middleware/access-layout'
 
 const AssignOrderList = lazy(
   () => import('@/pages/admin/order-management/assign-orders'),
@@ -45,7 +46,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <PrivateOutlet roles={['admin']}>
+      <PrivateOutlet roles={['admin', 'sub-admin']}>
         <AppWrapper />
       </PrivateOutlet>
     ),
@@ -59,7 +60,7 @@ const router = createBrowserRouter([
    */
   {
     path: '/admin',
-    element: <PrivateOutlet roles={['admin']} />,
+    element: <PrivateOutlet roles={['admin', 'sub-admin']} />,
     errorElement: <ErrorPage />,
     children: [
       { path: '', element: <Navigate to='/admin/dashboard' /> },
@@ -78,7 +79,14 @@ const router = createBrowserRouter([
        * */
       {
         path: 'cms',
-        element: <AppWrapper />,
+        element: (
+          <AccessLayout
+            access='Home_Management'
+            type={['view', 'add', 'update', 'delete']}
+          >
+            <AppWrapper />
+          </AccessLayout>
+        ),
         children: [
           { path: '', element: <Navigate to='/admin/cms/home-page' /> },
           { path: 'home-page', element: <HomePage /> },
@@ -96,9 +104,33 @@ const router = createBrowserRouter([
             path: '',
             element: <Navigate to='/admin/products/product-list' />,
           },
-          { path: 'product-list', element: <ProductList /> },
-          { path: 'product-list/add-product', element: <ManageProduct /> },
-          { path: 'product-list/edit-product/:id', element: <ManageProduct /> },
+          {
+            path: 'product-list',
+            element: (
+              <AccessLayout
+                access='Product_Management'
+                type={['view', 'add', 'update', 'delete']}
+              >
+                <ProductList />
+              </AccessLayout>
+            ),
+          },
+          {
+            path: 'product-list/add-product',
+            element: (
+              <AccessLayout access='Product_Management' type={'add'}>
+                <ManageProduct />
+              </AccessLayout>
+            ),
+          },
+          {
+            path: 'product-list/edit-product/:id',
+            element: (
+              <AccessLayout access='Product_Management' type={'edit'}>
+                <ManageProduct />
+              </AccessLayout>
+            ),
+          },
         ],
       },
       /**

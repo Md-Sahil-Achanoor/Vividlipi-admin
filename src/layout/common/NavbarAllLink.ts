@@ -5,113 +5,205 @@ import { LuLayoutDashboard } from 'react-icons/lu'
 import { MdLibraryBooks } from 'react-icons/md'
 import { MenuType } from '../../types'
 
+export const sidebarData = [
+  {
+    id: 'featured_category_management',
+    title: 'Feature Management',
+    icon: 'atom',
+    link: '/feature-management',
+  },
+  {
+    id: 'domain_management',
+    title: 'Domain Management',
+    icon: 'cog',
+    link: '/domain-management',
+  },
+  {
+    id: 'referral_and_gifts',
+    title: 'Referral Management',
+    icon: 'badgePercent',
+    link: '/referral-management',
+  },
+  {
+    id: 'admin_user_management',
+    title: 'Admin User Management',
+    icon: 'userAdmin',
+    link: '/admin-user-management',
+  },
+  {
+    id: 'roles_management',
+    title: 'Role Management',
+    icon: 'users',
+    link: '/role-management',
+  },
+  {
+    id: 'course_management',
+    title: 'Course Management',
+    icon: 'packageCheck',
+    link: '/course-management',
+  },
+  {
+    id: 'application_user_management',
+    title: 'App User Management',
+    icon: 'user',
+    link: '/app-user-management',
+  },
+  {
+    id: 'insight_management',
+    title: 'Insight Management',
+    icon: 'radar',
+    link: '/insight-management',
+  },
+  {
+    id: 'banners_management',
+    title: 'Banner Management',
+    icon: 'appWindow',
+    link: '/banner-management',
+  },
+  {
+    id: 'subscription_management',
+    title: 'Subscription Management',
+    icon: 'layers',
+    link: '/subscription-management',
+  },
+  {
+    id: 'payment_management',
+    title: 'Payment Management',
+    icon: 'dollar',
+    link: '/payment-management',
+  },
+  {
+    id: 'static_content_management',
+    title: 'Static Management',
+    icon: 'fileText',
+    link: '/static-management',
+  },
+]
+
 const NavbarAllLink: MenuType[] = [
   {
+    id: 'Dashboard_Management',
     title: 'Dashboard',
     link: '/admin/dashboard',
-    role: ['admin'],
+    role: ['admin', 'sub-admin'],
     icon: LuLayoutDashboard,
   },
   {
+    id: 'CMS_management',
     title: 'CMS',
     link: '/#',
-    role: ['admin'],
+    role: ['admin', 'sub-admin'],
     icon: BiBookContent,
     list: [
       {
+        id: 'CMS_management_Home_page',
         title: 'Home',
         link: '/admin/cms/home-page',
-        role: ['admin'],
+        role: ['admin', 'sub-admin'],
         icon: null,
       },
     ],
   },
   {
+    id: 'Product_Management',
     title: 'Product Management',
     link: '/#',
-    role: ['admin'],
+    role: ['admin', 'sub-admin'],
     icon: MdLibraryBooks,
     list: [
       {
+        id: 'Product_Management',
         title: 'Product',
         link: '/admin/products/product-list',
-        role: ['admin'],
+        role: ['admin', 'sub-admin'],
         icon: null,
       },
       {
+        id: 'Product_Author_Management',
         title: 'Author',
         link: '/admin/author/author-list',
-        role: ['admin'],
+        role: ['admin', 'sub-admin'],
         icon: null,
       },
       {
+        id: 'Product_Publisher_Management',
         title: 'Publisher',
         link: '/admin/publisher/publisher-list',
-        role: ['admin'],
+        role: ['admin', 'sub-admin'],
         icon: null,
       },
       {
+        id: 'Product_Category_Management',
         title: 'Category',
         link: '/admin/categories/main-category',
-        role: ['admin'],
+        role: ['admin', 'sub-admin'],
         icon: null,
       },
       {
+        id: 'Product_Sub_Category_Management',
         title: 'Sub Category',
         link: '/admin/categories/sub-category',
-        role: ['admin'],
+        role: ['admin', 'sub-admin'],
         icon: null,
       },
       {
+        id: 'Product_Coupon_Management',
         title: 'Coupon',
         link: '/admin/coupon/coupon-list',
-        role: ['admin'],
+        role: ['admin', 'sub-admin'],
         icon: null,
       },
     ],
   },
   {
+    id: 'User_Management',
     title: 'User Management',
     link: '/#',
-    role: ['admin'],
+    role: ['admin', 'sub-admin'],
     icon: FaUsersCog,
     list: [
       {
+        id: 'User_Management',
         title: 'Role List',
         link: '/admin/user-management/role-list',
-        role: ['admin'],
+        role: ['admin', 'sub-admin'],
         icon: null,
       },
       {
+        id: 'User_Management',
         title: 'Admin Users',
         link: '/admin/user-management/user-list',
-        role: ['admin'],
+        role: ['admin', 'sub-admin'],
         icon: null,
       },
     ],
   },
   {
+    id: 'Order_Management',
     title: 'Order Management',
     link: '/#',
-    role: ['admin'],
+    role: ['admin', 'sub-admin'],
     icon: AiOutlineOrderedList,
     list: [
       {
+        id: 'Order_User_Management',
         title: 'User List',
         link: '/admin/order-management/order-user-list',
-        role: ['admin'],
+        role: ['admin', 'sub-admin'],
         icon: null,
       },
       {
+        id: 'Assign_Order_Management',
         title: 'Assign Order List',
         link: '/admin/order-management/assign-order-list',
-        role: ['admin'],
+        role: ['admin', 'sub-admin'],
         icon: null,
       },
       {
+        id: 'Order_User_Management',
         title: 'Order List',
         link: '/admin/order-management/order-list',
-        role: ['admin'],
+        role: ['admin', 'sub-admin'],
         icon: null,
       },
     ],
@@ -143,4 +235,5 @@ const NavbarAllLink: MenuType[] = [
   //   ],
   // },
 ]
+
 export default NavbarAllLink
