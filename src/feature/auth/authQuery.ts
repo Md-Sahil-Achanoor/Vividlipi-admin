@@ -30,12 +30,27 @@ const authQuery = API.injectEndpoints({
           const res = result.data
           // console.log(res);
           if (res?.status === 1) {
-            dispatch(authAction.loginSuccess(res))
-            localStorage.setItem('user', JSON.stringify(res))
             const role = res?.user?.role
-            // console.log(role, "role", role === "admin");
             if (options?.router) {
-              if (role === 'admin') {
+              if (role === 'admin' && res?.Permissions === 'All Access') {
+                dispatch(authAction.loginSuccess(res))
+                localStorage.setItem('user', JSON.stringify(res))
+                toast.success('Signed in successfully')
+                options?.router('/admin/dashboard')
+              } else if (
+                typeof res?.Permissions === 'object' &&
+                role !== 'admin'
+              ) {
+                const response: AuthResponse = {
+                  ...res,
+                  user: {
+                    ...res.user,
+                    role: 'sub-admin',
+                    subRole: res?.user?.role,
+                  },
+                }
+                dispatch(authAction.loginSuccess(response))
+                localStorage.setItem('user', JSON.stringify(response))
                 toast.success('Signed in successfully')
                 options?.router('/admin/dashboard')
               } else {

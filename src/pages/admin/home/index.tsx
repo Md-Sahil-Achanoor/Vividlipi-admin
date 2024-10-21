@@ -20,11 +20,14 @@ import {
 } from '@/feature/home/homeQuery'
 import { homeAction } from '@/feature/home/homeSlice'
 import PageLayout from '@/layout/PageLayout'
+import { RolePermission } from '@/types'
 import { checkType, getModuleName, getTitle } from '@/utils/modules/home'
+import { checkPermission } from '@/utils/validateSchema'
 import { useState } from 'react'
 
 const HomePage = () => {
   const dispatch = useAppDispatch()
+  const { roleDetails } = useAppSelector((state) => state.auth)
   const [activeTab, setActiveTab] = useState<string>('feature-slider')
   const { type } = useAppSelector((state) => state.core)
   const {
@@ -92,54 +95,72 @@ const HomePage = () => {
     }
   }
 
+  const hasAddPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'add',
+    access: 'CMS_Home_Management',
+  })
+
+  const hasDeletePermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'delete',
+    access: 'CMS_Home_Management',
+  })
+
   return (
     <PageLayout title='Home Page CMS'>
-      <ManageFeatureSlider />
-      <ManageFeatureSubSlider />
-      <ManageFeatureProduct />
-      <ManageFeatureNewIn />
-      <ManageModule
-        classes={
-          checkType(type)
-            ? {
-                top: 'visible',
-                body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
-              }
-            : {
-                top: 'invisible',
-                body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
-              }
-        }
-        handleModal={handleModal}
-        wrapperClass='h-full'
-        isModalHeader
-        outSideClick
-        headText={`Delete the ${getModuleName(type)}?`}
-        heading={getTitle(
-          type,
-          selectedFeatureSlider ||
-            selectedFeatureSubSlider ||
-            selectedFeatureProduct,
-        )}
-        details='Are you certain you want to delete?'
-        type='delete'
-        buttonText={
-          isDeleteCategory ||
-          isDeleteSubCategory ||
-          isDeleteProduct ||
-          isDeleteNewIn
-            ? 'Deleting...'
-            : 'Delete'
-        }
-        buttonProps={{
-          onClick: handleUpdateStatus,
-          disabled:
+      {hasAddPermission && (
+        <>
+          <ManageFeatureSlider />
+          <ManageFeatureSubSlider />
+          <ManageFeatureProduct />
+          <ManageFeatureNewIn />
+        </>
+      )}
+      {hasDeletePermission && (
+        <ManageModule
+          classes={
+            checkType(type)
+              ? {
+                  top: 'visible',
+                  body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
+                }
+              : {
+                  top: 'invisible',
+                  body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
+                }
+          }
+          handleModal={handleModal}
+          wrapperClass='h-full'
+          isModalHeader
+          outSideClick
+          headText={`Delete the ${getModuleName(type)}?`}
+          heading={getTitle(
+            type,
+            selectedFeatureSlider ||
+              selectedFeatureSubSlider ||
+              selectedFeatureProduct,
+          )}
+          details='Are you certain you want to delete?'
+          type='delete'
+          buttonText={
             isDeleteCategory ||
             isDeleteSubCategory ||
             isDeleteProduct ||
-            isDeleteNewIn,
-        }}
-      />
+            isDeleteNewIn
+              ? 'Deleting...'
+              : 'Delete'
+          }
+          buttonProps={{
+            onClick: handleUpdateStatus,
+            disabled:
+              isDeleteCategory ||
+              isDeleteSubCategory ||
+              isDeleteProduct ||
+              isDeleteNewIn,
+          }}
+        />
+      )}
       <Card>
         <div className='mb-3 pb-5'>
           <div className='flex justify-center relative mt-2'>

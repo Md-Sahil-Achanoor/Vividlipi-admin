@@ -1,6 +1,6 @@
 export const permissionOptions = {
   Dashboard: [{ label: 'View', value: 'view' }],
-  Product_Management: [
+  Product_List_Management: [
     { label: 'Add', value: 'add' },
     { label: 'Update', value: 'update' },
     { label: 'Delete', value: 'delete' },
@@ -14,21 +14,14 @@ export const permissionOptions = {
     { label: 'View', value: 'view' },
     // { label: "enable", value: "enable" },
   ],
-  User_Management: [
+  Product_Author_Management: [
     { label: 'Add', value: 'add' },
     { label: 'Update', value: 'update' },
     { label: 'Delete', value: 'delete' },
     { label: 'View', value: 'view' },
     // { label: "enable", value: "enable" },
   ],
-  Promotions_and_Discounts: [
-    { label: 'Add', value: 'add' },
-    { label: 'Update', value: 'update' },
-    { label: 'Delete', value: 'delete' },
-    { label: 'View', value: 'view' },
-    // { label: "enable", value: "enable" },
-  ],
-  Return_and_Refund_Management: [
+  Product_Publisher_Management: [
     { label: 'Add', value: 'add' },
     { label: 'Update', value: 'update' },
     { label: 'Delete', value: 'delete' },
@@ -42,6 +35,42 @@ export const permissionOptions = {
     { label: 'View', value: 'view' },
     // { label: "enable", value: "enable" },
   ],
+  Product_Coupon_Management: [
+    { label: 'Add', value: 'add' },
+    { label: 'Update', value: 'update' },
+    { label: 'Delete', value: 'delete' },
+    { label: 'View', value: 'view' },
+  ],
+  User_Role_Management: [
+    { label: 'Add', value: 'add' },
+    { label: 'Update', value: 'update' },
+    { label: 'Delete', value: 'delete' },
+    { label: 'View', value: 'view' },
+    // { label: "enable", value: "enable" },
+  ],
+
+  User_Admin_Management: [
+    { label: 'Add', value: 'add' },
+    { label: 'Update', value: 'update' },
+    { label: 'Delete', value: 'delete' },
+    { label: 'View', value: 'view' },
+  ],
+
+  Order_User_Management: [
+    { label: 'Add', value: 'add' },
+    { label: 'Update', value: 'update' },
+    { label: 'Delete', value: 'delete' },
+    { label: 'View', value: 'view' },
+    // { label: "enable", value: "enable" },
+  ],
+
+  Order_Assign_Management: [
+    { label: 'Add', value: 'add' },
+    // { label: 'Update', value: 'update' },
+    { label: 'Delete', value: 'delete' },
+    { label: 'View', value: 'view' },
+    // { label: "enable", value: "enable" },
+  ],
   Permissions_and_Roles: [
     { label: 'Add', value: 'add' },
     { label: 'Update', value: 'update' },
@@ -49,7 +78,7 @@ export const permissionOptions = {
     { label: 'View', value: 'view' },
     // { label: "enable", value: "enable" },
   ],
-  Analytics_and_Reporting: [
+  CMS_Home_Management: [
     { label: 'Add', value: 'add' },
     { label: 'Update', value: 'update' },
     { label: 'Delete', value: 'delete' },
@@ -112,10 +141,10 @@ export const permissionOptions = {
     { label: 'View', value: 'view' },
     // { label: "enable", value: "enable" },
   ],
-  Order_Management: [
-    { label: 'Add', value: 'add' },
-    { label: 'Update', value: 'update' },
-    { label: 'Delete', value: 'delete' },
+  Order_List_Management: [
+    // { label: 'Add', value: 'add' },
+    // { label: 'Update', value: 'update' },
+    // { label: 'Delete', value: 'delete' },
     { label: 'View', value: 'view' },
     // { label: "enable", value: "enable" },
   ],
@@ -123,40 +152,48 @@ export const permissionOptions = {
 
 export const getActualRole = {
   Dashboard: 'Dashboard',
+
+  // CMS Management
+  CMS_Home_Management: 'CMS Home Management',
+
+  // Product Management
+  Product_List_Management: 'Product List Management',
   Product_Category_Management: 'Product Category Management',
-  Product_Management: 'Product Management',
   Product_Sub_Category_Management: 'Product Sub Category Management',
-  User_Management: 'User Management',
-  Promotions_and_Discounts: 'Promotions and Discounts',
-  Return_and_Refund_Management: 'Return and Refund Management',
-  Permissions_and_Roles: 'Permissions and Roles',
-  Analytics_and_Reporting: 'Analytics and Reporting',
-  Customer_Support: 'Customer Support',
-  Shipping_Management: 'Shipping Management',
-  Order_Management: 'Order Management',
-  Tax_Management: 'Tax Management',
-  Notification_Management: 'Notification Management',
-  Backup_and_Recovery: 'Backup and Recovery',
-  Multi_language_Support: 'Multi language Support',
-  Dashboard_Customization: 'Dashboard Customization',
+  Product_Author_Management: 'Product Author Management',
+  Product_Publisher_Management: 'Product Publisher Management',
+  Product_Coupon_Management: 'Product Coupon Management',
+
+  // User Management
+  User_Role_Management: 'User Role Management',
+  User_Admin_Management: 'User Admin Management',
+
+  // Order Management
+  Order_List_Management: 'Order List Management',
+  Order_User_Management: 'Order User Management',
+  Order_Assign_Management: 'Assign Order Management',
 }
 
 export const roleOptions = [
   'Dashboard',
+
+  // CMS
+  'CMS_Home_Management',
+
+  // Product Management
+  'Product_List_Management',
   'Product_Category_Management',
-  'Product_Management',
   'Product_Sub_Category_Management',
-  'User_Management',
-  'Promotions_and_Discounts',
-  'Return_and_Refund_Management',
-  'Permissions_and_Roles',
-  'Analytics_and_Reporting',
-  'Customer_Support',
-  'Shipping_Management',
-  'Order_Management',
-  'Tax_Management',
-  'Notification_Management',
-  'Backup_and_Recovery',
-  'Multi_language_Support',
-  'Dashboard_Customization',
+  'Product_Author_Management',
+  'Product_Publisher_Management',
+  'Product_Coupon_Management',
+
+  // User Management
+  'User_Role_Management',
+  'User_Admin_Management',
+
+  // Order Management
+  'Order_List_Management',
+  'Order_User_Management',
+  'Order_Assign_Management',
 ]

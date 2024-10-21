@@ -1,4 +1,4 @@
-import { useAppDispatch } from '@/app/store'
+import { useAppDispatch, useAppSelector } from '@/app/store'
 import NoTableData from '@/components/atoms/NoTableData'
 import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
 import Table from '@/components/ui/Table'
@@ -6,7 +6,9 @@ import { featureProductHeader } from '@/constants/tableHeader'
 import { coreAction } from '@/feature/core/coreSlice'
 import { useGetHomeFeatureProductsQuery } from '@/feature/home/homeQuery'
 import { homeAction } from '@/feature/home/homeSlice'
+import { RolePermission } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { checkPermission } from '@/utils/validateSchema'
 import { useEffect } from 'react'
 import ModuleHeader from '../ModuleHeader'
 
@@ -16,6 +18,7 @@ import ModuleHeader from '../ModuleHeader'
 // };
 
 const FeatureProducts = () => {
+  const { roleDetails } = useAppSelector((state) => state.auth)
   const { data, isLoading, isFetching, refetch } =
     useGetHomeFeatureProductsQuery({})
 
@@ -53,11 +56,26 @@ const FeatureProducts = () => {
     }
   }
 
+  const hasAddPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'add',
+    access: 'CMS_Home_Management',
+  })
+  // const hasEditPermission = checkPermission({
+  //   rolePermissions: roleDetails as RolePermission,
+  //   type: 'edit',
+  //   access: 'CMS_Home_Management',
+  // })
+  const hasDeletePermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'delete',
+    access: 'CMS_Home_Management',
+  })
   return (
     <div>
       <ModuleHeader
         title='Feature Products'
-        isAdd={data?.data && data?.data?.length < 9}
+        isAdd={hasAddPermission ? data?.data && data?.data?.length < 9 : false}
         isButton={false}
         handleModal={() => handleModal('manage-feature-product')}
       />
@@ -88,15 +106,19 @@ const FeatureProducts = () => {
                   >
                     Edit
                   </button> */}
-                  <button
-                    onClick={() => handleModal('delete-feature-product', item)}
-                    className={cn(
-                      'font-medium hover:underline',
-                      'text-red-600 dark:text-red-500',
-                    )}
-                  >
-                    Delete
-                  </button>
+                  {hasDeletePermission && (
+                    <button
+                      onClick={() =>
+                        handleModal('delete-feature-product', item)
+                      }
+                      className={cn(
+                        'font-medium hover:underline',
+                        'text-red-600 dark:text-red-500',
+                      )}
+                    >
+                      Delete
+                    </button>
+                  )}
                 </div>
               </td>
             </tr>

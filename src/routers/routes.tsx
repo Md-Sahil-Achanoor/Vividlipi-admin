@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy } from 'react'
 import { Navigate, createBrowserRouter } from 'react-router-dom'
+import AccessLayout from './middleware/access-layout'
 
 const AssignOrderList = lazy(
   () => import('@/pages/admin/order-management/assign-orders'),
@@ -45,7 +46,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <PrivateOutlet roles={['admin']}>
+      <PrivateOutlet roles={['admin', 'sub-admin']}>
         <AppWrapper />
       </PrivateOutlet>
     ),
@@ -59,7 +60,7 @@ const router = createBrowserRouter([
    */
   {
     path: '/admin',
-    element: <PrivateOutlet roles={['admin']} />,
+    element: <PrivateOutlet roles={['admin', 'sub-admin']} />,
     errorElement: <ErrorPage />,
     children: [
       { path: '', element: <Navigate to='/admin/dashboard' /> },
@@ -78,7 +79,14 @@ const router = createBrowserRouter([
        * */
       {
         path: 'cms',
-        element: <AppWrapper />,
+        element: (
+          <AccessLayout
+            access='CMS_Home_Management'
+            type={['view', 'add', 'update', 'delete']}
+          >
+            <AppWrapper />
+          </AccessLayout>
+        ),
         children: [
           { path: '', element: <Navigate to='/admin/cms/home-page' /> },
           { path: 'home-page', element: <HomePage /> },
@@ -96,9 +104,36 @@ const router = createBrowserRouter([
             path: '',
             element: <Navigate to='/admin/products/product-list' />,
           },
-          { path: 'product-list', element: <ProductList /> },
-          { path: 'product-list/add-product', element: <ManageProduct /> },
-          { path: 'product-list/edit-product/:id', element: <ManageProduct /> },
+          {
+            path: 'product-list',
+            element: (
+              <AccessLayout
+                access='Product_List_Management'
+                type={['view', 'add', 'update', 'delete']}
+              >
+                <ProductList />
+              </AccessLayout>
+            ),
+          },
+          {
+            path: 'product-list/add-product',
+            element: (
+              <AccessLayout
+                access='Product_List_Management'
+                type={['add', 'edit']}
+              >
+                <ManageProduct />
+              </AccessLayout>
+            ),
+          },
+          {
+            path: 'product-list/edit-product/:id',
+            element: (
+              <AccessLayout access='Product_List_Management' type={'edit'}>
+                <ManageProduct />
+              </AccessLayout>
+            ),
+          },
         ],
       },
       /**
@@ -109,8 +144,28 @@ const router = createBrowserRouter([
         path: 'categories',
         element: <AppWrapper />,
         children: [
-          { path: 'main-category', element: <MainCategoryList /> },
-          { path: 'sub-category', element: <SubCategoryList /> },
+          {
+            path: 'main-category',
+            element: (
+              <AccessLayout
+                access='Product_Category_Management'
+                type={['view', 'add', 'update', 'delete']}
+              >
+                <MainCategoryList />
+              </AccessLayout>
+            ),
+          },
+          {
+            path: 'sub-category',
+            element: (
+              <AccessLayout
+                access='Product_Sub_Category_Management'
+                type={['view', 'add', 'update', 'delete']}
+              >
+                <SubCategoryList />
+              </AccessLayout>
+            ),
+          },
           // { path: "edit/:id", element: <EditProduct /> },
         ],
       },
@@ -126,7 +181,17 @@ const router = createBrowserRouter([
             path: '',
             element: <Navigate to='/admin/publisher/publisher-list' />,
           },
-          { path: 'publisher-list', element: <PublisherList /> },
+          {
+            path: 'publisher-list',
+            element: (
+              <AccessLayout
+                access='Product_Publisher_Management'
+                type={['view', 'add', 'update', 'delete']}
+              >
+                <PublisherList />
+              </AccessLayout>
+            ),
+          },
           // { path: "edit/:id", element: <EditProduct /> },
         ],
       },
@@ -139,7 +204,17 @@ const router = createBrowserRouter([
         path: 'author',
         element: <AppWrapper />,
         children: [
-          { path: 'author-list', element: <AuthorList /> },
+          {
+            path: 'author-list',
+            element: (
+              <AccessLayout
+                access='Product_Author_Management'
+                type={['view', 'add', 'update', 'delete']}
+              >
+                <AuthorList />
+              </AccessLayout>
+            ),
+          },
           // { path: "edit/:id", element: <EditProduct /> },
         ],
       },
@@ -159,12 +234,49 @@ const router = createBrowserRouter([
             path: 'role-list',
             element: <AppWrapper />,
             children: [
-              { path: '', element: <RoleList /> },
-              { path: 'add-role', element: <ManageRole /> },
-              { path: 'edit-role/:id', element: <ManageRole /> },
+              {
+                path: '',
+                element: (
+                  <AccessLayout
+                    access='User_Role_Management'
+                    type={['view', 'add', 'update', 'delete']}
+                  >
+                    <RoleList />
+                  </AccessLayout>
+                ),
+              },
+              {
+                path: 'add-role',
+                element: (
+                  <AccessLayout
+                    access='User_Role_Management'
+                    type={['add', 'update']}
+                  >
+                    <ManageRole />
+                  </AccessLayout>
+                ),
+              },
+              {
+                path: 'edit-role/:id',
+                element: (
+                  <AccessLayout access='User_Role_Management' type={'edit'}>
+                    <ManageRole />
+                  </AccessLayout>
+                ),
+              },
             ],
           },
-          { path: 'user-list', element: <UserList /> },
+          {
+            path: 'user-list',
+            element: (
+              <AccessLayout
+                access='User_Admin_Management'
+                type={['view', 'add', 'update', 'delete']}
+              >
+                <UserList />
+              </AccessLayout>
+            ),
+          },
         ],
       },
       /**
@@ -181,11 +293,42 @@ const router = createBrowserRouter([
           },
           {
             path: 'coupon-list',
-            element: <CouponList />,
+            element: (
+              <AccessLayout
+                access='Product_Coupon_Management'
+                type={['view', 'add', 'update', 'delete']}
+              >
+                <CouponList />
+              </AccessLayout>
+            ),
           },
-          { path: 'coupon-list/add-coupon', element: <ManageCoupon /> },
-          { path: 'coupon-list/edit-coupon/:id', element: <ManageCoupon /> },
-          { path: 'coupon-list/view-coupon/:id', element: <ViewCoupon /> },
+          {
+            path: 'coupon-list/add-coupon',
+            element: (
+              <AccessLayout
+                access='Product_Coupon_Management'
+                type={['add', 'update']}
+              >
+                <ManageCoupon />
+              </AccessLayout>
+            ),
+          },
+          {
+            path: 'coupon-list/edit-coupon/:id',
+            element: (
+              <AccessLayout access='Product_Coupon_Management' type={'edit'}>
+                <ManageCoupon />
+              </AccessLayout>
+            ),
+          },
+          {
+            path: 'coupon-list/view-coupon/:id',
+            element: (
+              <AccessLayout access='Product_Coupon_Management' type={'view'}>
+                <ViewCoupon />
+              </AccessLayout>
+            ),
+          },
         ],
       },
 
@@ -207,16 +350,53 @@ const router = createBrowserRouter([
             path: 'assign-order-list',
             element: <AppWrapper />,
             children: [
-              { path: '', element: <AssignOrderList /> },
-              { path: 'assign-order', element: <ManageAssignOrder /> },
-              { path: 'edit-assign-order/:id', element: <ManageAssignOrder /> },
+              {
+                path: '',
+                element: (
+                  <AccessLayout
+                    access='Order_List_Management'
+                    type={['view', 'add', 'update', 'delete']}
+                  >
+                    <AssignOrderList />
+                  </AccessLayout>
+                ),
+              },
+              {
+                path: 'assign-order',
+                element: (
+                  <AccessLayout
+                    access='Order_Assign_Management'
+                    type={['view', 'add', 'update', 'delete']}
+                  >
+                    <ManageAssignOrder />
+                  </AccessLayout>
+                ),
+              },
+              {
+                path: 'edit-assign-order/:id',
+                element: (
+                  <AccessLayout access='Order_Assign_Management' type={'edit'}>
+                    <ManageAssignOrder />
+                  </AccessLayout>
+                ),
+              },
             ],
           },
           {
             path: 'order-list',
             element: <OrderList />,
           },
-          { path: 'order-user-list', element: <OrderUserList /> },
+          {
+            path: 'order-user-list',
+            element: (
+              <AccessLayout
+                access='Order_User_Management'
+                type={['view', 'add', 'update', 'delete']}
+              >
+                <OrderUserList />
+              </AccessLayout>
+            ),
+          },
         ],
       },
     ],

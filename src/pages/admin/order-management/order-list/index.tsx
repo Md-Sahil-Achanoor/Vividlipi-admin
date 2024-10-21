@@ -61,6 +61,7 @@ const OrderList = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>('All')
   const [userType, setUserType] = useState<string>('All')
   const navigator = useNavigate()
+  // const { roleDetails } = useAppSelector((state) => state.auth)
   const { type } = useAppSelector((state) => state.core)
   const { selectedAssignOrder } = useAppSelector(
     (state) => state.orderManagement,
@@ -175,18 +176,30 @@ const OrderList = () => {
     return 'N/A'
   }
 
-  useEffect(() => {
-    fetch(`http://localhost:3000/en/v1/auth/login`, {
-      method: 'POST',
-      body: JSON.stringify({
-        email: 'kiran@kalpas.in',
-        password: 'U2FsdGVkX19HQgDluYpD04JtywdpsySFvXrLfGvpydQ=',
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data))
-      .catch((err) => console.log(err))
-  }, [])
+  // useEffect(() => {
+  //   fetch(`http://localhost:3000/en/v1/auth/login`, {
+  //     method: 'POST',
+  //     body: JSON.stringify({
+  //       email: 'kiran@kalpas.in',
+  //       password: 'U2FsdGVkX19HQgDluYpD04JtywdpsySFvXrLfGvpydQ=',
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => console.log(data))
+  //     .catch((err) => console.log(err))
+  // }, [])
+
+  // const hasAddPermission = checkPermission({
+  //   rolePermissions: roleDetails as RolePermission,
+  //   type: 'add',
+  //   access: 'Order_Assign_Management',
+  // })
+
+  // const hasDeletePermission = checkPermission({
+  //   rolePermissions: roleDetails as RolePermission,
+  //   type: 'delete',
+  //   access: 'Order_Assign_Management',
+  // })
 
   return (
     <>

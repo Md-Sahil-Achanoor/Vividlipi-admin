@@ -12,9 +12,11 @@ export type RoleBase = {
   view: number
 }
 
+export type RolePermission = Record<string, Partial<RoleBase>>
+
 export interface IRolePermission {
   Title: string
-  Permissions: Record<string, Partial<RoleBase>>
+  Permissions: RolePermission
 }
 
 export interface RolePermissionPayLoad extends IRolePermission {}

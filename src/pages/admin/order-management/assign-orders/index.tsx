@@ -12,8 +12,9 @@ import {
 } from '@/feature/order-management/orderManagementQuery'
 import { orderManagementAction } from '@/feature/order-management/orderManagementSlice'
 import PageLayout from '@/layout/PageLayout'
-import { AssignOrderResponse, BreadCrumbItem } from '@/types'
+import { AssignOrderResponse, BreadCrumbItem, RolePermission } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { checkPermission } from '@/utils/validateSchema'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -37,6 +38,7 @@ const tableHead = [
 
 const AssignOrderList = () => {
   const navigator = useNavigate()
+  const { roleDetails } = useAppSelector((state) => state.auth)
   const { type } = useAppSelector((state) => state.core)
   const { selectedAssignOrder } = useAppSelector(
     (state) => state.orderManagement,
@@ -99,6 +101,20 @@ const AssignOrderList = () => {
     }
   }
 
+  const hasAddPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'add',
+    access: 'Order_Assign_Management',
+  })
+
+  const hasDeletePermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'delete',
+    access: 'Order_Assign_Management',
+  })
+
+  // console.log(`\n\n hasAddPermission:`, hasAddPermission)
+
   return (
     <>
       <ManageModule
@@ -136,7 +152,7 @@ const AssignOrderList = () => {
       <PageLayout
         title='Order List'
         breadcrumbItem={breadcrumbItem}
-        buttonText='Assign Order'
+        buttonText={hasAddPermission ? 'Assign Order' : ''}
         buttonProps={{
           onClick: () =>
             navigator('/admin/order-management/assign-order-list/assign-order'),
@@ -172,15 +188,17 @@ const AssignOrderList = () => {
                   <td className='table_td'>{item?.status}</td>
                   <td className='table_td'>
                     <div className='flex items-center gap-3'>
-                      <button
-                        onClick={() => handleModal('delete', item)}
-                        className={cn(
-                          'font-medium hover:underline',
-                          'text-red-600 dark:text-red-500',
-                        )}
-                      >
-                        Delete
-                      </button>
+                      {hasDeletePermission ? (
+                        <button
+                          onClick={() => handleModal('delete', item)}
+                          className={cn(
+                            'font-medium hover:underline',
+                            'text-red-600 dark:text-red-500',
+                          )}
+                        >
+                          Delete
+                        </button>
+                      ) : null}
                     </div>
                   </td>
                 </tr>

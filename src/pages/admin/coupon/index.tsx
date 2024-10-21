@@ -11,8 +11,9 @@ import {
 } from '@/feature/coupon/couponQuery'
 import { couponAction } from '@/feature/coupon/couponSlice'
 import PageLayout from '@/layout/PageLayout'
-import { BreadCrumbItem, CouponResponse } from '@/types'
+import { BreadCrumbItem, CouponResponse, RolePermission } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { checkPermission } from '@/utils/validateSchema'
 import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -25,6 +26,7 @@ const breadcrumbItem: BreadCrumbItem[] = [
 
 const CouponList = () => {
   const navigate = useNavigate()
+  const { roleDetails } = useAppSelector((state) => state.auth)
   const { type } = useAppSelector((state) => state.core)
   const { selectedCoupon } = useAppSelector((state) => state.coupon)
   const dispatch = useAppDispatch()
@@ -78,38 +80,58 @@ const CouponList = () => {
     }
   }
 
+  const hasAddPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'add',
+    access: 'Product_Coupon_Management',
+  })
+
+  const hasEditPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'edit',
+    access: 'Product_Coupon_Management',
+  })
+
+  const hasDeletePermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'delete',
+    access: 'Product_Coupon_Management',
+  })
+
   return (
     <>
-      <ManageModule
-        classes={
-          type === 'delete-coupon'
-            ? {
-                top: 'visible',
-                body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
-              }
-            : {
-                top: 'invisible',
-                body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
-              }
-        }
-        handleModal={handleModal}
-        wrapperClass='h-full'
-        isModalHeader
-        outSideClick
-        headText='Delete the Coupon?'
-        heading={selectedCoupon?.coupon_name || ''}
-        details='Are you certain you want to delete?'
-        type='delete'
-        buttonText={isDeleteCoupon ? 'Deleting...' : 'Delete'}
-        buttonProps={{
-          onClick: handleDeleteCoupon,
-          disabled: isDeleteCoupon,
-        }}
-      />
+      {hasDeletePermission && (
+        <ManageModule
+          classes={
+            type === 'delete-coupon'
+              ? {
+                  top: 'visible',
+                  body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
+                }
+              : {
+                  top: 'invisible',
+                  body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
+                }
+          }
+          handleModal={handleModal}
+          wrapperClass='h-full'
+          isModalHeader
+          outSideClick
+          headText='Delete the Coupon?'
+          heading={selectedCoupon?.coupon_name || ''}
+          details='Are you certain you want to delete?'
+          type='delete'
+          buttonText={isDeleteCoupon ? 'Deleting...' : 'Delete'}
+          buttonProps={{
+            onClick: handleDeleteCoupon,
+            disabled: isDeleteCoupon,
+          }}
+        />
+      )}
       <PageLayout
         title='Coupon List'
         breadcrumbItem={breadcrumbItem}
-        buttonText='Add Coupon'
+        buttonText={hasAddPermission ? 'Add Coupon' : ''}
         buttonProps={{
           onClick: () => navigate('/admin/coupon/coupon-list/add-coupon'),
         }}
@@ -131,33 +153,39 @@ const CouponList = () => {
                 <td className='table_td'>{item?.end_date}</td>
                 <td className='table_td'>
                   <div className='flex items-center gap-3'>
-                    <Link
-                      to={`/admin/coupon/coupon-list/edit-coupon/${item?.id}`}
-                      className={cn(
-                        'font-medium hover:underline',
-                        'text-blue-600 dark:text-blue-500',
-                      )}
-                    >
-                      Edit
-                    </Link>
-                    <Link
-                      to={`/admin/coupon/coupon-list/view-coupon/${item?.id}`}
-                      className={cn(
-                        'font-medium hover:underline',
-                        'text-gray-600 dark:text-gray-500',
-                      )}
-                    >
-                      View
-                    </Link>
-                    <button
-                      onClick={() => handleModal('delete', item)}
-                      className={cn(
-                        'font-medium hover:underline',
-                        'text-red-600 dark:text-red-500',
-                      )}
-                    >
-                      Delete
-                    </button>
+                    {hasEditPermission && (
+                      <Link
+                        to={`/admin/coupon/coupon-list/edit-coupon/${item?.id}`}
+                        className={cn(
+                          'font-medium hover:underline',
+                          'text-blue-600 dark:text-blue-500',
+                        )}
+                      >
+                        Edit
+                      </Link>
+                    )}
+                    {
+                      <Link
+                        to={`/admin/coupon/coupon-list/view-coupon/${item?.id}`}
+                        className={cn(
+                          'font-medium hover:underline',
+                          'text-gray-600 dark:text-gray-500',
+                        )}
+                      >
+                        View
+                      </Link>
+                    }
+                    {hasDeletePermission && (
+                      <button
+                        onClick={() => handleModal('delete', item)}
+                        className={cn(
+                          'font-medium hover:underline',
+                          'text-red-600 dark:text-red-500',
+                        )}
+                      >
+                        Delete
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>

@@ -35,6 +35,7 @@ const userManagementSlice = createSlice({
             permissions[role] = []
           }
         })
+        console.log(permissions)
         state.singleRolePermission = {
           Title: action.payload.Title,
           ...permissions,

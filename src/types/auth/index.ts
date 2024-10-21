@@ -1,4 +1,6 @@
-export type Role = 'admin' | ''
+import { RolePermission } from '../user-management'
+
+export type Role = 'admin' | 'sub-admin' | ''
 
 export interface ResponseUser {
   email: string
@@ -7,6 +9,7 @@ export interface ResponseUser {
   first_name: string
   last_name: string
   role: Role
+  subRole: string
 }
 
 export interface AuthResponse {
@@ -15,6 +18,7 @@ export interface AuthResponse {
   message: string
   user: ResponseUser
   admin: ResponseUser
+  Permissions: RolePermission | 'All Access'
 }
 
 export interface AuthState {
@@ -25,4 +29,5 @@ export interface AuthState {
   role: Role
   type: string
   selectedUser: null
+  roleDetails: RolePermission | 'All Access' | null
 }
