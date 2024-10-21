@@ -121,6 +121,7 @@ const userManagementQuery = API.injectEndpoints({
           const result = await queryFulfilled
           if (result?.data?.status === 1) {
             dispatch(coreAction.toggleModal({ open: false, type: '' }))
+            dispatch(userManagementAction.resetRolePermission())
             dispatch(
               userManagementQuery.util.updateQueryData(
                 'getRolePermissions',
@@ -264,6 +265,7 @@ const userManagementQuery = API.injectEndpoints({
                 },
               ),
             )
+            dispatch(userManagementAction.resetAdminUser())
             dispatch(coreAction.toggleModal({ open: false, type: '' }))
             // dispatch(categoryAction.resetSubRole());
             toast.success(result?.data?.message || 'Delete Successful!')

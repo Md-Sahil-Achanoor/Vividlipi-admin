@@ -17,7 +17,7 @@ const MultiSelectItem = <T extends object>({
   isRemoveAble = false,
   name,
 }: Props<T>) => {
-  // console.log(`\n\n  data: ====>`, data);
+  console.log(`\n\n  data: ====>`, data)
   if (data?.length !== 0) {
     return (
       <div className='flex items-center gap-1 flex-wrap'>

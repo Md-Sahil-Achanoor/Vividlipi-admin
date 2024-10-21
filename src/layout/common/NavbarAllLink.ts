@@ -89,14 +89,14 @@ const NavbarAllLink: MenuType[] = [
     icon: LuLayoutDashboard,
   },
   {
-    id: 'CMS_management',
+    id: 'CMS_Management',
     title: 'CMS',
     link: '/#',
     role: ['admin', 'sub-admin'],
     icon: BiBookContent,
     list: [
       {
-        id: 'CMS_management_Home_page',
+        id: 'CMS_Home_Management',
         title: 'Home',
         link: '/admin/cms/home-page',
         role: ['admin', 'sub-admin'],
@@ -112,7 +112,7 @@ const NavbarAllLink: MenuType[] = [
     icon: MdLibraryBooks,
     list: [
       {
-        id: 'Product_Management',
+        id: 'Product_List_Management',
         title: 'Product',
         link: '/admin/products/product-list',
         role: ['admin', 'sub-admin'],
@@ -163,14 +163,14 @@ const NavbarAllLink: MenuType[] = [
     icon: FaUsersCog,
     list: [
       {
-        id: 'User_Management',
+        id: 'User_Role_Management',
         title: 'Role List',
         link: '/admin/user-management/role-list',
         role: ['admin', 'sub-admin'],
         icon: null,
       },
       {
-        id: 'User_Management',
+        id: 'User_Admin_Management',
         title: 'Admin Users',
         link: '/admin/user-management/user-list',
         role: ['admin', 'sub-admin'],
@@ -193,14 +193,14 @@ const NavbarAllLink: MenuType[] = [
         icon: null,
       },
       {
-        id: 'Assign_Order_Management',
+        id: 'Order_Assign_Management',
         title: 'Assign Order List',
         link: '/admin/order-management/assign-order-list',
         role: ['admin', 'sub-admin'],
         icon: null,
       },
       {
-        id: 'Order_User_Management',
+        id: 'Order_List_Management',
         title: 'Order List',
         link: '/admin/order-management/order-list',
         role: ['admin', 'sub-admin'],

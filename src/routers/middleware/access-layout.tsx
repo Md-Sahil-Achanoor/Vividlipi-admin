@@ -14,6 +14,15 @@ export default function AccessLayout({
 }: AccessLayoutProps) {
   type Type = keyof RolePermission[typeof access]
   const { roleDetails, user } = useAppSelector((state) => state.auth)
+
+  if (
+    user?.role === 'admin' &&
+    typeof roleDetails === 'string' &&
+    roleDetails === 'All Access'
+  ) {
+    return children
+  }
+  // console.log(`\n\n roleDetails:`, roleDetails, roleDetails?.[access])
   const check =
     typeof roleDetails === 'object'
       ? typeof type === 'string'

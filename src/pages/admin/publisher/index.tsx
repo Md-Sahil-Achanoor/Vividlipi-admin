@@ -12,8 +12,9 @@ import {
 } from '@/feature/publisher/publisherQuery'
 import { publisherAction } from '@/feature/publisher/publisherSlice'
 import PageLayout from '@/layout/PageLayout'
-import { BreadCrumbItem, PublisherResponse } from '@/types'
+import { BreadCrumbItem, PublisherResponse, RolePermission } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { checkPermission } from '@/utils/validateSchema'
 import { useEffect } from 'react'
 
 const breadcrumbItem: BreadCrumbItem[] = [
@@ -25,6 +26,7 @@ const breadcrumbItem: BreadCrumbItem[] = [
 
 const PublisherList = () => {
   // const navigate = useNavigate();
+  const { roleDetails } = useAppSelector((state) => state.auth)
   const { type } = useAppSelector((state) => state.core)
   const { selectedPublisher } = useAppSelector((state) => state.publisher)
   const dispatch = useAppDispatch()
@@ -87,35 +89,55 @@ const PublisherList = () => {
     }
   }
 
+  const hasAddPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'add',
+    access: 'Product_Publisher_Management',
+  })
+
+  const hasEditPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'edit',
+    access: 'Product_Publisher_Management',
+  })
+
+  const hasDeletePermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'delete',
+    access: 'Product_Publisher_Management',
+  })
+
   return (
     <>
-      <ManageModule
-        classes={
-          type === 'delete-publisher'
-            ? {
-                top: 'visible',
-                body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
-              }
-            : {
-                top: 'invisible',
-                body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
-              }
-        }
-        handleModal={handleModal}
-        wrapperClass='h-full'
-        isModalHeader
-        outSideClick
-        headText='Delete the Publisher?'
-        heading={selectedPublisher?.Name || ''}
-        details='Are you certain you want to delete?'
-        type='delete'
-        buttonText={isDeletePublisher ? 'Deleting...' : 'Delete'}
-        buttonProps={{
-          onClick: handleDeletePublisher,
-          disabled: isDeletePublisher,
-        }}
-      />
-      <ManagePublisher />
+      {hasDeletePermission && (
+        <ManageModule
+          classes={
+            type === 'delete-publisher'
+              ? {
+                  top: 'visible',
+                  body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
+                }
+              : {
+                  top: 'invisible',
+                  body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
+                }
+          }
+          handleModal={handleModal}
+          wrapperClass='h-full'
+          isModalHeader
+          outSideClick
+          headText='Delete the Publisher?'
+          heading={selectedPublisher?.Name || ''}
+          details='Are you certain you want to delete?'
+          type='delete'
+          buttonText={isDeletePublisher ? 'Deleting...' : 'Delete'}
+          buttonProps={{
+            onClick: handleDeletePublisher,
+            disabled: isDeletePublisher,
+          }}
+        />
+      )}
+      {hasEditPermission || (hasAddPermission && <ManagePublisher />)}
       <PageLayout
         title='Publisher List'
         breadcrumbItem={breadcrumbItem}
@@ -138,24 +160,28 @@ const PublisherList = () => {
                 <td className='table_td'>{item?.description}</td>
                 <td className='table_td'>
                   <div className='flex items-center gap-3'>
-                    <button
-                      onClick={() => handleModal('edit', item)}
-                      className={cn(
-                        'font-medium hover:underline',
-                        'text-blue-600 dark:text-blue-500',
-                      )}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleModal('delete', item)}
-                      className={cn(
-                        'font-medium hover:underline',
-                        'text-red-600 dark:text-red-500',
-                      )}
-                    >
-                      Delete
-                    </button>
+                    {hasEditPermission && (
+                      <button
+                        onClick={() => handleModal('edit', item)}
+                        className={cn(
+                          'font-medium hover:underline',
+                          'text-blue-600 dark:text-blue-500',
+                        )}
+                      >
+                        Edit
+                      </button>
+                    )}
+                    {hasDeletePermission && (
+                      <button
+                        onClick={() => handleModal('delete', item)}
+                        className={cn(
+                          'font-medium hover:underline',
+                          'text-red-600 dark:text-red-500',
+                        )}
+                      >
+                        Delete
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>

@@ -13,8 +13,9 @@ import {
 } from '@/feature/user-management/userManagementQuery'
 import { userManagementAction } from '@/feature/user-management/userManagementSlice'
 import PageLayout from '@/layout/PageLayout'
-import { BreadCrumbItem, RolePermissionResponse } from '@/types'
+import { BreadCrumbItem, RolePermission, RolePermissionResponse } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { checkPermission } from '@/utils/validateSchema'
 import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -29,6 +30,7 @@ const tableHead = ['SL', 'Name', 'Permissions', 'Action']
 
 const RoleList = () => {
   const navigator = useNavigate()
+  const { roleDetails } = useAppSelector((state) => state.auth)
   const { type } = useAppSelector((state) => state.core)
   const { selectedRolePermission } = useAppSelector(
     (state) => state.userManagement,
@@ -89,38 +91,58 @@ const RoleList = () => {
     // return data?.filter?.((item) => item !== "");
   }
 
+  const hasAddPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'add',
+    access: 'User_Role_Management',
+  })
+
+  const hasEditPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'edit',
+    access: 'User_Role_Management',
+  })
+
+  const hasDeletePermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'delete',
+    access: 'User_Role_Management',
+  })
+
   return (
     <>
-      <ManageModule
-        classes={
-          type === 'delete-role'
-            ? {
-                top: 'visible',
-                body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
-              }
-            : {
-                top: 'invisible',
-                body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
-              }
-        }
-        handleModal={handleModal}
-        wrapperClass='h-full'
-        isModalHeader
-        outSideClick
-        headText='Delete the Role?'
-        heading={selectedRolePermission?.Title || ''}
-        details='Are you certain you want to delete?'
-        type='delete'
-        buttonText={isDeleteRolePermission ? 'Deleting...' : 'Delete'}
-        buttonProps={{
-          onClick: handleUpdateStatus,
-          disabled: isDeleteRolePermission,
-        }}
-      />
+      {hasDeletePermission && (
+        <ManageModule
+          classes={
+            type === 'delete-role'
+              ? {
+                  top: 'visible',
+                  body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
+                }
+              : {
+                  top: 'invisible',
+                  body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
+                }
+          }
+          handleModal={handleModal}
+          wrapperClass='h-full'
+          isModalHeader
+          outSideClick
+          headText='Delete the Role?'
+          heading={selectedRolePermission?.Title || ''}
+          details='Are you certain you want to delete?'
+          type='delete'
+          buttonText={isDeleteRolePermission ? 'Deleting...' : 'Delete'}
+          buttonProps={{
+            onClick: handleUpdateStatus,
+            disabled: isDeleteRolePermission,
+          }}
+        />
+      )}
       <PageLayout
         title='Role List'
         breadcrumbItem={breadcrumbItem}
-        buttonText='Add Role'
+        buttonText={hasAddPermission ? 'Add Role' : ''}
         buttonProps={{
           onClick: () => navigator('/admin/user-management/role-list/add-role'),
         }}
@@ -151,20 +173,24 @@ const RoleList = () => {
                   </td>
                   <td className='table_td'>
                     <div className='flex items-center gap-3'>
-                      <Link
-                        to={`/admin/user-management/role-list/edit-role/${item?.id}`}
-                      >
-                        Edit
-                      </Link>
-                      <button
-                        onClick={() => handleModal('delete', item)}
-                        className={cn(
-                          'font-medium hover:underline',
-                          'text-red-600 dark:text-red-500',
-                        )}
-                      >
-                        Delete
-                      </button>
+                      {hasEditPermission && (
+                        <Link
+                          to={`/admin/user-management/role-list/edit-role/${item?.id}`}
+                        >
+                          Edit
+                        </Link>
+                      )}
+                      {hasDeletePermission && (
+                        <button
+                          onClick={() => handleModal('delete', item)}
+                          className={cn(
+                            'font-medium hover:underline',
+                            'text-red-600 dark:text-red-500',
+                          )}
+                        >
+                          Delete
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>

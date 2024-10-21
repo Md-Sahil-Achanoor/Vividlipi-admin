@@ -14,9 +14,10 @@ import {
 import { authorAction } from '@/feature/author/authorSlice'
 import { coreAction } from '@/feature/core/coreSlice'
 import PageLayout from '@/layout/PageLayout'
-import { AuthorResponse, BreadCrumbItem } from '@/types'
+import { AuthorResponse, BreadCrumbItem, RolePermission } from '@/types'
 import { truncate } from '@/utils/file'
 import { cn } from '@/utils/twmerge'
+import { checkPermission } from '@/utils/validateSchema'
 import { useEffect } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 
@@ -30,6 +31,7 @@ const breadcrumbItem: BreadCrumbItem[] = [
 const AuthorList = () => {
   // const navigate = useNavigate();
   const { type } = useAppSelector((state) => state.core)
+  const { roleDetails } = useAppSelector((state) => state.auth)
   const { selectedAuthor } = useAppSelector((state) => state.author)
   const dispatch = useAppDispatch()
   const { data, isLoading, refetch } = useGetAuthorsQuery({
@@ -91,39 +93,59 @@ const AuthorList = () => {
     }
   }
 
+  const hasAddPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'add',
+    access: 'Product_Author_Management',
+  })
+
+  const hasEditPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'edit',
+    access: 'Product_Author_Management',
+  })
+
+  const hasDeletePermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'delete',
+    access: 'Product_Author_Management',
+  })
+
   return (
     <>
-      <ManageModule
-        classes={
-          type === 'delete-author'
-            ? {
-                top: 'visible',
-                body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
-              }
-            : {
-                top: 'invisible',
-                body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
-              }
-        }
-        handleModal={handleModal}
-        wrapperClass='h-full'
-        isModalHeader
-        outSideClick
-        headText='Delete the Author?'
-        heading={selectedAuthor?.Name || ''}
-        details='Are you certain you want to delete?'
-        type='delete'
-        buttonText={isDeleteAuthor ? 'Deleting...' : 'Delete'}
-        buttonProps={{
-          onClick: handleDeleteAuthor,
-          disabled: isDeleteAuthor,
-        }}
-      />
-      <ManageAuthor />
+      {hasDeletePermission && (
+        <ManageModule
+          classes={
+            type === 'delete-author'
+              ? {
+                  top: 'visible',
+                  body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
+                }
+              : {
+                  top: 'invisible',
+                  body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
+                }
+          }
+          handleModal={handleModal}
+          wrapperClass='h-full'
+          isModalHeader
+          outSideClick
+          headText='Delete the Author?'
+          heading={selectedAuthor?.Name || ''}
+          details='Are you certain you want to delete?'
+          type='delete'
+          buttonText={isDeleteAuthor ? 'Deleting...' : 'Delete'}
+          buttonProps={{
+            onClick: handleDeleteAuthor,
+            disabled: isDeleteAuthor,
+          }}
+        />
+      )}
+      {hasAddPermission && <ManageAuthor />}
       <PageLayout
         title='Author List'
         breadcrumbItem={breadcrumbItem}
-        buttonText='Add Author'
+        buttonText={hasAddPermission ? 'Add Author' : ''}
         buttonProps={{
           onClick: () => handleModal(),
         }}
@@ -155,24 +177,28 @@ const AuthorList = () => {
                 </td>
                 <td className='table_td'>
                   <div className='flex items-center gap-3'>
-                    <button
-                      onClick={() => handleModal('edit', item)}
-                      className={cn(
-                        'font-medium hover:underline',
-                        'text-blue-600 dark:text-blue-500',
-                      )}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleModal('delete', item)}
-                      className={cn(
-                        'font-medium hover:underline',
-                        'text-red-600 dark:text-red-500',
-                      )}
-                    >
-                      Delete
-                    </button>
+                    {hasEditPermission && (
+                      <button
+                        onClick={() => handleModal('edit', item)}
+                        className={cn(
+                          'font-medium hover:underline',
+                          'text-blue-600 dark:text-blue-500',
+                        )}
+                      >
+                        Edit
+                      </button>
+                    )}
+                    {hasDeletePermission && (
+                      <button
+                        onClick={() => handleModal('delete', item)}
+                        className={cn(
+                          'font-medium hover:underline',
+                          'text-red-600 dark:text-red-500',
+                        )}
+                      >
+                        Delete
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>

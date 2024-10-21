@@ -16,7 +16,7 @@ import {
   IRolePermissionForm,
   rolePermissionFormSchema,
 } from '@/models'
-import { BreadCrumbItem, RoleBase } from '@/types'
+import { BreadCrumbItem, RoleBase, RolePermission } from '@/types'
 import { convertPermissionIntoObject } from '@/utils/validateSchema'
 import { Field, Form, Formik, FormikHelpers } from 'formik'
 import { useEffect } from 'react'
@@ -26,14 +26,15 @@ import { useNavigate, useParams } from 'react-router-dom'
 const initialValues: IRolePermissionForm = {
   Title: '',
   Dashboard: [],
-  Product_Management: [],
-  User_Management: [],
+  Product_List_Management: [],
+  User_Admin_Management: [],
+  User_Role_Management: [],
   Product_Category_Management: [],
   Product_Sub_Category_Management: [],
-  Home_Management: [],
-  Order_Management: [],
+  CMS_Home_Management: [],
+  Order_List_Management: [],
   Order_User_Management: [],
-  Assign_Order_Management: [],
+  Order_Assign_Management: [],
   Product_Author_Management: [],
   Product_Publisher_Management: [],
   Product_Coupon_Management: [],
@@ -71,14 +72,18 @@ const ManageRole = () => {
     values: IRolePermissionForm,
     { setSubmitting, resetForm }: FormikHelpers<IRolePermissionForm>,
   ) => {
-    // console.log(values);
+    console.log(values)
     const { Title, ...rest } = values
 
-    const obj: Record<string, RoleBase> = {}
-    Object.keys(rest).forEach((key: any) => {
-      if ((rest as any)[key]?.length > 0) {
-        const obj2: any = obj
-        obj2[key] = convertPermissionIntoObject(obj2[key] as IOptions[])
+    type Type = keyof RolePermission
+    type RestType = IRolePermissionForm[keyof IRolePermissionForm]
+    const obj: Record<Type, RoleBase> = {}
+    const newRest = rest as Record<string, RestType>
+    Object.keys(newRest).forEach((key) => {
+      if (newRest[key] && newRest[key]?.length > 0) {
+        obj[key] = convertPermissionIntoObject(
+          newRest[key] as IOptions[],
+        ) as RoleBase
       }
     })
 
@@ -111,8 +116,8 @@ const ManageRole = () => {
     //   Notification_Management: convertPermissionIntoObject(
     //     values.Notification_Management as IOptions[]
     //   ),
-    //   Product_Management: convertPermissionIntoObject(
-    //     values.Product_Management as IOptions[]
+    //   Product_List_Management: convertPermissionIntoObject(
+    //     values.Product_List_Management as IOptions[]
     //   ),
     //   User_Management: convertPermissionIntoObject(
     //     values.User_Management as IOptions[]
@@ -153,9 +158,7 @@ const ManageRole = () => {
   }, [id])
 
   useEffect(() => {
-    return () => {
-      dispatch(userManagementAction.resetAdminUser())
-    }
+    dispatch(userManagementAction.resetRolePermission())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -176,7 +179,7 @@ const ManageRole = () => {
           >
             {({ isSubmitting, values, setFieldValue }) => (
               <Form>
-                {/* {console.log(values)} */}
+                {/* {console.log(errors)} */}
                 <div className='mt-5'>
                   <div className='max-w-[50%]'>
                     <Field
@@ -240,30 +243,86 @@ const ManageRole = () => {
                         isAuth
                       />
                     </div>
+
                     <div className='col-span-1'>
                       <Field
-                        label='Product Management'
-                        name='Product_Management'
+                        label='CMS Home Management'
+                        name='CMS_Home_Management'
                         isRequired={false}
-                        renderData={permissionOptions.Product_Management}
+                        renderData={permissionOptions.CMS_Home_Management}
                         renderItem={(item: IOptions) => <>{item?.label}</>}
                         isActive={(item: IOptions) =>
-                          values?.Product_Management?.find(
-                            (Product_Management) =>
-                              Product_Management?.value === item?.value,
+                          values?.CMS_Home_Management?.find(
+                            (CMS_Home_Management) =>
+                              CMS_Home_Management?.value === item?.value,
                           )
                         }
                         renderName={() => (
                           <MultiSelectItem<IOptions>
-                            data={values?.Product_Management as IOptions[]}
+                            data={values?.CMS_Home_Management as IOptions[]}
                             defaultName='Select...'
                             displayName='label'
                             onClick={(item) => {
                               setFieldValue(
-                                'Product_Management',
-                                values?.Product_Management?.filter(
-                                  (Product_Management) =>
-                                    Product_Management?.value !== item?.value,
+                                'CMS_Home_Management',
+                                values?.CMS_Home_Management?.filter(
+                                  (CMS_Home_Management) =>
+                                    CMS_Home_Management?.value !== item?.value,
+                                ),
+                              )
+                            }}
+                          />
+                        )}
+                        onChangeCallback={(item: IOptions) => {
+                          const isUnique = values?.CMS_Home_Management?.find(
+                            (CMS_Home_Management) =>
+                              CMS_Home_Management?.value === item?.value,
+                          )
+                          if (!isUnique) {
+                            setFieldValue('CMS_Home_Management', [
+                              ...(values?.CMS_Home_Management as IOptions[]),
+                              item,
+                            ])
+                          }
+                        }}
+                        clearData={(item: IOptions) => {
+                          const data = values?.CMS_Home_Management?.filter(
+                            (CMS_Home_Management) =>
+                              CMS_Home_Management?.value !== item?.value,
+                          )
+                          setFieldValue('CMS_Home_Management', data)
+                        }}
+                        isSelected={false}
+                        component={InfiniteSelect}
+                        isAuth
+                      />
+                    </div>
+
+                    <div className='col-span-1'>
+                      <Field
+                        label='Product Management'
+                        name='Product_List_Management'
+                        isRequired={false}
+                        renderData={permissionOptions.Product_List_Management}
+                        renderItem={(item: IOptions) => <>{item?.label}</>}
+                        isActive={(item: IOptions) =>
+                          values?.Product_List_Management?.find(
+                            (Product_List_Management) =>
+                              Product_List_Management?.value === item?.value,
+                          )
+                        }
+                        renderName={() => (
+                          <MultiSelectItem<IOptions>
+                            data={values?.Product_List_Management as IOptions[]}
+                            defaultName='Select...'
+                            displayName='label'
+                            onClick={(item) => {
+                              setFieldValue(
+                                'Product_List_Management',
+                                values?.Product_List_Management?.filter(
+                                  (Product_List_Management) =>
+                                    Product_List_Management?.value !==
+                                    item?.value,
                                 ),
                               )
                             }}
@@ -271,24 +330,25 @@ const ManageRole = () => {
                         )}
                         onChangeCallback={(item: IOptions) => {
                           // check unique item in array
-                          const isUnique = values?.Product_Management?.find(
-                            (Product_Management) =>
-                              Product_Management?.value === item?.value,
-                          )
+                          const isUnique =
+                            values?.Product_List_Management?.find(
+                              (Product_List_Management) =>
+                                Product_List_Management?.value === item?.value,
+                            )
                           if (!isUnique) {
-                            setFieldValue('Product_Management', [
-                              ...(values?.Product_Management as IOptions[]),
+                            setFieldValue('Product_List_Management', [
+                              ...(values?.Product_List_Management as IOptions[]),
                               item,
                             ])
                           }
                         }}
                         clearData={(item: IOptions) => {
                           // find data and clear
-                          const data = values?.Product_Management?.filter(
-                            (Product_Management) =>
-                              Product_Management?.value !== item?.value,
+                          const data = values?.Product_List_Management?.filter(
+                            (Product_List_Management) =>
+                              Product_List_Management?.value !== item?.value,
                           )
-                          setFieldValue('Product_Management', data)
+                          setFieldValue('Product_List_Management', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}
@@ -360,6 +420,7 @@ const ManageRole = () => {
                         isAuth
                       />
                     </div>
+
                     <div className='col-span-1'>
                       <Field
                         label='Sub Category Management'
@@ -425,225 +486,6 @@ const ManageRole = () => {
                         isAuth
                       />
                     </div>
-                    <div className='col-span-1'>
-                      <Field
-                        label='User Management'
-                        name='User_Management'
-                        isRequired={false}
-                        renderData={permissionOptions.User_Management}
-                        renderItem={(item: IOptions) => <>{item?.label}</>}
-                        isActive={(item: IOptions) =>
-                          values?.User_Management?.find(
-                            (User_Management) =>
-                              User_Management?.value === item?.value,
-                          )
-                        }
-                        renderName={() => (
-                          <MultiSelectItem<IOptions>
-                            data={values?.User_Management as IOptions[]}
-                            defaultName='Select...'
-                            displayName='label'
-                            onClick={(item) => {
-                              setFieldValue(
-                                'User_Management',
-                                values?.User_Management?.filter(
-                                  (User_Management) =>
-                                    User_Management?.value !== item?.value,
-                                ),
-                              )
-                            }}
-                          />
-                        )}
-                        onChangeCallback={(item: IOptions) => {
-                          // check unique item in array
-                          const isUnique = values?.User_Management?.find(
-                            (User_Management) =>
-                              User_Management?.value === item?.value,
-                          )
-                          if (!isUnique) {
-                            setFieldValue('User_Management', [
-                              ...(values?.User_Management as IOptions[]),
-                              item,
-                            ])
-                          }
-                        }}
-                        clearData={(item: IOptions) => {
-                          // find data and clear
-                          const data = values?.User_Management?.filter(
-                            (User_Management) =>
-                              User_Management?.value !== item?.value,
-                          )
-                          setFieldValue('User_Management', data)
-                        }}
-                        isSelected={false}
-                        component={InfiniteSelect}
-                        isAuth
-                      />
-                    </div>
-                    <div className='col-span-1'>
-                      <Field
-                        label='Order List Management'
-                        name='Order_Management'
-                        isRequired={false}
-                        renderData={permissionOptions.Order_Management}
-                        renderItem={(item: IOptions) => <>{item?.label}</>}
-                        isActive={(item: IOptions) =>
-                          values?.Order_Management?.find(
-                            (Order_Management) =>
-                              Order_Management?.value === item?.value,
-                          )
-                        }
-                        renderName={() => (
-                          <MultiSelectItem<IOptions>
-                            data={values?.Order_Management as IOptions[]}
-                            defaultName='Select...'
-                            displayName='label'
-                            onClick={(item) => {
-                              setFieldValue(
-                                'Order_Management',
-                                values?.Order_Management?.filter(
-                                  (Order_Management) =>
-                                    Order_Management?.value !== item?.value,
-                                ),
-                              )
-                            }}
-                          />
-                        )}
-                        onChangeCallback={(item: IOptions) => {
-                          const isUnique = values?.Order_Management?.find(
-                            (Order_Management) =>
-                              Order_Management?.value === item?.value,
-                          )
-                          if (!isUnique) {
-                            setFieldValue('Order_Management', [
-                              ...(values?.Order_Management as IOptions[]),
-                              item,
-                            ])
-                          }
-                        }}
-                        clearData={(item: IOptions) => {
-                          const data = values?.Order_Management?.filter(
-                            (Order_Management) =>
-                              Order_Management?.value !== item?.value,
-                          )
-                          setFieldValue('Order_Management', data)
-                        }}
-                        isSelected={false}
-                        component={InfiniteSelect}
-                        isAuth
-                      />
-                    </div>
-
-                    <div className='col-span-1'>
-                      <Field
-                        label='Order User Management'
-                        name='Order_User_Management'
-                        isRequired={false}
-                        renderData={permissionOptions.Order_User_Management}
-                        renderItem={(item: IOptions) => <>{item?.label}</>}
-                        isActive={(item: IOptions) =>
-                          values?.Order_User_Management?.find(
-                            (Order_User_Management) =>
-                              Order_User_Management?.value === item?.value,
-                          )
-                        }
-                        renderName={() => (
-                          <MultiSelectItem<IOptions>
-                            data={values?.Order_User_Management as IOptions[]}
-                            defaultName='Select...'
-                            displayName='label'
-                            onClick={(item) => {
-                              setFieldValue(
-                                'Order_User_Management',
-                                values?.Order_User_Management?.filter(
-                                  (Order_User_Management) =>
-                                    Order_User_Management?.value !==
-                                    item?.value,
-                                ),
-                              )
-                            }}
-                          />
-                        )}
-                        onChangeCallback={(item: IOptions) => {
-                          const isUnique = values?.Order_User_Management?.find(
-                            (Order_User_Management) =>
-                              Order_User_Management?.value === item?.value,
-                          )
-                          if (!isUnique) {
-                            setFieldValue('Order_User_Management', [
-                              ...(values?.Order_User_Management as IOptions[]),
-                              item,
-                            ])
-                          }
-                        }}
-                        clearData={(item: IOptions) => {
-                          const data = values?.Order_User_Management?.filter(
-                            (Order_User_Management) =>
-                              Order_User_Management?.value !== item?.value,
-                          )
-                          setFieldValue('Order_User_Management', data)
-                        }}
-                        isSelected={false}
-                        component={InfiniteSelect}
-                        isAuth
-                      />
-                    </div>
-
-                    <div className='col-span-1'>
-                      <Field
-                        label='Order List Management'
-                        name='Assign_Order_Management'
-                        isRequired={false}
-                        renderData={permissionOptions.Assign_Order_Management}
-                        renderItem={(item: IOptions) => <>{item?.label}</>}
-                        isActive={(item: IOptions) =>
-                          values?.Assign_Order_Management?.find(
-                            (Assign_Order_Management) =>
-                              Assign_Order_Management?.value === item?.value,
-                          )
-                        }
-                        renderName={() => (
-                          <MultiSelectItem<IOptions>
-                            data={values?.Assign_Order_Management as IOptions[]}
-                            defaultName='Select...'
-                            displayName='label'
-                            onClick={(item) => {
-                              setFieldValue(
-                                'Assign_Order_Management',
-                                values?.Assign_Order_Management?.filter(
-                                  (Assign_Order_Management) =>
-                                    Assign_Order_Management?.value !==
-                                    item?.value,
-                                ),
-                              )
-                            }}
-                          />
-                        )}
-                        onChangeCallback={(item: IOptions) => {
-                          const isUnique =
-                            values?.Assign_Order_Management?.find(
-                              (Assign_Order_Management) =>
-                                Assign_Order_Management?.value === item?.value,
-                            )
-                          if (!isUnique) {
-                            setFieldValue('Assign_Order_Management', [
-                              ...(values?.Assign_Order_Management as IOptions[]),
-                              item,
-                            ])
-                          }
-                        }}
-                        clearData={(item: IOptions) => {
-                          const data = values?.Assign_Order_Management?.filter(
-                            (Assign_Order_Management) =>
-                              Assign_Order_Management?.value !== item?.value,
-                          )
-                          setFieldValue('Assign_Order_Management', data)
-                        }}
-                        isSelected={false}
-                        component={InfiniteSelect}
-                        isAuth
-                      />
-                    </div>
 
                     <div className='col-span-1'>
                       <Field
@@ -654,8 +496,7 @@ const ManageRole = () => {
                         renderItem={(item: IOptions) => <>{item?.label}</>}
                         isActive={(item: IOptions) =>
                           values?.Product_Author_Management?.find(
-                            (Product_Author_Management) =>
-                              Product_Author_Management?.value === item?.value,
+                            (author) => author?.value === item?.value,
                           )
                         }
                         renderName={() => (
@@ -669,9 +510,7 @@ const ManageRole = () => {
                               setFieldValue(
                                 'Product_Author_Management',
                                 values?.Product_Author_Management?.filter(
-                                  (Product_Author_Management) =>
-                                    Product_Author_Management?.value !==
-                                    item?.value,
+                                  (author) => author?.value !== item?.value,
                                 ),
                               )
                             }}
@@ -680,9 +519,7 @@ const ManageRole = () => {
                         onChangeCallback={(item: IOptions) => {
                           const isUnique =
                             values?.Product_Author_Management?.find(
-                              (Product_Author_Management) =>
-                                Product_Author_Management?.value ===
-                                item?.value,
+                              (author) => author?.value === item?.value,
                             )
                           if (!isUnique) {
                             setFieldValue('Product_Author_Management', [
@@ -694,9 +531,7 @@ const ManageRole = () => {
                         clearData={(item: IOptions) => {
                           const data =
                             values?.Product_Author_Management?.filter(
-                              (Product_Author_Management) =>
-                                Product_Author_Management?.value !==
-                                item?.value,
+                              (author) => author?.value !== item?.value,
                             )
                           setFieldValue('Product_Author_Management', data)
                         }}
@@ -824,6 +659,276 @@ const ManageRole = () => {
                                 item?.value,
                             )
                           setFieldValue('Product_Coupon_Management', data)
+                        }}
+                        isSelected={false}
+                        component={InfiniteSelect}
+                        isAuth
+                      />
+                    </div>
+
+                    <div className='col-span-1'>
+                      <Field
+                        label='User Management'
+                        name='User_Management'
+                        isRequired={false}
+                        renderData={permissionOptions.User_Admin_Management}
+                        renderItem={(item: IOptions) => <>{item?.label}</>}
+                        isActive={(item: IOptions) =>
+                          values?.User_Admin_Management?.find(
+                            (User_Management) =>
+                              User_Management?.value === item?.value,
+                          )
+                        }
+                        renderName={() => (
+                          <MultiSelectItem<IOptions>
+                            data={values?.User_Admin_Management as IOptions[]}
+                            defaultName='Select...'
+                            displayName='label'
+                            onClick={(item) => {
+                              setFieldValue(
+                                'User_Management',
+                                values?.User_Admin_Management?.filter(
+                                  (User_Management) =>
+                                    User_Management?.value !== item?.value,
+                                ),
+                              )
+                            }}
+                          />
+                        )}
+                        onChangeCallback={(item: IOptions) => {
+                          // check unique item in array
+                          const isUnique = values?.User_Admin_Management?.find(
+                            (User_Management) =>
+                              User_Management?.value === item?.value,
+                          )
+                          if (!isUnique) {
+                            setFieldValue('User_Admin_Management', [
+                              ...(values?.User_Admin_Management as IOptions[]),
+                              item,
+                            ])
+                          }
+                        }}
+                        clearData={(item: IOptions) => {
+                          // find data and clear
+                          const data = values?.User_Admin_Management?.filter(
+                            (User_Management) =>
+                              User_Management?.value !== item?.value,
+                          )
+                          setFieldValue('User_Admin_Management', data)
+                        }}
+                        isSelected={false}
+                        component={InfiniteSelect}
+                        isAuth
+                      />
+                    </div>
+
+                    <div className='col-span-1'>
+                      <Field
+                        label='User Role Management'
+                        name='user_role'
+                        isRequired={false}
+                        renderData={permissionOptions.User_Role_Management}
+                        renderItem={(item: IOptions) => <>{item?.label}</>}
+                        isActive={(item: IOptions) =>
+                          values?.User_Role_Management?.find(
+                            (user_role) => user_role?.value === item?.value,
+                          )
+                        }
+                        renderName={() => (
+                          <MultiSelectItem<IOptions>
+                            data={values?.User_Role_Management as IOptions[]}
+                            defaultName='Select...'
+                            displayName='label'
+                            onClick={(item) => {
+                              setFieldValue(
+                                'user_role',
+                                values?.User_Role_Management?.filter(
+                                  (user_role) =>
+                                    user_role?.value !== item?.value,
+                                ),
+                              )
+                            }}
+                          />
+                        )}
+                        onChangeCallback={(item: IOptions) => {
+                          // check unique item in array
+                          const isUnique = values?.User_Role_Management?.find(
+                            (user_role) => user_role?.value === item?.value,
+                          )
+                          if (!isUnique) {
+                            setFieldValue('User_Role_Management', [
+                              ...(values?.User_Role_Management as IOptions[]),
+                              item,
+                            ])
+                          }
+                        }}
+                        clearData={(item: IOptions) => {
+                          // find data and clear
+                          const data = values?.User_Role_Management?.filter(
+                            (user_role) => user_role?.value !== item?.value,
+                          )
+                          setFieldValue('User_Role_Management', data)
+                        }}
+                        isSelected={false}
+                        component={InfiniteSelect}
+                        isAuth
+                      />
+                    </div>
+
+                    <div className='col-span-1'>
+                      <Field
+                        label='Order List Management'
+                        name='Order_List_Management'
+                        isRequired={false}
+                        renderData={permissionOptions.Order_List_Management}
+                        renderItem={(item: IOptions) => <>{item?.label}</>}
+                        isActive={(item: IOptions) =>
+                          values?.Order_List_Management?.find(
+                            (Order_List_Management) =>
+                              Order_List_Management?.value === item?.value,
+                          )
+                        }
+                        renderName={() => (
+                          <MultiSelectItem<IOptions>
+                            data={values?.Order_List_Management as IOptions[]}
+                            defaultName='Select...'
+                            displayName='label'
+                            onClick={(item) => {
+                              setFieldValue(
+                                'Order_List_Management',
+                                values?.Order_List_Management?.filter(
+                                  (Order_List_Management) =>
+                                    Order_List_Management?.value !==
+                                    item?.value,
+                                ),
+                              )
+                            }}
+                          />
+                        )}
+                        onChangeCallback={(item: IOptions) => {
+                          const isUnique = values?.Order_List_Management?.find(
+                            (Order_List_Management) =>
+                              Order_List_Management?.value === item?.value,
+                          )
+                          if (!isUnique) {
+                            setFieldValue('Order_List_Management', [
+                              ...(values?.Order_List_Management as IOptions[]),
+                              item,
+                            ])
+                          }
+                        }}
+                        clearData={(item: IOptions) => {
+                          const data = values?.Order_List_Management?.filter(
+                            (Order_Management) =>
+                              Order_Management?.value !== item?.value,
+                          )
+                          setFieldValue('Order_Management', data)
+                        }}
+                        isSelected={false}
+                        component={InfiniteSelect}
+                        isAuth
+                      />
+                    </div>
+
+                    <div className='col-span-1'>
+                      <Field
+                        label='Order User Management'
+                        name='Order_User_Management'
+                        isRequired={false}
+                        renderData={permissionOptions.Order_User_Management}
+                        renderItem={(item: IOptions) => <>{item?.label}</>}
+                        isActive={(item: IOptions) =>
+                          values?.Order_User_Management?.find(
+                            (Order_User_Management) =>
+                              Order_User_Management?.value === item?.value,
+                          )
+                        }
+                        renderName={() => (
+                          <MultiSelectItem<IOptions>
+                            data={values?.Order_User_Management as IOptions[]}
+                            defaultName='Select...'
+                            displayName='label'
+                            onClick={(item) => {
+                              setFieldValue(
+                                'Order_User_Management',
+                                values?.Order_User_Management?.filter(
+                                  (Order_User_Management) =>
+                                    Order_User_Management?.value !==
+                                    item?.value,
+                                ),
+                              )
+                            }}
+                          />
+                        )}
+                        onChangeCallback={(item: IOptions) => {
+                          const isUnique = values?.Order_User_Management?.find(
+                            (Order_User_Management) =>
+                              Order_User_Management?.value === item?.value,
+                          )
+                          if (!isUnique) {
+                            setFieldValue('Order_User_Management', [
+                              ...(values?.Order_User_Management as IOptions[]),
+                              item,
+                            ])
+                          }
+                        }}
+                        clearData={(item: IOptions) => {
+                          const data = values?.Order_User_Management?.filter(
+                            (Order_User_Management) =>
+                              Order_User_Management?.value !== item?.value,
+                          )
+                          setFieldValue('Order_User_Management', data)
+                        }}
+                        isSelected={false}
+                        component={InfiniteSelect}
+                        isAuth
+                      />
+                    </div>
+
+                    <div className='col-span-1'>
+                      <Field
+                        label='Assign Order Management'
+                        name='Order_Assign_Management'
+                        isRequired={false}
+                        renderData={permissionOptions.Order_Assign_Management}
+                        renderItem={(item: IOptions) => <>{item?.label}</>}
+                        isActive={(item: IOptions) =>
+                          values?.Order_Assign_Management?.find(
+                            (order) => order?.value === item?.value,
+                          )
+                        }
+                        renderName={() => (
+                          <MultiSelectItem<IOptions>
+                            data={values?.Order_Assign_Management as IOptions[]}
+                            defaultName='Select...'
+                            displayName='label'
+                            onClick={(item) => {
+                              setFieldValue(
+                                'Order_Assign_Management',
+                                values?.Order_Assign_Management?.filter(
+                                  (order) => order?.value !== item?.value,
+                                ),
+                              )
+                            }}
+                          />
+                        )}
+                        onChangeCallback={(item: IOptions) => {
+                          const isUnique =
+                            values?.Order_Assign_Management?.find(
+                              (order) => order?.value === item?.value,
+                            )
+                          if (!isUnique) {
+                            setFieldValue('Order_Assign_Management', [
+                              ...(values?.Order_Assign_Management as IOptions[]),
+                              item,
+                            ])
+                          }
+                        }}
+                        clearData={(item: IOptions) => {
+                          const data = values?.Order_Assign_Management?.filter(
+                            (order) => order?.value !== item?.value,
+                          )
+                          setFieldValue('Order_Assign_Management', data)
                         }}
                         isSelected={false}
                         component={InfiniteSelect}

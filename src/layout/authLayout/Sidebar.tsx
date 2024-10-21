@@ -2,7 +2,7 @@ import Logo from '@/components/atoms/Logo'
 import { useCallback, useMemo, useState } from 'react'
 import { RxCross2 } from 'react-icons/rx'
 import { useAppSelector } from '../../app/store'
-import { MenuType, SidebarProps } from '../../types'
+import { MenuType, RolePermission, SidebarProps } from '../../types'
 import { cn } from '../../utils/twmerge'
 import NavbarAllLink from '../common/NavbarAllLink'
 import MultiMenu from './Sidebar/MultiMenu'
@@ -27,22 +27,24 @@ const Sidebar = ({
     }
     if (user?.role === 'sub-admin') {
       const newNav: Record<string, MenuType> = {}
-      const permission = roleDetails as any
+      const permission = roleDetails as RolePermission
       const items: Record<string, string[]> = {}
+      console.log(`\n\n permission:`, permission)
       Object.keys(permission)?.forEach((key) => {
-        // console.log(`\n\n key:`, key)
+        // console.log(`\n\n key:`, key, permission[key])
         if (Object.keys(permission[key])?.length > 0) {
           const prefix = key.split('_')?.[0] as typeof key
+          // console.log(`\n\n prefix:`, prefix)
           if (!items[`${prefix}_Management`]) {
-            items[`${prefix}_Management`] = []
+            items[`${prefix}_Management`] = [key]
           } else {
             items[`${prefix}_Management`].push(key)
           }
         }
       })
-      // console.log(`\n\n items:`, items)
+      console.log(`\n\n items:`, items)
       NavbarAllLink?.forEach((item) => {
-        // console.log(`\n\n item:`, items[item?.id])
+        console.log(`\n\n item:`, items[item?.id])
         if (items[item?.id]?.length === 0) {
           newNav[item?.id] = item
         } else {
@@ -55,6 +57,7 @@ const Sidebar = ({
           }
         }
       })
+      console.log(`\n\n newNav:`, newNav)
       return Object.values(newNav)
     }
     return []

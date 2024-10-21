@@ -12,8 +12,9 @@ import {
 } from '@/feature/order-management/orderManagementQuery'
 import { orderManagementAction } from '@/feature/order-management/orderManagementSlice'
 import PageLayout from '@/layout/PageLayout'
-import { BreadCrumbItem, OrderUserResponse } from '@/types'
+import { BreadCrumbItem, OrderUserResponse, RolePermission } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { checkPermission } from '@/utils/validateSchema'
 import { useEffect, useState } from 'react'
 
 const breadcrumbItem: BreadCrumbItem[] = [
@@ -29,6 +30,7 @@ const LIMIT = 10
 
 const OrderUserList = () => {
   const [page, setPage] = useState(1)
+  const { roleDetails } = useAppSelector((state) => state.auth)
   const { type } = useAppSelector((state) => state.core)
   const { selectedOrderUser } = useAppSelector((state) => state.orderManagement)
   const dispatch = useAppDispatch()
@@ -96,39 +98,59 @@ const OrderUserList = () => {
   const totalPage = Math.ceil((data?.data?.total || 0) / 10) || 1
   const userList = data?.data?.data || []
 
+  const hasAddPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'add',
+    access: 'Order_Assign_Management',
+  })
+
+  const hasEditPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'edit',
+    access: 'Order_Assign_Management',
+  })
+
+  const hasDeletePermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'delete',
+    access: 'Order_Assign_Management',
+  })
+
   return (
     <>
-      <ManageModule
-        classes={
-          type === 'delete-order-user'
-            ? {
-                top: 'visible',
-                body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
-              }
-            : {
-                top: 'invisible',
-                body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
-              }
-        }
-        handleModal={handleModal}
-        wrapperClass='h-full'
-        isModalHeader
-        outSideClick
-        headText='Delete the User?'
-        heading={selectedOrderUser?.first_name || ''}
-        details='Are you certain you want to delete?'
-        type='delete'
-        buttonText={isDeleteOrderUser ? 'Deleting...' : 'Delete'}
-        buttonProps={{
-          onClick: handleUpdateStatus,
-          disabled: isDeleteOrderUser,
-        }}
-      />
-      <ManageOrderUser />
+      {hasDeletePermission && (
+        <ManageModule
+          classes={
+            type === 'delete-order-user'
+              ? {
+                  top: 'visible',
+                  body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
+                }
+              : {
+                  top: 'invisible',
+                  body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
+                }
+          }
+          handleModal={handleModal}
+          wrapperClass='h-full'
+          isModalHeader
+          outSideClick
+          headText='Delete the User?'
+          heading={selectedOrderUser?.first_name || ''}
+          details='Are you certain you want to delete?'
+          type='delete'
+          buttonText={isDeleteOrderUser ? 'Deleting...' : 'Delete'}
+          buttonProps={{
+            onClick: handleUpdateStatus,
+            disabled: isDeleteOrderUser,
+          }}
+        />
+      )}
+      {hasAddPermission && <ManageOrderUser />}
       <PageLayout
         title='User List'
         breadcrumbItem={breadcrumbItem}
-        buttonText='Add User'
+        buttonText={hasAddPermission ? 'Add User' : ''}
         buttonProps={{
           onClick: () => handleModal(),
         }}
@@ -151,24 +173,28 @@ const OrderUserList = () => {
                   </td>
                   <td className='table_td'>
                     <div className='flex items-center gap-3'>
-                      <button
-                        onClick={() => handleModal('edit', item)}
-                        className={cn(
-                          'font-medium hover:underline',
-                          'text-blue-600 dark:text-blue-500',
-                        )}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleModal('delete', item)}
-                        className={cn(
-                          'font-medium hover:underline',
-                          'text-red-600 dark:text-red-500',
-                        )}
-                      >
-                        Delete
-                      </button>
+                      {hasEditPermission && (
+                        <button
+                          onClick={() => handleModal('edit', item)}
+                          className={cn(
+                            'font-medium hover:underline',
+                            'text-blue-600 dark:text-blue-500',
+                          )}
+                        >
+                          Edit
+                        </button>
+                      )}
+                      {hasDeletePermission && (
+                        <button
+                          onClick={() => handleModal('delete', item)}
+                          className={cn(
+                            'font-medium hover:underline',
+                            'text-red-600 dark:text-red-500',
+                          )}
+                        >
+                          Delete
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>
