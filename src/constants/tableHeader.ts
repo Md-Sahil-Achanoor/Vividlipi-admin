@@ -21,6 +21,14 @@ export const featureProductHeader = [
   'Action',
 ]
 
+export const topTenProductHeader = [
+  'SL',
+  'Name',
+  'Thumbnail',
+  'Category',
+  'Action',
+]
+
 export const productLIstTableHead = [
   'SL',
   'Name',
@@ -37,7 +45,7 @@ export const productLIstTableHead = [
 export const publisherTableHead = [
   'SL',
   'Name',
-  'Slug',
+  // 'Slug',
   'Description',
   'Action',
 ]
@@ -45,7 +53,7 @@ export const publisherTableHead = [
 export const authorTableHead = [
   'SL',
   'Name',
-  'Slug',
+  // 'Slug',
   'Description',
   'Picture',
   'Action',
@@ -84,5 +92,9 @@ export const tabItems: TabItem[] = [
   {
     name: 'Feature Products',
     type: 'feature-product',
+  },
+  {
+    name: 'Top 10 Books',
+    type: 'top-ten-books',
   },
 ]

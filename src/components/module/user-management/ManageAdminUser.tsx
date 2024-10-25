@@ -111,7 +111,7 @@ const ManageAdminUser = () => {
           enableReinitialize
         >
           {({ isSubmitting, values, setFieldValue }) => (
-            <Form noValidate>
+            <Form>
               {/* {console.log(JSON.stringify(errors))} */}
               <div className='mt-2'>
                 <div>

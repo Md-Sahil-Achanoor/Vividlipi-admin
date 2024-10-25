@@ -33,7 +33,7 @@ export const rolePermissionFormSchema = Yup.object({
 
 export type IRolePermissionForm = Yup.InferType<typeof rolePermissionFormSchema>
 
-export const userManagementFormSchema = Yup.object({
+export const userManagementFormSchema = Yup.object().shape({
   name: Yup.string()
     .required('Name is required')
     .test({
@@ -42,7 +42,10 @@ export const userManagementFormSchema = Yup.object({
       },
       message: 'Name is required',
     }),
-  email: Yup.string().required('Email is required').email('Invalid email'),
+  email: Yup.string()
+    // .email('Invalid email format')
+    .matches(/^[^@]+@[^@]+\.[^@]+$/, 'Invalid email format')
+    .required('Email is required'),
   password: Yup.string().required('Password is required').min(6, 'Too short'),
   // confirmPassword: Yup.string()
   //   .required("Confirm password is required")

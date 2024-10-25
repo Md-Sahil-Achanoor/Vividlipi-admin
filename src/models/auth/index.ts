@@ -2,7 +2,7 @@ import * as Yup from 'yup'
 
 export const signUpSchema = Yup.object({
   email: Yup.string()
-    .email('Invalid email format')
+    .matches(/^[^@]+@[^@]+\.[^@]+$/, 'Invalid email format')
     .required('Email address is required.'),
   code: Yup.string().min(6).max(6).required('Code is required.'),
   school: Yup.string().required('Academy name is required.'),
@@ -40,7 +40,7 @@ export const operatorSignUpSchema = Yup.object({
     })
     .required('Short name is required.'),
   CompanyEmail: Yup.string()
-    .email('Invalid email format')
+    .matches(/^[^@]+@[^@]+\.[^@]+$/, 'Invalid email format')
     .required('Company email is required.'),
   PhoneNo: Yup.string()
     // .matches(
@@ -52,7 +52,7 @@ export const operatorSignUpSchema = Yup.object({
     // .matches(alphanumericOnly, "Contact name must be alphanumeric only")
     .required('Contact name is required.'),
   ContactEmail: Yup.string()
-    .email('Invalid email format')
+    .matches(/^[^@]+@[^@]+\.[^@]+$/, 'Invalid email format')
     .required('Contact email is required.'),
   GSTIN: Yup.string()
     // .matches(alphanumericOnly, "GSTIN must be alphanumeric only")
@@ -102,7 +102,7 @@ export const operatorSignUpSchema = Yup.object({
 
 export const signInSchema = Yup.object().shape({
   email: Yup.string()
-    .email('Invalid email format')
+    .matches(/^[^@]+@[^@]+\.[^@]+$/, 'Invalid email format')
     .required('Email address is required.'),
   password: Yup.string().required('Password is required.'),
 })
@@ -110,7 +110,7 @@ export const signInSchema = Yup.object().shape({
 export type ISignIn = Yup.InferType<typeof signInSchema>
 
 export const forgotPasswordSchema = Yup.object().shape({
-  email: Yup.string().email('Invalid email format'),
+  email: Yup.string().matches(/^[^@]+@[^@]+\.[^@]+$/, 'Invalid email format'),
   password: Yup.string().matches(
     /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/,
     'Password must contain at least 8 characters, one letter and one number.',

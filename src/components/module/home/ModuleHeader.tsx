@@ -6,6 +6,7 @@ type ModuleHeaderProps = {
   isAdd?: boolean
   isButton?: boolean
   status?: boolean
+  customFilter?: JSX.Element
 }
 
 const ModuleHeader = ({
@@ -14,6 +15,7 @@ const ModuleHeader = ({
   isAdd = true,
   isButton = true,
   status,
+  customFilter,
 }: ModuleHeaderProps) => {
   return (
     <div className='flex items-center justify-between gao-2 mb-5'>
@@ -31,15 +33,18 @@ const ModuleHeader = ({
           </button>
         )}
       </div>
-      {isAdd && (
-        <button
-          type='button'
-          onClick={() => handleModal('add')}
-          className='button_sm_primary'
-        >
-          Add New
-        </button>
-      )}
+      <div className='flex items-center gap-2'>
+        {customFilter}
+        {isAdd && (
+          <button
+            type='button'
+            onClick={() => handleModal('add')}
+            className='button_sm_primary'
+          >
+            Add New
+          </button>
+        )}
+      </div>
     </div>
   )
 }

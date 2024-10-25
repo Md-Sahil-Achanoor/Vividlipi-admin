@@ -14,6 +14,9 @@ import {
   ManagePayload,
   ManagePayloadQuery,
   ManageQuery,
+  TopTenBookPayload,
+  TopTenBooksQuery,
+  TopTenBooksResponse,
 } from '../../types'
 import { coreAction } from '../core/coreSlice'
 import { homeAction } from './homeSlice'
@@ -300,7 +303,7 @@ const homeQuery = API.injectEndpoints({
     >({
       query: ({ query }) => {
         return {
-          url: endpoints.list_home_product,
+          url: endpoints.top_ten_books,
           method: 'GET',
           params: query,
         }
@@ -596,6 +599,136 @@ const homeQuery = API.injectEndpoints({
         }
       },
     }),
+
+    /**
+     * **************** ----------------------------- ****************
+     * **************** @module TopTenBook Module ****************
+     * **************** ----------------------------- ****************
+     * */
+
+    /**
+     * @module GetTopTenBooks
+     * @param { Partial<TopTenBookPayload> }
+     * @returns { any }
+     * @description  Home Feature Products
+     */
+    getHomeTopTenBooks: builder.query<
+      ApiResponse<TopTenBooksResponse[]>,
+      ManageQuery<Partial<TopTenBooksQuery>>
+    >({
+      query: ({ query }) => {
+        return {
+          url: endpoints.top_ten_books,
+          method: 'GET',
+          params: query,
+        }
+      },
+      providesTags: ['HomeTopTenBooks'],
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any
+          const message =
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
+        }
+      },
+    }),
+
+    /**
+     * @module ManageTopTenBooks
+     * @param { FormData }
+     * @returns { any }
+     * @description Manage Home Feature Products
+     */
+    manageTopTenBook: builder.mutation<any, ManagePayload<TopTenBookPayload>>({
+      query: ({ data, id }) => {
+        return {
+          url: id ? endpoints.top_ten_books : endpoints.top_ten_books,
+          method: 'POST',
+          body: data,
+          params: {
+            sliderid: id,
+          },
+        }
+      },
+      invalidatesTags: ['HomeTopTenBooks'],
+      async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled
+          if (result?.data?.status === 1) {
+            options?.resetForm()
+            options?.setSubmitting(false)
+            toast.success(result?.data?.message || 'Success')
+            dispatch(homeAction.resetHome())
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
+          } else {
+            toast.error(result?.data?.message || 'Something went wrong!')
+          }
+        } catch (err: unknown) {
+          // do nothing
+          options?.setSubmitting(false)
+          const error = err as any
+          const message =
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
+        }
+      },
+    }),
+
+    /**
+     * @module DeleteTopTenBooks
+     * @param { Partial<TopTenBooksQuery> }
+     * @returns { any }
+     * @description Delete Home Feature Products
+     */
+
+    deleteTopTenBook: builder.mutation<
+      any,
+      ManagePayloadQuery<Partial<TopTenBooksQuery>>
+    >({
+      query: ({ id }) => ({
+        url: endpoints.top_ten_books,
+        method: 'DELETE',
+        params: {
+          BookId: id,
+        },
+      }),
+      invalidatesTags: ['HomeTopTenBooks'],
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          const result = await queryFulfilled
+          if (result?.data?.status === 1) {
+            toast.success(result?.data?.message || 'Success')
+            dispatch(homeAction.resetHome())
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
+            // dispatch(
+            //   homeQuery.util.updateQueryData(
+            //     "getHomeTopTenBooks",
+            //     {
+            //       query: _arg.query,
+            //     },
+            //     (draft) => {
+            //       draft.data = draft?.data?.filter(
+            //         (item) => item?.id !== _arg.id
+            //       );
+            //     }
+            //   )
+            // );
+          } else {
+            toast.error(result?.data?.message || 'Something went wrong!')
+          }
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any
+          const message =
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
+        }
+      },
+    }),
   }),
 })
 
@@ -617,6 +750,10 @@ export const {
   useDeleteNewInMutation,
   useGetHomeNewInStatusQuery,
   useToggleHomeNewInStatusMutation,
+
+  useGetHomeTopTenBooksQuery,
+  useManageTopTenBookMutation,
+  useDeleteTopTenBookMutation,
 } = homeQuery
 
 export default homeQuery

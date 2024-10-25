@@ -1,15 +1,17 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import {
   FeatureProductResponse,
   FeatureSliderResponse,
   FeatureSubSliderResponse,
   HomeState,
-} from '../../types'
+  TopTenBooksResponse,
+} from '@/types'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 const initialState: HomeState = {
   selectedFeatureSlider: null,
   selectedFeatureSubSlider: null,
   selectedFeatureProduct: null,
+  selectedTopTenBooks: null,
 }
 
 const homeSlice = createSlice({
@@ -38,6 +40,12 @@ const homeSlice = createSlice({
       action: PayloadAction<FeatureProductResponse | null>,
     ) => {
       state.selectedFeatureProduct = action.payload
+    },
+    setSelectedTopTenBooks: (
+      state,
+      action: PayloadAction<TopTenBooksResponse | null>,
+    ) => {
+      state.selectedTopTenBooks = action.payload
     },
   },
 })

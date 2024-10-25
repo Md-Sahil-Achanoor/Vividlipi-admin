@@ -1,26 +1,51 @@
 import { useAppDispatch, useAppSelector } from '@/app/store'
+import PlaceholderImage from '@/assets/svg/placeholder'
+import PlaceholderImageLink from '@/assets/svg/placeholder.svg'
 import NoTableData from '@/components/atoms/NoTableData'
+import InfiniteFilter from '@/components/elements/filters/InfiniteFilter'
 import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
 import Table from '@/components/ui/Table'
-import { featureProductHeader } from '@/constants/tableHeader'
+import { topTenProductHeader } from '@/constants/tableHeader'
 import { coreAction } from '@/feature/core/coreSlice'
-import { useGetHomeFeatureProductsQuery } from '@/feature/home/homeQuery'
+import { useGetHomeTopTenBooksQuery } from '@/feature/home/homeQuery'
 import { homeAction } from '@/feature/home/homeSlice'
 import { RolePermission } from '@/types'
 import { cn } from '@/utils/twmerge'
 import { checkPermission } from '@/utils/validateSchema'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 import ModuleHeader from '../ModuleHeader'
 
-// type FeatureProductsProps = {
+export interface Filter {
+  label: string
+  value: string
+}
+
+const items = [
+  {
+    label: 'Ebooks',
+    value: 'Ebooks',
+  },
+  {
+    label: 'Print Books',
+    value: 'Print Books',
+  },
+]
+
+// type TopTenBookProps = {
 //   data: FeatureProductResponse[];
 //   isLoading: boolean;
 // };
 
-const FeatureProducts = () => {
+const TopTenBook = () => {
+  const [category, setCategory] = React.useState('Ebooks')
   const { roleDetails } = useAppSelector((state) => state.auth)
-  const { data, isLoading, isFetching, refetch } =
-    useGetHomeFeatureProductsQuery({})
+
+  const { data, isLoading, isFetching, refetch } = useGetHomeTopTenBooksQuery({
+    query: {
+      Type: category,
+    },
+  })
 
   useEffect(() => {
     refetch()
@@ -39,13 +64,7 @@ const FeatureProducts = () => {
           open: true,
         }),
       )
-      dispatch(
-        homeAction.setSelectedFeatureProduct({
-          id: item?.id,
-          main: item?.main,
-          productId: item?.productDetails,
-        }),
-      )
+      dispatch(homeAction.setSelectedTopTenBooks(item))
     } else {
       dispatch(
         coreAction.toggleModal({
@@ -75,31 +94,61 @@ const FeatureProducts = () => {
   return (
     <div>
       <ModuleHeader
-        title='Feature Products'
+        title='Top Ten Books'
         isAdd={hasAddPermission ? data?.data && data?.data?.length < 9 : false}
         isButton={false}
-        handleModal={() => handleModal('manage-feature-product')}
+        handleModal={() => handleModal('manage-top-ten-books')}
+        customFilter={
+          <div className='max-w-[150px] min-w-[150px]'>
+            <InfiniteFilter<Filter>
+              wrapperClass=''
+              buttonClass='border p-2'
+              items={items}
+              renderItem={(item) => <>{item.label}</>}
+              isActive={(item) => item.value === category}
+              isSelected={false}
+              name={() => (
+                <div className='flex items-center gap-1'>
+                  <span className='text-sm uppercase'>
+                    {category || 'Select Type'}
+                  </span>
+                </div>
+              )}
+              handleSelectedOption={(item) => setCategory(item.value)}
+            />
+          </div>
+        }
       />
-      <Table headList={featureProductHeader}>
+      <Table headList={topTenProductHeader}>
         {isLoading || (data?.data && data?.data?.length > 0 && isFetching) ? (
-          <SkeletonTable total={6} tableCount={7} />
+          <SkeletonTable total={6} tableCount={5} />
         ) : data?.data && data?.data?.length > 0 ? (
           data?.data?.map((item, index) => (
-            <tr className='table_tr' key={item?.id}>
+            <tr className='table_tr' key={item?.Id}>
               <td className='table_td'>{index + 1}</td>
-              <td className='table_td'>{item?.productDetails?.book_title}</td>
-              <td className='table_td'>{item?.productDetails?.author_name}</td>
+              <td className='table_td'>{item?.BookId?.book_title}</td>
               <td className='table_td'>
-                {item?.productDetails?.publisher?.Name || 'N/A'}
+                {' '}
+                <div className='w-12 h-12 flex justify-center'>
+                  <LazyLoadImage
+                    src={
+                      (item?.BookId?.thumbnail as string) ||
+                      PlaceholderImageLink
+                    }
+                    alt={item?.BookId?.book_title}
+                    placeholder={<PlaceholderImage />}
+                    wrapperClassName='w-12 h-full object-contain bg-gray-100 p-[1px] rounded-sm'
+                    effect='blur'
+                    width='100%'
+                    className='w-12 h-full object-contain'
+                  />
+                </div>
               </td>
-              <td className='table_td'>
-                {item?.productDetails?.language || 'N/A'}
-              </td>
-              <td className='table_td'>{item?.main == 1 ? 'Yes' : 'No'}</td>
+              <td className='table_td'>{item?.Type}</td>
               <td className='table_td'>
                 <div className='flex items-center gap-3'>
                   {/* <button
-                    onClick={() => handleModal("manage-feature-product", item)}
+                    onClick={() => handleModal("manage-top-ten-books", item)}
                     className={cn(
                       "font-medium hover:underline",
                       "text-blue-600 dark:text-blue-500"
@@ -109,9 +158,7 @@ const FeatureProducts = () => {
                   </button> */}
                   {hasDeletePermission && (
                     <button
-                      onClick={() =>
-                        handleModal('delete-feature-product', item)
-                      }
+                      onClick={() => handleModal('delete-top-ten-books', item)}
                       className={cn(
                         'font-medium hover:underline',
                         'text-red-600 dark:text-red-500',
@@ -134,4 +181,4 @@ const FeatureProducts = () => {
   )
 }
 
-export default FeatureProducts
+export default TopTenBook

@@ -71,3 +71,34 @@ export const featureNewProductSchema = IProduct.concat(
 export type IHomeFeatureNewProduct = Yup.InferType<
   typeof featureNewProductSchema
 >
+
+export const topTenBookSchema = Yup.object().shape({
+  BookId: Yup.object()
+    .shape({
+      id: Yup.number(),
+      book_title: Yup.string(),
+      thumbnail: Yup.string(),
+    })
+    .nullable()
+    .test({
+      name: 'BookId',
+      message: 'Book is required',
+      test(value) {
+        return value !== null
+      },
+    }),
+  Type: Yup.object({
+    id: Yup.number(),
+    title: Yup.string(),
+  })
+    .nullable()
+    .test({
+      name: 'Type',
+      message: 'Type is Required.',
+      test(value) {
+        return value !== null
+      },
+    }),
+})
+
+export type ITopTenBooks = Yup.InferType<typeof topTenBookSchema>
