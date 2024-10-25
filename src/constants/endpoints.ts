@@ -35,6 +35,7 @@ export const endpoints = {
    * @module Product
    * */
   product: '/api/product',
+  category_product: '/api/Products',
   import_product: '/api/import-product',
 
   // old api
@@ -103,6 +104,7 @@ export const endpoints = {
   list_new_in: '/api/list-newin-products',
   delete_new_in: '/api/remove-newin-products',
   toggle_new_in: '/api/newin-toggle',
+  top_ten_books: '/api/TopBook',
 
   /**
    * @module Coupon

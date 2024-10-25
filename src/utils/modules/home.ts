@@ -8,6 +8,8 @@ const checkType = (type: string) => {
       return true
     case 'delete-new-in':
       return true
+    case 'delete-top-ten-books':
+      return true
     default:
       return false
   }
@@ -23,6 +25,8 @@ const getTitle = (type: string, data: any) => {
       return data?.productDetails?.book_title
     case 'delete-new-in':
       return data?.productDetails?.book_title
+    case 'delete-top-ten-books':
+      return data?.BookId?.book_title
     default:
       return ''
   }
@@ -38,6 +42,8 @@ const getModuleName = (type: string) => {
       return 'Feature Product'
     case 'delete-new-in':
       return 'New In'
+    case 'delete-top-ten-books':
+      return 'Top Ten Books'
     default:
       return ''
   }

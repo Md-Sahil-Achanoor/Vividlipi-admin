@@ -13,6 +13,7 @@ import {
 import { publisherAction } from '@/feature/publisher/publisherSlice'
 import PageLayout from '@/layout/PageLayout'
 import { BreadCrumbItem, PublisherResponse, RolePermission } from '@/types'
+import { truncate } from '@/utils/file'
 import { cn } from '@/utils/twmerge'
 import { checkPermission } from '@/utils/validateSchema'
 import { useEffect } from 'react'
@@ -156,8 +157,8 @@ const PublisherList = () => {
               <tr className='table_tr' key={item?.id}>
                 <td className='table_td'>{index + 1}</td>
                 <td className='table_td'>{item?.Name}</td>
-                <td className='table_td'>{item?.Slug}</td>
-                <td className='table_td'>{item?.description}</td>
+                {/* <td className='table_td'>{item?.Slug}</td> */}
+                <td className='table_td'>{truncate(item?.description, 20)}</td>
                 <td className='table_td'>
                   <div className='flex items-center gap-3'>
                     {hasEditPermission && (

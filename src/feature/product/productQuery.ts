@@ -299,6 +299,31 @@ const productQuery = API.injectEndpoints({
         }
       },
     }),
+
+    //
+    getCategoryProduct: builder.query<
+      ApiResponse<ListResponse<ProductResponse>>,
+      ManagePayloadQuery<Partial<ProductQuery>>
+    >({
+      query: ({ query }) => ({
+        url: endpoints.category_product,
+        method: 'GET',
+        params: query,
+      }),
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled
+          // console.log(`\n\n result:`, result?.data)
+          // dispatch(productAction.setProductList(result?.data?.data))
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any
+          const message =
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
+        }
+      },
+    }),
   }),
 })
 

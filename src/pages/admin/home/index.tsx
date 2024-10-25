@@ -8,6 +8,8 @@ import FeatureSlider from '@/components/module/home/feature-slider/FeatureSlider
 import { default as ManageFeatureSlider } from '@/components/module/home/feature-slider/ManageFeatureSlider'
 import FeatureSubSlider from '@/components/module/home/feature-sub-slider/FeatureSubSlider'
 import ManageFeatureSubSlider from '@/components/module/home/feature-sub-slider/ManageFeatureSubSlider'
+import ManageTopTenBook from '@/components/module/home/top-ten-books/ManageTopTenBooks'
+import TopTenBook from '@/components/module/home/top-ten-books/TopTenBooks'
 import { Card } from '@/components/ui/Card'
 import TabButtons from '@/components/ui/TabButtons'
 import { tabItems } from '@/constants/tableHeader'
@@ -17,6 +19,7 @@ import {
   useDeleteFeatureSlideMutation,
   useDeleteFeatureSubSlideMutation,
   useDeleteNewInMutation,
+  useDeleteTopTenBookMutation,
 } from '@/feature/home/homeQuery'
 import { homeAction } from '@/feature/home/homeSlice'
 import PageLayout from '@/layout/PageLayout'
@@ -34,6 +37,7 @@ const HomePage = () => {
     selectedFeatureSlider,
     selectedFeatureSubSlider,
     selectedFeatureProduct,
+    selectedTopTenBooks,
   } = useAppSelector((state) => state.home)
 
   const [deleteFeatureSlider, { isLoading: isDeleteCategory }] =
@@ -43,6 +47,8 @@ const HomePage = () => {
   const [deleteFeatureProduct, { isLoading: isDeleteProduct }] =
     useDeleteFeatureProductMutation()
   const [deleteNewIn, { isLoading: isDeleteNewIn }] = useDeleteNewInMutation()
+  const [deleteTopTenBook, { isLoading: isDeleteTopTenBook }] =
+    useDeleteTopTenBookMutation()
 
   const renderItems = () => {
     switch (activeTab) {
@@ -52,6 +58,8 @@ const HomePage = () => {
         return <FeatureSubSlider />
       case 'feature-new-in':
         return <FeatureNewIn />
+      case 'top-ten-books':
+        return <TopTenBook />
       default:
         return <FeatureSlider />
     }
@@ -64,13 +72,6 @@ const HomePage = () => {
     }
   }
 
-  // console.log(
-  //   `\n\n ~ HomePage ~ selectedFeatureSlider, selectedFeatureSubSlider:`,
-  //   selectedFeatureSlider,
-  //   selectedFeatureSubSlider,
-  //   selectedFeatureProduct,
-  //   type,
-  // )
   const handleUpdateStatus = async () => {
     if (type === 'delete-feature-slider') {
       await deleteFeatureSlider({
@@ -85,6 +86,11 @@ const HomePage = () => {
     } else if (type === 'delete-new-in') {
       await deleteNewIn({
         id: selectedFeatureProduct?.products,
+        query: {},
+      })
+    } else if (type === 'delete-top-ten-books') {
+      await deleteTopTenBook({
+        id: selectedTopTenBooks?.BookId?.id,
         query: {},
       })
     } else {
@@ -115,6 +121,7 @@ const HomePage = () => {
           <ManageFeatureSubSlider />
           <ManageFeatureProduct />
           <ManageFeatureNewIn />
+          <ManageTopTenBook />
         </>
       )}
       {hasDeletePermission && (
@@ -139,7 +146,8 @@ const HomePage = () => {
             type,
             selectedFeatureSlider ||
               selectedFeatureSubSlider ||
-              selectedFeatureProduct,
+              selectedFeatureProduct ||
+              selectedTopTenBooks,
           )}
           details='Are you certain you want to delete?'
           type='delete'
@@ -147,7 +155,8 @@ const HomePage = () => {
             isDeleteCategory ||
             isDeleteSubCategory ||
             isDeleteProduct ||
-            isDeleteNewIn
+            isDeleteNewIn ||
+            isDeleteTopTenBook
               ? 'Deleting...'
               : 'Delete'
           }
@@ -157,7 +166,8 @@ const HomePage = () => {
               isDeleteCategory ||
               isDeleteSubCategory ||
               isDeleteProduct ||
-              isDeleteNewIn,
+              isDeleteNewIn ||
+              isDeleteTopTenBook,
           }}
         />
       )}

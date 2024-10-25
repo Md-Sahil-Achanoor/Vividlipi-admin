@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from '@/app/store'
 import PlaceholderImage from '@/assets/svg/placeholder'
 import PlaceholderImageLink from '@/assets/svg/placeholder.svg'
 import NoTableData from '@/components/atoms/NoTableData'
+import TooltipButton from '@/components/atoms/TooltipButton'
 import ManageModule from '@/components/elements/modal/ManageModule'
 import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
 import ManageAuthor from '@/components/module/author/ManageAuthor'
@@ -159,11 +160,26 @@ const AuthorList = () => {
             data?.data?.map((item, index) => (
               <tr className='table_tr' key={item?.id}>
                 <td className='table_td'>{index + 1}</td>
-                <td className='table_td'>{item?.Name}</td>
-                <td className='table_td'>{item?.Slug}</td>
-                <td className='table_td'>{truncate(item?.description, 50)}</td>
                 <td className='table_td'>
-                  <div className='w-16 h-20 relative'>
+                  {item?.Name?.length > 20 ? (
+                    <TooltipButton
+                      className='w-max'
+                      parentClassName='p-0'
+                      isInnerRelative
+                      text={item?.Name}
+                    >
+                      {truncate(item?.Name, 20)}
+                    </TooltipButton>
+                  ) : (
+                    item?.Name
+                  )}
+                </td>
+                {/* <td className='table_td'>{item?.Slug}</td> */}
+                <td className='table_td' title={item?.description}>
+                  {truncate(item?.description, 20)}
+                </td>
+                <td className='table_td'>
+                  <div className='w-10 h-14 relative'>
                     <LazyLoadImage
                       src={(item?.Pic as string) || PlaceholderImageLink}
                       alt={item?.Name}
@@ -171,7 +187,7 @@ const AuthorList = () => {
                       effect='blur'
                       width={'100%'}
                       height={'100%'}
-                      className='w-full h-full object-cover '
+                      className='w-full h-full object-cover'
                     />
                   </div>
                 </td>
