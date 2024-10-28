@@ -89,7 +89,7 @@ export const orderTableHead = [
   'User Type',
   'Total Purchase',
   'Total Amount',
-  'Details',
+  // 'Details',
   'Payment Status',
   'Order Status',
   'Action',
