@@ -178,7 +178,7 @@ const AssignOrderList = () => {
                   <td className='table_td'>₹{item?.Total}</td>
                   <td className='table_td'>
                     <button
-                      className='button_sm_primary'
+                      className='font-medium hover:underline text-blue-600 dark:text-blue-500'
                       type='button'
                       onClick={() => handleModal('view', item)}
                     >
