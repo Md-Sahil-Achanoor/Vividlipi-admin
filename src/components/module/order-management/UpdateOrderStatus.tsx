@@ -149,7 +149,7 @@ const UpdateOrderStatus = () => {
                 <li className='mb-5 ms-4' key={index}>
                   <div className='absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white'></div>
                   <time className='mb-1 text-sm font-normal leading-none text-gray-400'>
-                    {formatDate(item?.Time)}
+                    {formatDate(item?.Time, 'DD MMM yyyy hh:mm A')}
                   </time>
                   <h3 className='text-lg font-semibold text-gray-900'>
                     {item?.Status}

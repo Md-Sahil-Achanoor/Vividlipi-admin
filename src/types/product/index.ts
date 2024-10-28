@@ -90,7 +90,7 @@ export interface ProductQuery extends ReqQuery {
   productid: string
   search: string
   page: number
-  cid: string
+  cid: string | number
   category: string | number
 }
 
