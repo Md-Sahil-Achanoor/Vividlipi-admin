@@ -312,7 +312,7 @@ const OrderList = () => {
             setPage={setPage}
           >
             {isLoading ? (
-              <SkeletonTable total={8} tableCount={8} />
+              <SkeletonTable total={8} tableCount={10} />
             ) : orderList &&
               typeof orderList === 'object' &&
               orderList?.length > 0 ? (

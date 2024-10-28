@@ -44,15 +44,12 @@ const UpdateOrderStatus = () => {
     { setSubmitting, resetForm }: FormikHelpers<UpdateOrderType>,
   ) => {
     const data: UpdateOrderType = {
-      // TrackingId: values.TrackingId || '',
       Status: values.Status,
       OrderId: selectedAssignOrder?.id as number,
     }
     if (values?.Status === 'Shipped') {
       data.TrackingId = values.TrackingId
     }
-    // console.log('values', values)
-    // return setSubmitting(false)
     await updateOrder({
       data,
       options: {
