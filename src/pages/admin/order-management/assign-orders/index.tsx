@@ -3,7 +3,7 @@ import NoTableData from '@/components/atoms/NoTableData'
 import TableWrapper from '@/components/elements/common/TableWrapper'
 import ManageModule from '@/components/elements/modal/ManageModule'
 import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
-import ViewOrderDetails from '@/components/module/user-management/ViewOrderDetails'
+import ViewOrderDetails from '@/components/module/order-management/ViewOrderDetails'
 import Table from '@/components/ui/Table'
 import { coreAction } from '@/feature/core/coreSlice'
 import {
