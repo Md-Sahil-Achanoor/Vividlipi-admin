@@ -1,14 +1,14 @@
-import { useAppDispatch, useAppSelector } from '@/app/store'
+import { useAppDispatch } from '@/app/store'
 import NoTableData from '@/components/atoms/NoTableData'
 import TableWrapper, { Filter } from '@/components/elements/common/TableWrapper'
 import InfiniteFilter from '@/components/elements/filters/InfiniteFilter'
-import ManageModule from '@/components/elements/modal/ManageModule'
 import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
+import UpdateOrderStatus from '@/components/module/user-management/UpdateOrderStatus'
 import ViewOrderDetails from '@/components/module/user-management/ViewOrderDetails'
 import Table from '@/components/ui/Table'
+import { orderTableHead } from '@/constants/tableHeader'
 import { coreAction } from '@/feature/core/coreSlice'
 import {
-  useDeleteAssignOrderMutation,
   useGetOrdersQuery,
   useGetOrderUserQuery,
 } from '@/feature/order-management/orderManagementQuery'
@@ -19,6 +19,7 @@ import {
   AssignOrderResponse,
   BreadCrumbItem,
   OrderQuery,
+  OrderUpdateResponse,
   OrderUserResponse,
   ProductQuery,
 } from '@/types'
@@ -33,17 +34,29 @@ const breadcrumbItem: BreadCrumbItem[] = [
   },
 ]
 
-const tableHead = [
-  'SL',
-  'User Name',
-  'User Email',
-  'User Type',
-  'Total Purchase',
-  'Total Amount',
-  'Order Details',
-  'Order Status',
-  // 'Action',
-]
+const getOrderStatus = (orderTrack: OrderUpdateResponse[]) => {
+  if (orderTrack.length === 0) return 'Confirmed'
+  return orderTrack[orderTrack.length - 1]?.Status || 'Confirmed'
+}
+
+const getStatusColor = (status: string) => {
+  switch (status) {
+    // case 'Confirmed':
+    //   return 'text-yellow-600'
+    case 'Packed':
+      return 'text-blue-600'
+    case 'Shipped':
+      return 'text-green-600'
+    case 'Completed':
+      return 'text-green-600'
+    case 'On Hold':
+      return 'text-red-600'
+    case 'Delayed':
+      return 'text-red-600'
+    default:
+      return 'text-yellow-600'
+  }
+}
 
 const OrderList = () => {
   const [page, setPage] = useState(1)
@@ -62,14 +75,7 @@ const OrderList = () => {
   const [userType, setUserType] = useState<string>('All')
   const navigator = useNavigate()
   // const { roleDetails } = useAppSelector((state) => state.auth)
-  const { type } = useAppSelector((state) => state.core)
-  const { selectedAssignOrder } = useAppSelector(
-    (state) => state.orderManagement,
-  )
   const dispatch = useAppDispatch()
-
-  const [deleteAssignOrder, { isLoading: isDeleteAssignOrder }] =
-    useDeleteAssignOrderMutation()
 
   const query = () => {
     const query: Partial<OrderQuery> = {
@@ -100,15 +106,6 @@ const OrderList = () => {
 
   // console.log(`\n\n selectedSubAssignOrder:`, selectedSubAssignOrder);
 
-  const handleUpdateStatus = async () => {
-    await deleteAssignOrder({
-      id: selectedAssignOrder?.id,
-      query: {
-        id: selectedAssignOrder?.id as number,
-      },
-    })
-  }
-
   const handleModal = (type?: string, data?: AssignOrderResponse) => {
     if (type === 'cancelled') {
       // do nothing
@@ -126,10 +123,10 @@ const OrderList = () => {
           data as AssignOrderResponse,
         ),
       )
-    } else if (type === 'delete') {
+    } else if (type === 'update') {
       dispatch(
         coreAction.toggleModal({
-          type: 'delete-assign-order',
+          type: 'update-order-status',
           open: true,
         }),
       )
@@ -176,19 +173,6 @@ const OrderList = () => {
     return 'N/A'
   }
 
-  // useEffect(() => {
-  //   fetch(`http://localhost:3000/en/v1/auth/login`, {
-  //     method: 'POST',
-  //     body: JSON.stringify({
-  //       email: 'kiran@kalpas.in',
-  //       password: 'U2FsdGVkX19HQgDluYpD04JtywdpsySFvXrLfGvpydQ=',
-  //     }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => console.log(data))
-  //     .catch((err) => console.log(err))
-  // }, [])
-
   // const hasAddPermission = checkPermission({
   //   rolePermissions: roleDetails as RolePermission,
   //   type: 'add',
@@ -203,37 +187,7 @@ const OrderList = () => {
 
   return (
     <>
-      <ManageModule
-        classes={
-          type === 'delete-assign-order'
-            ? {
-                top: 'visible',
-                body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
-              }
-            : {
-                top: 'invisible',
-                body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
-              }
-        }
-        handleModal={handleModal}
-        wrapperClass='h-full'
-        isModalHeader
-        outSideClick
-        headText='Delete the Order?'
-        heading={
-          selectedAssignOrder?.UserDetails?.first_name &&
-          selectedAssignOrder?.UserDetails?.last_name
-            ? `${selectedAssignOrder?.UserDetails?.first_name} ${selectedAssignOrder?.UserDetails?.last_name}`
-            : ''
-        }
-        details='Are you certain you want to delete?'
-        type='delete'
-        buttonText={isDeleteAssignOrder ? 'Deleting...' : 'Delete'}
-        buttonProps={{
-          onClick: handleUpdateStatus,
-          disabled: isDeleteAssignOrder,
-        }}
-      />
+      <UpdateOrderStatus />
       <ViewOrderDetails />
       <PageLayout
         title='Order List'
@@ -352,9 +306,13 @@ const OrderList = () => {
             </>
           )}
         >
-          <Table headList={tableHead} totalPage={totalPage} setPage={setPage}>
+          <Table
+            headList={orderTableHead}
+            totalPage={totalPage}
+            setPage={setPage}
+          >
             {isLoading ? (
-              <SkeletonTable total={8} tableCount={8} />
+              <SkeletonTable total={8} tableCount={10} />
             ) : orderList &&
               typeof orderList === 'object' &&
               orderList?.length > 0 ? (
@@ -378,7 +336,7 @@ const OrderList = () => {
                   <td className='table_td'>₹{item?.Total}</td>
                   <td className='table_td'>
                     <button
-                      className='button_sm_primary'
+                      className='font-medium hover:underline text-blue-600 dark:text-blue-500'
                       type='button'
                       onClick={() => handleModal('view', item)}
                     >
@@ -396,19 +354,27 @@ const OrderList = () => {
                   >
                     {item?.status === '0' ? 'Failed' : item?.status}
                   </td>
-                  {/* <td className='table_td'>
+                  <td
+                    className={cn(
+                      'table_td',
+                      getStatusColor(getOrderStatus(item?.OrderTrack)),
+                    )}
+                  >
+                    {getOrderStatus(item?.OrderTrack)}
+                  </td>
+                  <td className='table_td'>
                     <div className='flex items-center gap-3'>
                       <button
-                        onClick={() => handleModal('delete', item)}
+                        onClick={() => handleModal('update', item)}
                         className={cn(
                           'font-medium hover:underline',
-                          'text-red-600 dark:text-red-500',
+                          'text-blue-600 dark:text-blue-500',
                         )}
                       >
-                        Delete
+                        Update
                       </button>
                     </div>
-                  </td> */}
+                  </td>
                 </tr>
               ))
             ) : (

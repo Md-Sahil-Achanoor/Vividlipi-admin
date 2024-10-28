@@ -1,4 +1,4 @@
-import { ManageOrderUserType } from '@/models'
+import { ManageOrderUserType, UpdateOrderType } from '@/models'
 import { ReqQuery } from '../common'
 import { ProductResponse } from '../product'
 
@@ -62,11 +62,22 @@ export interface IAssignOrderPayload extends IAssignOrder<number, number> {
   Total: number
 }
 
+export interface UpdateOrderPayload {
+  OrderId: number
+  Status: 'Packed' | 'Completed' | 'Packed' | 'Shipped' | 'On Hold' | 'Delayed'
+  TrackingId: string
+}
+export interface OrderUpdateResponse extends UpdateOrderType {
+  id: number
+  Time: string
+}
+
 export interface AssignOrderResponse extends AssignOrder {
   id: number
   Total: number
   status: string
   UserType: number
+  OrderTrack: OrderUpdateResponse[]
 }
 
 export interface AssignOrderQuery extends ReqQuery {}

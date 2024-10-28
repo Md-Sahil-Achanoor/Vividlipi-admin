@@ -116,6 +116,7 @@ export const endpoints = {
    * */
   order_user: '/api/Users',
   order_list: '/api/Orders',
+  update_order: '/api/OrderStatusUpdate',
 
   assign_book: '/api/AssignBooks',
   get_assign_book: '/api/GetAssignBooks',

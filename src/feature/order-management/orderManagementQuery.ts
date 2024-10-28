@@ -1,6 +1,7 @@
 import API from '@/app/services/api'
 import { endpoints } from '@/constants/endpoints'
 import { coreAction } from '@/feature/core/coreSlice'
+import { UpdateOrderType } from '@/models'
 import {
   ApiResponse,
   AssignOrderQuery,
@@ -364,6 +365,36 @@ const orderManagementQuery = API.injectEndpoints({
         }
       },
     }),
+
+    updateOrder: builder.mutation<any, ManagePayload<UpdateOrderType>>({
+      query: ({ data }) => ({
+        url: endpoints.update_order,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['OrderList'],
+      async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled
+          if (result?.data?.status === 1) {
+            options?.resetForm()
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
+            dispatch(orderManagementAction.resetAll())
+            toast.success(result?.data?.message || 'Success')
+          } else {
+            toast.error(result?.data?.message || 'Something went wrong!')
+          }
+        } catch (err: unknown) {
+          const error = err as any
+          // console.log(`\n\n error:`, error);
+          const message =
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
+        } finally {
+          options?.setSubmitting(false)
+        }
+      },
+    }),
   }),
 })
 
@@ -378,6 +409,7 @@ export const {
   useGetOrderUserByIdQuery,
   useManageOrderUserMutation,
   useDeleteOrderUserMutation,
+  useUpdateOrderMutation,
 
   useGetOrdersQuery,
 } = orderManagementQuery

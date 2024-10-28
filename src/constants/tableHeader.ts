@@ -80,6 +80,22 @@ export const couponTableHead = [
   'Action',
 ]
 
+// Order
+
+export const orderTableHead = [
+  'SL',
+  'User Name',
+  'User Email',
+  'User Type',
+  'Total Purchase',
+  'Total Amount',
+  'Details',
+  'Payment Status',
+  'Order Status',
+  'Action',
+  // 'Action',
+]
+
 export const tabItems: TabItem[] = [
   {
     name: 'Feature Slider',
