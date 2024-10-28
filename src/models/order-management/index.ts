@@ -68,7 +68,15 @@ export type AssignOrderType = Yup.InferType<typeof assignOrderSchema>
 export const UpdateOrderSchema = Yup.object().shape({
   OrderId: Yup.number().required('Order is required'),
   Status: Yup.string()
-    .oneOf(['Packed', 'Completed', 'Packed', 'Shipped', 'On Hold', 'Delayed'])
+    .oneOf([
+      'Packed',
+      'Completed',
+      'Packed',
+      'Shipped',
+      'On Hold',
+      'Delayed',
+      'Confirmed',
+    ])
     .required('Status is required'),
   TrackingId: Yup.string().test({
     name: 'TrackingId',

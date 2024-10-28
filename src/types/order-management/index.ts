@@ -64,9 +64,17 @@ export interface IAssignOrderPayload extends IAssignOrder<number, number> {
 
 export interface UpdateOrderPayload {
   OrderId: number
-  Status: 'Packed' | 'Completed' | 'Packed' | 'Shipped' | 'On Hold' | 'Delayed'
+  Status:
+    | 'Packed'
+    | 'Completed'
+    | 'Packed'
+    | 'Shipped'
+    | 'On Hold'
+    | 'Delayed'
+    | 'Confirmed'
   TrackingId: string
 }
+
 export interface OrderUpdateResponse extends UpdateOrderType {
   id: number
   Time: string
@@ -78,6 +86,7 @@ export interface AssignOrderResponse extends AssignOrder {
   status: string
   UserType: number
   OrderTrack: OrderUpdateResponse[]
+  time: string
 }
 
 export interface AssignOrderQuery extends ReqQuery {}

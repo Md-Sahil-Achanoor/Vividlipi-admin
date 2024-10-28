@@ -71,7 +71,7 @@ const OrderList = () => {
   } = useDebounce(() => {
     setUserSearch(userSearch)
   }, 1000)
-  const [selectedStatus, setSelectedStatus] = useState<string>('All')
+  const [selectedStatus, setSelectedStatus] = useState<string>('Paid')
   const [userType, setUserType] = useState<string>('All')
   const navigator = useNavigate()
   // const { roleDetails } = useAppSelector((state) => state.auth)
@@ -363,17 +363,19 @@ const OrderList = () => {
                     {getOrderStatus(item?.OrderTrack)}
                   </td>
                   <td className='table_td'>
-                    <div className='flex items-center gap-3'>
-                      <button
-                        onClick={() => handleModal('update', item)}
-                        className={cn(
-                          'font-medium hover:underline',
-                          'text-blue-600 dark:text-blue-500',
-                        )}
-                      >
-                        Update
-                      </button>
-                    </div>
+                    {item?.status === '0' ? null : (
+                      <div className='flex items-center gap-3'>
+                        <button
+                          onClick={() => handleModal('update', item)}
+                          className={cn(
+                            'font-medium hover:underline',
+                            'text-blue-600 dark:text-blue-500',
+                          )}
+                        >
+                          Update
+                        </button>
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))
