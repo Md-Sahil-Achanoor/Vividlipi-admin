@@ -96,6 +96,17 @@ export const orderTableHead = [
   // 'Action',
 ]
 
+export const assignOrderTableHead = [
+  'SL',
+  'User Name',
+  'User Email',
+  'Total Purchase',
+  'Total Amount',
+  // 'Order Details',
+  'Order Status',
+  'Action',
+]
+
 export const tabItems: TabItem[] = [
   {
     name: 'Feature Slider',
