@@ -22,6 +22,7 @@ const homeSlice = createSlice({
       state.selectedFeatureSlider = null
       state.selectedFeatureSubSlider = null
       state.selectedFeatureProduct = null
+      state.selectedTopTenBooks = null
     },
     setSelectedFeatureSlider: (
       state,
