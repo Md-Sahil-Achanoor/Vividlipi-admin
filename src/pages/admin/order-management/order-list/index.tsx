@@ -312,7 +312,7 @@ const OrderList = () => {
             setPage={setPage}
           >
             {isLoading ? (
-              <SkeletonTable total={8} tableCount={10} />
+              <SkeletonTable total={8} tableCount={9} />
             ) : orderList &&
               typeof orderList === 'object' &&
               orderList?.length > 0 ? (
@@ -334,7 +334,7 @@ const OrderList = () => {
                   </td>
                   <td className='table_td'>{item?.Productdatas?.length}</td>
                   <td className='table_td'>₹{item?.Total}</td>
-                  <td className='table_td'>
+                  {/* <td className='table_td'>
                     <button
                       className='font-medium hover:underline text-blue-600 dark:text-blue-500'
                       type='button'
@@ -342,7 +342,7 @@ const OrderList = () => {
                     >
                       View
                     </button>
-                  </td>
+                  </td> */}
                   <td
                     className={cn(
                       'table_td',
@@ -363,8 +363,15 @@ const OrderList = () => {
                     {getOrderStatus(item?.OrderTrack)}
                   </td>
                   <td className='table_td'>
-                    {item?.status === '0' ? null : (
-                      <div className='flex items-center gap-3'>
+                    <div className='flex items-center gap-3'>
+                      <button
+                        className='font-medium hover:underline text-blue-600 dark:text-blue-500'
+                        type='button'
+                        onClick={() => handleModal('view', item)}
+                      >
+                        View
+                      </button>
+                      {item?.status === '0' ? null : (
                         <button
                           onClick={() => handleModal('update', item)}
                           className={cn(
@@ -374,8 +381,8 @@ const OrderList = () => {
                         >
                           Update
                         </button>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))
