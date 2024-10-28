@@ -38,7 +38,7 @@ const ManageTopTenBook = () => {
       query.search = searchValue
     }
     if (selectedCategory) {
-      query.category = selectedCategory?.id
+      query.cid = selectedCategory?.id
     }
     return query
   }
@@ -218,7 +218,7 @@ const ManageTopTenBook = () => {
                               values?.BookId?.book_title && 'uppercase',
                             )}
                           >
-                            {values?.BookId?.book_title || 'Select Category'}
+                            {values?.BookId?.book_title || 'Select Product'}
                           </span>
                         )
                       }}
