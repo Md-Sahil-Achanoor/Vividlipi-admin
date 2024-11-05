@@ -1,4 +1,4 @@
-import { ILoader } from '../../types'
+import { ILoader } from '@/types'
 
 const Loader = ({
   className,

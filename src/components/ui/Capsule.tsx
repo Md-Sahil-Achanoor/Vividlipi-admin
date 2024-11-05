@@ -1,5 +1,5 @@
+import { cn } from '@/utils/twmerge'
 import * as React from 'react'
-import { cn } from '../../utils/twmerge'
 
 const Capsule = React.forwardRef<
   HTMLParagraphElement,

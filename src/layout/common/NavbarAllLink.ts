@@ -1,9 +1,9 @@
+import { MenuType } from '@/types'
 import { AiOutlineOrderedList } from 'react-icons/ai'
 import { BiBookContent } from 'react-icons/bi'
 import { FaUsersCog } from 'react-icons/fa'
 import { LuLayoutDashboard } from 'react-icons/lu'
 import { MdLibraryBooks } from 'react-icons/md'
-import { MenuType } from '../../types'
 
 export const sidebarData = [
   {
@@ -150,6 +150,13 @@ const NavbarAllLink: MenuType[] = [
         id: 'Product_Coupon_Management',
         title: 'Coupon',
         link: '/admin/coupon/coupon-list',
+        role: ['admin', 'sub-admin'],
+        icon: null,
+      },
+      {
+        id: 'Product_Comment_Management',
+        title: 'Product Comments',
+        link: '/admin/product-comment/product-comment-list',
         role: ['admin', 'sub-admin'],
         icon: null,
       },

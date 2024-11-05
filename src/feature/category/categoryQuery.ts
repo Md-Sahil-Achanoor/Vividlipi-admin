@@ -1,7 +1,6 @@
+import API from '@/app/services/api'
+import { endpoints } from '@/constants/endpoints'
 import { categoryTag, couponCategoryTag } from '@/constants/query-tags.constant'
-import toast from 'react-hot-toast'
-import API from '../../app/services/api'
-import { endpoints } from '../../constants/endpoints'
 import {
   ApiResponse,
   CategoryPayload,
@@ -11,7 +10,8 @@ import {
   ManagePayloadQuery,
   ManageQuery,
   SubCategoryPayload,
-} from '../../types'
+} from '@/types'
+import toast from 'react-hot-toast'
 import { coreAction } from '../core/coreSlice'
 import { categoryAction } from './categorySlice'
 

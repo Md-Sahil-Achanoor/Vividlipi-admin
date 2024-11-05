@@ -1,6 +1,6 @@
 import { productBulkUploadSchema } from '@/models'
+import { BulkProduct, BulkUploadReturn } from '@/types'
 import moment from 'moment'
-import { BulkProduct, BulkUploadReturn } from '../../types'
 import { ExcelDateToJSDate, formatDate } from '../time'
 import validateSchema from '../validateSchema'
 

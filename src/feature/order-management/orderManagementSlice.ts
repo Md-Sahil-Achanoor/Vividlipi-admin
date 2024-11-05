@@ -1,6 +1,9 @@
-import { AssignOrderResponse, OrderUserManagementState } from '@/types'
+import {
+  AssignOrderResponse,
+  OrderUserManagementState,
+  OrderUserResponse,
+} from '@/types'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { OrderUserResponse } from '../../types'
 
 const initialState: OrderUserManagementState = {
   selectedOrderUser: null,

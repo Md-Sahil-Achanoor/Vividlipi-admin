@@ -1,11 +1,11 @@
 // import moment from "moment";
+import { useAppSelector } from '@/app/store'
+import { Role } from '@/types'
+import { checkTimeGapBetweenTwo } from '@/utils/time'
 import moment from 'moment'
 import { PropsWithChildren } from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import { useAppSelector } from '../../app/store'
 import AuthLayout from '../../layout/authLayout'
-import { Role } from '../../types'
-import { checkTimeGapBetweenTwo } from '../../utils/time'
 
 interface PrivateOutletProps extends PropsWithChildren {
   roles?: Role[]

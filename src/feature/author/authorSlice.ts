@@ -1,5 +1,5 @@
+import { AuthorResponse, AuthorState } from '@/types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AuthorResponse, AuthorState } from '../../types'
 
 const initialState: AuthorState = {
   selectedAuthor: null,

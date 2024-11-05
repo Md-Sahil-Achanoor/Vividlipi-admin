@@ -1,7 +1,7 @@
+import { useAppSelector } from '@/app/store'
+import logo from '@/assets/Images/logo.png'
+import { cn } from '@/utils/twmerge'
 import { Link } from 'react-router-dom'
-import { useAppSelector } from '../../app/store'
-import logo from '../../assets/Images/logo.png'
-import { cn } from '../../utils/twmerge'
 
 const Logo = () => {
   const { leftSideBarType, isMobile } = useAppSelector((state) => state.layout)

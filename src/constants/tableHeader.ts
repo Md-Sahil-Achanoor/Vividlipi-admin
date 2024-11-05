@@ -80,6 +80,15 @@ export const couponTableHead = [
   'Action',
 ]
 
+export const commentTableHead = [
+  'SL',
+  'Name',
+  'Thumbnail',
+  'Author',
+  'Comment',
+  'Action',
+]
+
 // Order
 
 export const orderTableHead = [

@@ -1,9 +1,9 @@
+import API from '@/app/services/api'
+import { ManagePayload } from '@/types'
+import { BulkUploadQuery, bulkUploadPayload } from '@/types/common/common'
+import { POST } from '@/utils/axios.config'
 import { AxiosProgressEvent } from 'axios'
 import toast from 'react-hot-toast'
-import API from '../../app/services/api'
-import { ManagePayload } from '../../types'
-import { BulkUploadQuery, bulkUploadPayload } from '../../types/common/common'
-import { POST } from '../../utils/axios.config'
 import { coreAction } from '../core/coreSlice'
 import { commonAction } from './commonSlice'
 

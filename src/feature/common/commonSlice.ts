@@ -1,5 +1,5 @@
+import { CommonState } from '@/types/common/common'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { CommonState } from '../../types/common/common'
 
 const initialState: CommonState = {
   progress: 0,
