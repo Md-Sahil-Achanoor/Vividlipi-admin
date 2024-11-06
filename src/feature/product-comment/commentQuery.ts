@@ -5,6 +5,7 @@ import {
   ApiResponse,
   CommentQuery,
   CommentResponse,
+  ListResponse,
   ManagePayloadQuery,
   ManageQuery,
 } from '@/types'
@@ -16,7 +17,7 @@ const commentQuery = API.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
     getComments: builder.query<
-      ApiResponse<CommentResponse[]>,
+      ApiResponse<ListResponse<CommentResponse>>,
       ManageQuery<Partial<CommentQuery>>
     >({
       query: ({ query }) => {
@@ -55,22 +56,21 @@ const commentQuery = API.injectEndpoints({
         try {
           const result = await queryFulfilled
           if (result?.data?.status === 1) {
+            toast.success('Approved successfully!')
             dispatch(coreAction.toggleModal({ open: false, type: '' }))
-            // dispatch(
-            //   commentQuery.util.updateQueryData(
-            //     'getComments',
-            //     {
-            //       query: _arg.query,
-            //     },
-            //     (draft) => {
-            //       draft.data = draft?.data?.map((item) =>
-            //         item?.id === _arg.id
-            //           ? { ...item, status: _arg.status }
-            //           : item,
-            //       )
-            //     },
-            //   ),
-            // )
+            dispatch(
+              commentQuery.util.updateQueryData(
+                'getComments',
+                {
+                  query: _arg.query,
+                },
+                (draft) => {
+                  draft.data.data = draft?.data?.data?.map((item) =>
+                    item?.id === _arg.id ? { ...item, approve: 1 } : item,
+                  )
+                },
+              ),
+            )
           } else {
             toast.error(result?.data?.message || 'Something went wrong!')
           }
@@ -92,7 +92,7 @@ const commentQuery = API.injectEndpoints({
         url: endpoints.product_comment,
         method: 'DELETE',
         params: {
-          id,
+          ReviewId: id,
         },
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
@@ -109,7 +109,7 @@ const commentQuery = API.injectEndpoints({
                   query: _arg.query,
                 },
                 (draft) => {
-                  draft.data = draft?.data?.filter(
+                  draft.data.data = draft?.data?.data?.filter(
                     (item) => item?.id !== _arg.id,
                   )
                 },

@@ -84,7 +84,8 @@ export const commentTableHead = [
   'SL',
   'Name',
   'Thumbnail',
-  'Author',
+  'Rating',
+  'Time',
   'Comment',
   'Action',
 ]
