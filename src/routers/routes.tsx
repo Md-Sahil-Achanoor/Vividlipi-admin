@@ -3,6 +3,7 @@ import { lazy } from 'react'
 import { Navigate, createBrowserRouter } from 'react-router-dom'
 import AccessLayout from './middleware/access-layout'
 
+const ProductCommentList = lazy(() => import('@/pages/admin/product-comments'))
 const AssignOrderList = lazy(
   () => import('@/pages/admin/order-management/assign-orders'),
 )
@@ -326,6 +327,34 @@ const router = createBrowserRouter([
             element: (
               <AccessLayout access='Product_Coupon_Management' type={'view'}>
                 <ViewCoupon />
+              </AccessLayout>
+            ),
+          },
+        ],
+      },
+
+      /**
+       * @SubModule { Coupon }
+       * @Role Admin
+       * */
+      {
+        path: 'product-comment',
+        element: <AppWrapper />,
+        children: [
+          {
+            path: '',
+            element: (
+              <Navigate to='/admin/product-comment/product-comment-list' />
+            ),
+          },
+          {
+            path: 'product-comment-list',
+            element: (
+              <AccessLayout
+                access='Product_Comment_Management'
+                type={['view', 'update', 'delete']}
+              >
+                <ProductCommentList />
               </AccessLayout>
             ),
           },

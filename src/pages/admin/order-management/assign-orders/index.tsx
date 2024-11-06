@@ -5,6 +5,7 @@ import ManageModule from '@/components/elements/modal/ManageModule'
 import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
 import ViewOrderDetails from '@/components/module/order-management/ViewOrderDetails'
 import Table from '@/components/ui/Table'
+import { assignOrderTableHead } from '@/constants/tableHeader'
 import { coreAction } from '@/feature/core/coreSlice'
 import {
   useDeleteAssignOrderMutation,
@@ -23,17 +24,6 @@ const breadcrumbItem: BreadCrumbItem[] = [
     name: 'Order List',
     link: '#',
   },
-]
-
-const tableHead = [
-  'SL',
-  'User Name',
-  'User Email',
-  'Total Purchase',
-  'Total Amount',
-  'Order Details',
-  'Order Status',
-  'Action',
 ]
 
 const AssignOrderList = () => {
@@ -160,9 +150,9 @@ const AssignOrderList = () => {
       >
         {/* <Card className="p-3 border-0 shadow-md"> */}
         <TableWrapper isActiveInactive={false} isSort={false}>
-          <Table headList={tableHead}>
+          <Table headList={assignOrderTableHead}>
             {isLoading ? (
-              <SkeletonTable total={8} tableCount={8} />
+              <SkeletonTable total={8} tableCount={7} />
             ) : data?.data &&
               typeof data?.data === 'object' &&
               data?.data?.length > 0 ? (
@@ -176,18 +166,18 @@ const AssignOrderList = () => {
                   <td className='table_td'>{item?.UserDetails?.email}</td>
                   <td className='table_td'>{item?.Productdatas?.length}</td>
                   <td className='table_td'>₹{item?.Total}</td>
-                  <td className='table_td'>
-                    <button
-                      className='font-medium hover:underline text-blue-600 dark:text-blue-500'
-                      type='button'
-                      onClick={() => handleModal('view', item)}
-                    >
-                      View
-                    </button>
-                  </td>
+                  {/* <td className='table_td'>
+                  </td> */}
                   <td className='table_td'>{item?.status}</td>
                   <td className='table_td'>
                     <div className='flex items-center gap-3'>
+                      <button
+                        className='font-medium hover:underline text-blue-600 dark:text-blue-500'
+                        type='button'
+                        onClick={() => handleModal('view', item)}
+                      >
+                        View
+                      </button>
                       {hasDeletePermission ? (
                         <button
                           onClick={() => handleModal('delete', item)}

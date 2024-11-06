@@ -80,6 +80,16 @@ export const couponTableHead = [
   'Action',
 ]
 
+export const commentTableHead = [
+  'SL',
+  'Name',
+  'Thumbnail',
+  'Rating',
+  'Time',
+  'Comment',
+  'Action',
+]
+
 // Order
 
 export const orderTableHead = [
@@ -94,6 +104,17 @@ export const orderTableHead = [
   'Order Status',
   'Action',
   // 'Action',
+]
+
+export const assignOrderTableHead = [
+  'SL',
+  'User Name',
+  'User Email',
+  'Total Purchase',
+  'Total Amount',
+  // 'Order Details',
+  'Order Status',
+  'Action',
 ]
 
 export const tabItems: TabItem[] = [

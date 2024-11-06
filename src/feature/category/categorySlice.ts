@@ -1,9 +1,5 @@
+import { CategoryResponse, CategoryState, SubCategoryResponse } from '@/types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import {
-  CategoryResponse,
-  CategoryState,
-  SubCategoryResponse,
-} from '../../types'
 
 const initialState: CategoryState = {
   selectedCategory: null,

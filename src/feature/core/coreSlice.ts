@@ -1,7 +1,7 @@
+import { ModalToggle } from '@/types'
+import type { InitialStateType } from '@/types/core'
+import { formatDate } from '@/utils/time'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ModalToggle } from '../../types'
-import type { InitialStateType } from '../../types/core'
-import { formatDate } from '../../utils/time'
 
 const initialState: InitialStateType = {
   isSideBarOpen: true,

@@ -44,6 +44,7 @@ export const endpoints = {
   edit_product: '/api/edit-product',
   delete_product: '/api/delete-product',
   product_by_cat1: '/api/ProductByCat1',
+  product_comment: '/api/Reviews',
 
   /**
    * @module Role Management

@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unsafe-optional-chaining */
-import toast from 'react-hot-toast'
-import API from '../../app/services/api'
-import { endpoints } from '../../constants/endpoints'
+import API from '@/app/services/api'
+import { endpoints } from '@/constants/endpoints'
 import {
   ApiResponse,
   ListResponse,
@@ -12,7 +11,8 @@ import {
   ProductPayload,
   ProductQuery,
   ProductResponse,
-} from '../../types'
+} from '@/types'
+import toast from 'react-hot-toast'
 import { coreAction } from '../core/coreSlice'
 import { productAction } from './productSlice'
 

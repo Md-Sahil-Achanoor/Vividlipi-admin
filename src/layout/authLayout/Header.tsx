@@ -1,8 +1,8 @@
+import { useAppSelector } from '@/app/store'
+import { cn } from '@/utils/twmerge'
 import { BiFullscreen, BiMenu } from 'react-icons/bi'
 import { useDispatch } from 'react-redux'
-import { useAppSelector } from '../../app/store'
 import { changeSidebarType } from '../../feature/layout/layoutSlice'
-import { cn } from '../../utils/twmerge'
 import ProfileMenu from '../common/TopbarDropdown/ProfileMenu'
 
 const doc = document as Document & {

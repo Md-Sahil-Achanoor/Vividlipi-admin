@@ -1,5 +1,5 @@
+import { CategoryResponse, CouponResponse, CouponState } from '@/types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { CategoryResponse, CouponResponse, CouponState } from '../../types'
 
 const initialState: CouponState = {
   selectedCoupon: null,

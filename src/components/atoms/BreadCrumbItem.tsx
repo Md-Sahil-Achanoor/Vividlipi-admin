@@ -1,5 +1,5 @@
+import { BreadCrumbItem } from '@/types'
 import { Link } from 'react-router-dom'
-import { BreadCrumbItem } from '../../types'
 
 interface Props {
   items: BreadCrumbItem[]

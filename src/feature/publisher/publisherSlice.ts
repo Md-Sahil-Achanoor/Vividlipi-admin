@@ -1,5 +1,5 @@
+import { PublisherResponse, PublisherState } from '@/types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { PublisherResponse, PublisherState } from '../../types'
 
 const initialState: PublisherState = {
   selectedPublisher: null,

@@ -1,6 +1,5 @@
-import toast from 'react-hot-toast'
-import API from '../../app/services/api'
-import { endpoints } from '../../constants/endpoints'
+import API from '@/app/services/api'
+import { endpoints } from '@/constants/endpoints'
 import {
   ApiResponse,
   FeatureNewInPayload,
@@ -17,7 +16,8 @@ import {
   TopTenBookPayload,
   TopTenBooksQuery,
   TopTenBooksResponse,
-} from '../../types'
+} from '@/types'
+import toast from 'react-hot-toast'
 import { coreAction } from '../core/coreSlice'
 import { homeAction } from './homeSlice'
 

@@ -1,6 +1,6 @@
+import { useAppSelector } from '@/app/store'
 import config from '@/config/config'
-import { useAppSelector } from '../../app/store'
-import { cn } from '../../utils/twmerge'
+import { cn } from '@/utils/twmerge'
 
 const Footer = () => {
   const { leftSideBarType, isMobile } = useAppSelector((state) => state.layout)

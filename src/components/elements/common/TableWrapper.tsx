@@ -1,8 +1,8 @@
+import { useAppDispatch, useAppSelector } from '@/app/store'
+import { coreAction } from '@/feature/core/coreSlice'
 import React, { PropsWithChildren } from 'react'
 import { BiSort } from 'react-icons/bi'
 import { GoDotFill } from 'react-icons/go'
-import { coreAction } from '@/feature/core/coreSlice'
-import { useAppDispatch, useAppSelector } from '@/app/store'
 import { Card } from '../../ui/Card'
 import InfiniteFilter from '../filters/InfiniteFilter'
 
@@ -59,8 +59,8 @@ const TableWrapper = ({
               wrapperClass=''
               buttonClass='border p-2'
               items={[
-                { label: 'Active', value: '1' },
-                { label: 'Inactive', value: '0' },
+                { label: 'Approved', value: '1' },
+                { label: 'Unapproved', value: '0' },
               ]}
               renderItem={(item) => <>{item.label}</>}
               isActive={(item) => item.value === selectedStatus}
@@ -73,7 +73,7 @@ const TableWrapper = ({
                     }`}
                   />
                   <span className='text-sm uppercase'>
-                    {selectedStatus === '1' ? 'Active' : 'Inactive'}
+                    {selectedStatus === '1' ? 'Approved' : 'Unapproved'}
                   </span>
                 </div>
               )}

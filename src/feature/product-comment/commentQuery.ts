@@ -1,34 +1,33 @@
 import API from '@/app/services/api'
 import { endpoints } from '@/constants/endpoints'
-import { couponTag } from '@/constants/query-tags.constant'
+import { commentTag } from '@/constants/query-tags.constant'
 import {
   ApiResponse,
-  CouponPayload,
-  CouponQuery,
-  CouponResponse,
-  ManagePayload,
+  CommentQuery,
+  CommentResponse,
+  ListResponse,
   ManagePayloadQuery,
   ManageQuery,
 } from '@/types'
 import toast from 'react-hot-toast'
 import { coreAction } from '../core/coreSlice'
-import { couponAction } from './couponSlice'
+import { commentAction } from './commentSlice'
 
-const couponQuery = API.injectEndpoints({
+const commentQuery = API.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
-    getCoupons: builder.query<
-      ApiResponse<CouponResponse[]>,
-      ManageQuery<Partial<CouponQuery>>
+    getComments: builder.query<
+      ApiResponse<ListResponse<CommentResponse>>,
+      ManageQuery<Partial<CommentQuery>>
     >({
       query: ({ query }) => {
         return {
-          url: endpoints.coupon,
+          url: endpoints.product_comment,
           method: 'GET',
           params: query,
         }
       },
-      providesTags: couponTag,
+      providesTags: commentTag,
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           await queryFulfilled
@@ -42,57 +41,42 @@ const couponQuery = API.injectEndpoints({
       },
     }),
 
-    getCouponById: builder.query<
-      ApiResponse<CouponResponse>,
-      ManageQuery<CouponQuery>
+    updateCommentStatus: builder.mutation<
+      any,
+      ManagePayloadQuery<Partial<CommentQuery>>
     >({
-      query: ({ query }) => ({
-        url: endpoints.coupon,
-        method: 'GET',
-        params: query,
+      query: ({ id }) => ({
+        url: endpoints.product_comment,
+        method: 'PUT',
+        params: {
+          ReviewId: id,
+        },
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const result = await queryFulfilled
-          dispatch(couponAction.setSelectedCoupon(result?.data?.data))
-        } catch (err: unknown) {
-          // do nothing
-          const error = err as any
-          const message =
-            error?.response?.data?.message || 'Something went wrong!'
-          toast.error(message)
-        }
-      },
-    }),
-
-    // POST
-    manageCoupon: builder.mutation<any, ManagePayload<CouponPayload>>({
-      query: ({ data, id }) => ({
-        url: endpoints.coupon,
-        method: id ? 'PUT' : 'POST',
-        body: data,
-        params: {
-          id,
-        },
-      }),
-      invalidatesTags: couponTag,
-      async onQueryStarted({ options }, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled
           if (result?.data?.status === 1) {
-            options?.resetForm()
-            options?.setSubmitting(false)
-            dispatch(couponAction.resetCoupon())
-            toast.success(result?.data?.data)
-            options?.router?.('/admin/coupon/coupon-list')
+            toast.success('Approved successfully!')
+            dispatch(coreAction.toggleModal({ open: false, type: '' }))
+            dispatch(
+              commentQuery.util.updateQueryData(
+                'getComments',
+                {
+                  query: _arg.query,
+                },
+                (draft) => {
+                  draft.data.data = draft?.data?.data?.map((item) =>
+                    item?.id === _arg.id ? { ...item, approve: 1 } : item,
+                  )
+                },
+              ),
+            )
           } else {
             toast.error(result?.data?.message || 'Something went wrong!')
           }
         } catch (err: unknown) {
           // do nothing
-          options?.setSubmitting(false)
           const error = err as any
-          // console.log(`\n\n error:`, error);
           const message =
             error?.response?.data?.message || 'Something went wrong!'
           toast.error(message)
@@ -100,15 +84,15 @@ const couponQuery = API.injectEndpoints({
       },
     }),
 
-    deleteCoupon: builder.mutation<
+    deleteComment: builder.mutation<
       any,
-      ManagePayloadQuery<Partial<CouponQuery>>
+      ManagePayloadQuery<Partial<CommentQuery>>
     >({
       query: ({ id }) => ({
-        url: endpoints.coupon,
+        url: endpoints.product_comment,
         method: 'DELETE',
         params: {
-          id,
+          ReviewId: id,
         },
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
@@ -116,16 +100,16 @@ const couponQuery = API.injectEndpoints({
           const result = await queryFulfilled
           if (result?.data?.status === 1) {
             dispatch(coreAction.toggleModal({ open: false, type: '' }))
-            // dispatch(couponAction.resetWithReload());
-            dispatch(couponAction.resetCoupon())
+            // dispatch(commentAction.resetWithReload());
+            dispatch(commentAction.resetComment())
             dispatch(
-              couponQuery.util.updateQueryData(
-                'getCoupons',
+              commentQuery.util.updateQueryData(
+                'getComments',
                 {
                   query: _arg.query,
                 },
                 (draft) => {
-                  draft.data = draft?.data?.filter(
+                  draft.data.data = draft?.data?.data?.filter(
                     (item) => item?.id !== _arg.id,
                   )
                 },
@@ -147,10 +131,9 @@ const couponQuery = API.injectEndpoints({
 })
 
 export const {
-  useGetCouponsQuery,
-  useGetCouponByIdQuery,
-  useManageCouponMutation,
-  useDeleteCouponMutation,
-} = couponQuery
+  useGetCommentsQuery,
+  useUpdateCommentStatusMutation,
+  useDeleteCommentMutation,
+} = commentQuery
 
-export default couponQuery
+export default commentQuery
