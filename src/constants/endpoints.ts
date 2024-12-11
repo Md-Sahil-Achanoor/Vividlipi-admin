@@ -35,6 +35,7 @@ export const endpoints = {
    * @module Product
    * */
   product: '/api/product',
+  category_product: '/api/Products',
   import_product: '/api/import-product',
 
   // old api
@@ -43,6 +44,7 @@ export const endpoints = {
   edit_product: '/api/edit-product',
   delete_product: '/api/delete-product',
   product_by_cat1: '/api/ProductByCat1',
+  product_comment: '/api/Reviews',
 
   /**
    * @module Role Management
@@ -103,9 +105,21 @@ export const endpoints = {
   list_new_in: '/api/list-newin-products',
   delete_new_in: '/api/remove-newin-products',
   toggle_new_in: '/api/newin-toggle',
+  top_ten_books: '/api/TopBook',
 
   /**
    * @module Coupon
    * */
   coupon: '/api/Coupons',
+
+  /**
+   * @module Order Management
+   * */
+  order_user: '/api/Users',
+  order_list: '/api/Orders',
+  update_order: '/api/OrderStatusUpdate',
+
+  assign_book: '/api/AssignBooks',
+  get_assign_book: '/api/GetAssignBooks',
+  delete_assign_book: '/api/RemoveAssignedBooks',
 }

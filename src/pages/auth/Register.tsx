@@ -46,7 +46,7 @@ const Register = () => {
       body.CIN = CIN
     }
     setSubmitting(true)
-    console.log(body)
+    // console.log(body)
     resetForm()
     router('/account/login')
     // signIn({

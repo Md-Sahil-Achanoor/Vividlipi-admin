@@ -17,28 +17,23 @@ export const rolePermissionFormSchema = Yup.object({
       message: "Role name can't be empty",
     }),
   Dashboard: Yup.array(optionsSchema),
-  Product_Management: Yup.array(optionsSchema),
-  User_Management: Yup.array(optionsSchema),
-  Promotions_and_Discounts: Yup.array(optionsSchema),
-  Return_and_Refund_Management: Yup.array(optionsSchema),
+  CMS_Home_Management: Yup.array(optionsSchema),
+  Product_List_Management: Yup.array(optionsSchema),
   Product_Category_Management: Yup.array(optionsSchema),
   Product_Sub_Category_Management: Yup.array(optionsSchema),
-  Permissions_and_Roles: Yup.array(optionsSchema),
-  Analytics_and_Reporting: Yup.array(optionsSchema),
-  Customer_Support: Yup.array(optionsSchema),
-  Shipping_Management: Yup.array(optionsSchema),
-  Content_Management: Yup.array(optionsSchema),
-  Dashboard_Customization: Yup.array(optionsSchema),
-  Multi_language_Support: Yup.array(optionsSchema),
-  Backup_and_Recovery: Yup.array(optionsSchema),
-  Notification_Management: Yup.array(optionsSchema),
-  Tax_Management: Yup.array(optionsSchema),
-  Order_Management: Yup.array(optionsSchema),
+  Product_Author_Management: Yup.array(optionsSchema),
+  Product_Publisher_Management: Yup.array(optionsSchema),
+  Product_Coupon_Management: Yup.array(optionsSchema),
+  User_Admin_Management: Yup.array(optionsSchema),
+  User_Role_Management: Yup.array(optionsSchema),
+  Order_List_Management: Yup.array(optionsSchema),
+  Order_User_Management: Yup.array(optionsSchema),
+  Order_Assign_Management: Yup.array(optionsSchema),
 })
 
 export type IRolePermissionForm = Yup.InferType<typeof rolePermissionFormSchema>
 
-export const userManagementFormSchema = Yup.object({
+export const userManagementFormSchema = Yup.object().shape({
   name: Yup.string()
     .required('Name is required')
     .test({
@@ -47,7 +42,10 @@ export const userManagementFormSchema = Yup.object({
       },
       message: 'Name is required',
     }),
-  email: Yup.string().required('Email is required').email('Invalid email'),
+  email: Yup.string()
+    // .email('Invalid email format')
+    .matches(/^[^@]+@[^@]+\.[^@]+$/, 'Invalid email format')
+    .required('Email is required'),
   password: Yup.string().required('Password is required').min(6, 'Too short'),
   // confirmPassword: Yup.string()
   //   .required("Confirm password is required")

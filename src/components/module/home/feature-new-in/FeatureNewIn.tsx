@@ -1,4 +1,4 @@
-import { useAppDispatch } from '@/app/store'
+import { useAppDispatch, useAppSelector } from '@/app/store'
 import NoTableData from '@/components/atoms/NoTableData'
 import FullTableSkeleton from '@/components/elements/skeleton/FullTableSkeleton'
 import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
@@ -12,12 +12,14 @@ import {
   useToggleHomeNewInStatusMutation,
 } from '@/feature/home/homeQuery'
 import { homeAction } from '@/feature/home/homeSlice'
-import { FeatureProductResponse } from '@/types'
+import { FeatureProductResponse, RolePermission } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { checkPermission } from '@/utils/validateSchema'
 import { useEffect } from 'react'
 import ModuleHeader from '../ModuleHeader'
 
 const FeatureNewIn = () => {
+  const { roleDetails } = useAppSelector((state) => state.auth)
   const { data: newInStatus, isFetching: newInStatusLoading } =
     useGetHomeNewInStatusQuery({})
 
@@ -60,6 +62,24 @@ const FeatureNewIn = () => {
     }
   }
 
+  const hasAddPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'add',
+    access: 'CMS_Home_Management',
+  })
+
+  const hasEditPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'edit',
+    access: 'CMS_Home_Management',
+  })
+
+  const hasDeletePermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'delete',
+    access: 'CMS_Home_Management',
+  })
+
   return (
     <div>
       {statusUpdateLoading && <ScreenLoader />}
@@ -75,9 +95,13 @@ const FeatureNewIn = () => {
       ) : (
         <ModuleHeader
           title='New In'
-          isAdd={newInStatus?.toggle === '1'}
+          isAdd={
+            hasAddPermission || hasEditPermission
+              ? newInStatus?.toggle === '1'
+              : false
+          }
           status={newInStatus?.toggle === '1'}
-          isButton
+          isButton={hasAddPermission || hasEditPermission}
           handleModal={(type?: string) => {
             if (type === 'toggle')
               toggleStatus({
@@ -132,15 +156,17 @@ const FeatureNewIn = () => {
                   {newInStatus?.toggle === '1' && (
                     <td className='table_td'>
                       <div className='flex items-center gap-3'>
-                        <button
-                          onClick={() => handleModal('delete-new-in', item)}
-                          className={cn(
-                            'font-medium hover:underline',
-                            'text-red-600 dark:text-red-500',
-                          )}
-                        >
-                          Delete
-                        </button>
+                        {hasDeletePermission && (
+                          <button
+                            onClick={() => handleModal('delete-new-in', item)}
+                            className={cn(
+                              'font-medium hover:underline',
+                              'text-red-600 dark:text-red-500',
+                            )}
+                          >
+                            Delete
+                          </button>
+                        )}
                       </div>
                     </td>
                   )}

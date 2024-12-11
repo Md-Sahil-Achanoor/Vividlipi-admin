@@ -1,6 +1,13 @@
 import { TabItem } from '@/types'
 
-export const featureSliderHeader = ['SL', 'Text', 'Image', 'Position', 'Action']
+export const featureSliderHeader = [
+  'SL',
+  'Text',
+  'Image',
+  'Mobile Image',
+  'Position',
+  'Action',
+]
 
 export const featureSubSliderHeader = ['SL', 'Image', 'Action']
 
@@ -11,6 +18,14 @@ export const featureProductHeader = [
   'Publisher',
   'Language',
   'Position',
+  'Action',
+]
+
+export const topTenProductHeader = [
+  'SL',
+  'Name',
+  'Thumbnail',
+  'Category',
   'Action',
 ]
 
@@ -30,7 +45,7 @@ export const productLIstTableHead = [
 export const publisherTableHead = [
   'SL',
   'Name',
-  'Slug',
+  // 'Slug',
   'Description',
   'Action',
 ]
@@ -38,7 +53,7 @@ export const publisherTableHead = [
 export const authorTableHead = [
   'SL',
   'Name',
-  'Slug',
+  // 'Slug',
   'Description',
   'Picture',
   'Action',
@@ -65,6 +80,43 @@ export const couponTableHead = [
   'Action',
 ]
 
+export const commentTableHead = [
+  'SL',
+  'Name',
+  'Thumbnail',
+  'Rating',
+  'Time',
+  'Comment',
+  'Action',
+]
+
+// Order
+
+export const orderTableHead = [
+  'SL',
+  'User Name',
+  'User Email',
+  'User Type',
+  'Total Purchase',
+  'Total Amount',
+  // 'Details',
+  'Payment Status',
+  'Order Status',
+  'Action',
+  // 'Action',
+]
+
+export const assignOrderTableHead = [
+  'SL',
+  'User Name',
+  'User Email',
+  'Total Purchase',
+  'Total Amount',
+  // 'Order Details',
+  'Order Status',
+  'Action',
+]
+
 export const tabItems: TabItem[] = [
   {
     name: 'Feature Slider',
@@ -77,5 +129,9 @@ export const tabItems: TabItem[] = [
   {
     name: 'Feature Products',
     type: 'feature-product',
+  },
+  {
+    name: 'Top 10 Books',
+    type: 'top-ten-books',
   },
 ]

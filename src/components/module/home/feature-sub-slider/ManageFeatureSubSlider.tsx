@@ -77,7 +77,7 @@ const ManageFeatureSubSlider = () => {
     >
       <div className='w-full h-full'>
         <Formik
-          initialValues={null || initialValues}
+          initialValues={initialValues}
           validationSchema={featureSubSliderSchema}
           onSubmit={onSubmit}
           enableReinitialize

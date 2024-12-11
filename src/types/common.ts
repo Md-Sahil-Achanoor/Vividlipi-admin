@@ -43,6 +43,9 @@ export interface ListResponse<T> {
   per_page: number
   total: number
   last_page: number
+  hasMore: boolean
+  prev_page_url: string
+  first_page_url: string
 }
 
 export interface ApiResponse<T> {
@@ -54,6 +57,7 @@ export interface ApiResponse<T> {
   status: number
   message: string
   current_page: number
+  search?: any
 }
 
 /**

@@ -14,6 +14,7 @@ export const couponCategoryTag = ['CouponCategory']
 export const productTag = ['Product']
 export const adminUsersTag = ['AdminUsers']
 export const roleListTag = ['RoleList']
+export const commentTag = ['Comment']
 
 export const RTKQueryTags = [
   ...couponTag,
@@ -32,4 +33,5 @@ export const RTKQueryTags = [
   ...couponCategoryTag,
   ...authorCategoryTag,
   ...publisherCategoryTag,
+  ...commentTag,
 ]

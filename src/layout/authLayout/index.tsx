@@ -1,6 +1,6 @@
+import { useAppDispatch, useAppSelector } from '@/app/store'
 import { cn } from '@/utils/twmerge'
 import { PropsWithChildren, useLayoutEffect } from 'react'
-import { useAppDispatch, useAppSelector } from '../../app/store'
 import { changeSidebarType } from '../../feature/layout/layoutSlice'
 import Footer from './Footer'
 import Header from './Header'

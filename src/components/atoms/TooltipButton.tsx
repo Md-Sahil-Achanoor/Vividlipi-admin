@@ -6,12 +6,14 @@ const TooltipButton = (props: {
   className?: string
   isInnerRelative?: boolean
   children?: React.ReactNode
+  parentClassName?: string
 }) => {
   return (
     <div
       className={cn(
         'p-2 rounded-xl group w-max',
         props?.isInnerRelative && 'relative',
+        props?.parentClassName,
       )}
     >
       {props.children}

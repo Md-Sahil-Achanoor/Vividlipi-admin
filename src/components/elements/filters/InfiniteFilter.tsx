@@ -87,7 +87,8 @@ const InfiniteFilter = <T extends object>({
       })
       if (node) observer.current.observe(node)
     },
-    [isLoading, loadMore],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [isLoading, loadMore, items],
   )
 
   // tailwind text overflow ellipsis
@@ -135,6 +136,7 @@ const InfiniteFilter = <T extends object>({
               >
                 <BiSearch className='text-xl text-textClr-muted' />
                 <input
+                  onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
                   className='flex-1 text-textClr-muted outline-none focus:border-gray-300 p-1 rounded-md focus-within:border-gray-300 '
                   {...searchProps}
                 />

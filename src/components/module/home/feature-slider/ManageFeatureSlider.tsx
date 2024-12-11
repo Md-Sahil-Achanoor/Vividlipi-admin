@@ -14,6 +14,7 @@ import { BsArrowRightShort } from 'react-icons/bs'
 const initialValues: IHomeFeatureSlider = {
   text: '',
   file: null,
+  MobileBannnerURL: '',
   redirectUrl: '',
   contentpostionX: 0,
   contentpositionY: 0,
@@ -27,9 +28,9 @@ const ManageFeatureSlider = () => {
   const [manageFeatureSlide, { isLoading }] = useManageFeatureSlideMutation()
   const { selectedFeatureSlider } = useAppSelector((state) => state.home)
   const dispatch = useAppDispatch()
+
   const handleModal = (type: string) => {
     if (type === 'cancelled') {
-      // do nothing
       dispatch(coreAction.toggleModal({ open: false, type: '' }))
       dispatch(homeAction.resetHome())
       formRef.current?.resetForm()
@@ -40,14 +41,19 @@ const ManageFeatureSlider = () => {
     values: IHomeFeatureSlider,
     { setSubmitting, resetForm }: FormikHelpers<IHomeFeatureSlider>,
   ) => {
-    // console.log("values", values);
-    // setSubmitting(false);
-    const fd = new FormData()
-    for (const key in values) {
-      if (key !== 'id') fd.append(key, (values as any)[key] as string | Blob)
+    // console.log('values', values)
+    // setSubmitting(false)
+    const { MobileBannnerURL, ...reset } = values
+    const obj: IHomeFeatureSlider = { ...reset }
+    if (MobileBannnerURL) {
+      obj.MobileBannnerURL = MobileBannnerURL
     }
-    // for (var pair of fd.entries()) {
-    //   console.log(pair);
+    const fd = new FormData()
+    for (const key in obj) {
+      if (key !== 'id') fd.append(key, (obj as any)[key] as string | Blob)
+    }
+    // for (const pair of fd.entries()) {
+    //   console.log(pair)
     // }
     await manageFeatureSlide({
       id: selectedFeatureSlider?.id,
@@ -58,6 +64,7 @@ const ManageFeatureSlider = () => {
       },
     })
   }
+
   return (
     <Modal
       classes={
@@ -113,7 +120,7 @@ const ManageFeatureSlider = () => {
                   <div className='col-span-2'>
                     <Field
                       name='file'
-                      label='Image'
+                      label='Website Banner'
                       maxFileSize={2}
                       isUpload={false}
                       component={FileUpload}
@@ -125,6 +132,16 @@ const ManageFeatureSlider = () => {
                         }
                       }}
                       placeholder='Image'
+                    />
+                  </div>
+                  <div className='col-span-2'>
+                    <Field
+                      name='MobileBannnerURL'
+                      label='Mobile Banner'
+                      component={FileUpload}
+                      maxFileSize={10}
+                      supportedString='jpg, jpeg, png'
+                      isRequired
                     />
                   </div>
                   <Field

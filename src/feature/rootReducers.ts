@@ -8,6 +8,8 @@ import coreSlice from './core/coreSlice'
 import couponSlice from './coupon/couponSlice'
 import homeSlice from './home/homeSlice'
 import layoutSlice from './layout/layoutSlice'
+import orderManagementSlice from './order-management/orderManagementSlice'
+import commentSlice from './product-comment/commentSlice'
 import productSlice from './product/productSlice'
 import publisherSlice from './publisher/publisherSlice'
 import userManagementSlice from './user-management/userManagementSlice'
@@ -20,10 +22,12 @@ const rootReducer = combineReducers({
   category: categorySlice,
   product: productSlice,
   userManagement: userManagementSlice,
+  orderManagement: orderManagementSlice,
   publisher: publisherSlice,
   author: authorSlice,
   home: homeSlice,
   coupon: couponSlice,
+  comment: commentSlice,
   [API.reducerPath]: API.reducer,
 })
 

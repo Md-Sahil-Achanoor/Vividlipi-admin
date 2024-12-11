@@ -1,11 +1,12 @@
+import { AuthResponse, AuthState } from '@/types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AuthResponse, AuthState } from '../../types'
 
 const initialState: AuthState = {
   isLoggedIn: false,
   user: null,
   token: '',
   role: '',
+  roleDetails: null,
   reRender: false,
   type: '',
   selectedUser: null,
@@ -17,8 +18,13 @@ const authSlice = createSlice({
   reducers: {
     loginSuccess: (
       state,
-      { payload: { user, token } }: PayloadAction<AuthResponse>,
+      { payload: { user, token, Permissions } }: PayloadAction<AuthResponse>,
     ) => {
+      if (typeof Permissions === 'object') {
+        state.roleDetails = Permissions
+      } else {
+        state.roleDetails = 'All Access'
+      }
       state.isLoggedIn = true
       state.user = user
       state.token = token

@@ -1,7 +1,7 @@
 import { CustomInputCom } from '@/types'
 import { cn } from '@/utils/twmerge'
 import { ErrorMessage } from 'formik'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import TooltipButton from '../atoms/TooltipButton'
@@ -13,7 +13,7 @@ const CustomInput: FC<CustomInputCom> = ({
   label,
   id,
   isPassword,
-  handleViewPassword,
+  // handleViewPassword,
   onChangeCallback,
   isRequired,
   onBlurCallback,
@@ -24,6 +24,7 @@ const CustomInput: FC<CustomInputCom> = ({
   tooltip,
   ...props
 }) => {
+  const [viewPassword, setViewPassword] = useState<boolean>(false)
   const Input = () => {
     if (props.type === 'textarea') {
       return (
@@ -69,6 +70,7 @@ const CustomInput: FC<CustomInputCom> = ({
         }}
         {...rest}
         {...props}
+        type={isPassword ? (viewPassword ? 'text' : 'password') : props.type}
       />
     )
   }
@@ -126,15 +128,19 @@ const CustomInput: FC<CustomInputCom> = ({
           {Input()}
           {rightIcon && rightIcon()}
           {isPassword ? (
-            <span
-              className='mx-1 cursor-pointer text-lg text-gray-500'
-              style={{
-                border: isPassword ? 'none' : '',
-              }}
-              onClick={handleViewPassword}
+            <div
+              className={cn(
+                'text-content-placeholder mx-1 cursor-pointer text-lg',
+                rest?.value ? 'visible' : 'invisible',
+              )}
+              onClick={() => setViewPassword(!viewPassword)}
             >
-              {props.type === 'text' ? <AiFillEye /> : <AiFillEyeInvisible />}
-            </span>
+              {viewPassword ? (
+                <AiFillEye className='text-custom-gray-100' />
+              ) : (
+                <AiFillEyeInvisible className='text-custom-gray-100' />
+              )}
+            </div>
           ) : null}
         </div>
         <ErrorMessage name={rest.name}>

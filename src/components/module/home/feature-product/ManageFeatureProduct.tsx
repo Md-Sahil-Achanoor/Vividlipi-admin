@@ -26,7 +26,7 @@ const ManageFeatureProduct = () => {
   const [manageFeatureProduct, { isLoading }] =
     useManageFeatureProductMutation()
   const [searchValue, setSearchValue] = useState<string>('')
-  console.log(`\n\n ~ ManageFeatureProduct ~ searchValue:`, searchValue)
+  // console.log(`\n\n ~ ManageFeatureProduct ~ searchValue:`, searchValue)
   const { value, onChange } = useDebounce(() => setSearchValue(value), 1000)
 
   const query = () => {

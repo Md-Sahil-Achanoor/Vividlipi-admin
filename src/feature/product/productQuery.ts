@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unsafe-optional-chaining */
-import toast from 'react-hot-toast'
-import API from '../../app/services/api'
-import { endpoints } from '../../constants/endpoints'
+import API from '@/app/services/api'
+import { endpoints } from '@/constants/endpoints'
 import {
   ApiResponse,
   ListResponse,
@@ -12,7 +11,8 @@ import {
   ProductPayload,
   ProductQuery,
   ProductResponse,
-} from '../../types'
+} from '@/types'
+import toast from 'react-hot-toast'
 import { coreAction } from '../core/coreSlice'
 import { productAction } from './productSlice'
 
@@ -42,6 +42,38 @@ const productQuery = API.injectEndpoints({
           toast.error(message)
         }
       },
+    }),
+
+    getProductInfinite: builder.query<
+      ApiResponse<ListResponse<ProductResponse>>,
+      ManagePayloadQuery<Partial<ProductQuery>>
+    >({
+      query: ({ query }) => ({
+        url: endpoints.product_list,
+        method: 'POST',
+        params: query,
+      }),
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName
+      },
+      merge: (currentCache, newItems, { arg: { query } }) => {
+        const newProducts = newItems.data.data
+        if (query?.search && query?.page === 1) {
+          // If 'search' is applied or changes, replace the cache
+          currentCache.data.data = newProducts
+        } else {
+          // If 'page' changes but 'search' stays the same, merge the new data
+          currentCache.data.data.push(...newProducts)
+        }
+      },
+      // Refetch when the page arg changes
+      forceRefetch({ currentArg, previousArg }) {
+        return (
+          currentArg?.query?.page !== previousArg?.query?.page || // Refetch on page change
+          currentArg?.query?.search !== previousArg?.query?.search
+        )
+      },
+      providesTags: ['ProductListInfinite'],
     }),
 
     getProductById: builder.query<
@@ -267,6 +299,31 @@ const productQuery = API.injectEndpoints({
         }
       },
     }),
+
+    //
+    getCategoryProduct: builder.query<
+      ApiResponse<ListResponse<ProductResponse>>,
+      ManagePayloadQuery<Partial<ProductQuery>>
+    >({
+      query: ({ query }) => ({
+        url: endpoints.category_product,
+        method: 'GET',
+        params: query,
+      }),
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled
+          // console.log(`\n\n result:`, result?.data)
+          // dispatch(productAction.setProductList(result?.data?.data))
+        } catch (err: unknown) {
+          // do nothing
+          const error = err as any
+          const message =
+            error?.response?.data?.message || 'Something went wrong!'
+          toast.error(message)
+        }
+      },
+    }),
   }),
 })
 
@@ -276,6 +333,7 @@ export const {
   useManageProductMutation,
   useDeleteProductMutation,
   useUpdateProductMutation,
+  useGetProductInfiniteQuery,
 
   useGetProductByCategory1Query,
 } = productQuery

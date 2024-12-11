@@ -14,7 +14,8 @@ import {
 } from '@/feature/product/productQuery'
 import { productAction } from '@/feature/product/productSlice'
 import PageLayout from '@/layout/PageLayout'
-import { BreadCrumbItem } from '@/types'
+import { BreadCrumbItem, RolePermission } from '@/types'
+import { checkPermission } from '@/utils/validateSchema'
 import { useEffect, useState } from 'react'
 import { BiUpload } from 'react-icons/bi'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
@@ -34,6 +35,7 @@ const ProductList = () => {
   // console.log(`\n\n ~ ProductList ~ page:`, page)
   const navigate = useNavigate()
   // const { page } = useAppSelector((state) => state.core)
+  const { roleDetails } = useAppSelector((state) => state.auth)
   const { reRenderBulk } = useAppSelector((state) => state.common)
   const { selectedProduct } = useAppSelector((state) => state.product)
   const { type } = useAppSelector((state) => state.core)
@@ -81,45 +83,67 @@ const ProductList = () => {
   const totalPage = Math.ceil((data?.data?.total || 0) / 10) || 1
   const productList = data?.data?.data || []
 
+  const hasAddPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'add',
+    access: 'Product_List_Management',
+  })
+
+  const hasEditPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'edit',
+    access: 'Product_List_Management',
+  })
+
+  const hasDeletePermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'delete',
+    access: 'Product_List_Management',
+  })
+
   return (
     <>
-      <BulkUpload uploadType='product' />
-      <ManageModule
-        classes={
-          type === 'delete-product'
-            ? {
-                top: 'visible',
-                body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
-              }
-            : {
-                top: 'invisible',
-                body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
-              }
-        }
-        handleModal={handleModal}
-        wrapperClass='h-full'
-        isModalHeader
-        outSideClick
-        headText='Delete the Product?'
-        heading={selectedProduct?.book_title || ''}
-        details='Are you certain you want to delete?'
-        type='delete'
-        buttonText={isDeleteProduct ? 'Deleting...' : 'Delete'}
-        buttonProps={{
-          onClick: handleDeleteProduct,
-          disabled: isDeleteProduct,
-        }}
-      />
+      {hasAddPermission && <BulkUpload uploadType='product' />}
+      {hasDeletePermission && (
+        <ManageModule
+          classes={
+            type === 'delete-product'
+              ? {
+                  top: 'visible',
+                  body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
+                }
+              : {
+                  top: 'invisible',
+                  body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
+                }
+          }
+          handleModal={handleModal}
+          wrapperClass='h-full'
+          isModalHeader
+          outSideClick
+          headText='Delete the Product?'
+          heading={selectedProduct?.book_title || ''}
+          details='Are you certain you want to delete?'
+          type='delete'
+          buttonText={isDeleteProduct ? 'Deleting...' : 'Delete'}
+          buttonProps={{
+            onClick: handleDeleteProduct,
+            disabled: isDeleteProduct,
+          }}
+        />
+      )}
       <PageLayout
         title='Product List'
         breadcrumbItem={breadcrumbItem}
-        buttonText='Add Product'
-        renderElements={() => (
-          <button className='button_sm_primary' onClick={handleOpenModal}>
-            <BiUpload className='mr-1' />
-            <span className='mr-1'>Bulk Upload</span>
-          </button>
-        )}
+        buttonText={hasAddPermission ? 'Add Product' : ''}
+        renderElements={() =>
+          hasAddPermission ? (
+            <button className='button_sm_primary' onClick={handleOpenModal}>
+              <BiUpload className='mr-1' />
+              <span className='mr-1'>Bulk Upload</span>
+            </button>
+          ) : null
+        }
         buttonProps={{
           onClick: () => navigate('/admin/products/product-list/add-product'),
         }}
@@ -146,16 +170,15 @@ const ProductList = () => {
                 </th>
                 <td className='table_td'>{item?.book_title}</td>
                 <td className='table_td'>
-                  <div className='w-16 h-16 flex justify-center'>
+                  <div className='w-12 h-12 flex justify-center'>
                     <LazyLoadImage
                       src={(item?.thumbnail as string) || PlaceholderImageLink}
                       alt={item?.book_title}
                       placeholder={<PlaceholderImage />}
-                      wrapperClassName='w-16 h-full object-contain bg-gray-100 p-[1px] rounded-sm'
+                      wrapperClassName='w-12 h-full object-contain bg-gray-100 p-[1px] rounded-sm'
                       effect='blur'
                       width='100%'
-                      height={64}
-                      className='w-16 h-full object-contain'
+                      className='w-12 h-full object-contain'
                     />
                   </div>
                 </td>
@@ -184,26 +207,30 @@ const ProductList = () => {
                 </td>
                 <td className='table_td'>
                   <div className='flex items-center gap-3'>
-                    <Link
-                      className='text-blue-600 hover:underline cursor-pointer'
-                      to={`/admin/products/product-list/edit-product/${item?.id}`}
-                    >
-                      Edit
-                    </Link>
-                    <button
-                      onClick={() => {
-                        dispatch(
-                          coreAction.toggleModal({
-                            type: 'delete-product',
-                            open: true,
-                          }),
-                        )
-                        dispatch(productAction.setSelectedProduct(item))
-                      }}
-                      className='cursor-pointer text-red-600 hover:underline'
-                    >
-                      Delete
-                    </button>
+                    {hasEditPermission && (
+                      <Link
+                        className='text-blue-600 hover:underline cursor-pointer'
+                        to={`/admin/products/product-list/edit-product/${item?.id}`}
+                      >
+                        Edit
+                      </Link>
+                    )}
+                    {hasDeletePermission && (
+                      <button
+                        onClick={() => {
+                          dispatch(
+                            coreAction.toggleModal({
+                              type: 'delete-product',
+                              open: true,
+                            }),
+                          )
+                          dispatch(productAction.setSelectedProduct(item))
+                        }}
+                        className='cursor-pointer text-red-600 hover:underline'
+                      >
+                        Delete
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>

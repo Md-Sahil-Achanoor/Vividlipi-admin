@@ -26,7 +26,7 @@ function App() {
   // };
 
   useEffect(() => {
-    setTheme('light')
+    setTheme('dark')
     setLoading(false)
     if (isUser?.user) {
       dispatch(authAction.loginSuccess(isUser))

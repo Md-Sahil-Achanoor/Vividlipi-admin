@@ -5,9 +5,10 @@ type Props = {
 }
 
 const TextError: FC<Props> = (props) => {
+  // console.log(`\n\n props:`, props)
   return (
-    <div className='mt-1 capitalize select-none text-red-500 text-[11px] font-normal'>
-      {props?.text}
+    <div className='mt-1 select-none text-red-500 text-[11px] font-normal'>
+      {typeof props?.text == 'string' ? props.text : ''}
     </div>
   )
 }

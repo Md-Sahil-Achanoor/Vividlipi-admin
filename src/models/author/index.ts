@@ -1,8 +1,11 @@
+import { alphanumericOnly } from '@/utils/regx.constants'
 import * as Yup from 'yup'
 
 export const authorSchema = Yup.object().shape({
   Pic: Yup.string().required('Image is Required'),
-  Name: Yup.string().required('Name is Required'),
+  Name: Yup.string()
+    .required('Name is Required')
+    .matches(alphanumericOnly, 'Name should be alphanumeric'),
   Slug: Yup.string().required('Slug is Required'),
   description: Yup.string().required('Description is Required'),
 })

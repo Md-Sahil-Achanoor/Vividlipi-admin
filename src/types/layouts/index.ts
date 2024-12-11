@@ -1,6 +1,7 @@
 import { Role } from '..'
 
 export interface MenuType {
+  id: string
   title: string
   icon: React.ElementType | null
   link: string

@@ -1,7 +1,6 @@
+import API from '@/app/services/api'
+import { endpoints } from '@/constants/endpoints'
 import { couponTag } from '@/constants/query-tags.constant'
-import toast from 'react-hot-toast'
-import API from '../../app/services/api'
-import { endpoints } from '../../constants/endpoints'
 import {
   ApiResponse,
   CouponPayload,
@@ -10,7 +9,8 @@ import {
   ManagePayload,
   ManagePayloadQuery,
   ManageQuery,
-} from '../../types'
+} from '@/types'
+import toast from 'react-hot-toast'
 import { coreAction } from '../core/coreSlice'
 import { couponAction } from './couponSlice'
 
@@ -84,7 +84,7 @@ const couponQuery = API.injectEndpoints({
             options?.setSubmitting(false)
             dispatch(couponAction.resetCoupon())
             toast.success(result?.data?.data)
-            options?.router?.('/admin/coupons/coupon-list')
+            options?.router?.('/admin/coupon/coupon-list')
           } else {
             toast.error(result?.data?.message || 'Something went wrong!')
           }

@@ -1,4 +1,3 @@
-import toast from 'react-hot-toast'
 import API from '@/app/services/api'
 import { endpoints } from '@/constants/endpoints'
 import { coreAction } from '@/feature/core/coreSlice'
@@ -13,6 +12,7 @@ import {
   UserManagementPayLoad,
   UserManagementResponse,
 } from '@/types'
+import toast from 'react-hot-toast'
 import { userManagementAction } from './userManagementSlice'
 
 const userManagementQuery = API.injectEndpoints({
@@ -121,6 +121,7 @@ const userManagementQuery = API.injectEndpoints({
           const result = await queryFulfilled
           if (result?.data?.status === 1) {
             dispatch(coreAction.toggleModal({ open: false, type: '' }))
+            dispatch(userManagementAction.resetRolePermission())
             dispatch(
               userManagementQuery.util.updateQueryData(
                 'getRolePermissions',
@@ -264,6 +265,7 @@ const userManagementQuery = API.injectEndpoints({
                 },
               ),
             )
+            dispatch(userManagementAction.resetAdminUser())
             dispatch(coreAction.toggleModal({ open: false, type: '' }))
             // dispatch(categoryAction.resetSubRole());
             toast.success(result?.data?.message || 'Delete Successful!')

@@ -47,7 +47,7 @@ const useFileUploader = ({
           url: endpoints.imageUpload,
           data: formData,
         }).unwrap()
-        console.log(`\n\n image:`, image)
+        // console.log(`\n\n image:`, image)
         res.push(image?.url)
       }
       if (isMultiple) {

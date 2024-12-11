@@ -12,8 +12,9 @@ import {
 import { categoryAction } from '@/feature/category/categorySlice'
 import { coreAction } from '@/feature/core/coreSlice'
 import PageLayout from '@/layout/PageLayout'
-import { BreadCrumbItem, CategoryResponse } from '@/types'
+import { BreadCrumbItem, CategoryResponse, RolePermission } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { checkPermission } from '@/utils/validateSchema'
 import { useEffect } from 'react'
 
 const breadcrumbItem: BreadCrumbItem[] = [
@@ -25,6 +26,7 @@ const breadcrumbItem: BreadCrumbItem[] = [
 
 const MainCategoryList = () => {
   // const navigate = useNavigate();
+  const { roleDetails } = useAppSelector((state) => state.auth)
   const { type } = useAppSelector((state) => state.core)
   const { selectedCategory } = useAppSelector((state) => state.category)
   const dispatch = useAppDispatch()
@@ -90,39 +92,59 @@ const MainCategoryList = () => {
     }
   }
 
+  const hasAddPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'add',
+    access: 'Product_Category_Management',
+  })
+
+  const hasEditPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'edit',
+    access: 'Product_Category_Management',
+  })
+
+  const hasDeletePermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'delete',
+    access: 'Product_Category_Management',
+  })
+
   return (
     <>
-      <ManageModule
-        classes={
-          type === 'delete-category'
-            ? {
-                top: 'visible',
-                body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
-              }
-            : {
-                top: 'invisible',
-                body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
-              }
-        }
-        handleModal={handleModal}
-        wrapperClass='h-full'
-        isModalHeader
-        outSideClick
-        headText='Delete the Category?'
-        heading={selectedCategory?.title || ''}
-        details='Are you certain you want to delete?'
-        type='delete'
-        buttonText={isDeleteCategory ? 'Deleting...' : 'Delete'}
-        buttonProps={{
-          onClick: handleUpdateStatus,
-          disabled: isDeleteCategory,
-        }}
-      />
-      <ManageCategory />
+      {hasDeletePermission && (
+        <ManageModule
+          classes={
+            type === 'delete-category'
+              ? {
+                  top: 'visible',
+                  body: `-translate-y-[0%] max-w-[400px] p-3 min-w-[400px] border-red-500`,
+                }
+              : {
+                  top: 'invisible',
+                  body: '-translate-y-[300%] max-w-[400px] p-3 min-w-[400px]',
+                }
+          }
+          handleModal={handleModal}
+          wrapperClass='h-full'
+          isModalHeader
+          outSideClick
+          headText='Delete the Category?'
+          heading={selectedCategory?.title || ''}
+          details='Are you certain you want to delete?'
+          type='delete'
+          buttonText={isDeleteCategory ? 'Deleting...' : 'Delete'}
+          buttonProps={{
+            onClick: handleUpdateStatus,
+            disabled: isDeleteCategory,
+          }}
+        />
+      )}
+      {hasAddPermission && <ManageCategory />}
       <PageLayout
         title='Category List'
         breadcrumbItem={breadcrumbItem}
-        buttonText='Add Category'
+        buttonText={hasAddPermission ? 'Add Category' : ''}
         buttonProps={{
           onClick: () => handleModal(),
         }}
@@ -142,24 +164,28 @@ const MainCategoryList = () => {
                 <td className='table_td'>{item?.Slug}</td>
                 <td className='table_td'>
                   <div className='flex items-center gap-3'>
-                    <button
-                      onClick={() => handleModal('edit', item)}
-                      className={cn(
-                        'font-medium hover:underline',
-                        'text-blue-600 dark:text-blue-500',
-                      )}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleModal('delete', item)}
-                      className={cn(
-                        'font-medium hover:underline',
-                        'text-red-600 dark:text-red-500',
-                      )}
-                    >
-                      Delete
-                    </button>
+                    {hasEditPermission && (
+                      <button
+                        onClick={() => handleModal('edit', item)}
+                        className={cn(
+                          'font-medium hover:underline',
+                          'text-blue-600 dark:text-blue-500',
+                        )}
+                      >
+                        Edit
+                      </button>
+                    )}
+                    {hasDeletePermission && (
+                      <button
+                        onClick={() => handleModal('delete', item)}
+                        className={cn(
+                          'font-medium hover:underline',
+                          'text-red-600 dark:text-red-500',
+                        )}
+                      >
+                        Delete
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>

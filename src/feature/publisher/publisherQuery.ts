@@ -1,7 +1,6 @@
+import API from '@/app/services/api'
+import { endpoints } from '@/constants/endpoints'
 import { publisherTag } from '@/constants/query-tags.constant'
-import toast from 'react-hot-toast'
-import API from '../../app/services/api'
-import { endpoints } from '../../constants/endpoints'
 import {
   ApiResponse,
   ManagePayload,
@@ -10,7 +9,8 @@ import {
   PublisherPayload,
   PublisherQuery,
   PublisherResponse,
-} from '../../types'
+} from '@/types'
+import toast from 'react-hot-toast'
 import { coreAction } from '../core/coreSlice'
 import { publisherAction } from './publisherSlice'
 

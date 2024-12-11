@@ -1,12 +1,12 @@
 import { roleOptions } from '@/constants/role-constant'
 import { IOptions, IUserManagementForm } from '@/models'
-import { filterPermission } from '@/utils/validateSchema'
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import {
   RolePermissionResponse,
   UserManagementResponse,
   UserManagementState,
-} from '../../types'
+} from '@/types'
+import { filterPermission } from '@/utils/validateSchema'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 const initialState: UserManagementState = {
   selectedRolePermission: null,
@@ -35,6 +35,7 @@ const userManagementSlice = createSlice({
             permissions[role] = []
           }
         })
+        console.log(permissions)
         state.singleRolePermission = {
           Title: action.payload.Title,
           ...permissions,

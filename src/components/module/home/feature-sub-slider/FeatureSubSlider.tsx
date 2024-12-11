@@ -1,4 +1,4 @@
-import { useAppDispatch } from '@/app/store'
+import { useAppDispatch, useAppSelector } from '@/app/store'
 import PlaceholderImage from '@/assets/svg/placeholder'
 import NoTableData from '@/components/atoms/NoTableData'
 import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
@@ -7,13 +7,15 @@ import { featureSubSliderHeader } from '@/constants/tableHeader'
 import { coreAction } from '@/feature/core/coreSlice'
 import { useGetHomeFeatureSubSliderQuery } from '@/feature/home/homeQuery'
 import { homeAction } from '@/feature/home/homeSlice'
-import { FeatureSubSliderResponse } from '@/types'
+import { FeatureSubSliderResponse, RolePermission } from '@/types'
 import { cn } from '@/utils/twmerge'
+import { checkPermission } from '@/utils/validateSchema'
 import { useEffect } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import ModuleHeader from '../ModuleHeader'
 
 const FeatureSubSlider = () => {
+  const { roleDetails } = useAppSelector((state) => state.auth)
   const { data, isLoading, refetch } = useGetHomeFeatureSubSliderQuery({})
   useEffect(() => {
     refetch()
@@ -43,10 +45,29 @@ const FeatureSubSlider = () => {
     }
   }
 
+  const hasAddPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'add',
+    access: 'CMS_Home_Management',
+  })
+
+  const hasEditPermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'edit',
+    access: 'CMS_Home_Management',
+  })
+
+  const hasDeletePermission = checkPermission({
+    rolePermissions: roleDetails as RolePermission,
+    type: 'delete',
+    access: 'CMS_Home_Management',
+  })
+
   return (
     <div>
       <ModuleHeader
         title='Feature Sub Slider'
+        isAdd={hasAddPermission || hasEditPermission}
         handleModal={() => handleModal('manage-feature-sub-slider')}
       />
       <Table headList={featureSubSliderHeader}>
@@ -85,17 +106,19 @@ const FeatureSubSlider = () => {
                   >
                     Edit
                   </button> */}
-                  <button
-                    onClick={() =>
-                      handleModal('delete-feature-sub-slider', item)
-                    }
-                    className={cn(
-                      'font-medium hover:underline',
-                      'text-red-600 dark:text-red-500',
-                    )}
-                  >
-                    Delete
-                  </button>
+                  {hasDeletePermission && (
+                    <button
+                      onClick={() =>
+                        handleModal('delete-feature-sub-slider', item)
+                      }
+                      className={cn(
+                        'font-medium hover:underline',
+                        'text-red-600 dark:text-red-500',
+                      )}
+                    >
+                      Delete
+                    </button>
+                  )}
                 </div>
               </td>
             </tr>

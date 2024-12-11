@@ -38,7 +38,7 @@ const ManageAdminUser = () => {
     }
   }
 
-  console.log(`\n\n ~ ManageAdminUser ~ selectedUser:`, selectedUser)
+  // console.log(`\n\n ~ ManageAdminUser ~ selectedUser:`, selectedUser)
   const onSubmit = async (
     values: IUserManagementForm,
     { setSubmitting, resetForm }: FormikHelpers<IUserManagementForm>,
@@ -111,7 +111,7 @@ const ManageAdminUser = () => {
           enableReinitialize
         >
           {({ isSubmitting, values, setFieldValue }) => (
-            <Form noValidate>
+            <Form>
               {/* {console.log(JSON.stringify(errors))} */}
               <div className='mt-2'>
                 <div>

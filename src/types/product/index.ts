@@ -90,9 +90,28 @@ export interface ProductQuery extends ReqQuery {
   productid: string
   search: string
   page: number
-  cid: string
+  cid: string | number
+  category: string | number
+}
+
+export interface CategoryProductQuery extends ReqQuery {
+  Device: 'Web' | 'Mobile'
+  cat1: string
+  Author: any
+  Publisher: any
+  Price: {
+    From: number
+    To: number
+  }
+  SortBy: number
+  page: number
 }
 
 export interface ProductState extends IStore {
   selectedProduct: ProductResponse | null
+}
+
+export interface OrderQuery extends ReqQuery {
+  Type: string
+  userId: number
 }

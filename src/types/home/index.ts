@@ -2,6 +2,7 @@ import {
   IHomeFeatureProduct,
   IHomeFeatureSlider,
   IHomeFeatureSubSlider,
+  ITopTenBooks,
 } from '@/models'
 import { IStore, ReqQuery } from '../common'
 import { ProductResponse } from '../product'
@@ -63,10 +64,30 @@ export interface FeatureNewInPayload {
 }
 
 /**
+ *  @module TopTenBooks
+ * */
+export interface TopTenBookPayload {
+  BookId: number
+  Type: string
+}
+
+export interface TopTenBooksResponse extends Omit<ITopTenBooks, 'Type'> {
+  Id: string | number
+  Type: string
+  // BookId: ProductResponse | null
+}
+
+export interface TopTenBooksQuery extends ReqQuery {
+  Type: string
+  BookId: string
+}
+
+/**
  * @module Home State
  */
 export interface HomeState extends IStore {
   selectedFeatureSlider: FeatureSliderResponse | null
   selectedFeatureSubSlider: FeatureSubSliderResponse | null
   selectedFeatureProduct: FeatureProductResponse | null
+  selectedTopTenBooks: TopTenBooksResponse | null
 }
