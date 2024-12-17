@@ -15,6 +15,9 @@ export const productTag = ['Product']
 export const adminUsersTag = ['AdminUsers']
 export const roleListTag = ['RoleList']
 export const commentTag = ['Comment']
+export const albumTag = [{ type: 'Album', id: 'LIST' }]
+export const photoTag = [{ type: 'Album', id: 'LIST' }]
+
 
 export const RTKQueryTags = [
   ...couponTag,
@@ -25,7 +28,7 @@ export const RTKQueryTags = [
   ...homeFeatureProductsTag,
   ...newInProductTag,
   ...newInProductToggleTag,
-  ...profileTag,
+  ...profileTag,  
   ...categoryTag,
   ...productTag,
   ...adminUsersTag,
@@ -34,4 +37,6 @@ export const RTKQueryTags = [
   ...authorCategoryTag,
   ...publisherCategoryTag,
   ...commentTag,
+  ...albumTag,
+  ...photoTag,
 ]

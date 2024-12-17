@@ -69,6 +69,16 @@ export const endpoints = {
   author_by_cat1: '/api/AuthorByCat1',
 
   /**
+   * @module Albums
+   * */
+  albums: '/api/Albums',
+
+  /**
+   * @module Photos
+   * */
+  albumsPhotos: '/api/AlbumsPhotos',
+
+  /**
    * @module CMS
    * @description Content Management System Main Home Module
    * */

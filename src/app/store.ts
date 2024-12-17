@@ -2,6 +2,7 @@ import { configureStore, ConfigureStoreOptions } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import rootReducer from '../feature/rootReducers'
 import API, { rtkQueryErrorLogger } from './services/api'
+import albumsQuery from '@/feature/albums/albumsQuery'
 
 export const createStore = (
   options?: ConfigureStoreOptions['preloadedState'] | undefined,
@@ -13,6 +14,7 @@ export const createStore = (
         serializableCheck: false,
       })
         .concat(API.middleware)
+        .concat(albumsQuery.middleware)
         .concat(rtkQueryErrorLogger),
     ...options,
   })

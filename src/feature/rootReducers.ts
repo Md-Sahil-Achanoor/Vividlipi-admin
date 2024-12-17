@@ -13,6 +13,9 @@ import commentSlice from './product-comment/commentSlice'
 import productSlice from './product/productSlice'
 import publisherSlice from './publisher/publisherSlice'
 import userManagementSlice from './user-management/userManagementSlice'
+import albumsQuery from './albums/albumsQuery'
+import albumsSlice from './albums/albumsSlice'
+import photosSlice from './photos/photosSlice'
 
 const rootReducer = combineReducers({
   auth: authSlice,
@@ -28,7 +31,10 @@ const rootReducer = combineReducers({
   home: homeSlice,
   coupon: couponSlice,
   comment: commentSlice,
+  album: albumsSlice,
+  photos: photosSlice,
   [API.reducerPath]: API.reducer,
+  [albumsQuery.reducerPath]: albumsQuery.reducer,
 })
 
 export default rootReducer

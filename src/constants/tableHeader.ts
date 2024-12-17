@@ -58,6 +58,8 @@ export const authorTableHead = [
   'Picture',
   'Action',
 ]
+export const AlbumsTableHead = ['SL', 'Name', 'Picture', 'Action']
+export const PhotosTableHead = ['SL', 'Name', 'Album', 'Picture', 'Action']
 
 export const categoryTableHeader = ['SL', 'Name', 'Slug', 'Action']
 

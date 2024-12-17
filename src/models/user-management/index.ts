@@ -29,6 +29,8 @@ export const rolePermissionFormSchema = Yup.object({
   Order_List_Management: Yup.array(optionsSchema),
   Order_User_Management: Yup.array(optionsSchema),
   Order_Assign_Management: Yup.array(optionsSchema),
+  Photo_Albums: Yup.array(optionsSchema),
+  Photos: Yup.array(optionsSchema),
 })
 
 export type IRolePermissionForm = Yup.InferType<typeof rolePermissionFormSchema>

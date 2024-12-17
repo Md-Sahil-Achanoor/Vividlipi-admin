@@ -163,6 +163,8 @@ export const getActualRole = {
   Product_Author_Management: 'Product Author Management',
   Product_Publisher_Management: 'Product Publisher Management',
   Product_Coupon_Management: 'Product Coupon Management',
+  Photo_Albums: 'Photo Album Management',
+  Photos: 'Albums Photo Management',
 
   // User Management
   User_Role_Management: 'User Role Management',

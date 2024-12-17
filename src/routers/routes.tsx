@@ -2,6 +2,8 @@
 import { lazy } from 'react'
 import { Navigate, createBrowserRouter } from 'react-router-dom'
 import AccessLayout from './middleware/access-layout'
+import Albums from '@/pages/admin/Albums'
+import Photos from '@/pages/admin/Photos'
 
 const ProductCommentList = lazy(() => import('@/pages/admin/product-comments'))
 const AssignOrderList = lazy(
@@ -360,6 +362,50 @@ const router = createBrowserRouter([
           },
         ],
       },
+      /**
+     * @SubModule { Albums }
+     * @Role Albums
+     * */
+      {
+        path: 'albums',
+        element: <AppWrapper />,
+        children: [
+          {
+            path: 'albums-list',
+            element: (
+              <AccessLayout
+                access='Photo_Albums'
+                type={['view', 'add', 'update', 'delete']}
+              >
+                <Albums />
+              </AccessLayout>
+            ),
+          },
+          // { path: "edit/:id", element: <EditProduct /> },
+        ],
+      },
+      /**
+     * @SubModule { Photos }
+     * @Role Photos
+     * */
+      {
+        path: 'photos',
+        element: <AppWrapper />,
+        children: [
+          {
+            path: 'photos-list',
+            element: (
+              <AccessLayout
+                access='Photos'
+                type={['view', 'add', 'update', 'delete']}
+              >
+                <Photos />
+              </AccessLayout>
+            ),
+          },
+          // { path: "edit/:id", element: <EditProduct /> },
+        ],
+      },
 
       /**
        * @SubModule { Order Management }
@@ -427,7 +473,7 @@ const router = createBrowserRouter([
             ),
           },
         ],
-      },
+      }
     ],
   },
 

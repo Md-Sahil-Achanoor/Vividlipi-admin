@@ -160,6 +160,20 @@ const NavbarAllLink: MenuType[] = [
         role: ['admin', 'sub-admin'],
         icon: null,
       },
+      {
+        id: 'Photo_Albums',
+        title: 'Photo Albums',
+        link: '/admin/albums/albums-list',
+        role: ['admin', 'sub-admin'],
+        icon: null,
+      },
+      {
+        id: 'Photos',
+        title: 'Photos',
+        link: '/admin/photos/photos-list',
+        role: ['admin', 'sub-admin'],
+        icon: null,
+      },
     ],
   },
   {
@@ -185,6 +199,7 @@ const NavbarAllLink: MenuType[] = [
       },
     ],
   },
+
   {
     id: 'Order_Management',
     title: 'Order Management',

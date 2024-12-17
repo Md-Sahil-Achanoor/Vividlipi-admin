@@ -38,6 +38,8 @@ const initialValues: IRolePermissionForm = {
   Product_Author_Management: [],
   Product_Publisher_Management: [],
   Product_Coupon_Management: [],
+  Photo_Albums: [],
+  Photos: [],
 }
 
 const ManageRole = () => {
