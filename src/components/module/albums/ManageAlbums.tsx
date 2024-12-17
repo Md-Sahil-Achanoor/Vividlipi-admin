@@ -12,7 +12,7 @@ import { BsArrowRightShort } from 'react-icons/bs';
 
 const ManageAlbums = () => {
     const { type, open } = useAppSelector((state) => state.core);
-    const { singleAuthor, selectedAuthor } = useAppSelector((state) => state.author);
+    const { singleAuthor, selectedAlbum } = useAppSelector((state) => state.album);
 
     const [manageAlbum, { isLoading }] = useManageAlbumMutation();
 
@@ -25,8 +25,8 @@ const ManageAlbums = () => {
     };
 
     const initialValues: IManageAlbum = {
-        Title: selectedAuthor?.Title || '',
-        coverPic: selectedAuthor?.CoverPic || '',
+        Title: selectedAlbum?.Title || '',
+        coverPic: selectedAlbum?.CoverPic || '',
     };
 
     const onSubmit = async (
@@ -39,7 +39,7 @@ const ManageAlbums = () => {
         };
         try {
             await manageAlbum({
-                id: selectedAuthor?.id,
+                id: selectedAlbum?.id,
                 data: formattedValues,
             });
             dispatch(coreAction.toggleModal({ open: false, type: '' }));
@@ -66,7 +66,7 @@ const ManageAlbums = () => {
             }
             handleModal={handleModal}
             wrapperClass="h-full"
-            headText={selectedAuthor?.id ? 'Update Album' : 'Create Album'}
+            headText={selectedAlbum?.id ? 'Update Album' : 'Create Album'}
             isModalHeader
             outSideClick
         >
@@ -111,7 +111,7 @@ const ManageAlbums = () => {
                                 ) : (
                                     <>
                                         <span className="font-medium">
-                                            {selectedAuthor?.id ? 'Update' : 'Create'}
+                                            {selectedAlbum?.id ? 'Update' : 'Create'}
                                         </span>
                                         <span className="text-2xl ml-1">
                                             <BsArrowRightShort />

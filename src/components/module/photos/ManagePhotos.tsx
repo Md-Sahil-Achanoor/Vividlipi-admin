@@ -11,16 +11,16 @@ import { BsArrowRightShort } from 'react-icons/bs';
 
 const ManagePhotos = () => {
     const { type, open } = useAppSelector((state) => state.core);
-    const { selectedAuthor } = useAppSelector((state) => state.author);
+    const { selectedPhoto } = useAppSelector((state) => state.photos);
 
-    const { data: albumsData, isLoading: albumsLoading } = useGetAlbumsQuery();
+    const { data: photosData, isLoading: albumsLoading } = useGetAlbumsQuery();
     const [managePhoto, { isLoading }] = useManagePhotoMutation();
     const dispatch = useAppDispatch();
 
     const initialValues: IManagePhoto = {
-        Name: selectedAuthor?.Title || '',
-        Pic: selectedAuthor?.Pic || '',
-        AlbumId: selectedAuthor?.AlbumId || '',
+        Name: selectedPhoto?.Title || '',
+        Pic: selectedPhoto?.Pic || '',
+        AlbumId: selectedPhoto?.AlbumId || '',
     };
 
     const handleModal = (type: string) => {
@@ -42,7 +42,7 @@ const ManagePhotos = () => {
 
             await managePhoto({
                 data: photoValues,
-                id: selectedAuthor?.id, // Pass ID for update
+                id: selectedPhoto?.id,
             }).unwrap();
 
             dispatch(coreAction.toggleModal({ open: false, type: '' }));
@@ -69,7 +69,7 @@ const ManagePhotos = () => {
             }
             handleModal={handleModal}
             wrapperClass="h-full"
-            headText={selectedAuthor?.id ? 'Update Photo' : 'Create Photo'}
+            headText={selectedPhoto?.id ? 'Update Photo' : 'Create Photo'}
             isModalHeader
             outSideClick
         >
@@ -120,7 +120,7 @@ const ManagePhotos = () => {
                                                 <option value="" disabled>
                                                     Select an album
                                                 </option>
-                                                {albumsData?.data?.map((album) => (
+                                                {photosData?.data?.map((album) => (
                                                     <option key={album.id} value={album.id}>
                                                         {album.Title}
                                                     </option>
@@ -144,7 +144,7 @@ const ManagePhotos = () => {
                                 ) : (
                                     <>
                                         <span className="font-medium">
-                                            {selectedAuthor?.id ? 'Update' : 'Create'}
+                                            {selectedPhoto?.id ? 'Update' : 'Create'}
                                         </span>
                                         <span className="text-2xl ml-1">
                                             <BsArrowRightShort />

@@ -8,11 +8,12 @@ import SkeletonTable from '@/components/elements/skeleton/SkeletonTable'
 import ManagePhotos from '@/components/module/photos/ManagePhotos'
 import Table from '@/components/ui/Table'
 import { PhotosTableHead } from '@/constants/tableHeader'
-import { authorAction } from '@/feature/author/authorSlice'
 import { coreAction } from '@/feature/core/coreSlice'
 import { useDeletePhotoMutation, useGetPhotosQuery } from '@/feature/photos/photosQuery'
+import { photoAction } from '@/feature/photos/photosSlice'
 import PageLayout from '@/layout/PageLayout'
-import { AuthorResponse, BreadCrumbItem, RolePermission } from '@/types'
+import { BreadCrumbItem, RolePermission } from '@/types'
+import { PhotoResponse } from '@/types/photo'
 import { truncate } from '@/utils/file'
 import { cn } from '@/utils/twmerge'
 import { checkPermission } from '@/utils/validateSchema'
@@ -30,7 +31,7 @@ const Photos = () => {
     // const navigate = useNavigate();  
     const { type } = useAppSelector((state) => state.core)
     const { roleDetails } = useAppSelector((state) => state.auth)
-    const { selectedAuthor } = useAppSelector((state) => state.author)
+    const { selectedPhoto } = useAppSelector((state) => state.photos)
     const dispatch = useAppDispatch()
 
     // const { data, isLoading, refetch } = useGetAuthorsQuery({
@@ -41,14 +42,14 @@ const Photos = () => {
 
     console.log('Photos', data)
 
-    const [deletePhoto, { isLoading: isDeleteAuthor }] =
+    const [deletePhoto, { isLoading: isDeletePhoto }] =
         useDeletePhotoMutation()
 
 
     useEffect(() => {
         refetch()
         return () => {
-            dispatch(authorAction.resetAuthor())
+            dispatch(photoAction.resetPhoto())
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [refetch, dispatch])
@@ -61,21 +62,18 @@ const Photos = () => {
     //   }
     // };
 
-    const handleDeleteAuthor = async () => {
-        await deletePhoto({
-            id: selectedAuthor?.id
-        })
+    const handleDeletePhoto = async () => {
+        await deletePhoto({ id: selectedPhoto?.id })
         dispatch(coreAction.toggleModal({ open: false, type: '' }))
 
     }
 
-    // const status = selectedAuthor?.isActive === 1 ? "Deactivate" : "Activate";
+    // const status = selectedPhoto?.isActive === 1 ? "Deactivate" : "Activate";
 
-    const handleModal = (type?: string, data?: AuthorResponse) => {
+    const handleModal = (type?: string, data?: PhotoResponse) => {
         if (type === 'cancelled') {
-            // do nothing
             dispatch(coreAction.toggleModal({ open: false, type: '' }))
-            dispatch(authorAction.setSelectedAuthor(null))
+            dispatch(photoAction.setSelectedPhoto(null))
         } else if (type === 'edit') {
             dispatch(
                 coreAction.toggleModal({
@@ -83,8 +81,7 @@ const Photos = () => {
                     open: true,
                 }),
             )
-            dispatch(authorAction.setSelectedAuthor(data as AuthorResponse))
-            // setSingleAuthor;
+            dispatch(photoAction.setSelectedPhoto(data as PhotoResponse))
         } else if (type === 'delete') {
             dispatch(
                 coreAction.toggleModal({
@@ -92,9 +89,10 @@ const Photos = () => {
                     open: true,
                 }),
             )
-            dispatch(authorAction.setSelectedAuthor(data as AuthorResponse))
+            dispatch(photoAction.setSelectedPhoto(data as PhotoResponse))
         } else {
             dispatch(coreAction.toggleModal({ open: true, type: 'manage-author' }))
+            dispatch(photoAction.setSelectedPhoto(null))
         }
     }
 
@@ -136,13 +134,13 @@ const Photos = () => {
                     isModalHeader
                     outSideClick
                     headText='Delete the Album?'
-                    heading={selectedAuthor?.Name || ''}
+                    heading={selectedPhoto?.Name || ''}
                     details='Are you certain you want to delete?'
                     type='delete'
-                    buttonText={isDeleteAuthor ? 'Deleting...' : 'Delete'}
+                    buttonText={isDeletePhoto ? 'Deleting...' : 'Delete'}
                     buttonProps={{
-                        onClick: handleDeleteAuthor,
-                        disabled: isDeleteAuthor,
+                        onClick: handleDeletePhoto,
+                        disabled: isDeletePhoto,
                     }}
                 />
             )}
